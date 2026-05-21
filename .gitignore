@@ -1,0 +1,25 @@
+# Scratch work — ad-hoc, throwaway, not versioned
+scratch/
+
+# Script outputs and intermediate data (large files)
+archives/*/outputs/*.csv
+archives/*/outputs/*.parquet
+archives/*/outputs/*.json
+archives/*/raw-data/*.csv
+archives/*/raw-data/*.parquet
+archives/*/raw-data/*.xlsx
+
+# Env and secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS
+.DS_Store
