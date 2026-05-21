@@ -2,7 +2,7 @@
 
 > Living document. Updated after every Metabase session where new table/column knowledge is discovered.
 > All tables prefixed with `tmmumpsdb.` in Metabase SQL.
-> Last updated: 2026-05-21
+> Last updated: 2026-05-22
 
 ---
 
@@ -274,10 +274,82 @@ Join any table's `Warehouse ID` → `Warehouse Details.ID`
 | Promised Warehouse Processing | Promised WH processing time |
 | Actual Doctor Call Time | Actual time doctor called |
 | Actual Warehouse Processing | Actual WH processing time |
-| Metadata | Contains data at time of order placement only. Assume synced with rest of table. |
+| Metadata | Snapshot at order placement time. Assume synced with rest of table. |
 
-> Warning: Promise data gets overwritten until doctor confirms order. Not reliable for pre-confirmation state.
+> Warning: Promise data gets overwritten until doctor confirms order. Pre-confirmation values unreliable.
 > Doctor working hours: 7:30 AM – 11:30 PM.
+
+**Metadata column — key fields:**
+
+| Field | Definition |
+|-------|------------|
+| `buffer_applied_flag` | Boolean. Whether a buffer was applied to this order's promise |
+| `pickup_buffer_in_minutes` | Buffer added to dispatch promise time |
+| `drop_buffer_in_minutes` | Buffer added to delivery promise time |
+
+**Source of truth for promise engine inputs/outputs:** Always use `metadata → instrumentation_details` — this is the only field that reflects the exact state at order placement time.
+
+`instrumentation_details` contains three sub-objects:
+
+| Sub-object | Key fields |
+|------------|------------|
+| `doctor_attributes` | `promised_doctor_call_time`, `doctor_call_required`, `cass_flow_enabled`, `doctor_working_hours` |
+| `warehouse_attributes` | `promised_warehouse_time`, `wh_processing_type`, `wh_processing_mins`, `warehouse_id`, `is_mfc`, `is_sdd`, `is_inventory`, `warehouse_work_start`, `warehouse_work_end` |
+| `logistics_attributes` | `promised_dispatch_time`, `promised_delivery_time`, `delivery_tat_mins`, `delivery_partner_id`, `is_air`, `air_delivery_enabled`, `payment_type`, `input_pincode`, `resolved_pincode` |
+
+<details>
+<summary>Sample metadata JSON</summary>
+
+```json
+{
+  "pb_audit_update_promise_time": true,
+  "buffer_applied_flag": false,
+  "pickup_buffer_in_minutes": 0,
+  "drop_buffer_in_minutes": 0,
+  "instrumentation_details": {
+    "doctor_attributes": {
+      "promised_doctor_call_time": "2026-05-22T08:48:47.985",
+      "default_doctor_call_minutes_config": 60,
+      "doctor_call_required": true,
+      "cass_flow_enabled": true,
+      "order_category": null,
+      "doctor_working_hours": { "work_start": "08:00", "work_end": "22:00" }
+    },
+    "warehouse_attributes": {
+      "promised_warehouse_time": "2026-05-23T14:30",
+      "wh_processing_type": "NON_SDD_NON_INVENTORY",
+      "wh_processing_mins": 810,
+      "warehouse_id": 30,
+      "is_mfc": true,
+      "is_inventory": false,
+      "is_sdd": false,
+      "warehouse_work_start": "10:00",
+      "warehouse_work_end": "19:00",
+      "input_pincode": "766105"
+    },
+    "logistics_attributes": {
+      "warehouse_id": 30,
+      "input_pincode": "766105",
+      "resolved_pincode": "766105",
+      "is_sdd": false,
+      "is_mfc": true,
+      "is_inventory": false,
+      "promised_wh_processing_time": "2026-05-23T14:30",
+      "payment_type": "PREPAID",
+      "promised_dispatch_time": "2026-05-23T18:00",
+      "delivery_tat_mins": 2880,
+      "air_delivery_tat_mins": 2880,
+      "is_air": true,
+      "promised_delivery_time": "2026-05-25T18:00",
+      "promised_air_delivery_time": "2026-05-25T18:00",
+      "delivery_partner_id": 225,
+      "air_delivery_enabled": true
+    },
+    "stamped_ts": "2026-05-22T00:04:48.312"
+  }
+}
+```
+</details>
 
 ---
 
@@ -315,8 +387,9 @@ Join any table's `Warehouse ID` → `Warehouse Details.ID`
 | Column | Definition |
 |--------|------------|
 | Wh ID | Maps to Warehouse Details |
+| Type | Processing bucket. Values: `SDD_Inventory`, `SDD_Non_Inventory`, `Non_SDD_Inventory`, `Non_SDD_Non_Inventory` |
 | Active | Whether active |
-| Weekoff Day | WH processing time bucket info |
+| Processing Time in Mins | WH processing time in minutes for this bucket |
 
 ---
 
