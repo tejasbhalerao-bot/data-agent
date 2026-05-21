@@ -23,12 +23,21 @@ if [[ -z "$PROJECT" || -z "$FOLDER" || -z "$DESCRIPTOR" || -z "$EXT" ]]; then
   exit 1
 fi
 
-TARGET_DIR="archives/$PROJECT/$FOLDER"
+# _context is a special project that maps to context/ at repo root
+if [[ "$PROJECT" == "_context" ]]; then
+  TARGET_DIR="context/$FOLDER"
+else
+  TARGET_DIR="archives/$PROJECT/$FOLDER"
+fi
 
 if [[ ! -d "$TARGET_DIR" ]]; then
-  echo "Error: folder '$TARGET_DIR' does not exist."
-  echo "Create project first: cp -r archives/_template archives/$PROJECT"
-  exit 1
+  if [[ "$PROJECT" == "_context" ]]; then
+    mkdir -p "$TARGET_DIR"
+  else
+    echo "Error: folder '$TARGET_DIR' does not exist."
+    echo "Create project first: cp -r archives/_template archives/$PROJECT"
+    exit 1
+  fi
 fi
 
 # Find highest existing version for this descriptor

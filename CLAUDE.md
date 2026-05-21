@@ -64,6 +64,25 @@ data-agent/
 
 Versioning is managed automatically by `new-file.sh`. Never manually name versioned files.
 
+## Schema Update Rules (CRITICAL)
+
+After every Metabase session, before ending the conversation:
+
+1. Check if any new tables, columns, joins, or data behaviour was discovered
+2. If yes — update `context/schema.md`:
+   - Add new table section if table not yet documented
+   - Add new columns to existing table if missing
+   - Add row to **Discovered Quirks & Gotchas** table if behaviour was unexpected
+3. If a query proved reusable (fast-fetch pattern, validated join) — save it to `context/reference-queries/` using `new-file.sh`:
+   ```bash
+   ./workflows/scripts/new-file.sh _context reference-queries <query-descriptor> sql
+   ```
+   > Note: reference-queries uses `_context` as the project name since it lives outside archives.
+
+Schema updates are not optional. Every Metabase run that reveals something new must update the doc.
+
+---
+
 ## Git Rules
 
 - Push: scripts, analysis plans, query dumps, insights, context docs
