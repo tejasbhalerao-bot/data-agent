@@ -50,9 +50,11 @@ Use `promised_air_delivery_date` if courier is express-type (`partner_name ILIKE
 
 ---
 
-## Excluded Couriers
+## Courier Pricing Scope
 
-Shiprocket and Shadowfax excluded from PBA analysis scope.
+Shiprocket and Shadowfax have no configured pricing in the Clickpost PBA setup.
+Their `cost_per_shipment` columns will be null in output.
+They are NOT excluded from preference array analysis — all couriers are included.
 
 ---
 
