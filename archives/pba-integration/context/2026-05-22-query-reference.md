@@ -3,6 +3,8 @@
 
 All Redshift tables prefixed with `tmmumpsdb.`
 
+> **Always read `context/schema.md` (global schema reference) before writing any query. Table definitions, column meanings, join keys, and quirks live there.**
+
 ---
 
 ## Tables
@@ -15,7 +17,7 @@ All Redshift tables prefixed with `tmmumpsdb.`
 | `order_status` | Order lifecycle events. `order_status_id = 344` = PBA-eligible placed order. `order_status_id = 39` = order created timestamp |
 | `order_tat_details` | `pickup_time`, `delivery_attempt_time` per order |
 | `delivery_date_tracker` | `actual_delivery_date`, `promised_delivery_date` (surface), `promised_air_delivery_date` (express) |
-| `m_system_value_master` | Master lookup. `serial_id = delivery_partner_id`, `value = partner_name` |
+| `m_system_value_master` | General system enum/lookup table. Decodes various IDs across system (e.g. `Order Status ID` where `Name = 'Order Status'`). Used in Query 1 to decode `delivery_partner_id → partner_name` to determine express vs surface promise column. |
 
 ---
 
