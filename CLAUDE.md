@@ -64,6 +64,17 @@ data-agent/
 
 Versioning is managed automatically by `new-file.sh`. Never manually name versioned files.
 
+## Context Loading Rules (CRITICAL)
+
+At the start of every session, before any analysis, query, schema design, or script planning:
+
+1. Read all files in `context/` (global schema docs, data dictionary, domain SOPs)
+2. If a project folder is active or mentioned — read all files in `archives/[project]/context/`
+
+Do not proceed with any work until both context layers are loaded. Never rely on memory from prior sessions for schema, pricing, cutoffs, or data-source structure — always read the files.
+
+---
+
 ## Schema Update Rules (CRITICAL)
 
 After every Metabase session, before ending the conversation:
