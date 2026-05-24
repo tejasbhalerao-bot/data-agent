@@ -27,6 +27,31 @@ If objective is clear: proceed without prompting.
 
 ---
 
+## Step 1b: Surface business logic assumptions before planning
+
+Before building the plan, identify every point where business knowledge is required to proceed correctly.
+
+**Never assume. Always ask.**
+
+This includes — but is not limited to:
+
+| Assumption type | Example |
+|---|---|
+| Metric definition | "On-time" — does it mean delivered by promise date, or by cutoff? |
+| Inclusion / exclusion rules | Are RTOs included in adherence calculation? Are cancelled orders excluded? |
+| Vertical scope | Does this apply to all fulfilment verticals or specific ones? |
+| Cohort definition | Which orders qualify — all, or only PBA-eligible? |
+| Business rule | If a courier is unavailable, does the order fall back or fail? |
+| Date / event anchor | Is "go-live" the date PBA was enabled in prod or the date first order was processed? |
+| Threshold / benchmark | What is "good" adherence — is there a target? |
+
+List every assumption as a question. Ask all at once — do not drip-feed one at a time.
+Wait for answers before proceeding to plan construction.
+
+If Tejas says "use your judgement" on a business logic question — push back once. Business logic errors invalidate the entire analysis.
+
+---
+
 ## Step 2: Detect analysis type
 
 | Type | Signal |
