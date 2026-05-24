@@ -20,6 +20,8 @@ Load and follow the listed skill when the request matches. Do not improvise the 
 | Tejas wants to... | Invoke |
 |---|---|
 | Run any analysis — exploratory, post-release, one-time, recurring | `workflows/skills/plan-builder.md` |
+| Review / refine an existing plan | `workflows/skills/plan-refiner.md` |
+| Map tables and define output schema from an approved plan | `workflows/skills/table-mapper.md` |
 | Discover or validate a table not in `context/schema.md` | `workflows/skills/schema-discovery.md` |
 
 ### Analysis pipeline (invoked in order after plan-builder)
