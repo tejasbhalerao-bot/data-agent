@@ -24,15 +24,16 @@ Load and follow the listed skill when the request matches. Do not improvise the 
 
 ### Analysis pipeline (invoked in order after plan-builder)
 
-Skills are chained — each hands off to the next. Do not skip steps.
-
 ```
 plan-builder → plan-refiner → [Tejas approval] → table-mapper → query-builder
 → data-validator → script-builder → output-validator → analysis-runner
 → insights-runner → loop-runner
 ```
 
-> Skills not yet built are placeholders — stop and flag when reached.
+**Chaining rules:**
+- `plan-refiner` always runs after `plan-builder` — never hand plan to Tejas directly from plan-builder
+- Each skill hands off to the next only when its own completion criteria are met
+- Do not skip steps — if a skill is not yet built, stop and flag to Tejas
 
 ---
 
