@@ -4,22 +4,58 @@
 
 Never create files directly in project folders using Write or Edit tools.
 Always use `./workflows/scripts/new-file.sh` to create versioned files.
+Exception: `workflows/skills/` and `changelogs/` — Write tool allowed directly (non-data files).
 
-### Detect project from context
+---
 
-- If a project folder is mentioned or already active (e.g. `archives/pba/`), use that as `<project>`.
-- If no project exists yet, run `cp -r archives/_template archives/<project-name>` first, then use `new-file.sh`.
+## New Project Setup (CRITICAL)
 
-### Folder → descriptor mapping
+When starting a project with no existing folder in `archives/`:
 
-| What you're creating | `<folder>` arg | `<descriptor>` convention |
+1. Run: `cp -r archives/_template archives/<project-name>`
+2. Edit `archives/<project-name>/context/data-sources.md` with known sources
+3. Then proceed — never create project subfolders manually
+
+---
+
+## File Routing Table (CRITICAL)
+
+Where every file goes. No exceptions.
+
+| You are creating... | Destination | Tool |
 |---|---|---|
-| Analysis plan doc | `analysis-plans` | `<project>-analysis-plan` |
-| SQL query dump | `queries-dump` | `<project>-<topic>-query` |
-| Data structuring script | `scripts` | `structure-<data-topic>` |
-| Aggregates script | `scripts` | `aggregate-<topic>` |
-| Insight / findings doc | `insights` | `<project>-insights` |
-| Test file | `tests` | `test-<script-descriptor>` |
+| Analysis plan doc | `archives/[project]/analysis-plans/` | `new-file.sh` |
+| SQL query written or exported from Metabase | `archives/[project]/queries-dump/` | `new-file.sh` |
+| Python/shell script that structures or aggregates data | `archives/[project]/scripts/` | `new-file.sh` |
+| Test file for a script | `archives/[project]/tests/` | `new-file.sh` |
+| Findings doc with interpreted results | `archives/[project]/insights/` | `new-file.sh` |
+| Schema ref, sample CSV (≤10 rows), config snapshot, query reference doc, pricing doc | `archives/[project]/context/` | `new-file.sh` |
+| `data-sources.md` manifest | `archives/[project]/context/data-sources.md` | Edit existing |
+| Full CSV export from Metabase (real data) | `archives/[project]/raw-data/` | Drop manually — gitignored, bypass `new-file.sh` |
+| CSV produced by running a script | `archives/[project]/outputs/` | Script writes here — gitignored |
+| Validated reusable SQL (confirmed correct in Metabase) | `context/reference-queries/` | `new-file.sh` with project `_context` |
+| Redshift schema update | `context/schema.md` | Edit existing |
+| Skill SOP (how Claude does a class of work) | `workflows/skills/` | Write tool directly |
+| Session changelog / skill amendment | `changelogs/` | Write tool directly |
+| Throwaway / ad-hoc work | `scratch/` | Write directly, never commit |
+
+### Hard rules
+
+- `raw-data/` and `outputs/` are gitignored — never reference their filenames in committed docs without noting they are local-only
+- `context/` (global) = cross-project knowledge. `archives/[project]/context/` = project-specific knowledge. Never mix.
+- Sample data (≤10 rows) → `archives/[project]/context/`. Full exports → `archives/[project]/raw-data/`.
+- `queries-dump/` = SQL only. `scripts/` = Python/shell only. Never mix.
+
+### `new-file.sh` descriptor conventions
+
+| Folder | `<descriptor>` convention |
+|---|---|
+| `analysis-plans` | `<project>-analysis-plan` |
+| `queries-dump` | `<project>-<topic>-query` |
+| `scripts` | `structure-<topic>` or `aggregate-<topic>` |
+| `insights` | `<project>-insights` |
+| `tests` | `test-<script-descriptor>` |
+| `context` | `<descriptive-name>` (e.g. `courier-pricing-snapshot`) |
 
 ### Examples
 
@@ -28,6 +64,8 @@ Always use `./workflows/scripts/new-file.sh` to create versioned files.
 ./workflows/scripts/new-file.sh pba scripts structure-raw-shipments py
 ./workflows/scripts/new-file.sh pba scripts aggregate-courier-performance py
 ./workflows/scripts/new-file.sh pba insights pba-insights md
+./workflows/scripts/new-file.sh pba context courier-pricing-snapshot md
+./workflows/scripts/new-file.sh _context reference-queries allocation-audit-base sql
 ```
 
 After `new-file.sh` creates the file, use Edit tool to write content into it.
