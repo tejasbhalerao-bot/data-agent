@@ -113,6 +113,19 @@ Do not proceed with any work until both context layers are loaded. Never rely on
 
 ---
 
+## Schema Discovery Rules (CRITICAL)
+
+Before writing any SQL query or data script:
+
+1. Read `context/schema.md`
+2. Check every table referenced against the documented tables list
+3. If any table is **not documented** — stop all work and invoke `workflows/skills/schema-discovery.md`
+4. Do not proceed until discovery is complete, approved by Tejas, and pushed to GitHub
+
+Never infer schema from memory, prior sessions, or column name guesses.
+
+---
+
 ## Schema Update Rules (CRITICAL)
 
 After every Metabase session, before ending the conversation:
