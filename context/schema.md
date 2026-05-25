@@ -2,7 +2,9 @@
 
 > Living document. Updated after every Metabase session where new table/column knowledge is discovered.
 > All tables prefixed with `tmmumpsdb.` in Metabase SQL.
-> Last updated: 2026-05-22
+> Last updated: 2026-05-25
+
+> **Column naming:** Redshift column names are `snake_case` (`order_id`, `pickup_time`, `created_at`). Metabase UI shows display names (`Order ID`, `Pickup Time`). Always use `snake_case` in SQL across all tables.
 
 ---
 
@@ -268,7 +270,9 @@ Join any table's `Warehouse ID` → `Warehouse Details.ID`
 | Column | Definition |
 |--------|------------|
 | Order ID | Unique order identifier |
-| Promised Delivery Date | Promised delivery date shown to customer |
+| Promised Delivery Date | Promised delivery date shown to customer. **Always use this for analysis.** |
+| Promised Air Delivery Date | Promised delivery date for express/air couriers. Populated when courier is air-enabled. |
+| Actual Delivery Date | Date order was actually delivered |
 | Promised Dispatch Date | Promised dispatch date |
 | Promised Doctor Call Time | Promised doctor call time |
 | Promised Warehouse Processing | Promised WH processing time |
@@ -353,6 +357,68 @@ Join any table's `Warehouse ID` → `Warehouse Details.ID`
 
 ---
 
+#### Logistics Allocation Audit
+**Purpose:** One record per order per allocation event. Stores both PBA and Internal courier decisions in `allocation_metadata` JSON.
+**Written by:** System on each Clickpost allocation call (SOFT at order placement, HARD at dispatch).
+
+| Column | Definition |
+|--------|------------|
+| order_id | Order identifier |
+| request_id | Links this allocation to the Clickpost API call — joins to `logistics_rails_api_audit.reference_number` |
+| allocation_type | `SOFT` (order placement) or `HARD` (dispatch) |
+| selected_source | `INTERNAL` in shadow mode — PBA is counterfactual only. **Update when PBA goes live.** |
+| created_at | When the allocation record was created |
+| updated_at | Last update timestamp — used for deduplication |
+| allocation_metadata | JSON — see sub-fields below |
+
+**`allocation_metadata` sub-fields:**
+
+| Field | Definition |
+|-------|------------|
+| `warehouse_id` | int — active warehouses `>= 17` |
+| `pincode` | int — drop pincode |
+| `projected_dispatch_time` | epoch milliseconds — cast: `timestamp 'epoch' + (val::bigint/1000) * interval '1 second'` |
+| `pba_partner_id` | int — PBA-selected courier (`delivery_partner_id`) |
+| `pba_tat` | int minutes — `CEILING(x/1440)` for days |
+| `internal_partner_id` | int — Internal-selected courier (`delivery_partner_id`) |
+| `internal_tat` | int minutes — `CEILING(x/1440)` for days |
+
+**Delivery partner name decode:**
+`m_system_value_master` used as `SELECT serial_id AS delivery_partner_id, value AS partner_name` to map `pba_partner_id` / `internal_partner_id` → human-readable name.
+
+---
+
+#### Logistics Rails API Audit
+**Purpose:** Raw Clickpost API response logs. One row per API call.
+**Written by:** System on every Clickpost API call.
+
+| Column | Definition |
+|--------|------------|
+| pk | Format: `RECOMMEND#<order_id>` for PBA recommendation calls |
+| reference_number | Joins to `logistics_allocation_audit.request_id` — use this for exact matching, not timestamps |
+| api_name | API type. Filter on `'CLICKPOST_RECOMMEND'` for PBA preference array data |
+| created_at | Timestamp of API call |
+| request_payload | JSON — contains `pickup_pincode` |
+| response_payload | JSON — contains `preference_array` at path `result[0].preference_array` |
+
+**Per courier in `preference_array` (idx 0 = rank 1):**
+
+| Field | Definition |
+|-------|------------|
+| `account_code` | Human-readable courier code (= ANKW account code) |
+| `cp_id` | Clickpost internal courier ID |
+| `courier_name` | Courier display name |
+| `priority` | Array position — determines rank |
+| `delivery_type` | Surface / Express |
+| `scores_computation.scoring_params_actual.EDD` | EDD score (lower = better) |
+| `scores_computation.scoring_params_actual.PRICING` | Pricing score (lower = better) |
+| `scores_computation.scoring_params_actual.AVERAGE_TAT` | Historical TAT score |
+| `scores_computation.total_score` | Overall score |
+
+**Ranking logic:** `EDD ASC → PRICING ASC → AVERAGE_TAT ASC → total_score ASC → priority ASC`
+
+---
+
 ### Reference / Master Tables
 
 ---
@@ -415,3 +481,9 @@ Join any table's `Warehouse ID` → `Warehouse Details.ID`
 | 5 | Pincode Delivery TAT | `Delivery Days in Mins` overrides `Delivery Days` when non-NULL |
 | 6 | Pincode TAT Adherence Data | System adds 1 day to Ideal TAT per iteration until ≥80% adherence — Final TAT ≠ Ideal TAT |
 | 7 | Warehouse Details | Always verify active warehouses + FC/MFC classification with Tejas before querying |
+| 8 | logistics_allocation_audit | Multiple rows per order per `allocation_type`. Always dedupe on `updated_at DESC` before any join |
+| 9 | logistics_allocation_audit | `warehouse_id < 17` = decommissioned warehouse. Always filter `>= 17` |
+| 10 | logistics_allocation_audit | `selected_source = 'INTERNAL'` in shadow mode — PBA is counterfactual. **Update this when PBA goes live.** |
+| 11 | logistics_rails_api_audit | Join to `logistics_allocation_audit` on `reference_number = request_id` — exact match. Do not use timestamp approximation |
+| 12 | logistics_rails_api_audit | Preference array currently observed up to 6 couriers (idx 0–5). No hard cap — can grow as Clickpost config changes |
+| 13 | logistics_rails_api_audit | Filter on `api_name = 'CLICKPOST_RECOMMEND'` for PBA data. Other `api_name` values exist in this table |
