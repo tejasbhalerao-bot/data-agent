@@ -104,4 +104,7 @@ Mapping of analysis queries to plan questions. Add every new query here.
 | `scripts/2026-05-25-aggregate-same-courier-courier-adherence-v2.py` | 1.4, 1.7 | Same as v1. Adds cohort filtering. | — |
 | `scripts/2026-05-25-aggregate-promise-direction-adherence-v2.py` | 1.5, 1.7 | Same as v1. Adds cohort filtering. | — |
 | `scripts/2026-05-25-aggregate-diff-courier-pba-calibration-v2.py` | 1.6, 1.7 | Same as v1. Adds cohort filtering. Reads v2 diff-courier-internal-rank CSV. | — |
-| `scripts/2026-05-25-aggregate-1-7-pre-post-cutoff-adherence-v1.py` | 1.7 | PRE + POST cohort × adherence_bucket side-by-side. cohort_orders + pba_orders + pba_pct + internal_orders + internal_pct. | Requires `--cutoff-date`. Reads v2 adherence base extract. |
+| `scripts/2026-05-25-aggregate-1-7-pre-post-cutoff-adherence-v1.py` | 1.7 | Calendar date split only (PRE/POST by `--cutoff-date`). Superseded by v2 for time-of-day cutoff analysis. | Kept for calendar-date splits if needed. |
+| `queries-dump/2026-05-25-pba-adherence-base-extract-v3.sql` | 1.7 | Same as v2 + `warehouse_id`. Required for 1.7 v2 time-of-day cutoff classification. | Use this for 1.7 v2. v2 scripts (1.1–1.6) work with v2 or v3. |
+| `scripts/2026-05-25-aggregate-1-7-pre-post-cutoff-adherence-v2.py` | 1.7 | Per-courier × regime (INTERNAL/PBA) × PRE/POST × adherence_bucket. Reads warehouse-id-mapping.csv + cutoff-times.csv for time-of-day classification. | Requires v3 base extract. Check "Unmatched partner names" on first run. |
+| `context/warehouse-id-mapping.csv` | 1.7 | warehouse_id → alias → city_label. Maps to Row Labels in cutoff-times.csv. | Faridabad (21) has no city_label — orders excluded from PRE/POST. |

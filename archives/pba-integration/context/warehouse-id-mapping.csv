@@ -1,0 +1,24 @@
+warehouse_id,alias,city_label
+17,BLR_ANKW,Bengaluru
+18,LKO_ANKW,Lucknow
+19,DEL_ANKW,Delhi
+20,MUM_ANKW,Mumbai
+21,FDB_ANKW,
+22,KOL_ANKW,Howrah
+23,AMD_ANKW,Ahmedabad
+24,IDR_ANKW,Indore
+25,HYD_ANKW,Hyderabad
+26,PUN_ANKW,Pune District
+27,PAT_ANKW,Patna
+28,JAI_ANKW,Jaipur
+29,VNS_ANKW,Varanasi
+30,RAI_ANKW,Raipur District
+31,CHD_ANKW,Chandigarh
+32,GHY_ANKW,Guwahati
+33,BBI_ANKW,Bhubaneswar
+34,RNC_ANKW,Ranchi
+35,NGP_ANKW,Nagpur
+36,CHN_ANKW,Chennai
+37,LKO_NEW_ANKW,Lucknow
+38,BLR_NEW_ANKW,Bengaluru
+39,PAT_NEW_ANKW,Patna
