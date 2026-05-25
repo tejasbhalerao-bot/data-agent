@@ -58,6 +58,15 @@ They are NOT excluded from preference array analysis — all couriers are includ
 
 ---
 
+## Query Nomenclature Rules
+
+- **Name by content, not plan section number.** Plan section numbers shift; query purpose doesn't.
+- **Format:** `pba-<what-it-does>-v<n>.sql` — e.g. `pba-adherence-base-extract-v1.sql`
+- **Versioning:** bump `v<n>` when query logic changes. Never overwrite an existing version.
+- **Mapping query → plan question** lives in the Analysis Queries table below — that is the single source of truth. Do not encode plan question numbers in filenames.
+
+---
+
 ## Base Queries
 
 | File | Purpose |
@@ -69,3 +78,13 @@ They are NOT excluded from preference array analysis — all couriers are includ
 **Query 1 preference array:** up to 6 couriers (idx 0–5 → dp1–dp6)
 **Query 2 date filter:** `2026-05-10 00:00:00`
 **Query 2 notes:** No `order_status` join. Warehouse filter (`>= 17`) applied in `allocation` CTE, not in `cte`.
+
+---
+
+## Analysis Queries
+
+Mapping of analysis queries to plan questions. Add every new query here.
+
+| File | Plan Questions | Output | Notes |
+|---|---|---|---|
+| `queries-dump/2026-05-25-pba-adherence-base-extract-v1.sql` | 1.1, 1.2, 1.3, 1.4 | 1 row per order. `hard_pba_tat_days`, `hard_internal_tat_days`, `pickup_time`, `delivery_attempt_time`, partner IDs + names | Adherence = TAT vs `CEIL((delivery_attempt_time - pickup_time) in days)`. Aggregations in script, not in query. |
