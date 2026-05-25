@@ -91,3 +91,4 @@ Mapping of analysis queries to plan questions. Add every new query here.
 | `scripts/2026-05-25-aggregate-1-1-adherence-top-level-v1.py` | 1.1 | 6-row summary. Buckets: Early / On-Time / Late / Not Picked Up / Not Delivered / Excluded. PBA + Internal counts + pct. | — |
 | `scripts/2026-05-25-aggregate-courier-adherence-v1.py` | 1.2 | Two CSVs — PBA and Internal. courier_name × adherence_bucket with pct_within_courier + pct_of_total. | Excluded bucket logged, not in output tables. |
 | `scripts/2026-05-25-aggregate-same-courier-adherence-v1.py` | 1.3 | 5-row summary. Same-courier cohort only (pba_partner_id == internal_partner_id). PBA + Internal counts + pct. Cohort size printed to console. | — |
+| `scripts/2026-05-25-aggregate-same-courier-courier-adherence-v1.py` | 1.4 | courier_name × adherence_bucket. PBA + Internal counts + pct_within_courier + pct_of_total. Same-courier cohort only. | — |
