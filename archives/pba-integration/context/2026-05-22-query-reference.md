@@ -96,3 +96,12 @@ Mapping of analysis queries to plan questions. Add every new query here.
 | `queries-dump/2026-05-25-pba-diff-courier-internal-rank-v1.sql` | 1.6 | 1 row per order. Different-courier cohort only. Internal courier's rank + EDD score in PBA's preference array. Joined via request_id = reference_number + ankw_account_code match. | Internal courier absent from array → NULL rank + EDD. |
 | `scripts/2026-05-25-aggregate-diff-courier-pba-calibration-v1.py` | 1.6 | Calibration buckets: ACCURATE / PBA_OVERESTIMATED / PBA_UNDERESTIMATED / NOT_IN_PREF_ARRAY / Not Picked Up / Not Delivered. Rank distribution printed to console. | Reads pba-diff-courier-internal-rank CSV. |
 | `scripts/2026-05-25-aggregate-promise-distribution-v1.py` | 2.1 | 8-row summary. tat_bucket (1d–7d / 7d+) × pba_orders + pba_pct + internal_orders + internal_pct. | Reads adherence base extract. Null TAT logged to console. |
+| `queries-dump/2026-05-25-pba-adherence-base-extract-v2.sql` | 1.1–1.6, 1.7 | Same as v1 + `allocation_created_at`. Required for pre/post cohort filtering. | Use this going forward. v1 preserved for reference. |
+| `queries-dump/2026-05-25-pba-diff-courier-internal-rank-v2.sql` | 1.6, 1.7 | Same as v1 + `allocation_created_at`. Required for pre/post cohort filtering in 1.6 script. | Use this going forward. v1 preserved for reference. |
+| `scripts/2026-05-25-aggregate-1-1-adherence-top-level-v2.py` | 1.1, 1.7 | Same as v1. Adds `--cohort PRE\|POST\|ALL` + `--cutoff-date`. Output suffix `_PRE`/`_POST` when filtered. | — |
+| `scripts/2026-05-25-aggregate-courier-adherence-v2.py` | 1.2, 1.7 | Same as v1. Adds cohort filtering. Two CSVs (PBA + Internal) with optional suffix. | — |
+| `scripts/2026-05-25-aggregate-same-courier-adherence-v2.py` | 1.3, 1.7 | Same as v1. Adds cohort filtering. | — |
+| `scripts/2026-05-25-aggregate-same-courier-courier-adherence-v2.py` | 1.4, 1.7 | Same as v1. Adds cohort filtering. | — |
+| `scripts/2026-05-25-aggregate-promise-direction-adherence-v2.py` | 1.5, 1.7 | Same as v1. Adds cohort filtering. | — |
+| `scripts/2026-05-25-aggregate-diff-courier-pba-calibration-v2.py` | 1.6, 1.7 | Same as v1. Adds cohort filtering. Reads v2 diff-courier-internal-rank CSV. | — |
+| `scripts/2026-05-25-aggregate-1-7-pre-post-cutoff-adherence-v1.py` | 1.7 | PRE + POST cohort × adherence_bucket side-by-side. cohort_orders + pba_orders + pba_pct + internal_orders + internal_pct. | Requires `--cutoff-date`. Reads v2 adherence base extract. |
