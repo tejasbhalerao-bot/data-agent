@@ -62,9 +62,10 @@ They are NOT excluded from preference array analysis — all couriers are includ
 
 | File | Purpose |
 |---|---|
-| `queries-dump/2026-05-22-base-query-1-allocation-output.sql` | One row per order. Soft + Hard side-by-side. PBA + Internal partner IDs, TATs, actual delivery date, promised delivery date |
-| `queries-dump/2026-05-22-base-query-2-preference-array.sql` | One row per order per courier in Clickpost preference array. Internal courier rank position, TAT comparison, scoring params |
+| `queries-dump/2026-05-25-pba-allocation-with-pref-array-v1.sql` | One row per order. HARD allocation only. PBA + Internal partner IDs, TATs, preference array pivoted wide (dp1–dp6: name, EDD, pricing, total_score). Joins `logistics_rails_api_audit` on `request_id = reference_number` — exact match, no timestamp approximation. |
+| `queries-dump/2026-05-25-pba-allocation-output-v1.sql` | One row per order. SOFT + HARD side-by-side. PBA + Internal partner IDs, TATs, actual delivery date, promised delivery date. `order_tat_details` joined LEFT (preserves orders without pickup data). |
 
-**Query 1 date filter:** `2026-05-08` (PBA go-live)
-**Query 2 date filter:** `2026-02-18` (broader — ranking signal analysis)
-**Query 2 coverage note:** Excludes orders where internal courier absent from Clickpost list (`internal_actual_rank IS NOT NULL` filter). `pba_matches_rank1` always NULL in shadow mode.
+**Query 1 date filter:** `2026-05-22 19:00:00` (adjust for production run)
+**Query 1 preference array:** up to 6 couriers (idx 0–5 → dp1–dp6)
+**Query 2 date filter:** `2026-05-10 00:00:00`
+**Query 2 notes:** No `order_status` join. Warehouse filter (`>= 17`) applied in `allocation` CTE, not in `cte`.
