@@ -19,7 +19,7 @@ Checks follow pipeline order: nightly job first, then allocation engine.
 
 Before any cascade or computation check, verify the input pool is clean.
 
-Pull all orders from the source table for the last 7 days. Check which delivery statuses are present — delivered, cancelled, RTO, in-transit, returned. The bucket computation must use only successfully delivered orders. Cancelled, RTO, and in-transit orders must not appear in the pool.
+Pull all orders from the source table for the last 7 days. Check which delivery statuses are present — delivered, cancelled, RTO, in-transit, returned. The bucket computation must use only delivery attempted orders. Cancelled, Discarded, and in-transit orders must not appear in the pool.
 
 **Compare against:** The set of statuses actually included in the nightly job's input query. If non-delivered statuses are present, every downstream bucket distribution is wrong regardless of other checks passing.
 
