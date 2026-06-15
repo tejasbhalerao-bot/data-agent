@@ -206,7 +206,7 @@ Join any table's `Warehouse ID` → `Warehouse Details.ID`
 ---
 
 #### Order TAT Details
-**Purpose:** Pickup time + delivery attempt timestamps per order. Source of truth for courier selected at invoice generation.
+**Purpose:** Pickup time + delivery attempt timestamps per order. Source of truth for courier selected at invoice generation, warehouse shipping, promise TAT of the courier selected. 
 **Written by:** System, on order pickup by courier.
 **Note:** Stores only 1st delivery attempt timestamp even if multiple OFD attempts exist.
 
@@ -222,6 +222,7 @@ Join any table's `Warehouse ID` → `Warehouse Details.ID`
 | Delay Days | Days added to Promise TAT to reach ≥80% adherence. Customer TAT = Promise TAT + Delay Days |
 | Supposed TAT | Boolean. True if no config value existed (defaults to 5 days) |
 
+Note: Shipping courier's promise = Promise TAT + Delay Days
 ---
 
 #### Order Status
@@ -237,7 +238,7 @@ Join any table's `Warehouse ID` → `Warehouse Details.ID`
 ---
 
 #### Package Details Tracking
-**Purpose:** Warehouse + logistics leg tracking. Source of truth for whether order was SDD.
+**Purpose:** Warehouse + logistics leg tracking. Source of truth for whether order was SDD at the time of shipping.
 **Written by:** System when order hits warehouse.
 
 | Column | Definition |
@@ -264,7 +265,7 @@ Join any table's `Warehouse ID` → `Warehouse Details.ID`
 
 #### Delivery Date Tracker
 **Purpose:** Promise data per order — dispatch date, delivery date, doctor call time, WH processing time.
-**Written by:** System. Promise data overwritten until doctor confirms order.
+**Written by:** System. Promise data overwritten until order placed.
 **Source of truth for:** Promise dates, actual doctor call time, actual WH processing time.
 
 | Column | Definition |
@@ -280,8 +281,8 @@ Join any table's `Warehouse ID` → `Warehouse Details.ID`
 | Actual Warehouse Processing | Actual WH processing time |
 | Metadata | Snapshot at order placement time. Assume synced with rest of table. |
 
-> Warning: Promise data gets overwritten until doctor confirms order. Pre-confirmation values unreliable.
-> Doctor working hours: 7:30 AM – 11:30 PM.
+> Warning: Promise data gets overwritten until order placement. Pre-order placed values unreachable.
+> Doctor working hours: 8:00 AM – 11:00 PM.
 
 **Metadata column — key fields:**
 
@@ -291,7 +292,7 @@ Join any table's `Warehouse ID` → `Warehouse Details.ID`
 | `pickup_buffer_in_minutes` | Buffer added to dispatch promise time |
 | `drop_buffer_in_minutes` | Buffer added to delivery promise time |
 
-**Source of truth for promise engine inputs/outputs:** Always use `metadata → instrumentation_details` — this is the only field that reflects the exact state at order placement time.
+**Source of truth for promise engine inputs/outputs:** Always use `metadata → instrumentation_details` — this is the only field that reflects the exact state at order placement time. Essentially, your pincode, warehouse, inventory state, sdd state. These are the primary inputs which control every other input to promise getting constructed. Things may change from at time of order placed to at time of shipping. 
 
 `instrumentation_details` contains three sub-objects:
 
