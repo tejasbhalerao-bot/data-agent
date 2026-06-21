@@ -3,8 +3,8 @@
 Each leg = actual handoff vs its digitised promise:
     Doctor   : dr_confirm_ts                vs digitised_dr_promise          (+/-1 min)
     Warehouse: actual_warehouse_processing  vs digitised_wh_promise          (+/-1 min)
-    Dispatch : pickup_time                  vs digitised_dispatch_promise    (+/-1 min)
-    Delivery : delivery_attempt_time        vs digitised_delivery_promise    (day-level)
+    Dispatch : pickup_time                  vs digitised_dispatch_promise    (date-level)
+    Delivery : delivery_attempt_time        vs digitised_delivery_promise    (date-level)
 
 Early = actual before promise, Late = actual after, On-Time = within band.
 Cohort: all 8 timestamps present, digitised_ts >= 2026-05-08, wh_processing_mins != 0.
@@ -86,7 +86,7 @@ def main() -> None:
                 n_missing += 1
                 continue
             leaves[(cls_ts(dr_a, dr_p), cls_ts(wh_a, wh_p),
-                     cls_ts(ds_a, ds_p), cls_day(dl_a, dl_p))] += 1
+                     cls_day(ds_a, ds_p), cls_day(dl_a, dl_p))] += 1  # dispatch & delivery: date-level
 
     cohort = sum(leaves.values())
     n_doc = Counter()
