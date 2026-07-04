@@ -28,6 +28,7 @@ running the scripts in `scripts/` against the raw CSV.
 
 ## Key scope decisions (locked)
 
+- **View 1 / View 2 cascade (MANDATORY definitions for Doctor/Warehouse/Dispatch/Delivery leg classification):** full rules, cuts, and final N in [`2026-07-04-view1-view2-cascade-definitions-v1.md`](2026-07-04-view1-view2-cascade-definitions-v1.md). Script: `scripts/2026-07-04-aggregate-view-cascade-v1.py`.
 - **Base population (MANDATORY, applies to every script/query in this project):** `digitised_ts > 8 May 2026` AND `delivery_attempt_time` not null → 522,808 of 813,499 rows (64.3%). Full detail in [`2026-07-04-base-population-filter-v1.md`](2026-07-04-base-population-filter-v1.md). Reusable filter: `scripts/2026-07-04-structure-base-population-filter-v1.py` → `outputs/base-population.csv`. Every new script/query must read from this filtered set, not the raw file directly.
 - **Outcome metric:** day-level. `offset = date(delivery_attempt_time) − date(digitised_delivery_promise)`; ≤−1 Early, 0 On-Time, ≥+1 Late.
 - **Instrumentation cutover:** digitised SDD/MFC/inventory/category state only populated from **8 May 2026**. Segmented analysis restricted to `digitised_ts >= 2026-05-08`.
