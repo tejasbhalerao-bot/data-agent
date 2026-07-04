@@ -35,3 +35,9 @@ running the scripts in `scripts/` against the raw CSV.
 - **Vertical:** `digitised_is_sdd` → Hyperlocal (true) / Courier (false).
 - **WH type:** `digitised_is_mfc` → MFC (true) / FC (false).
 - **Doctor-leg band:** exact sign, ±1-min buffer.
+
+## Discovered quirks & gotchas
+
+- **`shipping_delivery_promise` is an integer TAT in days** (the delivery TAT promised by the courier selected at shipping time), NOT an absolute timestamp — unlike `digitised_delivery_promise`, which is a timestamp. The comparable digitised-side quantity is a derived TAT: `date(digitised_delivery_promise) − date(digitised_dispatch_promise)`, not `digitised_delivery_promise` itself. Do not compare these two columns directly.
+- **`digitised_is_sdd`/`digitised_is_inventory` use `true`/`false` strings; `shipping_is_sdd` uses `1`/`0`; `shipping_is_inventory` uses `true`/`false`.** Normalize before comparing digitised vs shipping boolean state (`{"true":True,"1":True,"false":False,"0":False}`).
+- **`digitised_delivery_partner` has ~4.8% blanks** in the base population; `shipping_delivery_partner` is essentially always populated. Treat blank-digitised-partner orders as indeterminate for any courier-switch check, not as "no switch."
