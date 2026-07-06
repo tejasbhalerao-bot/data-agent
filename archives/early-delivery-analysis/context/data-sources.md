@@ -26,6 +26,10 @@
 Script outputs land in `archives/early-delivery-analysis/outputs/*.csv` (gitignored). Regenerate by
 running the scripts in `scripts/` against the raw CSV.
 
+## Full session recap
+
+[`2026-07-06-full-session-recap-view1-view2-cascade-v1.md`](2026-07-06-full-session-recap-view1-view2-cascade-v1.md) — complete, sequential record of every analysis, mistake+correction, hypothesis test (courier/warehouse/SDD/day-of-week switches), philosophical discussion, and PRD collaboration in this project through 2026-07-06. Read this first when resuming work on this project — it supersedes needing to re-derive context from scratch.
+
 ## Key scope decisions (locked)
 
 - **View 1 / View 2 cascade (MANDATORY definitions for Doctor/Warehouse/Dispatch/Delivery leg classification):** full rules, cuts, and final N in [`2026-07-04-view1-view2-cascade-definitions-v1.md`](2026-07-04-view1-view2-cascade-definitions-v1.md). Script: `scripts/2026-07-04-aggregate-view-cascade-v1.py`.
