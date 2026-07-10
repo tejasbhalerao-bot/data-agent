@@ -110,3 +110,12 @@ These fields can diverge between digitisation and shipping — always check both
 | digitised_is_sdd | shipping_is_sdd | SDD eligibility re-evaluated |
 | digitised_is_inventory | shipping_is_inventory | Inventory state re-evaluated |
 | digitised_delivery_promise | derived from shipping_delivery_promise days | Promise recalculated at shipping |
+
+---
+
+## Working Set Definition
+
+**Filter:** `delivery_attempt_time IS NOT NULL`
+**Size:** 522,839 orders (83.7% of 624,304 total)
+
+All analyses in this project operate on this working set unless explicitly stated otherwise. Orders without a delivery attempt are excluded — they stalled before reaching the customer and cannot be evaluated for promise performance.
