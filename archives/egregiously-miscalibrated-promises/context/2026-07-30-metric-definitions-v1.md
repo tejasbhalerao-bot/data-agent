@@ -146,6 +146,31 @@
 - Uses DATE() truncation on all four timestamps before computing differences.
 - This measures courier transit performance only — it does not capture whether dispatch itself happened on time (see **Dispatch Early / On-Time / Late**).
 
+---
+
+### Shipping Delivery TAT Early / On-Time / Late
+
+**Definition:** Whether the courier's actual transit time (pickup → delivery attempt) was shorter, equal to, or longer than the TAT promised by the courier who actually shipped the order.
+
+**Inputs:**
+- A = `shipping_delivery_promise` — TAT in days promised by the courier who actually shipped the order
+- B = `DATE(delivery_attempt_time) − DATE(pickup_time)` — actual TAT in calendar days
+
+**Formula:**
+
+| Condition | Classification |
+|-----------|---------------|
+| A > B | Early — courier delivered in fewer days than their shipping TAT promise |
+| A = B | On-time — courier matched their shipping TAT promise exactly |
+| A < B | Late — courier took more days than their shipping TAT promise |
+
+**Unit:** Days (A is already in days; B is an integer date difference)
+
+**Caveats:**
+- `shipping_delivery_promise` is the TAT of the courier who actually shipped the order — it may differ from the digitised promise if the order was rerouted to a different courier or warehouse after placement (see **Delivery TAT Early / On-Time / Late** for the digitised-promise equivalent).
+- Orders with NULL `delivery_attempt_time` or `pickup_time` are excluded.
+- Uses DATE() truncation on `delivery_attempt_time` and `pickup_time` before computing B.
+
 <!--
 Template:
 
