@@ -121,6 +121,31 @@
 - Orders with NULL `delivery_attempt_time` are excluded — courier never attempted delivery.
 - This metric classifies all deviations including ±1 day. The **Egregiously Miscalibrated Order** metric is a subset of early/late, capturing only cases where |A − B| ≥ 2 days.
 
+---
+
+### Delivery TAT Early / On-Time / Late
+
+**Definition:** Whether the courier's actual transit time (pickup → delivery attempt) was shorter, equal to, or longer than the promised transit time (promised dispatch → promised delivery).
+
+**Inputs:**
+- A = `DATE(digitised_delivery_promise) − DATE(digitised_dispatch_promise)` — promised TAT in calendar days
+- B = `DATE(delivery_attempt_time) − DATE(pickup_time)` — actual TAT in calendar days
+
+**Formula:**
+
+| Condition | Classification |
+|-----------|---------------|
+| A > B | Early — courier delivered in fewer days than promised |
+| A = B | On-time — courier matched the promised TAT exactly |
+| A < B | Late — courier took more days than promised |
+
+**Unit:** Calendar days (integer difference between dates)
+
+**Caveats:**
+- All four timestamps must be non-NULL — orders missing any of them are excluded.
+- Uses DATE() truncation on all four timestamps before computing differences.
+- This measures courier transit performance only — it does not capture whether dispatch itself happened on time (see **Dispatch Early / On-Time / Late**).
+
 <!--
 Template:
 
