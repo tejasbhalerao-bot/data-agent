@@ -48,6 +48,30 @@
 - `dr_confirm_ts` is doctor confirmation time, not call time — these are distinct events.
 - Orders with NULL `dr_confirm_ts` are excluded — doctor never confirmed.
 
+---
+
+### Warehouse Early / On-Time / Late
+
+**Definition:** Whether the warehouse finished packing the order before, exactly at, or after the promised packing completion time.
+
+**Inputs:**
+- A = `digitised_wh_promise` — time the warehouse was promised to finish packing the order
+- B = `awb_sticker_printed_ts` — time the warehouse actually finished packing (proxied by AWB sticker print time)
+
+**Formula:**
+
+| Condition | Classification |
+|-----------|---------------|
+| A > B | Early — warehouse finished packing before the promised time |
+| A = B | On-time — warehouse finished packing exactly at the promised time |
+| A < B | Late — warehouse finished packing after the promised time |
+
+**Unit:** Timestamp comparison (no date truncation — full timestamp used)
+
+**Caveats:**
+- AWB sticker print time is used as the proxy for warehouse packing completion — it is the closest system-recorded event to when the order was ready for courier pickup.
+- Orders with NULL `awb_sticker_printed_ts` are excluded — warehouse never completed packing.
+
 <!--
 Template:
 
