@@ -24,6 +24,30 @@
 - Date comparison strips the time component. A promise of `2026-07-08 20:00` and an attempt of `2026-07-06 23:59` counts as a 2-day gap and is included.
 - `digitised_delivery_promise` reflects the promise shown to the customer at order placement — this is the correct anchor, not any downstream shipping promise.
 
+---
+
+### Doctor Early / On-Time / Late
+
+**Definition:** Whether the doctor confirmed the order before, exactly at, or after the promised confirmation time.
+
+**Inputs:**
+- A = `digitised_dr_promise` — time the doctor was promised to confirm the order
+- B = `dr_confirm_ts` — time the doctor actually confirmed the order
+
+**Formula:**
+
+| Condition | Classification |
+|-----------|---------------|
+| A > B | Early — doctor confirmed before the promised time |
+| A = B | On-time — doctor confirmed exactly at the promised time |
+| A < B | Late — doctor confirmed after the promised time |
+
+**Unit:** Timestamp comparison (no date truncation — full timestamp used)
+
+**Caveats:**
+- `dr_confirm_ts` is doctor confirmation time, not call time — these are distinct events.
+- Orders with NULL `dr_confirm_ts` are excluded — doctor never confirmed.
+
 <!--
 Template:
 
