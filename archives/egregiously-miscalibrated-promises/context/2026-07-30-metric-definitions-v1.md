@@ -96,6 +96,31 @@
 - Uses DATE() truncation — a promise of `2026-07-13 23:59` and a pickup of `2026-07-13 00:01` are both `2026-07-13` and count as on-time.
 - Orders with NULL `pickup_time` are excluded — courier never picked up the order.
 
+---
+
+### Delivery Early / On-Time / Late
+
+**Definition:** Whether the courier attempted delivery before, exactly on, or after the promised delivery date.
+
+**Inputs:**
+- A = `DATE(digitised_delivery_promise)` — calendar date the courier was promised to deliver the order
+- B = `DATE(delivery_attempt_time)` — calendar date the courier actually attempted delivery
+
+**Formula:**
+
+| Condition | Classification |
+|-----------|---------------|
+| A > B | Early — courier attempted delivery before the promised date |
+| A = B | On-time — courier attempted delivery on the promised date |
+| A < B | Late — courier attempted delivery after the promised date |
+
+**Unit:** Calendar date comparison (time component stripped from both timestamps)
+
+**Caveats:**
+- Uses DATE() truncation — a promise of `2026-07-08 20:00` and an attempt at `2026-07-08 13:04` are both `2026-07-08` and count as on-time.
+- Orders with NULL `delivery_attempt_time` are excluded — courier never attempted delivery.
+- This metric classifies all deviations including ±1 day. The **Egregiously Miscalibrated Order** metric is a subset of early/late, capturing only cases where |A − B| ≥ 2 days.
+
 <!--
 Template:
 
