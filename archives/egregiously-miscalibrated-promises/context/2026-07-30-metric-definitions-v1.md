@@ -171,6 +171,31 @@
 - Orders with NULL `delivery_attempt_time` or `pickup_time` are excluded.
 - Uses DATE() truncation on `delivery_attempt_time` and `pickup_time` before computing B.
 
+---
+
+### Doctor Ops Early / On-Time / Late
+
+**Definition:** Whether the doctor made the call to the customer before, exactly at, or after the promised call time.
+
+**Inputs:**
+- A = `digitised_dr_promise` — time the doctor was promised to call the customer
+- B = `actual_doctor_call_time` — time the doctor actually called the customer
+
+**Formula:**
+
+| Condition | Classification |
+|-----------|---------------|
+| A > B | Early — doctor called before the promised time |
+| A = B | On-time — doctor called exactly at the promised time |
+| A < B | Late — doctor called after the promised time |
+
+**Unit:** Timestamp comparison (no date truncation — full timestamp used)
+
+**Caveats:**
+- Distinct from **Doctor Early / On-Time / Late** (metric 1) which uses `dr_confirm_ts` (system confirmation event). This metric uses `actual_doctor_call_time` (the actual call to the customer) — these are two different events.
+- On-time (A = B) requires an exact millisecond match and will be extremely rare in practice.
+- Orders with NULL `actual_doctor_call_time` are excluded — doctor never called.
+
 <!--
 Template:
 
