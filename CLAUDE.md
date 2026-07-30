@@ -65,6 +65,7 @@ Where every file goes. No exceptions.
 | Schema ref, sample CSV (≤10 rows), config/pricing/query ref doc | `archives/[project]/context/` | `new-file.sh` |
 | `data-sources.md` manifest | `archives/[project]/context/data-sources.md` | Edit existing |
 | Analysis request log entry | `archives/[project]/context/<dated>-analysis-request-log-v<n>.md` | Edit existing |
+| Analysis numerical results | `archives/[project]/insights/<dated>-[project]-insights-v<n>.md` | Edit existing |
 | Full CSV export from Metabase (real data) | `archives/[project]/raw-data/` | Drop manually — gitignored |
 | CSV produced by running a script | `archives/[project]/outputs/` | Script writes here — gitignored |
 | Validated reusable SQL (confirmed correct in Metabase) | `context/reference-queries/` | `new-file.sh` project `_context` |
@@ -139,11 +140,15 @@ Schema updates are not optional. Every Metabase run that reveals something new m
 
 ## 6. Analysis Request Logging (CRITICAL)
 
-Whenever Tejas asks for analysis or asks to be shown numbers — including exploratory questions, metric calculations, breakdowns, comparisons, or any output derived from data — log the request in the project's analysis request log **before ending the conversation**.
+Whenever Tejas asks for analysis or asks to be shown numbers — including exploratory questions, metric calculations, breakdowns, comparisons, or any output derived from data — do **both** of the following before ending the conversation:
+
+### 6a. Analysis Request Log
+
+Append a new row to the project's analysis request log.
 
 **Log file location:** `archives/[project]/context/<dated>-analysis-request-log-v<n>.md`
 
-**Entry format:** Append a new row to the log table:
+**Entry format:**
 
 | Field | What to write |
 |-------|--------------|
@@ -152,7 +157,18 @@ Whenever Tejas asks for analysis or asks to be shown numbers — including explo
 | `Request` | One crisp sentence describing exactly what was asked, written so a stranger to the project understands it without any prior context |
 | `Output` | One crisp sentence describing what was produced or delivered |
 
-**After appending:** commit and push the log file to GitHub immediately. Do not batch log entries across sessions.
+### 6b. Insights Doc
+
+Append the **full numerical results** to the project's insights doc.
+
+**Insights file location:** `archives/[project]/insights/<dated>-[project]-insights-v<n>.md`
+
+**Entry format:** One section per analysis request, with:
+- A heading referencing the log entry number (e.g. `## #6 — …`)
+- The request restated in one sentence
+- All result tables, counts, and percentages in full — no summarising or omitting numbers
+
+**After appending both files:** commit and push both to GitHub immediately. Do not batch entries across sessions.
 
 ---
 
