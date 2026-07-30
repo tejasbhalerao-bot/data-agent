@@ -161,3 +161,27 @@
 | Delivery Cx | 92.9% | 0.0% | 7.1% | 0 |
 | Delivery TAT | 71.5% | 21.1% | 7.4% | 0 |
 | Shipping Delivery TAT | 54.7% | 37.3% | 8.0% | 0 |
+
+---
+
+## #6 — Warehouse × Dispatch × Delivery Cx Cross-Tab
+
+**Request:** For the 96,424 egregious orders, all unique Warehouse × Dispatch × Delivery Cx combinations with % of egregious orders. Sorted by size descending.
+**Denominator:** 96,424 | 1 order unclassifiable
+
+| Warehouse | Dispatch | Delivery Cx | Count | % of Egregious |
+|-----------|----------|-------------|-------|----------------|
+| Early | Early | Early | 34,554 | 35.8% |
+| Late | On-Time | Early | 23,950 | 24.8% |
+| Late | On-Time | Late | 14,106 | 14.6% |
+| Late | Late | Late | 7,877 | 8.2% |
+| Early | On-Time | Early | 6,382 | 6.6% |
+| Early | On-Time | Late | 3,462 | 3.6% |
+| Early | Early | Late | 2,065 | 2.1% |
+| Late | Early | Early | 1,832 | 1.9% |
+| Late | Early | Late | 1,111 | 1.2% |
+| Late | Late | Early | 673 | 0.7% |
+| Early | Late | Late | 320 | 0.3% |
+| Early | Late | Early | 90 | 0.1% |
+| On-Time | Early | Early | 1 | 0.0% |
+| *(all other combinations)* | | | 0 | 0.0% |
