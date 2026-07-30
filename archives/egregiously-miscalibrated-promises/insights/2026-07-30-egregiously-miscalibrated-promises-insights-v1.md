@@ -185,3 +185,26 @@
 | Early | Late | Early | 90 | 0.1% |
 | On-Time | Early | Early | 1 | 0.0% |
 | *(all other combinations)* | | | 0 | 0.0% |
+
+---
+
+## #7 — Warehouse × Dispatch × Delivery Cx Cross-Tab (Non-SDD Only)
+
+**Request:** Rebuild the Warehouse × Dispatch × Delivery Cx cross-tab restricted to Non-SDD egregious orders (digitised_is_sdd = false).
+**Denominator:** 87,501 | 0 unclassifiable
+
+| Warehouse | Dispatch | Delivery Cx | Count | % of Non-SDD Egregious |
+|-----------|----------|-------------|-------|------------------------|
+| Early | Early | Early | 30,169 | 34.5% |
+| Late | On-Time | Early | 23,816 | 27.2% |
+| Late | On-Time | Late | 12,563 | 14.4% |
+| Late | Late | Late | 7,151 | 8.2% |
+| Early | On-Time | Early | 6,361 | 7.3% |
+| Early | On-Time | Late | 2,915 | 3.3% |
+| Late | Early | Early | 1,747 | 2.0% |
+| Early | Early | Late | 1,386 | 1.6% |
+| Late | Late | Early | 667 | 0.8% |
+| Late | Early | Late | 330 | 0.4% |
+| Early | Late | Late | 305 | 0.3% |
+| Early | Late | Early | 90 | 0.1% |
+| On-Time | Early | Early | 1 | 0.0% |
