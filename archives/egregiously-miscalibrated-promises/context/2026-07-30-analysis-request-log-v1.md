@@ -10,3 +10,4 @@
 
 | # | Date | Request | Output |
 |---|------|---------|--------|
+| 1 | 2026-07-30 | For all July 2026 orders, compute: total order count, % egregiously miscalibrated (delivery attempt ≥2 calendar days from promised delivery date), and the early/late split within that group. | 803,997 total orders; 96,424 egregiously miscalibrated (12.0%); 67,482 egregiously early (8.4%); 28,942 egregiously late (3.6%). 175,191 orders had no delivery attempt and were excluded from calibration classification. |
