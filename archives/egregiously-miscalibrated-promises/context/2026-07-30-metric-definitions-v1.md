@@ -72,6 +72,30 @@
 - AWB sticker print time is used as the proxy for warehouse packing completion — it is the closest system-recorded event to when the order was ready for courier pickup.
 - Orders with NULL `awb_sticker_printed_ts` are excluded — warehouse never completed packing.
 
+---
+
+### Dispatch Early / On-Time / Late
+
+**Definition:** Whether the courier picked up the order before, exactly on, or after the promised dispatch date.
+
+**Inputs:**
+- A = `DATE(digitised_dispatch_promise)` — calendar date the courier was promised to pick up the order
+- B = `DATE(pickup_time)` — calendar date the courier actually picked up the order
+
+**Formula:**
+
+| Condition | Classification |
+|-----------|---------------|
+| A > B | Early — courier picked up before the promised dispatch date |
+| A = B | On-time — courier picked up on the promised dispatch date |
+| A < B | Late — courier picked up after the promised dispatch date |
+
+**Unit:** Calendar date comparison (time component stripped from both timestamps)
+
+**Caveats:**
+- Uses DATE() truncation — a promise of `2026-07-13 23:59` and a pickup of `2026-07-13 00:01` are both `2026-07-13` and count as on-time.
+- Orders with NULL `pickup_time` are excluded — courier never picked up the order.
+
 <!--
 Template:
 
