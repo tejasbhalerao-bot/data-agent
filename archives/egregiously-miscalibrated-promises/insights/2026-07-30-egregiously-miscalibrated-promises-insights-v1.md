@@ -208,3 +208,44 @@
 | Early | Late | Late | 305 | 0.3% |
 | Early | Late | Early | 90 | 0.1% |
 | On-Time | Early | Early | 1 | 0.0% |
+
+---
+
+## #8 — Warehouse × Dispatch × Delivery Cx Cross-Tab (Non-SDD + Inventory and Non-SDD + Non-Inventory)
+
+**Request:** Warehouse × Dispatch × Delivery Cx cross-tab for Non-SDD+Inventory and Non-SDD+Non-Inventory egregious orders separately.
+
+### Non-SDD + Inventory (n = 57,688) | 0 unclassifiable
+
+| Warehouse | Dispatch | Delivery Cx | Count | % |
+|-----------|----------|-------------|-------|---|
+| Late | On-Time | Early | 23,454 | 40.7% |
+| Late | On-Time | Late | 12,281 | 21.3% |
+| Late | Late | Late | 6,800 | 11.8% |
+| Early | On-Time | Early | 5,236 | 9.1% |
+| Early | Early | Early | 4,035 | 7.0% |
+| Early | On-Time | Late | 2,445 | 4.2% |
+| Late | Early | Early | 1,707 | 3.0% |
+| Late | Late | Early | 653 | 1.1% |
+| Early | Early | Late | 406 | 0.7% |
+| Late | Early | Late | 316 | 0.5% |
+| Early | Late | Late | 271 | 0.5% |
+| Early | Late | Early | 83 | 0.1% |
+| On-Time | Early | Early | 1 | 0.0% |
+
+### Non-SDD + Non-Inventory (n = 29,813) | 0 unclassifiable
+
+| Warehouse | Dispatch | Delivery Cx | Count | % |
+|-----------|----------|-------------|-------|---|
+| Early | Early | Early | 26,134 | 87.7% |
+| Early | On-Time | Early | 1,125 | 3.8% |
+| Early | Early | Late | 980 | 3.3% |
+| Early | On-Time | Late | 470 | 1.6% |
+| Late | On-Time | Early | 362 | 1.2% |
+| Late | Late | Late | 351 | 1.2% |
+| Late | On-Time | Late | 282 | 0.9% |
+| Late | Early | Early | 40 | 0.1% |
+| Early | Late | Late | 34 | 0.1% |
+| Late | Early | Late | 14 | 0.0% |
+| Late | Late | Early | 14 | 0.0% |
+| Early | Late | Early | 7 | 0.0% |
