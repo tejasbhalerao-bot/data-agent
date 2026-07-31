@@ -305,3 +305,26 @@
 | 12 – 24 hrs | 2,601 | 10.0% | 2.7% |
 | > 24 hrs | 13,466 | 51.5% | 14.0% |
 | **Total** | **26,134** | **100.0%** | **27.1%** |
+
+---
+
+## #13 — Cohort 40: Warehouse Bucket × Dispatch Days Early × Delivery TAT Days Early Matrix
+
+**Request:** For cohort 40, build a 3-way matrix of warehouse earliness bucket × dispatch days early × delivery TAT days early. Each cell = % of cohort 40 (n=26,134).
+**Delivery TAT days early** = [DATE(digitised_delivery_promise) − DATE(digitised_dispatch_promise)] − [DATE(delivery_attempt_time) − DATE(pickup_time)]. Positive = courier delivered in fewer days than promised.
+
+| WH Bucket | Dispatch | TAT -1d (late) | TAT 0d | TAT 1d early | TAT 2d early | TAT 3d+ early | Row % | n |
+|---|---|---|---|---|---|---|---|---|
+| 4–8 hrs | 1d early | 0.0% | 0.0% | 15.5% | 4.2% | 0.6% | 20.3% | 5,302 |
+| 4–8 hrs | 2d early | 0.0% | 0.7% | 0.2% | 0.0% | 0.0% | 0.9% | 247 |
+| 8–12 hrs | 1d early | 0.0% | 0.0% | 9.3% | 2.8% | 0.5% | 12.6% | 3,301 |
+| 8–12 hrs | 2d early | 0.0% | 0.4% | 0.2% | 0.0% | 0.0% | 0.6% | 148 |
+| 12–24 hrs | 1d early | 0.0% | 0.0% | 6.8% | 1.5% | 0.2% | 8.5% | 2,216 |
+| 12–24 hrs | 2d early | 0.0% | 0.9% | 0.4% | 0.1% | 0.0% | 1.4% | 368 |
+| 12–24 hrs | 3d+ early | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.1% | 17 |
+| > 24 hrs | 1d early | 0.0% | 0.0% | 10.5% | 2.9% | 0.4% | 13.9% | 3,625 |
+| > 24 hrs | 2d early | 0.0% | 19.5% | 10.8% | 2.9% | 0.4% | 33.5% | 8,759 |
+| > 24 hrs | 3d+ early | 0.8% | 2.0% | 1.0% | 0.3% | 0.0% | 4.1% | 1,082 |
+| **Col Total** | | **0.9%** | **23.5%** | **54.6%** | **14.8%** | **2.2%** | **95.9%** | **25,065** |
+
+*1,069 cohort 40 orders (4.1%) unclassifiable — NULL dispatch promise, pickup time, or TAT fields.*
