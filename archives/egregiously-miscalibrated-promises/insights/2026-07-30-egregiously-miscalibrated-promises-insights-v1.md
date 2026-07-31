@@ -472,6 +472,39 @@ Non-Inventory is 19.4% of all orders but 30.9% of the egregious set — approxim
 
 ---
 
+## #19 — Egregious Non-SDD Non-Inventory Superset: WH Magnitude Buckets
+
+**Request:** For the egregious Non-SDD Non-Inventory superset (n=29,813), plot warehouse earliness/lateness magnitude buckets.
+**Denominators:** Superset (n=29,813) and total egregious (n=96,424)
+
+| WH Bucket | Count | % of Superset | % of Egregious |
+|---|---|---|---|
+| **── WAREHOUSE EARLY ──** | | | |
+| Early < 30 mins | 84 | 0.3% | 0.1% |
+| Early 30 – 60 mins | 114 | 0.4% | 0.1% |
+| Early 1 – 2 hrs | 426 | 1.4% | 0.4% |
+| Early 2 – 4 hrs | 1,381 | 4.6% | 1.4% |
+| Early 4 – 8 hrs | 6,227 | 20.9% | 6.5% |
+| Early 8 – 12 hrs | 3,643 | 12.2% | 3.8% |
+| Early 12 – 24 hrs | 3,058 | 10.3% | 3.2% |
+| Early > 24 hrs | 13,817 | 46.3% | 14.3% |
+| **Subtotal Early** | **28,750** | **96.4%** | **29.8%** |
+| **── WAREHOUSE ON-TIME ──** | | | |
+| On-Time | 0 | 0.0% | 0.0% |
+| **── WAREHOUSE LATE ──** | | | |
+| Late < 30 mins | 41 | 0.1% | 0.0% |
+| Late 30 – 60 mins | 52 | 0.2% | 0.1% |
+| Late 1 – 2 hrs | 76 | 0.3% | 0.1% |
+| Late 2 – 4 hrs | 116 | 0.4% | 0.1% |
+| Late 4 – 8 hrs | 76 | 0.3% | 0.1% |
+| Late 8 – 12 hrs | 71 | 0.2% | 0.1% |
+| Late 12 – 24 hrs | 453 | 1.5% | 0.5% |
+| Late > 24 hrs | 178 | 0.6% | 0.2% |
+| **Subtotal Late** | **1,063** | **3.6%** | **1.1%** |
+| **TOTAL** | **29,813** | **100.0%** | **30.9%** |
+
+---
+
 ## #16 — Cohorts 27–33: WH Magnitude Buckets & WH × Dispatch × TAT Matrices
 
 **Request:** For each of cohorts 27–33 (Non-SDD Inventory egregious sub-cohorts), build WH magnitude buckets (earliness or lateness) and WH × dispatch × TAT matrices individually.
