@@ -328,3 +328,52 @@
 | **Col Total** | | **0.9%** | **23.5%** | **54.6%** | **14.8%** | **2.2%** | **95.9%** | **25,065** |
 
 *1,069 cohort 40 orders (4.1%) unclassifiable — NULL dispatch promise, pickup time, or TAT fields.*
+
+---
+
+## #14 — SDD Egregious: Warehouse × Dispatch × Delivery Cx Cross-Tabs
+
+**Request:** Build Warehouse × Dispatch × Delivery Cx cross-tab for all SDD egregious orders, SDD Inventory, and SDD Non-Inventory. Cohort numbering continues from 49.
+
+### ALL SDD Egregious (n=8,545 | 8.9% of all egregious)
+
+| Cohort | Warehouse | Dispatch | Delivery Cx | Count | % of SDD Egregious |
+|---|---|---|---|---|---|
+| 49 | Early | Early | Early | 4,212 | 49.3% |
+| 50 | Late | On-Time | Late | 1,505 | 17.6% |
+| 51 | Late | Early | Late | 777 | 9.1% |
+| 52 | Late | Late | Late | 693 | 8.1% |
+| 53 | Early | Early | Late | 673 | 7.9% |
+| 54 | Early | On-Time | Late | 539 | 6.3% |
+| 55 | Late | Early | Early | 82 | 1.0% |
+| 56 | Late | On-Time | Early | 46 | 0.5% |
+| 57 | Early | Late | Late | 15 | 0.2% |
+| 58 | Early | On-Time | Early | 3 | 0.0% |
+
+### ALL SDD Inventory Egregious (n=3,954 | 46.3% of SDD egregious)
+
+| Cohort | Warehouse | Dispatch | Delivery Cx | Count | % of SDD Inventory |
+|---|---|---|---|---|---|
+| 59 | Late | On-Time | Late | 1,468 | 37.1% |
+| 60 | Late | Early | Late | 742 | 18.8% |
+| 61 | Late | Late | Late | 637 | 16.1% |
+| 62 | Early | On-Time | Late | 525 | 13.3% |
+| 63 | Early | Early | Late | 399 | 10.1% |
+| 64 | Late | Early | Early | 81 | 2.0% |
+| 65 | Late | On-Time | Early | 46 | 1.2% |
+| 66 | Early | Early | Early | 45 | 1.1% |
+| 67 | Early | Late | Late | 8 | 0.2% |
+| 68 | Early | On-Time | Early | 3 | 0.1% |
+
+### ALL SDD Non-Inventory Egregious (n=4,591 | 53.7% of SDD egregious)
+
+| Cohort | Warehouse | Dispatch | Delivery Cx | Count | % of SDD Non-Inventory |
+|---|---|---|---|---|---|
+| 69 | Early | Early | Early | 4,167 | 90.8% |
+| 70 | Early | Early | Late | 274 | 6.0% |
+| 71 | Late | Late | Late | 56 | 1.2% |
+| 72 | Late | On-Time | Late | 37 | 0.8% |
+| 73 | Late | Early | Late | 35 | 0.8% |
+| 74 | Early | On-Time | Late | 14 | 0.3% |
+| 75 | Early | Late | Late | 7 | 0.2% |
+| 76 | Late | Early | Early | 1 | 0.0% |
