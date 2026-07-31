@@ -416,6 +416,21 @@
 
 ---
 
+## #17 — Non-Inventory Share of All July 2026 Orders
+
+**Request:** What % of all July 2026 orders are Non-Inventory at digitised?
+
+| Segment | Count | % of All Orders |
+|---|---|---|
+| Inventory | 646,010 | 80.3% |
+| Non-Inventory | 156,171 | 19.4% |
+| Unclassifiable (NULL) | 1,816 | 0.2% |
+| **Total** | **803,997** | **100.0%** |
+
+Non-Inventory is 19.4% of all orders but 30.9% of the egregious set — approximately 1.6× overrepresented.
+
+---
+
 ## #16 — Cohorts 27–33: WH Magnitude Buckets & WH × Dispatch × TAT Matrices
 
 **Request:** For each of cohorts 27–33 (Non-SDD Inventory egregious sub-cohorts), build WH magnitude buckets (earliness or lateness) and WH × dispatch × TAT matrices individually.
