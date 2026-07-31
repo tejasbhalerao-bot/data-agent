@@ -505,6 +505,42 @@ Non-Inventory is 19.4% of all orders but 30.9% of the egregious set — approxim
 
 ---
 
+## #20 — Egregious Non-SDD Non-Inventory Superset: Dispatch & Delivery TAT Magnitude Tables
+
+**Request:** Progressive magnitude tables for dispatch days early/late and delivery TAT days early/late for the superset (n=29,813).
+
+### Dispatch
+
+| Deviation | Count | % of Superset | % of Egregious |
+|---|---|---|---|
+| Early 3d+ | 1,115 | 3.7% | 1.2% |
+| Early 2d | 9,726 | 32.6% | 10.1% |
+| Early 1d | 16,327 | 54.8% | 16.9% |
+| On-Time | 2,239 | 7.5% | 2.3% |
+| Late 1d | 235 | 0.8% | 0.2% |
+| Late 2d | 82 | 0.3% | 0.1% |
+| Late 3d+ | 89 | 0.3% | 0.1% |
+| **Total** | **29,813** | **100.0%** | **30.9%** |
+
+### Delivery TAT
+
+| Deviation | Count | % of Superset | % of Egregious |
+|---|---|---|---|
+| Early 4d+ | 26 | 0.1% | 0.0% |
+| Early 3d | 804 | 2.7% | 0.8% |
+| Early 2d | 5,384 | 18.1% | 5.6% |
+| Early 1d | 15,101 | 50.7% | 15.7% |
+| On-Time | 6,277 | 21.1% | 6.5% |
+| Late 1d | 407 | 1.4% | 0.4% |
+| Late 2d | 489 | 1.6% | 0.5% |
+| Late 3d | 597 | 2.0% | 0.6% |
+| Late 4d | 360 | 1.2% | 0.4% |
+| Late 5d | 170 | 0.6% | 0.2% |
+| Late 6d+ | 198 | 0.7% | 0.2% |
+| **Total** | **29,813** | **100.0%** | **30.9%** |
+
+---
+
 ## #16 — Cohorts 27–33: WH Magnitude Buckets & WH × Dispatch × TAT Matrices
 
 **Request:** For each of cohorts 27–33 (Non-SDD Inventory egregious sub-cohorts), build WH magnitude buckets (earliness or lateness) and WH × dispatch × TAT matrices individually.
