@@ -827,3 +827,47 @@ Non-Inventory is 19.4% of all orders but 30.9% of the egregious set — approxim
 | 8 – 12 hrs | 1d early | 0.0% | 0.6% | 0.0% | 0.1% | 0.0% | 0.7% | 12 |
 | 12 – 24 hrs | 1d early | 0.0% | 5.2% | 1.1% | 0.2% | 0.0% | 6.5% | 111 |
 | **Col Total** | | **2.9%** | **66.9%** | **23.8%** | **5.6%** | **0.9%** | **100.0%** | **1,707** |
+
+---
+
+## #23 — Digitised vs Shipping vs Actual TAT Distribution and Deviation (Non-SDD Inventory Egregious Superset)
+
+**Request:** For the Non-SDD Inventory egregious superset (n=57,688), compare raw distributions of digitised TAT promise (`digitised_delivery_tat_mins` converted to days), shipping TAT promise (`shipping_delivery_promise` in days), and actual courier TAT (`delivery_attempt_date − pickup_date`); and compute the deviation (promised − actual) for both promise fields.
+
+### Raw TAT distribution
+
+| TAT days | Digitised | Dig % | Shipping | Ship % | Actual | Act % |
+|----------|-----------|-------|----------|--------|--------|-------|
+| 0d or less | 52 | 0.1% | 1 | 0.0% | 660 | 1.1% |
+| 1d | 6,279 | 10.9% | 7,510 | 13.0% | 10,012 | 17.4% |
+| 2d | 8,289 | 14.4% | 12,826 | 22.2% | 19,753 | 34.2% |
+| 3d | 13,441 | 23.3% | 16,664 | 28.9% | 10,338 | 17.9% |
+| 4d | 17,575 | 30.5% | 11,073 | 19.2% | 5,912 | 10.2% |
+| 5d | 10,608 | 18.4% | 5,180 | 9.0% | 4,037 | 7.0% |
+| 6d | 1,285 | 2.2% | 2,022 | 3.5% | 2,770 | 4.8% |
+| 7d+ | 159 | 0.3% | 2,412 | 4.2% | 4,206 | 7.3% |
+| **Total** | **57,688** | **100.0%** | **57,688** | **100.0%** | **57,688** | **100.0%** |
+
+Digitised peaks at 4d (30.5%), shipping peaks at 3d (28.9%), actual peaks at 2d (34.2%). Both promises are right-shifted by ~1–2 days vs reality.
+
+### TAT deviation (promised − actual)
+
+Positive = courier faster than promised (early for customer). Negative = courier slower (late for customer).
+
+| Deviation | Digitised | Dig % | Shipping | Ship % |
+|-----------|-----------|-------|----------|--------|
+| Early 3d+ | 5,683 | 9.9% | 3,980 | 6.9% |
+| Early 2d | 25,351 | 43.9% | 9,602 | 16.6% |
+| Early 1d | 4,272 | 7.4% | 17,976 | 31.2% |
+| On-Time | 1,770 | 3.1% | 9,107 | 15.8% |
+| Late 1d | 3,341 | 5.8% | 4,186 | 7.3% |
+| Late 2d | 10,004 | 17.3% | 6,853 | 11.9% |
+| Late 3d+ | 7,267 | 12.6% | 5,984 | 10.4% |
+| **Total Early** | **35,306** | **61.2%** | **31,558** | **54.7%** |
+| **On-Time** | **1,770** | **3.1%** | **9,107** | **15.8%** |
+| **Total Late** | **20,612** | **35.7%** | **17,023** | **29.5%** |
+
+**Key findings:**
+- Digitised TAT (dominant bucket: Early 2d at 43.9%): over-estimates TAT for 61.2% of routes — the model is promising 4–5d for routes the courier completes in 2–3d. On-time rate is only 3.1%. Late tail is 35.7% (courier slower than digitised TAT for those routes).
+- Shipping TAT (dominant bucket: Early 1d at 31.2%): better calibrated than digitised — on-time improves to 15.8%, and the dominant over-estimate shifts to Early 1d rather than Early 2d — but still 54.7% early. Late tail is 29.5%, nearly identical to digitised, confirming shipping does not capture slow routes any better.
+- Both promises are directionally biased upward (over-estimating actual TAT for the majority), but neither captures the ~30% late tail — indicating high variance in actual courier performance that neither model accounts for.
