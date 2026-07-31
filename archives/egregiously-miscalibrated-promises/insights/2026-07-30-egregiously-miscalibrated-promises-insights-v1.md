@@ -286,3 +286,22 @@
 | 8–12 hrs | 4813526 | Jul 24 22:00 | Jul 24 12:40 | 560 | Jul 25 20:00 | Jul 24 13:53 | Jul 29 | Jul 26 |
 | 12–24 hrs | 4171350 | Jul 4 11:00 | Jul 3 17:23 | 1,057 | Jul 4 20:00 | Jul 3 17:52 | Jul 8 | Jul 6 |
 | > 24 hrs | 4779013 | Jul 9 11:00 | Jul 7 16:17 | 2,563 | Jul 9 17:00 | Jul 7 18:23 | Jul 11 | Jul 9 |
+
+---
+
+## #12 — Cohort 40: Warehouse Earliness Magnitude Buckets
+
+**Request:** For cohort 40 (Non-SDD Non-Inventory egregious, Warehouse=Early, Dispatch=Early, Delivery=Early, n=26,134), segment by how early the warehouse packed (digitised_wh_promise − awb_sticker_printed_ts).
+**Denominators:** Cohort 40 (n=26,134) and total egregious (n=96,424)
+
+| Bucket | Count | % of Cohort 40 | % of Egregious |
+|--------|------:|---------------:|---------------:|
+| < 30 mins | 18 | 0.1% | 0.0% |
+| 30 – 60 mins | 15 | 0.1% | 0.0% |
+| 1 – 2 hrs | 186 | 0.7% | 0.2% |
+| 2 – 4 hrs | 850 | 3.3% | 0.9% |
+| 4 – 8 hrs | 5,549 | 21.2% | 5.8% |
+| 8 – 12 hrs | 3,449 | 13.2% | 3.6% |
+| 12 – 24 hrs | 2,601 | 10.0% | 2.7% |
+| > 24 hrs | 13,466 | 51.5% | 14.0% |
+| **Total** | **26,134** | **100.0%** | **27.1%** |
