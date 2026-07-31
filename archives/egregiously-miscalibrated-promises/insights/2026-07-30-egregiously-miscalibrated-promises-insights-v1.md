@@ -268,3 +268,21 @@
 | 12 – 24 hrs | 2,695 | 8.9% | 2.8% | 96.5% |
 | > 24 hrs | 13,486 | 44.7% | 14.0% | 99.9% |
 | **Total** | **30,169** | **100.0%** | **31.3%** | **86.6%** |
+
+---
+
+## #11 — Cohort 14: Sample Orders per Warehouse Earliness Bucket (All Columns)
+
+**Request:** Pull one sample order per bucket from cohort 14 to understand why orders packed slightly early in the warehouse still result in dispatch and delivery being a full day+ early.
+
+**Key finding across all buckets:** The courier picks up the order on the same day the AWB is printed — within hours — regardless of the dispatch promise date. The dispatch promise date (always next day or later) is being ignored. AWB print is acting as the de facto pickup trigger.
+
+| Bucket | Order ID | WH Promise | AWB Printed | WH Mins Early | Dispatch Promise | Pickup Time | Delivery Promise | Delivery Attempt |
+|--------|----------|------------|-------------|---------------|-----------------|-------------|-----------------|-----------------|
+| < 30 mins | 13983730 | Jul 3 18:03 | Jul 3 17:48 | 15 | Jul 4 18:00 | Jul 3 18:19 | Jul 7 | Jul 5 |
+| 30–60 mins | 9093921 | Jul 15 18:34 | Jul 15 17:53 | 40 | Jul 16 17:00 | Jul 15 18:07 | Jul 20 | Jul 18 |
+| 1–2 hrs | 14418699 | Jul 2 16:30 | Jul 2 15:07 | 83 | Jul 3 13:00 | Jul 2 19:29 | Jul 8 | Jul 5 |
+| 4–8 hrs | 4650456 | Jul 17 22:00 | Jul 17 15:10 | 410 | Jul 18 18:00 | Jul 17 18:46 | Jul 22 | Jul 20 |
+| 8–12 hrs | 4813526 | Jul 24 22:00 | Jul 24 12:40 | 560 | Jul 25 20:00 | Jul 24 13:53 | Jul 29 | Jul 26 |
+| 12–24 hrs | 4171350 | Jul 4 11:00 | Jul 3 17:23 | 1,057 | Jul 4 20:00 | Jul 3 17:52 | Jul 8 | Jul 6 |
+| > 24 hrs | 4779013 | Jul 9 11:00 | Jul 7 16:17 | 2,563 | Jul 9 17:00 | Jul 7 18:23 | Jul 11 | Jul 9 |
