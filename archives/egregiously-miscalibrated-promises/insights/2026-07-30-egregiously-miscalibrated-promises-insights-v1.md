@@ -249,3 +249,22 @@
 | Late | Early | Late | 14 | 0.0% |
 | Late | Late | Early | 14 | 0.0% |
 | Early | Late | Early | 7 | 0.0% |
+
+---
+
+## #9 — Cohort 14: Warehouse Earliness Magnitude Buckets
+
+**Request:** For cohort 14 (Non-SDD egregious, Warehouse=Early, Dispatch=Early, Delivery=Early, n=30,169), segment by how early the warehouse packed (digitised_wh_promise − awb_sticker_printed_ts).
+**Denominators:** Cohort 14 (n=30,169) and total egregious (n=96,424)
+
+| Bucket | Count | % of Cohort 14 | % of Egregious |
+|--------|-------|----------------|----------------|
+| < 30 mins | 1,442 | 4.8% | 1.5% |
+| 30 – 60 mins | 2,297 | 7.6% | 2.4% |
+| 1 – 2 hrs | 398 | 1.3% | 0.4% |
+| 2 – 4 hrs | 851 | 2.8% | 0.9% |
+| 4 – 8 hrs | 5,551 | 18.4% | 5.8% |
+| 8 – 12 hrs | 3,449 | 11.4% | 3.6% |
+| 12 – 24 hrs | 2,695 | 8.9% | 2.8% |
+| > 24 hrs | 13,486 | 44.7% | 14.0% |
+| **Total** | **30,169** | **100.0%** | **31.3%** |
