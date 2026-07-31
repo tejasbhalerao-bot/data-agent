@@ -377,3 +377,39 @@
 | 74 | Early | On-Time | Late | 14 | 0.3% |
 | 75 | Early | Late | Late | 7 | 0.2% |
 | 76 | Late | Early | Early | 1 | 0.0% |
+
+---
+
+## #15 — Cohort 41: Warehouse Earliness Buckets & WH × Delivery TAT Matrix
+
+**Request:** For cohort 41 (Non-SDD Non-Inventory egregious, Warehouse=Early, Dispatch=On-Time, Delivery=Early, n=1,125), build warehouse earliness magnitude buckets and WH bucket × Delivery TAT days early matrix. Dispatch column dropped — all orders are on-time on dispatch.
+
+### View 1: Warehouse Earliness Magnitude Buckets
+
+| Bucket | Count | % of Cohort 41 | % of Egregious |
+|---|---|---|---|
+| < 30 mins | 44 | 3.9% | 0.0% |
+| 30 – 60 mins | 66 | 5.9% | 0.1% |
+| 1 – 2 hrs | 150 | 13.3% | 0.2% |
+| 2 – 4 hrs | 309 | 27.5% | 0.3% |
+| 4 – 8 hrs | 308 | 27.4% | 0.3% |
+| 8 – 12 hrs | 40 | 3.6% | 0.0% |
+| 12 – 24 hrs | 174 | 15.5% | 0.2% |
+| > 24 hrs | 34 | 3.0% | 0.0% |
+| **Total** | **1,125** | **100.0%** | **1.2%** |
+
+### View 2: WH Bucket × Delivery TAT Days Early (% of Cohort 41)
+
+*Dispatch is on-time for all orders; TAT early = delivery Cx days early (min 2d for egregious orders — TAT -1d/0d/1d are mathematically impossible here).*
+
+| WH Bucket | TAT -1d (late) | TAT 0d | TAT 1d | TAT 2d early | TAT 3d+ early | Row % | n |
+|---|---|---|---|---|---|---|---|
+| < 30 mins | 0.0% | 0.0% | 0.0% | 3.6% | 0.3% | 3.9% | 44 |
+| 30 – 60 mins | 0.0% | 0.0% | 0.0% | 4.4% | 1.4% | 5.9% | 66 |
+| 1 – 2 hrs | 0.0% | 0.0% | 0.0% | 11.7% | 1.6% | 13.3% | 150 |
+| 2 – 4 hrs | 0.0% | 0.0% | 0.0% | 24.3% | 3.2% | 27.5% | 309 |
+| 4 – 8 hrs | 0.0% | 0.0% | 0.0% | 23.2% | 4.2% | 27.4% | 308 |
+| 8 – 12 hrs | 0.0% | 0.0% | 0.0% | 2.6% | 1.0% | 3.6% | 40 |
+| 12 – 24 hrs | 0.0% | 0.0% | 0.0% | 13.5% | 2.0% | 15.5% | 174 |
+| > 24 hrs | 0.0% | 0.0% | 0.0% | 2.5% | 0.5% | 3.0% | 34 |
+| **Col Total** | **0.0%** | **0.0%** | **0.0%** | **85.9%** | **14.1%** | **100.0%** | **1,125** |
