@@ -541,6 +541,65 @@ Non-Inventory is 19.4% of all orders but 30.9% of the egregious set — approxim
 
 ---
 
+## #21 — Egregious Non-SDD Inventory Superset: WH, Dispatch & Delivery TAT Magnitude Tables
+
+**Request:** Progressive magnitude tables for WH, dispatch days early/late, and delivery TAT days early/late for the Non-SDD Inventory egregious superset (n=57,688).
+
+### Warehouse
+
+| Deviation | Count | % of Superset | % of Egregious |
+|---|---|---|---|
+| Early > 24 hrs | 21 | 0.0% | 0.0% |
+| Early 12 – 24 hrs | 156 | 0.3% | 0.2% |
+| Early 1 – 2 hrs | 443 | 0.8% | 0.5% |
+| Early 30 – 60 mins | 5,815 | 10.1% | 6.0% |
+| Early < 30 mins | 6,030 | 10.5% | 6.3% |
+| On-Time | 1 | 0.0% | 0.0% |
+| Late < 30 mins | 4,135 | 7.2% | 4.3% |
+| Late 30 – 60 mins | 3,293 | 5.7% | 3.4% |
+| Late 1 – 2 hrs | 5,351 | 9.3% | 5.5% |
+| Late 2 – 4 hrs | 7,359 | 12.8% | 7.6% |
+| Late 4 – 8 hrs | 7,816 | 13.5% | 8.1% |
+| Late 8 – 12 hrs | 1,340 | 2.3% | 1.4% |
+| Late 12 – 24 hrs | 12,277 | 21.3% | 12.7% |
+| Late > 24 hrs | 3,640 | 6.3% | 3.8% |
+| **Total** | **57,688** | **100.0%** | **59.8%** |
+
+### Dispatch
+
+| Deviation | Count | % of Superset | % of Egregious |
+|---|---|---|---|
+| Early 2d+ | 258 | 0.4% | 0.3% |
+| Early 1d | 6,207 | 10.8% | 6.4% |
+| On-Time | 43,416 | 75.3% | 45.0% |
+| Late 1d | 5,240 | 9.1% | 5.4% |
+| Late 2d | 1,786 | 3.1% | 1.9% |
+| Late 3d | 361 | 0.6% | 0.4% |
+| Late 4d | 145 | 0.3% | 0.2% |
+| Late 5d | 74 | 0.1% | 0.1% |
+| Late 6d+ | 201 | 0.3% | 0.2% |
+| **Total** | **57,688** | **100.0%** | **59.8%** |
+
+### Delivery TAT
+
+| Deviation | Count | % of Superset | % of Egregious |
+|---|---|---|---|
+| Early 5d+ | 101 | 0.2% | 0.1% |
+| Early 4d | 670 | 1.2% | 0.7% |
+| Early 3d | 4,920 | 8.5% | 5.1% |
+| Early 2d | 25,355 | 44.0% | 26.3% |
+| Early 1d | 4,298 | 7.5% | 4.5% |
+| On-Time | 1,779 | 3.1% | 1.8% |
+| Late 1d | 3,331 | 5.8% | 3.5% |
+| Late 2d | 9,978 | 17.3% | 10.3% |
+| Late 3d | 3,774 | 6.5% | 3.9% |
+| Late 4d | 1,694 | 2.9% | 1.8% |
+| Late 5d | 816 | 1.4% | 0.8% |
+| Late 6d+ | 972 | 1.7% | 1.0% |
+| **Total** | **57,688** | **100.0%** | **59.8%** |
+
+---
+
 ## #16 — Cohorts 27–33: WH Magnitude Buckets & WH × Dispatch × TAT Matrices
 
 **Request:** For each of cohorts 27–33 (Non-SDD Inventory egregious sub-cohorts), build WH magnitude buckets (earliness or lateness) and WH × dispatch × TAT matrices individually.
