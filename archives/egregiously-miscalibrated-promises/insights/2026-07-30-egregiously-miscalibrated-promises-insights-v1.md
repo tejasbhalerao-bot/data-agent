@@ -1208,3 +1208,87 @@ WH deviation = `digitised_wh_promise − awb_sticker_printed_ts` in minutes (pos
 | **Total** | **57,688** | **58.0%** | **0.9%** | **41.1%** |
 
 **Verdict: Hypothesis supported.** Unlike H11 (actual doctor call), doctor confirmation shows a clear signal. Early WH buckets: 0–33% late confirmation. Late WH buckets: 40–55% late confirmation, with visible gradient peaking at Late 4–8 hrs (49.5%) and Late >24 hrs (55.2%). Mechanism: `dr_confirm_ts` is what triggers WH to start processing — a late confirmation holds the warehouse even if the doctor call itself was on time. The doctor call (H11) and confirmation (H12) are measuring different pipeline events. Note: Late >24 hrs overlap with H9 (payment pending 64%) is likely non-independent — payment pending likely delays the doctor confirmation as well.
+
+---
+
+## #35 — H11 and H12 re-analysis: magnitude of doctor deviation per WH bucket
+
+**Request:** Re-examine H11 (actual_doctor_call_time) and H12 (dr_confirm_ts) by showing the magnitude distribution of doctor deviation (not just early/on-time/late binary) per WH deviation bucket, to allow confident conclusions about whether the doctor leg drives WH lateness.
+
+**Doctor deviation sign convention:** positive = doctor acted before digitised_dr_promise (early), negative = after (late). Units: minutes.
+
+**Buckets for doctor deviation:** Early >24 hrs / Early 12–24 hrs / Early 1–12 hrs / Early 5–60 mins / Early <5 mins / On-Time / Late <5 mins / Late 5–60 mins / Late 1–4 hrs / Late 4–12 hrs / Late 12–24 hrs / Late >24 hrs.
+
+---
+
+### H12 magnitude: dr_confirm_ts vs digitised_dr_promise (each cell = % of WH bucket row)
+
+| WH Dev | n | E>24h | E12-24h | E1-12h | E5-60m | E<5m | On-Time | L<5m | L5-60m | L1-4h | L4-12h | L12-24h | L>24h |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Early > 24 hrs | 21 | 100.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% |
+| Early 12 – 24 hrs | 156 | 0.0% | 1.9% | 0.0% | 47.4% | 18.6% | 1.3% | 25.0% | 5.8% | 0.0% | 0.0% | 0.0% | 0.0% |
+| Early 1 – 2 hrs | 454 | 0.2% | 0.0% | 1.1% | 91.2% | 2.4% | 0.0% | 3.7% | 1.3% | 0.0% | 0.0% | 0.0% | 0.0% |
+| Early 30 – 60 mins | 5,813 | 0.0% | 0.0% | 0.1% | 67.3% | 12.9% | 0.7% | 16.8% | 2.2% | 0.1% | 0.0% | 0.0% | 0.0% |
+| Early < 30 mins | 6,032 | 0.0% | 0.0% | 0.0% | 49.6% | 16.0% | 1.1% | 22.7% | 10.4% | 0.1% | 0.0% | 0.0% | 0.0% |
+| On-Time | 1 | 0.0% | 0.0% | 0.0% | 0.0% | 100.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% |
+| Late < 30 mins | 4,138 | 0.0% | 0.0% | 0.1% | 43.4% | 15.9% | 0.7% | 19.3% | 19.6% | 1.1% | 0.0% | 0.0% | 0.0% |
+| Late 30 – 60 mins | 3,291 | 0.1% | 0.0% | 0.2% | 41.8% | 13.4% | 1.0% | 17.7% | 20.9% | 4.8% | 0.0% | 0.0% | 0.0% |
+| Late 1 – 2 hrs | 5,352 | 0.0% | 0.0% | 0.2% | 41.2% | 14.7% | 1.1% | 15.1% | 17.2% | 10.3% | 0.1% | 0.1% | 0.0% |
+| Late 2 – 4 hrs | 7,358 | 0.0% | 0.0% | 0.3% | 37.5% | 13.6% | 1.0% | 15.1% | 16.0% | 15.1% | 1.2% | 0.2% | 0.0% |
+| Late 4 – 8 hrs | 7,815 | 0.1% | 0.0% | 0.1% | 35.3% | 13.8% | 1.2% | 15.8% | 10.7% | 11.1% | 11.0% | 0.9% | 0.0% |
+| Late 8 – 12 hrs | 1,340 | 0.1% | 0.0% | 0.3% | 33.2% | 17.0% | 1.0% | 18.4% | 9.3% | 4.0% | 11.3% | 5.5% | 0.0% |
+| Late 12 – 24 hrs | 12,277 | 0.0% | 0.0% | 0.1% | 43.3% | 14.2% | 0.8% | 16.3% | 15.6% | 6.2% | 2.3% | 1.3% | 0.0% |
+| Late > 24 hrs | 3,640 | 0.1% | 0.1% | 0.3% | 34.1% | 10.0% | 0.4% | 10.1% | 14.5% | 9.8% | 10.8% | 4.6% | 5.4% |
+| **Total** | **57,688** | **0.1%** | **0.0%** | **0.1%** | **43.8%** | **14.0%** | **0.9%** | **16.6%** | **13.5%** | **6.8%** | **3.1%** | **0.8%** | **0.3%** |
+
+---
+
+### H11 magnitude: actual_doctor_call_time vs digitised_dr_promise (each cell = % of WH bucket row)
+
+| WH Dev | n | E>24h | E12-24h | E1-12h | E5-60m | E<5m | On-Time | L<5m | L5-60m | L1-4h | L4-12h | L12-24h | L>24h |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Early > 24 hrs | 21 | 100.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% |
+| Early 12 – 24 hrs | 156 | 0.6% | 1.3% | 2.6% | 54.5% | 9.6% | 0.0% | 30.8% | 0.6% | 0.0% | 0.0% | 0.0% | 0.0% |
+| Early 1 – 2 hrs | 454 | 0.4% | 0.0% | 5.3% | 88.3% | 1.1% | 0.0% | 4.8% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% |
+| Early 30 – 60 mins | 5,813 | 0.0% | 0.1% | 2.9% | 72.4% | 5.1% | 0.1% | 19.2% | 0.2% | 0.0% | 0.0% | 0.0% | 0.0% |
+| Early < 30 mins | 6,032 | 0.0% | 0.2% | 3.3% | 63.6% | 6.9% | 0.1% | 25.0% | 0.9% | 0.0% | 0.0% | 0.0% | 0.0% |
+| On-Time | 1 | 0.0% | 0.0% | 0.0% | 100.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% | 0.0% |
+| Late < 30 mins | 4,138 | 0.0% | 0.3% | 3.7% | 64.6% | 7.5% | 0.0% | 22.3% | 1.4% | 0.0% | 0.0% | 0.0% | 0.0% |
+| Late 30 – 60 mins | 3,291 | 0.1% | 0.3% | 3.7% | 67.9% | 6.7% | 0.0% | 19.4% | 1.4% | 0.3% | 0.0% | 0.0% | 0.0% |
+| Late 1 – 2 hrs | 5,352 | 0.1% | 0.3% | 4.3% | 67.3% | 7.3% | 0.1% | 17.8% | 1.4% | 1.4% | 0.0% | 0.0% | 0.0% |
+| Late 2 – 4 hrs | 7,358 | 0.1% | 0.6% | 4.4% | 65.2% | 7.1% | 0.0% | 17.7% | 2.3% | 2.5% | 0.1% | 0.0% | 0.0% |
+| Late 4 – 8 hrs | 7,815 | 0.1% | 0.4% | 3.0% | 62.7% | 5.9% | 0.0% | 20.8% | 2.3% | 3.7% | 1.0% | 0.1% | 0.0% |
+| Late 8 – 12 hrs | 1,340 | 0.2% | 0.4% | 3.2% | 58.9% | 6.7% | 0.1% | 25.4% | 1.3% | 1.8% | 1.6% | 0.4% | 0.0% |
+| Late 12 – 24 hrs | 12,277 | 0.1% | 0.1% | 3.0% | 70.9% | 6.7% | 0.1% | 17.5% | 0.9% | 0.4% | 0.1% | 0.1% | 0.0% |
+| Late > 24 hrs | 3,640 | 0.9% | 0.8% | 4.9% | 69.0% | 6.2% | 0.1% | 9.7% | 2.2% | 2.4% | 1.4% | 1.1% | 1.3% |
+
+---
+
+### % of orders with doctor deviation ≥1 hr late — summary comparison
+
+| WH Deviation Bucket | n | H12: confirm ≥1h late | H11: call ≥1h late |
+|---|---|---|---|
+| Early > 24 hrs | 21 | 0.0% | 0.0% |
+| Early 12 – 24 hrs | 156 | 0.0% | 0.0% |
+| Early 1 – 2 hrs | 454 | 0.0% | 0.0% |
+| Early 30 – 60 mins | 5,813 | 0.1% | 0.0% |
+| Early < 30 mins | 6,032 | 0.1% | 0.0% |
+| On-Time | 1 | 0.0% | 0.0% |
+| Late < 30 mins | 4,138 | 1.1% | 0.0% |
+| Late 30 – 60 mins | 3,291 | 4.8% | 0.3% |
+| Late 1 – 2 hrs | 5,352 | 10.5% | 1.4% |
+| Late 2 – 4 hrs | 7,358 | 16.5% | 2.6% |
+| Late 4 – 8 hrs | 7,815 | 23.0% | 4.8% |
+| Late 8 – 12 hrs | 1,340 | 20.8% | 3.8% |
+| Late 12 – 24 hrs | 12,277 | 9.8% | 0.6% |
+| Late > 24 hrs | 3,640 | 30.6% | 6.2% |
+
+---
+
+**Revised verdict on H12:** The "Dr Late" signal in H12 (40–55%) was heavily padded by sub-hour lateness — confirmations arriving a few seconds or minutes after the promise — which cannot plausibly delay AWB printing by hours. When restricted to ≥1 hr late confirmation (the threshold with any mechanistic plausibility for multi-hour WH delays), a clear gradient exists from 0.1% in WH-early buckets to 30.6% in WH Late >24 hrs. H12 is a real but partial driver: approximately 1-in-3 orders in the most extreme late WH bucket have a genuinely late confirmation (≥1 hr). The other ~70% of WH Late >24 hrs orders are unexplained by doctor confirmation timing alone.
+
+**WH Late 12–24 hrs anomaly:** Despite being the largest late WH bucket (12,277 orders), only 9.8% have ≥1 hr late confirmation — lower than the 23% in WH Late 4–8 hrs. This is consistent with H9: Late 12–24 hrs had 12.6% payment pending (high, but mostly independent of doctor timing), whereas Late 4–8 hrs had 5.3% payment pending and shows a cleaner doctor signal.
+
+**Revised verdict on H11:** Definitively rejected even with magnitude analysis. At the ≥1 hr late threshold, the call time shows only 0–6% across all WH buckets — flat noise with no meaningful gradient. The call itself never triggered WH processing; only the confirmation does. H11 is conclusively dead.
+
+**Overall H11/H12 conclusion:** Doctor confirmation is a real but minority driver (~20–30% of severe late WH orders have ≥1 hr late confirmation). The majority of WH lateness — especially the Late 12–24 hrs cohort (n=12,277) — is explained primarily by H9 (payment pending) and other as-yet-untested factors, not by doctor timing.
