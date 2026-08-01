@@ -1070,3 +1070,33 @@ Inventory state change is extremely rare: only 206 orders excluded from the full
 | **Total** | **57,482** | **22.3%** | **7.4%** | **33.7%** | **36.6%** |
 
 **Verdict: All H3–H8 findings confirmed with higher confidence.** H4 and H3 patterns are completely unchanged (71.6% and 29.7%). H8 strengthens in the early buckets — Early 2d rises from 48.8% to 56.0%, Early 4d from 25.5% to 61.0% — because the NULL-shipping-promise orders removed from the cross-tab denominator were disproportionately in the small inventory-change group. The structural problem is squarely in the TAT promise model, not operational reclassifications.
+
+---
+
+## #30 — Consolidated H1–H8 Table (Inventory-Stable Subset)
+
+**Request:** Produce a single consolidated table with all eight hypotheses side-by-side per TAT deviation bucket on the inventory-stable Non-SDD Inventory egregious subset (n=57,482). H1–H4 denominator = bucket Count. H5–H8 denominator = orders with non-NULL shipping promise (= 57,482, all orders in this subset).
+
+| Deviation | Count | H1:SDD | H2:WH | H3:Cour | H4:Prom | H5:P✓C✓ | H6:P✗C✓ | H7:P✗C✗ | H8:P✓C✗ |
+|-----------|-------|--------|-------|---------|---------|---------|---------|---------|---------|
+| Early 5d+ | 101 | 24.8% | 45.5% | 43.6% | 97.0% | 43.6% | 0.0% | 3.0% | 53.5% |
+| Early 4d | 670 | 22.8% | 52.8% | 33.7% | 91.2% | 30.1% | 3.6% | 5.2% | 61.0% |
+| Early 3d | 4,909 | 8.9% | 27.2% | 35.6% | 80.6% | 27.9% | 7.7% | 11.7% | 52.8% |
+| Early 2d | 25,305 | 2.1% | 9.0% | 21.3% | 71.6% | 15.6% | 5.7% | 22.7% | 56.0% |
+| Early 1d | 4,290 | 3.4% | 8.3% | 31.8% | 43.7% | 16.7% | 15.1% | 41.2% | 27.0% |
+| On-Time | 1,752 | 0.7% | 2.1% | 21.9% | 22.5% | 13.4% | 8.4% | 69.0% | 9.1% |
+| Late 1d | 3,283 | 0.0% | 3.5% | 39.9% | 40.0% | 28.9% | 11.0% | 49.0% | 11.1% |
+| Late 2d | 9,936 | 0.0% | 3.5% | 35.2% | 40.7% | 28.2% | 7.0% | 52.3% | 12.5% |
+| Late 3d | 3,764 | 0.1% | 3.7% | 43.0% | 47.6% | 35.5% | 7.5% | 44.9% | 12.1% |
+| Late 4d | 1,689 | 0.2% | 3.2% | 43.2% | 46.6% | 35.0% | 8.2% | 45.2% | 11.6% |
+| Late 5d | 814 | 0.0% | 2.8% | 42.0% | 49.9% | 35.3% | 6.8% | 43.4% | 14.6% |
+| Late 6d+ | 969 | 0.2% | 2.4% | 43.8% | 50.1% | 35.9% | 7.8% | 42.1% | 14.1% |
+| **Total** | **57,482** | **2.3%** | **8.9%** | **29.7%** | **58.9%** | **22.3%** | **7.4%** | **33.7%** | **36.6%** |
+
+**Three failure modes emerge cleanly:**
+
+1. **Early 2d–5d+ (the bulk of early egregious):** H4 (71–97%) and H8 (53–61%) dominate. Promise shortened at shipping, same courier delivers to the shorter promise → egregiously early vs digitised. H1 and H2 near zero — SDD and WH changes uninvolved.
+
+2. **Late 1d–2d:** H7 dominates (49–52%) — nothing changed, pure courier underperformance vs unchanged promise. H5 elevated at 28% — when both change, still tends to produce late outcomes.
+
+3. **Late 3d+ (severe lates):** H5 (~35%) and H7 (~43–45%) split roughly equally. Severe late deliveries come either from compounding disruption (both promise and courier change, courier still fails) or from stubborn underperformance with no changes at all. H1 and H2 remain near zero throughout the entire late side.
