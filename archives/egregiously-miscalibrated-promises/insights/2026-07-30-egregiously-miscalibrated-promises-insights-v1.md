@@ -1491,3 +1491,31 @@ Note: 51.5 + 36.6 = 88.1%; the remaining 11.9% have a null on either digitised o
 - **Same courier (51.5% of Early 1d) — confirmed WH packed early:** 82.6% have AWB printed before WH promise. Mechanism: WH promise was set after the courier cutoff (hence D+1 dispatch promise), but WH packed early enough that AWB was ready before cutoff. Same courier came same day. Dispatch was 1 day early vs promise. The 17.3% WH-late same-courier cases cannot be fully explained without courier cutoff timestamps.
 - **Switched courier (36.6% of Early 1d) — confirmed courier switch enabled same-day pickup for WH-late orders:** 50.5% have AWB printed after WH promise (WH packed late). Original courier's cutoff was already missed; a replacement courier with a later cutoff was assigned, enabling same-day pickup, which (given D+1 dispatch promise) produced Early 1d dispatch. The other 49.5% have WH packing early — for those, both WH early and courier switch occurred, and either factor alone could explain the early dispatch.
 - **Null courier (11.9%):** Partner data missing; cannot classify mechanism.
+
+---
+
+## #42 — Delivery TAT Early 2d: promised vs actual TAT distribution and courier switch breakdown
+
+**Request:** Explore what is happening in the Delivery TAT Early 2d cohort (n=25,355, 44% of Non-SDD Inventory egregious superset) — the largest untouched highlighted cohort. Delivery TAT Early 2d = actual transit (pickup → delivery attempt) was exactly 2 days faster than promised transit (dispatch promise → delivery promise).
+
+**Promised vs actual TAT combos (every order is exactly promised − actual = 2d):**
+
+| Promised TAT | Actual TAT | Count | % |
+|---|---|---|---|
+| 4d | 2d | 12,881 | 50.8% |
+| 3d | 1d | 6,505 | 25.7% |
+| 5d | 3d | 5,192 | 20.5% |
+| 6d | 4d | 505 | 2.0% |
+| 2d | 0d | 233 | 0.9% |
+| 7d | 5d | 36 | 0.1% |
+| 8d | 6d | 3 | 0.0% |
+
+**Courier switch breakdown:**
+
+| Group | Count | % |
+|---|---|---|
+| Same courier (digitised = shipping) | 17,915 | 70.7% |
+| Switched courier | 5,406 | 21.3% |
+| Null (partner data missing) | 2,034 | 8.0% |
+
+**Verdict:** The deviation is perfectly uniform — every order is exactly 2 days early, with no irregular combinations. 70.7% had no courier switch. The courier is not underperforming or changing — the digitised delivery promise is systematically built with a transit TAT that is 2 days longer than what the courier actually takes. This is a promise construction problem: the system over-pads the transit window by 2 days for the pincode/courier/zone combinations represented in this cohort.
