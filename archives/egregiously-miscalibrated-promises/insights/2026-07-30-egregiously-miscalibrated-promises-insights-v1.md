@@ -1130,3 +1130,29 @@ WH deviation = `digitised_wh_promise − awb_sticker_printed_ts` in minutes (pos
 *(Early 2–12 hrs: 11 orders, omitted — too small to be meaningful)*
 
 **Verdict: Hypothesis strongly supported for the late tail.** Early side is flat at 1.5–2.6% — no signal (payment pending can only delay, not accelerate). Late side shows clear monotonic escalation: Late <30 mins 2.3% → Late 4–8 hrs 5.3% → Late 8–12 hrs 12.0% → Late 12–24 hrs 12.6% → **Late >24 hrs 64.0%**. Two in every three orders in the most extreme late WH bucket had a payment pending event. Mechanism: payment not confirmed → warehouse holds order → AWB printed only after payment clears → WH appears egregiously late vs digitised promise which assumed no payment delay. Overall 9.3% of superset had a payment pending event, concentrated almost entirely in the severe late WH tail.
+
+---
+
+## #32 — Hypothesis 10: Inventory→Non-Inventory Switch as Driver of WH Deviation (Non-SDD Inventory Egregious Superset)
+
+**Request:** For the Non-SDD Inventory egregious superset (n=57,688), test whether WH earliness/lateness is explained by an inventory→non-inventory switch between digitised and shipping (digitised_is_inventory=TRUE, shipping_is_inventory=FALSE). Per WH deviation bucket, compute % of orders with this switch.
+
+| WH Deviation | Count | Inv→NonInv n | Inv→NonInv % |
+|---|---|---|---|
+| Early > 24 hrs | 21 | 1 | 4.8% |
+| Early 12 – 24 hrs | 156 | 0 | 0.0% |
+| Early 1 – 2 hrs | 443 | 0 | 0.0% |
+| Early 30 – 60 mins | 5,813 | 0 | 0.0% |
+| Early < 30 mins | 6,032 | 9 | 0.1% |
+| On-Time | 1 | 0 | 0.0% |
+| Late < 30 mins | 4,138 | 1 | 0.0% |
+| Late 30 – 60 mins | 3,291 | 6 | 0.2% |
+| Late 1 – 2 hrs | 5,352 | 8 | 0.1% |
+| Late 2 – 4 hrs | 7,358 | 17 | 0.2% |
+| Late 4 – 8 hrs | 7,815 | 23 | 0.3% |
+| Late 8 – 12 hrs | 1,340 | 5 | 0.4% |
+| Late 12 – 24 hrs | 12,277 | 44 | 0.4% |
+| Late > 24 hrs | 3,640 | 75 | 2.1% |
+| **Total** | **57,688** | **189** | **0.3%** |
+
+**Verdict: Hypothesis rejected.** Only 189 orders (0.3%) switched inventory status at shipping. Even the most extreme late bucket tops out at 2.1%. No signal in either direction. WH deviation has nothing to do with inventory reclassification. H9 (payment pending, 64% at Late >24 hrs) is the dominant explanation for extreme WH lateness; H10 is not.
