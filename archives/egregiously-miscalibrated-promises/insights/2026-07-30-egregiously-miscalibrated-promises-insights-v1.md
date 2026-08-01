@@ -1182,3 +1182,29 @@ WH deviation = `digitised_wh_promise − awb_sticker_printed_ts` in minutes (pos
 | **Total** | **57,688** | **77.7%** | **0.1%** | **22.2%** |
 
 **Verdict: Hypothesis rejected.** Doctor late % is flat at ~20–30% across all WH buckets with no monotonic pattern. The most extreme WH late buckets are actually below the overall average: Late >24 hrs = 18.2%, Late 12–24 hrs = 19.1% vs 22.2% overall. A driver hypothesis would require escalating doctor lateness as WH deviation worsens — the data shows the opposite. Doctor call timing is background noise, not a causal factor in WH deviation.
+
+---
+
+## #34 — Hypothesis 12: Doctor Confirmation as Driver of WH Deviation (Non-SDD Inventory Egregious Superset)
+
+**Request:** Same as H11 but using doctor confirmation (dr_confirm_ts) instead of actual_doctor_call_time. For the Non-SDD Inventory egregious superset (n=57,688), per WH deviation bucket, compute % of orders where doctor confirmation was early, on-time, or late vs digitised_dr_promise.
+
+| WH Deviation | Count | Dr Early | Dr On-Time | Dr Late |
+|---|---|---|---|---|
+| Early > 24 hrs | 21 | 100.0% | 0.0% | 0.0% |
+| Early 12 – 24 hrs | 156 | 67.9% | 1.3% | 30.8% |
+| Early 1 – 2 hrs | 454 | 94.9% | 0.0% | 5.1% |
+| Early 30 – 60 mins | 5,813 | 80.2% | 0.7% | 19.1% |
+| Early < 30 mins | 6,032 | 65.6% | 1.1% | 33.3% |
+| On-Time | 1 | 100.0% | 0.0% | 0.0% |
+| Late < 30 mins | 4,138 | 59.4% | 0.7% | 39.9% |
+| Late 30 – 60 mins | 3,291 | 55.4% | 1.0% | 43.5% |
+| Late 1 – 2 hrs | 5,352 | 56.1% | 1.1% | 42.8% |
+| Late 2 – 4 hrs | 7,358 | 51.5% | 1.0% | 47.5% |
+| Late 4 – 8 hrs | 7,815 | 49.3% | 1.2% | 49.5% |
+| Late 8 – 12 hrs | 1,340 | 50.6% | 1.0% | 48.4% |
+| Late 12 – 24 hrs | 12,277 | 57.6% | 0.8% | 41.6% |
+| Late > 24 hrs | 3,640 | 44.5% | 0.4% | 55.2% |
+| **Total** | **57,688** | **58.0%** | **0.9%** | **41.1%** |
+
+**Verdict: Hypothesis supported.** Unlike H11 (actual doctor call), doctor confirmation shows a clear signal. Early WH buckets: 0–33% late confirmation. Late WH buckets: 40–55% late confirmation, with visible gradient peaking at Late 4–8 hrs (49.5%) and Late >24 hrs (55.2%). Mechanism: `dr_confirm_ts` is what triggers WH to start processing — a late confirmation holds the warehouse even if the doctor call itself was on time. The doctor call (H11) and confirmation (H12) are measuring different pipeline events. Note: Late >24 hrs overlap with H9 (payment pending 64%) is likely non-independent — payment pending likely delays the doctor confirmation as well.
