@@ -871,3 +871,53 @@ Positive = courier faster than promised (early for customer). Negative = courier
 - Digitised TAT (dominant bucket: Early 2d at 43.9%): over-estimates TAT for 61.2% of routes — the model is promising 4–5d for routes the courier completes in 2–3d. On-time rate is only 3.1%. Late tail is 35.7% (courier slower than digitised TAT for those routes).
 - Shipping TAT (dominant bucket: Early 1d at 31.2%): better calibrated than digitised — on-time improves to 15.8%, and the dominant over-estimate shifts to Early 1d rather than Early 2d — but still 54.7% early. Late tail is 29.5%, nearly identical to digitised, confirming shipping does not capture slow routes any better.
 - Both promises are directionally biased upward (over-estimating actual TAT for the majority), but neither captures the ~30% late tail — indicating high variance in actual courier performance that neither model accounts for.
+
+---
+
+## #24 — Hypothesis 1: SDD State Change as Driver of TAT Deviation (Non-SDD Inventory Egregious Superset)
+
+**Request:** Test whether delivery TAT earliness/lateness in the Non-SDD Inventory egregious superset (n=57,688) is explained by an SDD state change between digitised and shipping (digitised_is_sdd ≠ shipping_is_sdd). Per TAT deviation bucket, compute % of orders with SDD state change.
+
+TAT deviation = `(digitised_delivery_promise − digitised_dispatch_promise) − (delivery_attempt − pickup)` in days.
+
+| Deviation | Count | SDD chg n | SDD chg % |
+|-----------|-------|-----------|-----------|
+| Early 5d+ | 101 | 25 | 24.8% |
+| Early 4d | 670 | 153 | 22.8% |
+| Early 3d | 4,920 | 436 | 8.9% |
+| Early 2d | 25,355 | 520 | 2.1% |
+| Early 1d | 4,298 | 146 | 3.4% |
+| On-Time | 1,779 | 12 | 0.7% |
+| Late 1d | 3,331 | 0 | 0.0% |
+| Late 2d | 9,978 | 2 | 0.0% |
+| Late 3d | 3,774 | 5 | 0.1% |
+| Late 4d | 1,694 | 3 | 0.2% |
+| Late 5d | 816 | 0 | 0.0% |
+| Late 6d+ | 972 | 2 | 0.2% |
+| **Total** | **57,688** | **1,304** | **2.3%** |
+
+**Verdict: Hypothesis rejected.** Only 2.3% of orders overall had an SDD state change. Late buckets are 0.0–0.2% — no signal. Early extreme tail (Early 4d+: 23–25%) shows minor signal, but the dominant Early 2d bucket (44% of superset) is only 2.1%. SDD rerouting is not a meaningful driver of TAT miscalibration.
+
+---
+
+## #25 — Hypothesis 2: Warehouse Change as Driver of TAT Deviation (Non-SDD Inventory Egregious Superset)
+
+**Request:** Test whether delivery TAT earliness/lateness in the Non-SDD Inventory egregious superset (n=57,688) is explained by a warehouse change between digitised and shipping (digitised_wh_id ≠ shipping_warehouse). Per TAT deviation bucket, compute % of orders with warehouse change.
+
+| Deviation | Count | WH chg n | WH chg % |
+|-----------|-------|----------|----------|
+| Early 5d+ | 101 | 46 | 45.5% |
+| Early 4d | 670 | 354 | 52.8% |
+| Early 3d | 4,920 | 1,337 | 27.2% |
+| Early 2d | 25,355 | 2,294 | 9.0% |
+| Early 1d | 4,298 | 359 | 8.4% |
+| On-Time | 1,779 | 40 | 2.2% |
+| Late 1d | 3,331 | 124 | 3.7% |
+| Late 2d | 9,978 | 365 | 3.7% |
+| Late 3d | 3,774 | 142 | 3.8% |
+| Late 4d | 1,694 | 54 | 3.2% |
+| Late 5d | 816 | 23 | 2.8% |
+| Late 6d+ | 972 | 23 | 2.4% |
+| **Total** | **57,688** | **5,161** | **8.9%** |
+
+**Verdict: Hypothesis partially interesting in the early tail, rejected everywhere else.** Late buckets are flat at 2.4–3.8% — no signal. Early extreme tail (Early 4d+: 45–53%) shows meaningful signal — warehouse rerouting to a closer WH likely compresses both WH processing and courier TAT. However the dominant Early 2d bucket is only 9.0%; 91% of those 25,355 orders are same-warehouse throughout and still run 2d faster than promised. WH change is more explanatory than SDD change (8.9% vs 2.3% overall) but explains only a small fraction of the bulk miscalibration.
