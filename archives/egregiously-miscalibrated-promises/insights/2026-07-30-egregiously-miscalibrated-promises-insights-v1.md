@@ -1560,3 +1560,44 @@ Top combos (digitised TAT / shipping TAT / actual TAT):
 - **Same courier:** Neither hypothesis is confirmed cleanly. The shipping promise has partially adjusted downward from digitised (by 1d in 57.6% of cases), but actual performance beats even the shipping promise in 89.2% of orders. Only 10.8% have shipping TAT = actual TAT. The system over-estimates transit time at both the digitised and shipping layers — actual courier performance is outpacing both. This is a structural calibration gap in the transit TAT lookup, not courier improvement captured by the shipping layer.
 - **Switched courier:** The new courier's shipping promise also does not match actual — only 13.6% do, nearly identical to same-courier (10.8%). A notable tail (16.7%) has the new courier promising 3d+ more than actual, and some combos (e.g. dig=5d / ship=7d / actual=3d) show the replacement courier promising even longer TAT than the original, yet actual is still 2d faster than digitised. The switched-courier group does not reveal a "better courier was allocated" story — the lane itself performs faster than any courier promises it.
 - **Combined conclusion:** The Delivery TAT Early 2d cohort is driven by a systemic transit TAT over-estimation baked into both the digitised and shipping promise layers for specific pincode/courier/zone lanes. Neither layer has accurately captured actual courier performance. Fix direction: recalibrate transit TAT lookup tables using recent actuals for the affected lanes.
+
+---
+
+## #44 — Delivery TAT remaining cohorts (Early 1d, Early 3d, Late 1d, Late 2d, Late 3d, Late 4d): digitised vs shipping vs actual TAT
+
+**Request:** Run the same digitised / shipping / actual TAT comparison across all six remaining highlighted Delivery TAT cohorts to test whether the same systemic transit TAT miscalibration finding from Early 2d holds universally.
+
+**Early cohorts — same courier shipping TAT vs actual TAT:**
+
+| Cohort | n (same courier) | Ship = Actual (+0d) | Ship 1d over (+1d) | Ship 2d+ over |
+|---|---|---|---|---|
+| Early 1d | 2,505 | 34.3% | 64.3% | 0.7% |
+| Early 3d | 2,234 | 5.3% | 22.2% | 72.0% |
+
+Early 1d: shipping partially adjusts (64.3% ship is 1d over actual, 34.3% matches). Early 3d: shipping barely moves — 72% still 2–3d over actual, only 5.3% match.
+
+**Late cohorts — same courier shipping TAT vs actual TAT:**
+
+| Cohort | n (same courier) | Ship = Dig (no adjustment) | Ship gap vs actual |
+|---|---|---|---|
+| Late 1d | 1,823 | ~85% | −1d in 84.8% |
+| Late 2d | 5,932 | ~84% | −2d in 84.4% |
+| Late 3d | 1,935 | ~84% | −3d in 84.0% |
+| Late 4d | 869 | ~85% | −4d in 85.0% |
+
+For all late cohorts, the shipping TAT is identical to the digitised TAT in 84–85% of same-courier cases — the shipping layer makes zero downward adjustment. Both layers under-promise transit by exactly the cohort's deviation magnitude.
+
+Representative combos (late cohorts, same courier):
+- Late 2d: `dig=2d / ship=2d / actual=4d` — 30.3% of same-courier Late 2d orders
+- Late 3d: `dig=2d / ship=2d / actual=5d` — 26.9%
+- Late 4d: `dig=2d / ship=2d / actual=6d` — 24.6%
+
+**Switched courier:** All cohorts show high variance in ship gap (ranging from −6d to +15d depending on cohort), with no consistent improvement over digitised. Some replacement couriers promise even longer TATs than the original.
+
+**Unified verdict across all 7 Delivery TAT cohorts (Early 1d through Late 4d):**
+
+The transit TAT lookup table driving both digitised and shipping promises has stale values for specific pincode/courier/zone lanes. The shipping layer does not recalibrate it — for late cohorts it is copy-pasted directly from digitised; for early cohorts there is marginal partial adjustment but never enough to match actual. Two failure modes:
+- **Early cohorts:** lookup over-estimates transit → customer receives order N days early
+- **Late cohorts:** lookup under-estimates transit → customer receives order N days late
+
+One fix addresses all seven cohorts: recalibrate the transit TAT lookup table using rolling actuals per lane.
