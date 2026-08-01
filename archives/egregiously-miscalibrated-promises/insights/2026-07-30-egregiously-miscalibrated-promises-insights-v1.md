@@ -1414,3 +1414,44 @@ Clear monotonic relationship from On-Time (4.4% baseline) through Late 1d (37.7%
 | Pickup 1d after AWB | 1.3% | 7.8% | 51.0% |
 
 **Verdict:** The mechanism is proven. Courier same-day pickup behaviour is essentially constant across all three buckets (~92–99%). The ONLY differentiator is when the AWB is printed relative to the dispatch promise. Early 1d = AWB printed 1 day early, courier collects same day. On-Time = AWB printed on promise day, courier collects same day. Late 1d = AWB printed same day as promise but courier collects next day (51%) OR AWB printed 1 day late and courier collects same day (47.5%). The dispatch deviation is a function of AWB timing alone — not courier behaviour.
+
+---
+
+## #40 — H16: Late 3d+ dispatch driven by DOCTOR_AND_HA_CALL_REQUIRED / HA call with no SLA
+
+**Request:** Quantify the % of DOCTOR_AND_HA_CALL_REQUIRED orders per dispatch deviation bucket to test whether HA call (no SLA) drives Late 3d+ dispatch, analogous to how H9 (payment pending) was tested.
+
+**Order category breakdown by dispatch bucket** (Non-SDD Inventory egregious superset, n=57,688, 0 missing dispatch/pickup):
+
+| Dispatch Bucket | N | Dr+HA% | HA-only% | Dr-only% | No-call% | PmtPend% |
+|---|---|---|---|---|---|---|
+| Early 2d+ | 258 | 32.6% | 6.2% | 23.6% | 37.6% | 4.7% |
+| Early 1d | 6,207 | 36.6% | 6.2% | 23.6% | 33.6% | 1.6% |
+| On-Time | 43,416 | 38.9% | 5.7% | 24.1% | 31.3% | 4.4% |
+| Late 1d | 5,240 | 47.2% | 9.8% | 18.7% | 24.4% | 37.7% |
+| Late 2d | 1,786 | 55.4% | 11.5% | 15.7% | 17.4% | 68.2% |
+| Late 3d | 361 | 50.7% | 6.4% | 19.9% | 23.0% | 26.6% |
+| Late 4d | 145 | 48.3% | 4.1% | 23.4% | 24.1% | 6.2% |
+| Late 5d | 74 | 52.7% | 9.5% | 14.9% | 23.0% | 9.5% |
+| Late 6d+ | 201 | 50.7% | 6.5% | 18.9% | 23.9% | 5.0% |
+
+**HA-involved total (Dr+HA + HA-only) vs payment pending:**
+
+| Dispatch Bucket | N | HA-involved% | PmtPend% |
+|---|---|---|---|
+| Early 2d+ | 258 | 38.8% | 4.7% |
+| Early 1d | 6,207 | 42.7% | 1.6% |
+| On-Time | 43,416 | 44.6% | 4.4% |
+| Late 1d | 5,240 | 57.0% | 37.7% |
+| Late 2d | 1,786 | 67.0% | 68.2% |
+| Late 3d | 361 | 57.1% | 26.6% |
+| Late 4d | 145 | 52.4% | 6.2% |
+| Late 5d | 74 | 62.2% | 9.5% |
+| Late 6d+ | 201 | 57.2% | 5.0% |
+
+**Verdicts:**
+
+- **H9 for dispatch (Late 1d/2d):** Payment pending is the dominant driver for Late 1d (37.7%) and especially Late 2d (68.2%). These orders are stuck awaiting payment completion before AWB can print.
+- **H16 — SUPPORTED (Late 3d+):** Payment pending collapses from 68.2% at Late 2d to 26.6% at Late 3d, and further to 5–10% at Late 4d–6d+. It is not the driver of severe late dispatch. Instead, HA-involved (DOCTOR_AND_HA_CALL_REQUIRED + HA_CALL_REQUIRED) stays elevated at 52–62% across all Late 3d+ buckets, compared to a 44.6% baseline in On-Time orders — a persistent +8 to +18pp elevation.
+- **Mechanism:** For DOCTOR_AND_HA_CALL_REQUIRED orders, the sequence is: doctor call → HA call → invoice → AWB → pickup. The HA call has no enforced SLA. If the HA call takes 3, 4, or 5+ days, the AWB cannot print until it completes, and courier always collects same-day. These orders cannot be rescued by any upstream fix that only targets doctor confirmation or payment — the HA call leg itself is the bottleneck.
+- **Scale:** Late 3d+ total = 781 orders (1.4% of egregious superset). Of these, ~52–62% (≈410–485 orders) are HA-involved. This is a concentrated failure mode, not a diffuse one.
