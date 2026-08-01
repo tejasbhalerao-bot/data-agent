@@ -1455,3 +1455,39 @@ Clear monotonic relationship from On-Time (4.4% baseline) through Late 1d (37.7%
 - **H16 — SUPPORTED (Late 3d+):** Payment pending collapses from 68.2% at Late 2d to 26.6% at Late 3d, and further to 5–10% at Late 4d–6d+. It is not the driver of severe late dispatch. Instead, HA-involved (DOCTOR_AND_HA_CALL_REQUIRED + HA_CALL_REQUIRED) stays elevated at 52–62% across all Late 3d+ buckets, compared to a 44.6% baseline in On-Time orders — a persistent +8 to +18pp elevation.
 - **Mechanism:** For DOCTOR_AND_HA_CALL_REQUIRED orders, the sequence is: doctor call → HA call → invoice → AWB → pickup. The HA call has no enforced SLA. If the HA call takes 3, 4, or 5+ days, the AWB cannot print until it completes, and courier always collects same-day. These orders cannot be rescued by any upstream fix that only targets doctor confirmation or payment — the HA call leg itself is the bottleneck.
 - **Scale:** Late 3d+ total = 781 orders (1.4% of egregious superset). Of these, ~52–62% (≈410–485 orders) are HA-involved. This is a concentrated failure mode, not a diffuse one.
+
+---
+
+## #41 — Early 1d dispatch: courier switch rate and WH deviation breakdown by courier group
+
+**Request:** Within Early 1d dispatch orders, determine (a) what % had a courier change from digitised to shipping, (b) whether same-courier Early 1d is driven by WH packing early (before WH promise), and (c) whether switched-courier Early 1d is driven by WH packing on time/late with the new courier enabling same-day pickup.
+
+**Courier switch rate for Early 1d (n=6,207) vs adjacent buckets:**
+
+| Dispatch Bucket | N | Switched% | Same% | Null% |
+|---|---|---|---|---|
+| Early 2d+ | 258 | 39.1% | 41.5% | 19.4% |
+| Early 1d | 6,207 | 36.6% | 51.5% | 11.9% |
+| On-Time | 43,416 | 26.9% | 64.9% | 8.1% |
+| Late 1d | 5,240 | 45.2% | 46.5% | 8.4% |
+
+Note: 51.5 + 36.6 = 88.1%; the remaining 11.9% have a null on either digitised or shipping partner and cannot be classified.
+
+**WH deviation (AWB vs WH promise) by courier group within Early 1d:**
+
+| WH deviation | Same courier (n=3,195) | Switched courier (n=2,273) | Null courier (n=739) |
+|---|---|---|---|
+| Early >2h | 2.3% | 0.8% | 1.9% |
+| Early 30m–2h | 52.6% | 27.4% | 42.5% |
+| Early 0–30m | 27.8% | 21.2% | 22.3% |
+| Late 0–30m | 8.3% | 13.5% | 10.6% |
+| Late 30m–2h | 5.2% | 19.5% | 13.3% |
+| Late >2h | 3.8% | 17.6% | 9.5% |
+| **WH early (total)** | **82.6%** | **49.5%** | **66.7%** |
+| **WH late (total)** | **17.3%** | **50.5%** | **33.3%** |
+
+**Verdicts:**
+
+- **Same courier (51.5% of Early 1d) — confirmed WH packed early:** 82.6% have AWB printed before WH promise. Mechanism: WH promise was set after the courier cutoff (hence D+1 dispatch promise), but WH packed early enough that AWB was ready before cutoff. Same courier came same day. Dispatch was 1 day early vs promise. The 17.3% WH-late same-courier cases cannot be fully explained without courier cutoff timestamps.
+- **Switched courier (36.6% of Early 1d) — confirmed courier switch enabled same-day pickup for WH-late orders:** 50.5% have AWB printed after WH promise (WH packed late). Original courier's cutoff was already missed; a replacement courier with a later cutoff was assigned, enabling same-day pickup, which (given D+1 dispatch promise) produced Early 1d dispatch. The other 49.5% have WH packing early — for those, both WH early and courier switch occurred, and either factor alone could explain the early dispatch.
+- **Null courier (11.9%):** Partner data missing; cannot classify mechanism.
