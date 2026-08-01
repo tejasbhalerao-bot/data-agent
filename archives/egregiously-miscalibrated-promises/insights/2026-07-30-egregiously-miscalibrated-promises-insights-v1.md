@@ -921,3 +921,27 @@ TAT deviation = `(digitised_delivery_promise − digitised_dispatch_promise) −
 | **Total** | **57,688** | **5,161** | **8.9%** |
 
 **Verdict: Hypothesis partially interesting in the early tail, rejected everywhere else.** Late buckets are flat at 2.4–3.8% — no signal. Early extreme tail (Early 4d+: 45–53%) shows meaningful signal — warehouse rerouting to a closer WH likely compresses both WH processing and courier TAT. However the dominant Early 2d bucket is only 9.0%; 91% of those 25,355 orders are same-warehouse throughout and still run 2d faster than promised. WH change is more explanatory than SDD change (8.9% vs 2.3% overall) but explains only a small fraction of the bulk miscalibration.
+
+---
+
+## #26 — Hypothesis 3: Courier Change as Driver of TAT Deviation (Non-SDD Inventory Egregious Superset)
+
+**Request:** Test whether delivery TAT earliness/lateness in the Non-SDD Inventory egregious superset (n=57,688) is explained by a courier change between digitised and shipping (digitised_delivery_partner ≠ shipping_delivery_partner). Per TAT deviation bucket, compute % of orders with courier change.
+
+| Deviation | Count | Courier chg n | Courier chg % |
+|-----------|-------|--------------|---------------|
+| Early 5d+ | 101 | 44 | 43.6% |
+| Early 4d | 670 | 226 | 33.7% |
+| Early 3d | 4,920 | 1,752 | 35.6% |
+| Early 2d | 25,355 | 5,406 | 21.3% |
+| Early 1d | 4,298 | 1,367 | 31.8% |
+| On-Time | 1,779 | 391 | 22.0% |
+| Late 1d | 3,331 | 1,328 | 39.9% |
+| Late 2d | 9,978 | 3,521 | 35.3% |
+| Late 3d | 3,774 | 1,624 | 43.0% |
+| Late 4d | 1,694 | 732 | 43.2% |
+| Late 5d | 816 | 342 | 41.9% |
+| Late 6d+ | 972 | 427 | 43.9% |
+| **Total** | **57,688** | **17,160** | **29.7%** |
+
+**Verdict: Hypothesis partially supported — most nuanced of the three.** Late buckets consistently elevated at 35–44% vs on-time baseline of 22% (~15–20pp lift), suggesting courier rerouting is a real contributor to late TAT. The dominant Early 2d bucket (44% of superset) sits at 21.3% — essentially at on-time baseline — meaning courier change is not driving the bulk of early TAT miscalibration. Overall 29.7% of orders had a courier change, far higher than SDD (2.3%) or WH (8.9%) changes, indicating courier rerouting is a common event in this superset.
