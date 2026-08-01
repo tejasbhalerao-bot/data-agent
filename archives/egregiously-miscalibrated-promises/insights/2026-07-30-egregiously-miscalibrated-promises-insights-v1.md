@@ -969,3 +969,40 @@ TAT deviation = `(digitised_delivery_promise − digitised_dispatch_promise) −
 | **Total** | **57,688** | **33,982** | **58.9%** |
 
 **Verdict: Strongly supported for the early side — strongest hypothesis of the four.** Clear monotonic relationship on the early side: 43.7% → 71.6% → 80.6% → 91.2% → 97.0% as deviation increases from Early 1d to Early 5d+. Dominant Early 2d bucket at 71.6% is 49pp above the on-time baseline of 22.6%. Mechanism: shipping recalibrates TAT downward → courier fulfills the shorter shipping promise → egregiously early vs original digitised promise. Key implication: if digitised TAT were calibrated to what shipping ends up promising, ~71.6% of the dominant Early 2d cohort would not be egregious. Late side elevated but flat at 40–50% (~20pp lift over baseline) with no monotonic pattern — promise extension at shipping correlates with late delivery but is not the sole driver.
+
+---
+
+## #28 — Hypotheses 5–8: Promise Change × Courier Change 2×2 Cross-Tab Per TAT Deviation Bucket
+
+**Request:** For the Non-SDD Inventory egregious superset (n=52,788 with non-NULL shipping promise), compute a 2×2 cross-tab of promise change (yes/no) × courier change (yes/no) per TAT deviation bucket.
+- H5: Promise Changed AND Courier Changed
+- H6: Promise Unchanged AND Courier Changed
+- H7: Promise Unchanged AND Courier Unchanged
+- H8: Promise Changed AND Courier Unchanged
+
+Promise changed = `DATE(digitised_delivery_promise) − DATE(digitised_dispatch_promise) ≠ shipping_delivery_promise`.
+Courier changed = `digitised_delivery_partner ≠ shipping_delivery_partner`.
+
+| Deviation | Count | H5: Prom✓ Cour✓ | H6: Prom✗ Cour✓ | H7: Prom✗ Cour✗ | H8: Prom✓ Cour✗ |
+|-----------|-------|-----------------|-----------------|-----------------|-----------------|
+| Early 5d+ | 101 | 43.6% | 0.0% | 3.0% | 20.8% |
+| Early 4d | 670 | 30.1% | 3.6% | 4.8% | 25.5% |
+| Early 3d | 4,920 | 27.9% | 7.7% | 11.3% | 34.1% |
+| Early 2d | 25,355 | 15.6% | 5.7% | 21.9% | 48.8% |
+| Early 1d | 4,298 | 16.7% | 15.1% | 37.5% | 20.8% |
+| On-Time | 1,779 | 13.4% | 8.5% | 65.7% | 7.6% |
+| Late 1d | 3,331 | 28.9% | 10.9% | 46.4% | 8.3% |
+| Late 2d | 9,978 | 28.3% | 7.0% | 50.2% | 9.3% |
+| Late 3d | 3,774 | 35.5% | 7.6% | 43.1% | 8.2% |
+| Late 4d | 1,694 | 34.9% | 8.3% | 43.6% | 7.7% |
+| Late 5d | 816 | 35.2% | 6.7% | 40.1% | 11.0% |
+| Late 6d+ | 972 | 36.0% | 7.9% | 38.8% | 9.4% |
+| **Total** | **52,788** | **24.4%** | **8.1%** | **35.1%** | **32.4%** |
+
+**H8 (Promise changed, courier unchanged)** is the primary driver of Early 2d at 48.8% — nearly half the dominant cohort. Mechanism: digitised over-promises TAT, shipping corrects it downward, same courier fulfills the shorter shipping promise → egregiously early vs digitised. Signal fades on the late side (8–11%). Fix is at digitised promise calibration.
+
+**H7 (Nothing changed)** dominates On-Time (65.7%) and Late 1d–2d (46–50%). For late orders this is the hardest failure mode — no structural change, just courier underperformance vs promise. Requires better TAT estimation at digitised/shipping.
+
+**H5 (Both changed)** ramps from 15.6% at Early 2d to 28–36% in the Late 3d+ tail. Compounding disruption from simultaneous promise and courier change drives the most severe late deliveries. Also elevated in extreme early tail (27–44% in Early 3d+).
+
+**H6 (Courier changed, promise unchanged)** is flat at 7–15% with no directional signal — minor contributor in either direction.
