@@ -1519,3 +1519,44 @@ Note: 51.5 + 36.6 = 88.1%; the remaining 11.9% have a null on either digitised o
 | Null (partner data missing) | 2,034 | 8.0% |
 
 **Verdict:** The deviation is perfectly uniform — every order is exactly 2 days early, with no irregular combinations. 70.7% had no courier switch. The courier is not underperforming or changing — the digitised delivery promise is systematically built with a transit TAT that is 2 days longer than what the courier actually takes. This is a promise construction problem: the system over-pads the transit window by 2 days for the pincode/courier/zone combinations represented in this cohort.
+
+---
+
+## #43 — Delivery TAT Early 2d: digitised vs shipping vs actual TAT for same-courier and switched-courier groups
+
+**Request:** For the 70.7% same-courier and 21.3% switched-courier orders in the Delivery TAT Early 2d cohort, compare digitised promised TAT vs shipping promised TAT vs actual TAT to determine whether (a) courier performance improved from digitised to shipping (shipping ≈ actual, digitised >> actual), or (b) the system adds buffers that actuals beat every time regardless of courier.
+
+**Same courier (n=17,915) — Shipping TAT vs Actual TAT:**
+
+| Shipping TAT − Actual TAT | Count | % |
+|---|---|---|
+| +0d (shipping = actual) | 1,928 | 10.8% |
+| +1d (shipping 1d over actual) | 10,321 | 57.6% |
+| +2d (shipping = digitised, 2d over actual) | 5,542 | 30.9% |
+| Other | 124 | 0.7% |
+
+Top combos (digitised TAT / shipping TAT / actual TAT):
+
+| Dig | Ship | Actual | % |
+|---|---|---|---|
+| 4d | 3d | 2d | 33.4% |
+| 4d | 4d | 2d | 17.3% |
+| 3d | 2d | 1d | 14.7% |
+| 5d | 4d | 3d | 8.4% |
+| 3d | 3d | 1d | 7.6% |
+
+**Switched courier (n=5,406) — Shipping TAT vs Actual TAT:**
+
+| Shipping TAT − Actual TAT | Count | % |
+|---|---|---|
+| +0d (shipping = actual) | 735 | 13.6% |
+| +1d | 2,128 | 39.4% |
+| +2d | 1,457 | 27.0% |
+| +3d or more | 903 | 16.7% |
+| Under actual (−1d) | 48 | 0.9% |
+
+**Verdicts:**
+
+- **Same courier:** Neither hypothesis is confirmed cleanly. The shipping promise has partially adjusted downward from digitised (by 1d in 57.6% of cases), but actual performance beats even the shipping promise in 89.2% of orders. Only 10.8% have shipping TAT = actual TAT. The system over-estimates transit time at both the digitised and shipping layers — actual courier performance is outpacing both. This is a structural calibration gap in the transit TAT lookup, not courier improvement captured by the shipping layer.
+- **Switched courier:** The new courier's shipping promise also does not match actual — only 13.6% do, nearly identical to same-courier (10.8%). A notable tail (16.7%) has the new courier promising 3d+ more than actual, and some combos (e.g. dig=5d / ship=7d / actual=3d) show the replacement courier promising even longer TAT than the original, yet actual is still 2d faster than digitised. The switched-courier group does not reveal a "better courier was allocated" story — the lane itself performs faster than any courier promises it.
+- **Combined conclusion:** The Delivery TAT Early 2d cohort is driven by a systemic transit TAT over-estimation baked into both the digitised and shipping promise layers for specific pincode/courier/zone lanes. Neither layer has accurately captured actual courier performance. Fix direction: recalibrate transit TAT lookup tables using recent actuals for the affected lanes.
