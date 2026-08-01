@@ -1100,3 +1100,33 @@ Inventory state change is extremely rare: only 206 orders excluded from the full
 2. **Late 1d–2d:** H7 dominates (49–52%) — nothing changed, pure courier underperformance vs unchanged promise. H5 elevated at 28% — when both change, still tends to produce late outcomes.
 
 3. **Late 3d+ (severe lates):** H5 (~35%) and H7 (~43–45%) split roughly equally. Severe late deliveries come either from compounding disruption (both promise and courier change, courier still fails) or from stubborn underperformance with no changes at all. H1 and H2 remain near zero throughout the entire late side.
+
+---
+
+## #31 — Hypothesis 9: Payment Pending as Driver of WH Deviation (Non-SDD Inventory Egregious Superset)
+
+**Request:** For the Non-SDD Inventory egregious superset (n=57,688), test whether WH earliness/lateness is explained by orders entering payment pending state (payment_pending_ts non-NULL). Per WH deviation bucket, compute % of orders with a payment pending event.
+
+WH deviation = `digitised_wh_promise − awb_sticker_printed_ts` in minutes (positive = early, negative = late).
+
+| WH Deviation | Count | Pay Pend n | Pay Pend % |
+|---|---|---|---|
+| Early > 24 hrs | 21 | 6 | 28.6% |
+| Early 12 – 24 hrs | 156 | 4 | 2.6% |
+| Early 1 – 2 hrs | 443 | 9 | 2.0% |
+| Early 30 – 60 mins | 5,813 | 87 | 1.5% |
+| Early < 30 mins | 6,032 | 147 | 2.4% |
+| On-Time | 1 | 0 | 0.0% |
+| Late < 30 mins | 4,138 | 96 | 2.3% |
+| Late 30 – 60 mins | 3,291 | 86 | 2.6% |
+| Late 1 – 2 hrs | 5,352 | 178 | 3.3% |
+| Late 2 – 4 hrs | 7,358 | 268 | 3.6% |
+| Late 4 – 8 hrs | 7,815 | 416 | 5.3% |
+| Late 8 – 12 hrs | 1,340 | 161 | 12.0% |
+| Late 12 – 24 hrs | 12,277 | 1,550 | 12.6% |
+| **Late > 24 hrs** | **3,640** | **2,330** | **64.0%** |
+| **Total** | **57,688** | **5,342** | **9.3%** |
+
+*(Early 2–12 hrs: 11 orders, omitted — too small to be meaningful)*
+
+**Verdict: Hypothesis strongly supported for the late tail.** Early side is flat at 1.5–2.6% — no signal (payment pending can only delay, not accelerate). Late side shows clear monotonic escalation: Late <30 mins 2.3% → Late 4–8 hrs 5.3% → Late 8–12 hrs 12.0% → Late 12–24 hrs 12.6% → **Late >24 hrs 64.0%**. Two in every three orders in the most extreme late WH bucket had a payment pending event. Mechanism: payment not confirmed → warehouse holds order → AWB printed only after payment clears → WH appears egregiously late vs digitised promise which assumed no payment delay. Overall 9.3% of superset had a payment pending event, concentrated almost entirely in the severe late WH tail.
