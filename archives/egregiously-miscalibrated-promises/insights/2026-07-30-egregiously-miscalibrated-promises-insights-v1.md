@@ -1156,3 +1156,29 @@ WH deviation = `digitised_wh_promise − awb_sticker_printed_ts` in minutes (pos
 | **Total** | **57,688** | **189** | **0.3%** |
 
 **Verdict: Hypothesis rejected.** Only 189 orders (0.3%) switched inventory status at shipping. Even the most extreme late bucket tops out at 2.1%. No signal in either direction. WH deviation has nothing to do with inventory reclassification. H9 (payment pending, 64% at Late >24 hrs) is the dominant explanation for extreme WH lateness; H10 is not.
+
+---
+
+## #33 — Hypothesis 11: Doctor Leg as Driver of WH Deviation (Non-SDD Inventory Egregious Superset)
+
+**Request:** For the Non-SDD Inventory egregious superset (n=57,688), test whether WH earliness/lateness is explained by the doctor leg (digitised_dr_promise vs actual_doctor_call_time at timestamp level). Per WH deviation bucket, compute % early / on-time / late on the doctor leg.
+
+| WH Deviation | Count | Dr Early | Dr On-Time | Dr Late |
+|---|---|---|---|---|
+| Early > 24 hrs | 21 | 100.0% | 0.0% | 0.0% |
+| Early 12 – 24 hrs | 156 | 68.6% | 0.0% | 31.4% |
+| Early 1 – 2 hrs | 454 | 95.2% | 0.0% | 4.8% |
+| Early 30 – 60 mins | 5,813 | 80.5% | 0.1% | 19.4% |
+| Early < 30 mins | 6,032 | 74.0% | 0.1% | 25.9% |
+| On-Time | 1 | 100.0% | 0.0% | 0.0% |
+| Late < 30 mins | 4,138 | 76.2% | 0.0% | 23.7% |
+| Late 30 – 60 mins | 3,291 | 78.8% | 0.0% | 21.2% |
+| Late 1 – 2 hrs | 5,352 | 79.3% | 0.1% | 20.6% |
+| Late 2 – 4 hrs | 7,358 | 77.3% | 0.0% | 22.6% |
+| Late 4 – 8 hrs | 7,815 | 72.1% | 0.0% | 27.8% |
+| Late 8 – 12 hrs | 1,340 | 69.4% | 0.1% | 30.5% |
+| Late 12 – 24 hrs | 12,277 | 80.8% | 0.1% | 19.1% |
+| Late > 24 hrs | 3,640 | 81.8% | 0.1% | 18.2% |
+| **Total** | **57,688** | **77.7%** | **0.1%** | **22.2%** |
+
+**Verdict: Hypothesis rejected.** Doctor late % is flat at ~20–30% across all WH buckets with no monotonic pattern. The most extreme WH late buckets are actually below the overall average: Late >24 hrs = 18.2%, Late 12–24 hrs = 19.1% vs 22.2% overall. A driver hypothesis would require escalating doctor lateness as WH deviation worsens — the data shows the opposite. Doctor call timing is background noise, not a causal factor in WH deviation.
