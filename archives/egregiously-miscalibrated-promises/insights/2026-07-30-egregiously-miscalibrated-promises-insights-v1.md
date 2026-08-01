@@ -945,3 +945,27 @@ TAT deviation = `(digitised_delivery_promise − digitised_dispatch_promise) −
 | **Total** | **57,688** | **17,160** | **29.7%** |
 
 **Verdict: Hypothesis partially supported — most nuanced of the three.** Late buckets consistently elevated at 35–44% vs on-time baseline of 22% (~15–20pp lift), suggesting courier rerouting is a real contributor to late TAT. The dominant Early 2d bucket (44% of superset) sits at 21.3% — essentially at on-time baseline — meaning courier change is not driving the bulk of early TAT miscalibration. Overall 29.7% of orders had a courier change, far higher than SDD (2.3%) or WH (8.9%) changes, indicating courier rerouting is a common event in this superset.
+
+---
+
+## #27 — Hypothesis 4: Promise Change (Digitised vs Shipping TAT) as Driver of TAT Deviation (Non-SDD Inventory Egregious Superset)
+
+**Request:** Test whether delivery TAT earliness/lateness in the Non-SDD Inventory egregious superset (n=57,688) is explained by a promise change between digitised and shipping, defined as `DATE(digitised_delivery_promise) − DATE(digitised_dispatch_promise) ≠ shipping_delivery_promise`. Per TAT deviation bucket, compute % of orders where the TAT promise changed.
+
+| Deviation | Count | Promise chg n | Promise chg % |
+|-----------|-------|--------------|---------------|
+| Early 5d+ | 101 | 98 | 97.0% |
+| Early 4d | 670 | 611 | 91.2% |
+| Early 3d | 4,920 | 3,966 | 80.6% |
+| Early 2d | 25,355 | 18,146 | 71.6% |
+| Early 1d | 4,298 | 1,879 | 43.7% |
+| On-Time | 1,779 | 402 | 22.6% |
+| Late 1d | 3,331 | 1,335 | 40.1% |
+| Late 2d | 9,978 | 4,069 | 40.8% |
+| Late 3d | 3,774 | 1,794 | 47.5% |
+| Late 4d | 1,694 | 788 | 46.5% |
+| Late 5d | 816 | 407 | 49.9% |
+| Late 6d+ | 972 | 487 | 50.1% |
+| **Total** | **57,688** | **33,982** | **58.9%** |
+
+**Verdict: Strongly supported for the early side — strongest hypothesis of the four.** Clear monotonic relationship on the early side: 43.7% → 71.6% → 80.6% → 91.2% → 97.0% as deviation increases from Early 1d to Early 5d+. Dominant Early 2d bucket at 71.6% is 49pp above the on-time baseline of 22.6%. Mechanism: shipping recalibrates TAT downward → courier fulfills the shorter shipping promise → egregiously early vs original digitised promise. Key implication: if digitised TAT were calibrated to what shipping ends up promising, ~71.6% of the dominant Early 2d cohort would not be egregious. Late side elevated but flat at 40–50% (~20pp lift over baseline) with no monotonic pattern — promise extension at shipping correlates with late delivery but is not the sole driver.
