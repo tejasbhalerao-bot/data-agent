@@ -1655,3 +1655,39 @@ One fix addresses all seven cohorts: recalibrate the transit TAT lookup table us
 
 - **Payment pending footprint is 1.1pp** — 328 orders appear WH Late on AWB but WH Early on invoice. These are exactly the orders where invoice was created before the WH promise but AWB printing was delayed by payment resolution. Payment pending's footprint in Non-SDD Non-Inventory is negligible compared to its 68.2% dominance in the Inventory Late 2d dispatch cohort.
 - **96.4–97.5% of the entire Non-SDD Non-Inventory egregious set had the order ready (AWB or invoice) before the WH promise.** The warehouse (procurement) effect is total — SKUs arrive and are invoiced far earlier than the system anticipated. Late WH buckets are noise at 2.5–3.6%. The analysis space is almost entirely about why the WH promise is so wrong on the early side.
+
+---
+
+## #47 — Non-SDD Non-Inventory: AWB-based vs invoice-based WH deviation side-by-side comparative table
+
+**Request:** Produce a comparative 7-column table showing AWB-based and invoice-based WH deviation distributions side by side for the full Non-SDD Non-Inventory egregious set (n=29,813), to allow direct visual comparison of the two measurement approaches.
+
+| WH Deviation | AWB Count | AWB % Non-SDD Non-Inv | AWB % Egregious | Invoice Count | Invoice % Non-SDD Non-Inv | Invoice % Egregious |
+|---|---|---|---|---|---|---|
+| Early >24 hrs | 13,817 | 46.3% | 14.3% | 14,424 | 48.4% | 15.0% |
+| Early 12–24 hrs | 3,058 | 10.3% | 3.2% | 2,901 | 9.7% | 3.0% |
+| Early 8–12 hrs | 3,641 | 12.2% | 3.8% | 4,189 | 14.1% | 4.3% |
+| Early 4–8 hrs | 6,229 | 20.9% | 6.5% | 5,948 | 20.0% | 6.2% |
+| Early 2–4 hrs | 1,381 | 4.6% | 1.4% | 1,118 | 3.8% | 1.2% |
+| Early 1–2 hrs | 426 | 1.4% | 0.4% | 299 | 1.0% | 0.3% |
+| Early 30–60 mins | 114 | 0.4% | 0.1% | 124 | 0.4% | 0.1% |
+| Early <30 mins | 84 | 0.3% | 0.1% | 60 | 0.2% | 0.1% |
+| On-Time | 0 | 0.0% | 0.0% | 0 | 0.0% | 0.0% |
+| Late <30 mins | 41 | 0.1% | 0.0% | 42 | 0.1% | 0.0% |
+| Late 30–60 mins | 52 | 0.2% | 0.1% | 38 | 0.1% | 0.0% |
+| Late 1–2 hrs | 76 | 0.3% | 0.1% | 87 | 0.3% | 0.1% |
+| Late 2–4 hrs | 116 | 0.4% | 0.1% | 107 | 0.4% | 0.1% |
+| Late 4–8 hrs | 76 | 0.3% | 0.1% | 78 | 0.3% | 0.1% |
+| Late 8–12 hrs | 71 | 0.2% | 0.1% | 26 | 0.1% | 0.0% |
+| Late 12–24 hrs | 453 | 1.5% | 0.5% | 237 | 0.8% | 0.2% |
+| Late >24 hrs | 178 | 0.6% | 0.2% | 125 | 0.4% | 0.1% |
+| **Total Early** | **28,750** | **96.4%** | **29.8%** | **29,063** | **97.5%** | **30.1%** |
+| **Total Late** | **1,063** | **3.6%** | **1.1%** | **740** | **2.5%** | **0.8%** |
+
+*Invoice total = 29,803 (10 orders with no invoice_create_ts excluded). AWB total = 29,813. Denominators: % of Non-SDD Non-Inv uses 29,813 throughout; % of Egregious uses 96,424.*
+
+**Key observations:**
+
+- Both distributions are nearly identical — the two measurement approaches converge. This confirms that payment pending (the only mechanism that creates AWB/invoice divergence) is not a meaningful driver in this segment.
+- The meaningful deltas are concentrated in the late tail: Late 12–24 hrs drops from 1.5% (AWB) to 0.8% (invoice) and Late >24 hrs from 0.6% to 0.4%. These 328 orders (1.1pp delta) are exactly the payment-pending-affected orders from #46 — orders where the invoice was created before the WH promise but AWB printing was held for payment clearance.
+- Early >24 hrs is the dominant bucket in both views (46.3% AWB / 48.4% invoice) — SKUs are being procured and invoiced more than a full day before the system's WH promise window opens. The WH promise is structurally miscalibrated for this segment.
