@@ -1601,3 +1601,28 @@ The transit TAT lookup table driving both digitised and shipping promises has st
 - **Late cohorts:** lookup under-estimates transit → customer receives order N days late
 
 One fix addresses all seven cohorts: recalibrate the transit TAT lookup table using rolling actuals per lane.
+
+---
+
+## #45 — Non-SDD Non-Inventory Cohort 40: WH deviation using invoice_create_ts vs digitised_wh_promise
+
+**Request:** For Cohort 40 of the Non-SDD Non-Inventory egregious set (WH Early + Dispatch Early + Delivery Cx Early, n=26,134), rebuild the WH earliness distribution using `invoice_create_ts` instead of `awb_sticker_printed_ts` as the comparison point against `digitised_wh_promise`. Rationale: invoice creation precedes AWB printing and is unaffected by payment pending holds, giving a cleaner view of the procurement + preparation leg.
+
+**Comparison: AWB-based vs invoice-based WH earliness distribution (Cohort 40, n=26,134):**
+
+| WH Early by | AWB-based (n) | AWB-based % | Invoice-based (n) | Invoice-based % |
+|---|---|---|---|---|
+| <30 mins | 18 | 0.1% | 8 | 0.0% |
+| 30–60 mins | 15 | 0.1% | 14 | 0.1% |
+| 1–2 hrs | 186 | 0.7% | 79 | 0.3% |
+| 2–4 hrs | 850 | 3.3% | 655 | 2.5% |
+| 4–8 hrs | 5,549 | 21.2% | 5,101 | 19.5% |
+| 8–12 hrs | 3,449 | 13.2% | 3,918 | 15.0% |
+| 12–24 hrs | 2,601 | 10.0% | 2,389 | 9.1% |
+| **>24 hrs** | **13,466** | **51.5%** | **13,961** | **53.4%** |
+| Late (after WH promise) | — | — | 0 | 0.0% |
+
+**Verdicts:**
+
+- **Payment pending is irrelevant to Cohort 40.** Zero orders have invoice_create_ts after digitised_wh_promise. The preparation leg was complete before the WH promise in every single Cohort 40 order. The earliness is driven entirely by procurement + preparation completing faster than the WH promise anticipated — not by any payment-related delay being absent at the AWB step.
+- **The distribution is nearly identical using either timestamp**, with a slight shift toward more extreme early when using invoice (>24 hrs grows from 51.5% → 53.4%). This is expected — invoice always precedes AWB, so it is even further from the WH promise. The dominant story is unchanged: 53.4% of Cohort 40 had the order invoiced more than 24 hours before the WH promise. SKUs were procured and ready far earlier than the system expected.
