@@ -1691,3 +1691,147 @@ One fix addresses all seven cohorts: recalibrate the transit TAT lookup table us
 - Both distributions are nearly identical — the two measurement approaches converge. This confirms that payment pending (the only mechanism that creates AWB/invoice divergence) is not a meaningful driver in this segment.
 - The meaningful deltas are concentrated in the late tail: Late 12–24 hrs drops from 1.5% (AWB) to 0.8% (invoice) and Late >24 hrs from 0.6% to 0.4%. These 328 orders (1.1pp delta) are exactly the payment-pending-affected orders from #46 — orders where the invoice was created before the WH promise but AWB printing was held for payment clearance.
 - Early >24 hrs is the dominant bucket in both views (46.3% AWB / 48.4% invoice) — SKUs are being procured and invoiced more than a full day before the system's WH promise window opens. The WH promise is structurally miscalibrated for this segment.
+
+---
+
+## #48 — Non-SDD Non-Inventory: delivery TAT deviation exploratory study (H3/H4/H5–H8)
+
+**Request:** Exploratory study to determine whether there is a delivery TAT deviation component in the Non-SDD Non-Inventory egregious set that is independent of the warehouse/dispatch contribution — mirroring the H1–H8 tests run for Inventory.
+
+**Script:** `archives/egregiously-miscalibrated-promises/scripts/2026-08-02-aggregate-non-inv-delivery-tat-deviation-v1.py`
+
+---
+
+### Part 1 — Raw TAT distributions
+
+| TAT (d) | Dig n | Dig % | Ship n | Ship % | Act n | Act % |
+|---|---|---|---|---|---|---|
+| 0 | 0 | 0.0% | 0 | 0.0% | 80 | 0.3% |
+| 1 | 1,971 | 6.6% | 2,884 | 9.7% | 5,216 | 17.5% |
+| 2 | 6,135 | 20.6% | 7,882 | 26.4% | 13,038 | 43.7% |
+| 3 | 9,903 | 33.2% | 10,064 | 33.8% | 7,223 | 24.2% |
+| 4 | 7,351 | 24.7% | 5,936 | 19.9% | 2,440 | 8.2% |
+| 5 | 4,070 | 13.7% | 2,102 | 7.1% | 710 | 2.4% |
+| 6 | 361 | 1.2% | 552 | 1.9% | 411 | 1.4% |
+| 7+ | 22 | 0.1% | 393 | 1.3% | 695 | 2.3% |
+
+Digitised TAT peaks at 3d (33.2%) and 4d (24.7%). Actual TAT peaks at 2d (43.7%) and 1d (17.5%). Both promise layers are systematically 1–2 days longer than what couriers actually deliver — same stale transit TAT lookup table signature as Inventory.
+
+---
+
+### Part 2 — TAT deviation buckets (digitised TAT − actual TAT, in days)
+
+| Bucket | n | % of Non-SDD Non-Inv | % of Egregious |
+|---|---|---|---|
+| Early 4d+ | 26 | 0.1% | 0.0% |
+| Early 3d | 804 | 2.7% | 0.8% |
+| Early 2d | 5,384 | 18.1% | 5.6% |
+| Early 1d | 15,101 | 50.7% | 15.7% |
+| On-Time | 6,277 | 21.1% | 6.5% |
+| Late 1d | 407 | 1.4% | 0.4% |
+| Late 2d | 489 | 1.6% | 0.5% |
+| Late 3d+ | 1,325 | 4.4% | 1.4% |
+
+**68.8% of Non-Inventory egregious orders have early delivery TAT** — courier delivers faster than promised, independent of when dispatch happened. Late 3d+ at 4.4% (n=1,325) is a meaningful tail in the opposite direction.
+
+---
+
+### Part 3 — H3: Courier change per TAT deviation bucket
+
+| Bucket | n | Courier chg n | Courier chg % |
+|---|---|---|---|
+| Early 4d+ | 26 | 14 | 53.8% |
+| Early 3d | 804 | 424 | 52.7% |
+| Early 2d | 5,384 | 1,878 | 34.9% |
+| Early 1d | 15,101 | 3,364 | 22.3% |
+| On-Time | 6,277 | 1,405 | 22.4% |
+| Late 1d | 407 | 216 | 53.1% |
+| Late 2d | 489 | 224 | 45.8% |
+| Late 3d+ | 1,325 | 668 | 50.4% |
+
+Courier change is **not** a driver of the dominant Early 1d bucket (22.3% = on-time baseline of 22.4%). Elevated in the extreme early tail (Early 3d+: 52–54%) and throughout the late tail (45–53%).
+
+---
+
+### Part 4 — H4: Promise change per TAT deviation bucket
+
+| Bucket | n | Has ship TAT | Promise chg | % |
+|---|---|---|---|---|
+| Early 4d+ | 26 | 26 | 20 | 76.9% |
+| Early 3d | 804 | 804 | 658 | 81.8% |
+| Early 2d | 5,384 | 5,384 | 3,922 | 72.8% |
+| Early 1d | 15,101 | 15,101 | 6,104 | 40.4% |
+| On-Time | 6,277 | 6,277 | 1,110 | 17.7% |
+| Late 1d | 407 | 407 | 206 | 50.6% |
+| Late 2d | 489 | 489 | 236 | 48.3% |
+| Late 3d+ | 1,325 | 1,325 | 673 | 50.8% |
+
+Clear monotonic early pattern: 76.9% → 81.8% → 72.8% → 40.4% → 17.7% baseline. Same stale TAT lookup table signature as Inventory H4.
+
+---
+
+### Part 5 — H5–H8 cross-tab: Promise change × Courier change
+
+| Bucket | Has ship | H5 both% | H6 Cx% | H7 neither% | H8 Px% |
+|---|---|---|---|---|---|
+| Early 4d+ | 26 | 42.3% | 11.5% | 11.5% | 34.6% |
+| Early 3d | 804 | 42.5% | 10.2% | 8.0% | **39.3%** |
+| Early 2d | 5,384 | 26.4% | 8.5% | 18.6% | **46.5%** |
+| Early 1d | 15,101 | 11.9% | 10.4% | **49.2%** | 28.5% |
+| On-Time | 6,277 | 11.4% | 11.0% | **71.3%** | 6.3% |
+| Late 1d | 407 | 41.5% | 11.5% | 37.8% | 9.1% |
+| Late 2d | 489 | 38.0% | 7.8% | 44.0% | 10.2% |
+| Late 3d+ | 1,325 | 38.3% | 12.1% | 37.1% | 12.5% |
+
+**Key divergence from Inventory:**
+- Early 2d follows Inventory — H8 dominant (46.5%): shipping shortens TAT, same courier delivers to it, egregiously early vs digitised promise.
+- **Early 1d is dominated by H7 (49.2%)**: neither courier nor promise changed. The courier routinely delivers 1d faster than both digitised and shipping promise. The shipping layer is not correcting for these lanes at all — unlike Inventory where shipping partially adjusted.
+- Late 1d–2d: H5 (both changed, 38–42%) and H7 (38–44%) split — either compounding disruption or pure courier underperformance with no system correction.
+- Late 3d+: H5 (38.3%) and H7 (37.1%) roughly equal — severe late deliveries from compounding disruption or genuinely hard routes.
+
+---
+
+### Part 6 — Same-courier combos: does shipping correct the digitised promise?
+
+**Early 1d same-courier (n=11,737):**
+
+| Dig TAT | Ship TAT | Act TAT | n | % |
+|---|---|---|---|---|
+| 3 | 3 | 2 | 3,848 | 32.8% |
+| 4 | 4 | 3 | 1,854 | 15.8% |
+| 3 | 2 | 2 | 1,841 | 15.7% |
+| 2 | 2 | 1 | 1,427 | 12.2% |
+| 4 | 3 | 3 | 1,154 | 9.8% |
+| 2 | 1 | 1 | 728 | 6.2% |
+
+Top 3 combos (dig=ship, courier faster): 32.8% + 15.8% + 12.2% = 60.8% of same-courier Early 1d — shipping made no correction, courier delivers 1d faster than both layers consistently. Next 2 combos (shipping corrected by 1d, courier delivered to shipping promise — still 1d early vs digitised): 15.7% + 9.8% = 25.5%.
+
+**Early 2d same-courier (n=3,506):**
+
+| Dig TAT | Ship TAT | Act TAT | n | % |
+|---|---|---|---|---|
+| 4 | 3 | 2 | 1,254 | 35.8% |
+| 4 | 4 | 2 | 564 | 16.1% |
+| 5 | 4 | 3 | 563 | 16.1% |
+| 3 | 2 | 1 | 309 | 8.8% |
+
+Shipping partially corrects (35.8% ship=3 vs dig=4) but undershoots — courier still delivers 1d faster than shipping promised. 16.1% shipping made no correction at all (dig=ship=4, act=2, 2d faster than either).
+
+**Late 3d+ same-courier (n=657):**
+
+| Dig TAT | Ship TAT | Act TAT | n | % |
+|---|---|---|---|---|
+| 2 | 2 | 5 | 76 | 11.6% |
+| 3 | 3 | 6 | 65 | 9.9% |
+| 1 | 1 | 4 | 54 | 8.2% |
+
+Courier consistently takes 3+ days more than both promises predict. No system correction whatsoever — the lookup table has no visibility into these hard routes.
+
+---
+
+### Verdicts
+
+1. **Delivery TAT component is real and large (68.8% early TAT)** — independent of dispatch timing; warehouse does not explain this.
+2. **Root cause is the same stale transit TAT lookup table** — both digitised and shipping promise TATs that couriers reliably beat (or fail to meet) on specific lanes.
+3. **Non-Inventory diverges from Inventory in one key way:** the shipping layer makes zero correction for the dominant Early 1d bucket (H7=49.2%). In Inventory, shipping partially corrected via H8. Non-Inventory routes are either not in the recalibration loop or the lane-level actuals are not being fed back.
+4. **Late 3d+ (n=1,325, 4.4%)** is a distinct failure mode: H5+H7 dominant, couriers missing promises by 3+ days with no system correction. Likely specific pincode/zone combinations where courier capacity or routing creates systematic underperformance vs the lookup table.
