@@ -615,40 +615,196 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- A.3 Late 1d / 2d -->
     <div class="subsection">
-      <h3>A.3 — Late 1d &amp; 2d: Payment Pending Holds Block AWB Printing</h3>
+      <h3>A.3 — Late Dispatch: Payment Pending Holds Block AWB Printing</h3>
 
-      <p>When an order enters a payment-pending state, the warehouse cannot print the AWB until payment is resolved. This delays pickup, pushing dispatch past the promised date. The payment pending rate escalates sharply into the late dispatch buckets:</p>
+      <p>When an order enters payment-pending state, the warehouse cannot print the AWB until payment resolves. No AWB means no courier pickup — dispatch is held regardless of warehouse readiness. We measured this across three dimensions: how many orders in each dispatch group are payment-pending, how payment pending affects the invoice-to-AWB gap, and how much of the total lateness is actually explained by this mechanism.</p>
 
-      <div class="stat-row">
-        <div class="stat">
-          <div class="stat-num">4.4%</div>
-          <div class="stat-label">Payment pending rate — On-Time baseline (n=43,416)</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num red">37.7%</div>
-          <div class="stat-label">Payment pending rate — Late 1d (n=5,240)</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num red">68.2%</div>
-          <div class="stat-label">Payment pending rate — Late 2d (n=1,786)</div>
-        </div>
+      <!-- Step 1: Quantum -->
+      <h4>Step 1 — How many orders enter payment pending, per dispatch group</h4>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Dispatch group</th>
+              <th class="td-num">Orders</th>
+              <th class="td-num">% of Inv superset</th>
+              <th class="td-num">Pmt pending n</th>
+              <th class="td-num">Pmt pending %</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Early (all)</td>
+              <td class="td-num">6,465</td>
+              <td class="td-num">11.2%</td>
+              <td class="td-num">114</td>
+              <td class="td-num td-muted">1.8%</td>
+            </tr>
+            <tr>
+              <td>On-Time</td>
+              <td class="td-num">43,416</td>
+              <td class="td-num">75.3%</td>
+              <td class="td-num">1,913</td>
+              <td class="td-num">4.4% ← baseline</td>
+            </tr>
+            <tr class="td-focus-red">
+              <td class="td-bold">Late (all)</td>
+              <td class="td-num td-bold">7,807</td>
+              <td class="td-num td-bold">13.5%</td>
+              <td class="td-num td-bold">3,315</td>
+              <td class="td-num td-hl-red">42.5%</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+
+      <p>Payment pending is effectively at baseline for Early (1.8%) and On-Time (4.4%) dispatch. In the Late group it is 10× elevated at 42.5% — but critically, this means <strong>57.5% of late orders are not payment-pending at all</strong>. At the top level, payment pending has the potential to explain 42.5% × 13.5% = <strong>5.74% of all 57,688 orders</strong>. The remaining 7.76% of orders are late for other reasons.</p>
+
+      <!-- Step 2: Day-level -->
+      <h4>Step 2 — Payment pending rate at day-level dispatch deviation</h4>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Dispatch deviation</th>
+              <th class="td-num">Orders</th>
+              <th class="td-num">% of superset</th>
+              <th class="td-num">Pmt pending n</th>
+              <th class="td-num">Pmt pending %</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Early 1d</td>
+              <td class="td-num">6,207</td>
+              <td class="td-num">10.8%</td>
+              <td class="td-num">102</td>
+              <td class="td-num td-muted">1.6%</td>
+            </tr>
+            <tr>
+              <td>On-Time</td>
+              <td class="td-num">43,416</td>
+              <td class="td-num">75.3%</td>
+              <td class="td-num">1,913</td>
+              <td class="td-num">4.4%</td>
+            </tr>
+            <tr class="td-focus-red">
+              <td class="td-bold">Late 1d</td>
+              <td class="td-num td-bold">5,240</td>
+              <td class="td-num td-bold">9.1%</td>
+              <td class="td-num td-bold">1,975</td>
+              <td class="td-num td-hl-red">37.7%</td>
+            </tr>
+            <tr class="td-focus-red">
+              <td class="td-bold">Late 2d</td>
+              <td class="td-num td-bold">1,786</td>
+              <td class="td-num td-bold">3.1%</td>
+              <td class="td-num td-bold">1,218</td>
+              <td class="td-num td-hl-red">68.2%</td>
+            </tr>
+            <tr>
+              <td>Late 3d</td>
+              <td class="td-num">361</td>
+              <td class="td-num">0.6%</td>
+              <td class="td-num">96</td>
+              <td class="td-num">26.6%</td>
+            </tr>
+            <tr>
+              <td>Late 4d+</td>
+              <td class="td-num td-muted">~520</td>
+              <td class="td-num td-muted">0.9%</td>
+              <td class="td-num td-muted">~25</td>
+              <td class="td-num td-muted">&lt;10% each</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Payment pending concentrates sharply in Late 1d and Late 2d — 3,193 of the 3,315 total payment-pending late orders. Beyond Late 2d the rate collapses back toward 10–27%, suggesting the remaining Late 3d+ orders are driven by a different mechanism.</p>
+
+      <!-- Step 3: Invoice→AWB gap -->
+      <h4>Step 3 — How long does payment pending actually hold the AWB?</h4>
+
+      <p>To measure the impact of payment pending, we compared the <strong>invoice-to-AWB gap</strong> (<code>awb_sticker_printed_ts − invoice_create_ts</code>, in hours) between payment-pending and non-payment-pending orders within each dispatch bucket.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Dispatch bucket</th>
+              <th class="td-num">Pmt pend n</th>
+              <th class="td-num">Pmt pend median</th>
+              <th class="td-num">Pmt pend IQR</th>
+              <th class="td-num">Non-pmt median</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Early 1d</td>
+              <td class="td-num">102</td>
+              <td class="td-num">0.8h</td>
+              <td class="td-num td-muted">0.4 – 2.0h</td>
+              <td class="td-num">0.2h</td>
+            </tr>
+            <tr>
+              <td>On-Time</td>
+              <td class="td-num">1,913</td>
+              <td class="td-num">2.4h</td>
+              <td class="td-num td-muted">0.7 – 5.7h</td>
+              <td class="td-num">0.4h</td>
+            </tr>
+            <tr class="td-focus-red">
+              <td class="td-bold">Late 1d</td>
+              <td class="td-num td-bold">1,974</td>
+              <td class="td-num td-hl-red">23.2h</td>
+              <td class="td-num td-muted">17.7 – 25.7h</td>
+              <td class="td-num">0.4h</td>
+            </tr>
+            <tr class="td-focus-red">
+              <td class="td-bold">Late 2d</td>
+              <td class="td-num td-bold">1,218</td>
+              <td class="td-num td-hl-red">26.6h</td>
+              <td class="td-num td-muted">24.1 – 28.6h</td>
+              <td class="td-num">0.4h</td>
+            </tr>
+            <tr>
+              <td>Late 3d</td>
+              <td class="td-num">96</td>
+              <td class="td-num">22.7h</td>
+              <td class="td-num td-muted">19.0 – 26.3h</td>
+              <td class="td-num">0.6h</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The non-pmt baseline is <strong>0.4h across all buckets</strong> — AWB prints within minutes of invoice for a non-pending order. Payment pending orders in the Late buckets sit at 23–27h. The entire delta is pure payment hold.</p>
 
       <div class="flow">
-        <span class="flow-step problem">Payment pending</span>
+        <span class="flow-step problem">Payment pending flagged</span>
         <span class="flow-arrow">→</span>
-        <span class="flow-step">WH hold — cannot pack</span>
+        <span class="flow-step">AWB print blocked (~23h hold)</span>
         <span class="flow-arrow">→</span>
-        <span class="flow-step">AWB delayed</span>
+        <span class="flow-step">Courier collection shifts to next day</span>
         <span class="flow-arrow">→</span>
-        <span class="flow-step">Courier collection late</span>
-        <span class="flow-arrow">→</span>
-        <span class="flow-step outcome">Late 1d / 2d dispatch</span>
+        <span class="flow-step outcome">Late 1d dispatch</span>
       </div>
 
+      <!-- What payment pending explains -->
       <div class="finding finding-green">
-        <div class="finding-label">Hypothesis H9 — Supported</div>
-        <p>Payment-pending cascades explain the majority of Late 1d and Late 2d dispatch orders. The 9× increase from On-Time baseline (4.4%) to Late 2d (68.2%) is too large to be coincidence. Orders blocked on payment resolution cannot be dispatched on time regardless of warehouse or courier readiness.</p>
+        <div class="finding-label">What Payment Pending Cleanly Explains</div>
+        <p><strong>Late 1d — 1,975 payment-pending orders (37.7% of Late 1d).</strong> A 23.2h invoice-to-AWB hold (IQR: 17.7–25.7h) means the AWB is not printed until the next calendar day. Couriers collect same-day as AWB print (established universally across all dispatch buckets). Result: dispatch moves exactly one day past the promise. The mechanism is tight and fully accounts for this cohort.</p>
+        <p>For Early 1d and On-Time, payment resolves fast (0.8h and 2.4h median) — the hold is absorbed within the WH window and does not reach the courier collection step.</p>
+      </div>
+
+      <!-- What payment pending does not explain -->
+      <div class="finding" style="background:var(--amber-dim);border-left-color:var(--amber);">
+        <div class="finding-label" style="color:var(--amber);">Limits of the Explanation</div>
+        <p><strong>Late 2d (1,218 pmt-pending orders, 68.2%).</strong> The median hold is 26.6h, IQR 24.1–28.6h — tightly clustered around exactly 24 hours. A 26.6h hold starting from invoice should push AWB to the next calendar day and pickup one day late, not two. The additional day likely comes from payment resolving late in the evening, pushing AWB past the courier's same-day cut-off. This hypothesis is not yet confirmed — courier cut-off timestamps are not available in the dataset.</p>
+        <p><strong>Late 3d (96 pmt-pending orders, 26.6%).</strong> The median hold here is 22.7h — the same as Late 1d. A 22h hold cannot mechanically cause a 3-day dispatch miss. These orders almost certainly have a second root cause stacked on top of payment pending (e.g. doctor/HA call hold, or a separate invoice pipeline delay).</p>
+        <p><strong>Overall quantum.</strong> Payment pending can account for at most 5.74% of all 57,688 egregious orders (42.5% × 13.5%). The remaining 7.76% of late orders — and all of Late 3d+ — are driven by mechanisms that payment pending alone does not explain.</p>
       </div>
     </div>
 
