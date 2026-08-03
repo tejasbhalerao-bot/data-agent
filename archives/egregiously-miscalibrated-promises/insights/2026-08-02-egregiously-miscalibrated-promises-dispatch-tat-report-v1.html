@@ -995,16 +995,133 @@ tbody tr:hover td { background: var(--surface-alt); }
 
       <div class="finding" style="background:var(--amber-dim);border-left-color:var(--amber);">
         <div class="finding-label" style="color:var(--amber);">What the Fix Does Not Address</div>
-        <p><strong>8.1% of the superset remains late</strong> even with payment pending fully eliminated. Late 3d and Late 4d+ barely move (−0.2pp and 0pp). These are driven entirely by other mechanisms — the invoice pipeline delay and HA/doctor call SLA issues identified in A.5 below.</p>
+        <p><strong>8.1% of the superset remains late</strong> even with payment pending fully eliminated. Late 3d and Late 4d+ barely move (−0.2pp and 0pp). These are driven entirely by other mechanisms — the invoice pipeline delay and HA/doctor call SLA issues identified in A.6 below.</p>
+        <p><strong>The residual Late 1d cohort (6.0%, n≈3,265):</strong> non-pmt-pending orders still dispatched a day late. Root cause is late invoice creation, not an AWB hold — investigated in detail in A.5.</p>
         <p><strong>Side effect:</strong> 547 currently On-Time pmt orders would shift into Early 1d dispatch if payment resolved at baseline speed (+1.1pp in Early). This is because their invoice creation is early enough that a 0.4h AWB print moves pickup to the day before the dispatch promise. Not a customer harm, but a downstream TAT promise inaccuracy to account for.</p>
       </div>
     </div>
 
     <hr class="divider">
 
-    <!-- A.5 Rejected Hypotheses -->
+    <!-- A.5 Residual Late 1d -->
     <div class="subsection">
-      <h3>A.5 — Hypotheses Tested and Rejected</h3>
+      <h3>A.5 — Residual Late 1d: Why Invoice Creation Is Late</h3>
+
+      <p>After eliminating payment pending, <strong>3,265 orders remain in Late 1d</strong> (dispatch_dev = −1, payment_pending_ts = NULL). These shipped a day late without any payment hold. The question is: what delayed their AWB print?</p>
+
+      <h4>The delay is upstream of AWB — not an AWB hold</h4>
+      <p>For these orders, the invoice→AWB gap is <strong>~25 minutes</strong> — identical to the non-pmt baseline across all dispatch buckets. AWB prints immediately after invoice in every case. The delay is entirely upstream: something is causing <strong>invoice creation itself to be late</strong>.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Invoice→AWB gap (non-pmt, by dispatch bucket)</th>
+              <th class="td-num">Median gap</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Early 1d</td><td class="td-num">0.4h (24m)</td></tr>
+            <tr><td>On-Time</td><td class="td-num">0.4h (24m)</td></tr>
+            <tr class="td-focus"><td class="td-bold">Late 1d (residual)</td><td class="td-num td-bold">0.4h (25m)</td></tr>
+            <tr><td>Late 2d</td><td class="td-num">0.4h (25m)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>An inventory-switch hypothesis (orders moving from <code>digitised_is_inventory=TRUE</code> to <code>shipping_is_inventory=FALSE</code>) was also tested and eliminated: only 54 of 3,265 orders (1.7%) had this switch — negligible.</p>
+
+      <h4>Two distinct root causes, by order category</h4>
+      <p>The residual Late 1d cohort splits cleanly by whether a doctor call is required:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th class="td-num">Share of residual Late 1d</th>
+              <th class="td-num">n</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="td-focus"><td class="td-bold">Call-required (DOCTOR_CALL_REQUIRED / DOCTOR_AND_HA_CALL_REQUIRED)</td><td class="td-num td-bold">69%</td><td class="td-num td-bold">2,264</td></tr>
+            <tr><td>Non-call (AUTO_CONFIRM / NO_CALL)</td><td class="td-num">31%</td><td class="td-num">1,001</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Call-required orders — late doctor confirmation is the bottleneck</h4>
+      <p>For call-required orders, invoice creation is triggered by <code>dr_confirm_ts</code>. We compared two legs: (1) from the promised doctor slot (<code>digitised_dr_promise</code>) to actual confirmation (<code>dr_confirm_ts</code>), and (2) from confirmation to invoice.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Leg</th>
+              <th class="td-num">Late 1d median</th>
+              <th class="td-num">On-Time median</th>
+              <th class="td-num">Ratio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="td-focus">
+              <td class="td-bold">dr_promise → dr_confirm</td>
+              <td class="td-num td-hl-red td-bold">169 min</td>
+              <td class="td-num td-hl-green">41 min</td>
+              <td class="td-num td-bold">4×</td>
+            </tr>
+            <tr>
+              <td>dr_confirm → invoice</td>
+              <td class="td-num td-muted">233 min</td>
+              <td class="td-num td-muted">185 min</td>
+              <td class="td-num td-muted">1.3×</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.83rem;color:var(--text-2);">Call-required: Late 1d n=2,264 · On-Time n=28,274</p>
+
+      <p>The <code>dr_confirm → invoice</code> leg is similar for both cohorts (233m vs 185m) and is <em>not</em> the bottleneck. The gap between when the doctor was promised (<code>dr_promise</code>) and when they actually confirmed is <strong>4× wider for Late 1d orders</strong> — 169 minutes vs 41 minutes. Late doctor confirmation cascades directly to late invoice creation.</p>
+
+      <h4>Non-call orders — unknown warehouse pipeline delay</h4>
+      <p>For orders that require no doctor or HA call, the invoice creation pipeline runs directly from the warehouse promise. Here the gap is simple to measure: <code>wh_promise → invoice</code>.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Leg</th>
+              <th class="td-num">Late 1d median</th>
+              <th class="td-num">On-Time median</th>
+              <th class="td-num">Ratio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="td-focus">
+              <td class="td-bold">wh_promise → invoice</td>
+              <td class="td-num td-hl-red td-bold">499 min</td>
+              <td class="td-num td-hl-green">245 min</td>
+              <td class="td-num td-bold">2×</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.83rem;color:var(--text-2);">Non-call: Late 1d n=1,001 · On-Time n=13,229</p>
+
+      <p>The warehouse-to-invoice pipeline takes twice as long for Late 1d non-call orders. The source of this delay within the WH → invoice leg is not yet identified — it is not doctor confirmation and not an HA call. It likely reflects a warehouse processing or system handoff bottleneck that applies selectively to these orders.</p>
+
+      <div class="finding" style="background:var(--amber-dim);border-left-color:var(--amber);">
+        <div class="finding-label" style="color:var(--amber);">Residual Late 1d — Two Open Problems</div>
+        <p><strong>69% (call-required):</strong> Doctors confirming 169 minutes after their promised slot vs 41 minutes for On-Time orders. This is a doctor SLA adherence problem — the downstream invoice and AWB pipeline runs in 25 minutes once confirmation arrives.</p>
+        <p><strong>31% (non-call):</strong> Warehouse → invoice pipeline takes 499 minutes vs 245 minutes. The leg breakdown within this gap (which sub-step is slow) has not been measured yet. This is the next investigation target.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- A.6 Rejected Hypotheses -->
+    <div class="subsection">
+      <h3>A.6 — Hypotheses Tested and Rejected</h3>
 
       <div class="rejected">
         <div class="rejected-header">

@@ -1835,3 +1835,226 @@ Courier consistently takes 3+ days more than both promises predict. No system co
 2. **Root cause is the same stale transit TAT lookup table** — both digitised and shipping promise TATs that couriers reliably beat (or fail to meet) on specific lanes.
 3. **Non-Inventory diverges from Inventory in one key way:** the shipping layer makes zero correction for the dominant Early 1d bucket (H7=49.2%). In Inventory, shipping partially corrected via H8. Non-Inventory routes are either not in the recalibration loop or the lane-level actuals are not being fed back.
 4. **Late 3d+ (n=1,325, 4.4%)** is a distinct failure mode: H5+H7 dominant, couriers missing promises by 3+ days with no system correction. Likely specific pincode/zone combinations where courier capacity or routing creates systematic underperformance vs the lookup table.
+
+---
+
+## #49 — Payment pending rate by dispatch group and day (Non-SDD Inventory)
+
+Request: Quantify payment pending rates across Early/On-Time/Late dispatch groups and at day-level granularity for the Non-SDD Inventory egregious superset (n=57,688).
+
+Script: `archives/egregiously-miscalibrated-promises/scripts/2026-08-03-aggregate-inv-payment-pending-dispatch-v1.py`
+
+### Part 1 — Group-level payment pending rate
+
+| Group | n | % of superset | Pmt pending n | Pmt pending % |
+|---|---|---|---|---|
+| Early | 7,039 | 12.2% | 311 | 4.4% |
+| On-Time | 43,378 | 75.2% | 1,878 | 4.3% |
+| Late | 7,771 | 13.5% | 3,301 | 42.5% |
+
+Payment pending rate in the Late group is 10× the Early/On-Time baseline. 5.74% of the full superset (42.5% × 13.5%) are both late-dispatched and payment-pending.
+
+### Part 2 — Day-level payment pending rate
+
+| Dev (days) | Label | n | % of superset | Pmt pending n | Pmt pending % |
+|---|---|---|---|---|---|
+| +2 | Early 2d | 849 | 1.5% | 18 | 2.1% |
+| +1 | Early 1d | 6,190 | 10.7% | 293 | 4.7% |
+| 0 | On-Time | 43,378 | 75.2% | 1,878 | 4.3% |
+| −1 | Late 1d | 5,244 | 9.1% | 1,979 | 37.7% |
+| −2 | Late 2d | 1,786 | 3.1% | 1,218 | 68.2% |
+| −3 | Late 3d | 361 | 0.6% | 96 | 26.6% |
+| −4 | Late 4d | 150 | 0.3% | 8 | 5.3% |
+| −5+ | Late 5d+ | 230 | 0.4% | 0 | 0.0% |
+
+Payment pending rate peaks at Late 2d (68.2%) and is still very elevated at Late 1d (37.7%), then collapses at Late 3d+ (≤26.6%). Late 3d+ is driven by other mechanisms.
+
+---
+
+## #50 — Invoice→AWB gap: payment-pending vs non-pmt by dispatch group (Non-SDD Inventory)
+
+Request: Measure median invoice→AWB gap hours for payment-pending vs non-pmt orders per dispatch group.
+
+Script: same as #49 (Part 3 of aggregate script).
+
+### Part 3a — Group-level invoice→AWB gap
+
+| Group | Pmt n | Pmt median | Pmt p25 | Pmt p75 | Non-pmt n | Non-pmt median | Non-pmt p25 | Non-pmt p75 |
+|---|---|---|---|---|---|---|---|---|
+| Early | 311 | 0.9h | 0.3h | 1.9h | 6,728 | 0.4h | 0.2h | 0.7h |
+| On-Time | 1,878 | 1.1h | 0.2h | 5.3h | 41,500 | 0.4h | 0.2h | 0.7h |
+| Late | 3,301 | 24.5h | 21.4h | 28.1h | 4,470 | 0.4h | 0.2h | 0.7h |
+
+Non-pmt baseline is constant at 0.4h (23m) across all three groups. Payment pending in the Late group imposes a median 24.5h hold (IQR 21.4–28.1h). Payment pending in Early/On-Time groups resolves quickly (0.9h–1.1h) — the payment hold clears before AWB needs to print for those orders.
+
+### Part 3b — Day-level invoice→AWB gap (material rows)
+
+| Dev | Label | Pmt n | Pmt median | Pmt p25 | Pmt p75 | Non-pmt n | Non-pmt median |
+|---|---|---|---|---|---|---|---|
+| +1 | Early 1d | 293 | 0.8h | 0.3h | 1.7h | 5,897 | 0.4h |
+| 0 | On-Time | 1,878 | 1.1h | 0.2h | 5.3h | 41,500 | 0.4h |
+| −1 | Late 1d | 1,979 | 23.2h | 20.6h | 26.0h | 3,265 | 0.4h |
+| −2 | Late 2d | 1,218 | 26.6h | 24.1h | 28.6h | 568 | 0.4h |
+
+Mechanism confirmed: payment pending imposes a 23–27h AWB print hold on Late orders. The hold duration maps directly to the dispatch deviation: 23h hold → courier misses same-day pickup → Late 1d. 26.6h hold → courier misses next-day pickup also → Late 2d. Non-pmt baseline of 0.4h is identical regardless of dispatch deviation.
+
+---
+
+## #51 — Counterfactual simulation: eliminating payment pending (Non-SDD Inventory)
+
+Request: Simulate dispatch deviation distribution if all pmt-pending orders received AWB at invoice_create_ts + 0.4h (non-pmt baseline), keeping same-day courier pickup assumption.
+
+Script: `archives/egregiously-miscalibrated-promises/scripts/2026-08-03-simulate-no-payment-pending-v1.py`
+
+Superset n: 57,688. Effective n (with dispatch/pickup ts): 57,688. Pmt orders simulated: 5,341. Pmt without invoice ts: ~0.
+
+### Dispatch deviation distribution — actual vs simulated
+
+| Bucket | Actual n | Actual % | Sim n | Sim % | Delta n | Delta pp |
+|---|---|---|---|---|---|---|
+| Early 3d+ | 189 | 0.3% | 191 | 0.3% | +2 | 0.0pp |
+| Early 2d | 849 | 1.5% | 849 | 1.5% | 0 | 0.0pp |
+| Early 1d | 6,190 | 10.8% | 6,737 | 11.7% | +547 | +1.1pp |
+| On-Time | 43,378 | 75.3% | 45,794 | 79.5% | +2,416 | +4.2pp |
+| Late 1d | 5,244 | 9.1% | 3,452 | 6.0% | −1,792 | −3.1pp |
+| Late 2d | 1,786 | 3.1% | 580 | 1.0% | −1,206 | −2.1pp |
+| Late 3d | 361 | 0.6% | 269 | 0.5% | −92 | −0.2pp |
+| Late 4d+ | 420 | 0.7% | 404 | 0.7% | −16 | 0.0pp |
+
+### Group summary
+
+| Group | Actual % | Sim % | Delta pp |
+|---|---|---|---|
+| Early | 12.6% | 13.4% | +1.1pp |
+| On-Time | 75.3% | 79.5% | +4.2pp |
+| Late | 13.5% | 8.1% | −5.4pp |
+
+### Where payment-pending orders move to (n=5,341 pmt orders)
+
+| From bucket | To bucket | n | % of pmt |
+|---|---|---|---|
+| Late 1d | On-Time | 1,844 | 34.5% |
+| On-Time | On-Time | 1,361 | 25.5% |
+| Late 2d | On-Time | 1,107 | 20.7% |
+| On-Time | Early 1d ⚠ | 547 | 10.2% |
+| Late 2d | Late 1d | 104 | 1.9% |
+| Late 3d / 4d+ | Late 1d / 2d / unchanged | 108 | 2.0% |
+| Early 1d | Early 1d / 2d / 3d | 102 | 1.9% |
+| Late 1d | Early 1d / unchanged | 130 | 2.4% |
+
+Eliminating payment pending recovers 5.4pp of lateness. The 547 On-Time→Early 1d side effect occurs because these orders' invoices are created early enough that simulated AWB at invoice+0.4h falls one calendar day before the dispatch promise.
+
+---
+
+## #52 — Residual Late 1d cohort: sample orders and AWB/invoice timing (Non-SDD Inventory)
+
+Request: Investigate timing patterns for the residual Late 1d cohort (dispatch_dev=−1, payment_pending_ts=NULL, n=3,265) to triangulate what is causing late AWB print.
+
+Script: `archives/egregiously-miscalibrated-promises/scripts/2026-08-03-investigate-residual-late-1d-v1.py`
+
+Cohort sizes: Residual Late 1d = 3,265. On-Time (no pmt) baseline = 41,500.
+
+### Part 2 — AWB print date vs dispatch promise date
+
+| AWB vs promise (days) | Late 1d n | Late 1d % | On-Time n | On-Time % |
+|---|---|---|---|---|
+| −2 (2d early) | 0 | 0.0% | 1,014 | 2.4% |
+| −1 (1d early) | 0 | 0.0% | 36,428 | 87.8% |
+| 0 (same day) | 2,261 | 69.2% | 4,058 | 9.8% |
+| +1 (1d late) | 933 | 28.6% | 0 | 0.0% |
+| +2 (2d late) | 71 | 2.2% | 0 | 0.0% |
+
+For On-Time orders: 90.2% have AWB printed 1–2 days before the dispatch promise (courier picks up same day as AWB, giving dispatch on the promise date). For Late 1d: 69.2% print AWB on the promise date itself — courier collects same day but it's too late (promise date is past), or courier cannot collect until next day. 28.6% print AWB 1d after promise — entirely outside the window.
+
+### Part 3 — Invoice date vs dispatch promise date
+
+Invoice patterns mirror AWB exactly (invoice→AWB gap is ~25m, confirmed in #53). The delay is upstream of invoice creation.
+
+### Part 7 — AWB print hour of day (selected rows)
+
+| Hour | Late 1d % | On-Time % |
+|---|---|---|
+| 09:00–12:00 | 21% | 41% |
+| 12:00–17:00 | 47% | 36% |
+| 17:00+ | 32% | 23% |
+
+Late 1d AWB prints skew afternoon/evening vs morning-heavy On-Time baseline. Orders completing invoice creation late in the day miss the courier's collection window.
+
+No skew in order category mix or courier mix between Late 1d and On-Time cohorts.
+
+---
+
+## #53 — H1 and H2 elimination tests for residual Late 1d (Non-SDD Inventory)
+
+Request: H1: Is invoice also delayed (not just AWB), and is the invoice→AWB gap constant? H2: Is lateness driven by orders switching digitised_is_inventory=TRUE → shipping_is_inventory=FALSE at shipping?
+
+Script: scratchpad (h1h2_test.py — not archived, results captured here).
+
+### H1: Invoice timing vs dispatch promise
+
+| Invoice vs promise (days) | Late 1d n | Late 1d % | On-Time n | On-Time % |
+|---|---|---|---|---|
+| −1 (1d early) | 0 | 0.0% | 36,428 | 87.8% |
+| 0 (same day) | 2,261 | 69.2% | 4,058 | 9.8% |
+| +1 (1d late) | 933 | 28.6% | 0 | 0.0% |
+| +2 (2d late) | 71 | 2.2% | 0 | 0.0% |
+
+Invoice date distribution is identical to AWB date distribution (Part 2 of #52). Invoice is delayed identically to AWB.
+
+Invoice→AWB gap by dispatch bucket (median, non-pmt orders only):
+
+| Dispatch bucket | Invoice→AWB median |
+|---|---|
+| Early 1d | 0.4h |
+| On-Time | 0.4h |
+| Late 1d | 0.4h (~25m) |
+| Late 2d | 0.4h (~25m) |
+
+Gap is constant at ~25m regardless of dispatch deviation. The AWB prints within 25 minutes of invoice creation for every bucket. The delay is entirely upstream of invoice.
+
+**H1 conclusion:** Invoice creation is the delay point. AWB-to-AWB gap is not the bottleneck.
+
+### H2: Inventory switch rate
+
+| | n | % of Late 1d cohort |
+|---|---|---|
+| Residual Late 1d cohort total | 3,265 | 100% |
+| shipping_is_inventory = FALSE | 54 | 1.7% |
+
+Only 54 orders switched inventory state at shipping. **H2 eliminated** — negligible.
+
+---
+
+## #54 — Invoice creation driver analysis for residual Late 1d (Non-SDD Inventory)
+
+Request: Decompose residual Late 1d (n=3,265) into call-required and non-call order categories; measure per-leg time gaps vs On-Time baseline to identify what drives late invoice creation.
+
+Script: scratchpad (invoice_drivers.py — not archived, results captured here).
+
+### Call-required orders (DOCTOR_CALL_REQUIRED + DOCTOR_AND_HA_CALL_REQUIRED)
+
+Cohort sizes: Late 1d n = 2,264 (69.3% of 3,265). On-Time n = 28,274.
+
+| Leg | Late 1d median | On-Time median | Ratio |
+|---|---|---|---|
+| dr_promise → dr_confirm | 169m | 41m | 4.1× |
+| dr_confirm → invoice | 233m | 185m | 1.3× |
+
+**Primary bottleneck: dr_promise → dr_confirm gap.** Doctor confirmation is arriving 169 minutes after the promised slot vs 41 minutes for On-Time orders — a 4× gap. The downstream leg (dr_confirm → invoice) is similar for both cohorts (233m vs 185m), confirming it is not the bottleneck. Late doctor confirmation cascades to late invoice creation, which cascades to late AWB print (gap constant at 25m), which cascades to late dispatch.
+
+### Non-call orders (AUTO_CONFIRM / NO_CALL and similar)
+
+Cohort sizes: Late 1d n = 1,001 (30.7% of 3,265). On-Time n = 13,229.
+
+| Leg | Late 1d median | On-Time median | Ratio |
+|---|---|---|---|
+| wh_promise → invoice | 499m | 245m | 2.0× |
+
+**Primary bottleneck: wh_promise → invoice gap.** The warehouse-to-invoice pipeline takes 2× longer for Late 1d non-call orders. No doctor call leg exists to explain this — the delay is entirely within the warehouse processing or system handoff between wh_promise and invoice creation. Origin is not yet identified.
+
+### Summary
+
+| Category | Share of residual Late 1d | Primary driver | Bottleneck gap (Late 1d vs On-Time) |
+|---|---|---|---|
+| Call-required | 69% | Late doctor confirmation | dr_promise→dr_confirm: 169m vs 41m (4×) |
+| Non-call | 31% | Unknown WH pipeline delay | wh_promise→invoice: 499m vs 245m (2×) |
