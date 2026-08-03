@@ -810,9 +810,201 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <hr class="divider">
 
-    <!-- A.4 Rejected Hypotheses -->
+    <!-- A.4 Simulation -->
     <div class="subsection">
-      <h3>A.4 — Hypotheses Tested and Rejected</h3>
+      <h3>A.4 — Simulation: If Payment Pending Were Eliminated, How Does the Distribution Move?</h3>
+
+      <p>To quantify the total addressable impact of fixing payment pending, we ran a counterfactual simulation. For every payment-pending order, we replaced the actual AWB print time with <strong>invoice creation + 0.4h</strong> (the observed non-pmt baseline). Since same-day courier pickup is universal, the simulated pickup date becomes <code>DATE(invoice_create_ts + 0.4h)</code>, and the simulated dispatch deviation follows from there. Non-pmt orders are left unchanged.</p>
+
+      <h4>Group-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Dispatch group</th>
+              <th class="td-num">Actual n</th>
+              <th class="td-num">Actual %</th>
+              <th class="td-num">Simulated n</th>
+              <th class="td-num">Simulated %</th>
+              <th class="td-num">Delta</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Early</td>
+              <td class="td-num">6,465</td>
+              <td class="td-num">11.2%</td>
+              <td class="td-num">7,110</td>
+              <td class="td-num">12.3%</td>
+              <td class="td-num td-muted">+1.1pp</td>
+            </tr>
+            <tr class="td-focus">
+              <td class="td-bold">On-Time</td>
+              <td class="td-num">43,416</td>
+              <td class="td-num">75.3%</td>
+              <td class="td-num td-bold">45,887</td>
+              <td class="td-num td-hl-green">79.5%</td>
+              <td class="td-num td-hl-green">+4.3pp</td>
+            </tr>
+            <tr>
+              <td class="td-bold">Late</td>
+              <td class="td-num td-bold">7,807</td>
+              <td class="td-num td-hl-red">13.5%</td>
+              <td class="td-num td-bold">4,691</td>
+              <td class="td-num td-hl-amber">8.1%</td>
+              <td class="td-num td-hl-amber">−5.4pp</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Day-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Dispatch deviation</th>
+              <th class="td-num">Actual n</th>
+              <th class="td-num">Actual %</th>
+              <th class="td-num">Simulated n</th>
+              <th class="td-num">Simulated %</th>
+              <th class="td-num">Delta</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Early 1d</td>
+              <td class="td-num">6,207</td>
+              <td class="td-num">10.8%</td>
+              <td class="td-num">6,823</td>
+              <td class="td-num">11.8%</td>
+              <td class="td-num td-muted">+1.1pp</td>
+            </tr>
+            <tr class="td-focus">
+              <td class="td-bold">On-Time</td>
+              <td class="td-num">43,416</td>
+              <td class="td-num">75.3%</td>
+              <td class="td-num td-bold">45,887</td>
+              <td class="td-num td-hl-green">79.5%</td>
+              <td class="td-num td-hl-green">+4.3pp</td>
+            </tr>
+            <tr>
+              <td class="td-bold">Late 1d</td>
+              <td class="td-num td-bold">5,240</td>
+              <td class="td-num td-hl-red">9.1%</td>
+              <td class="td-num">3,438</td>
+              <td class="td-num td-hl-amber">6.0%</td>
+              <td class="td-num td-hl-amber">−3.1pp</td>
+            </tr>
+            <tr>
+              <td class="td-bold">Late 2d</td>
+              <td class="td-num td-bold">1,786</td>
+              <td class="td-num td-hl-red">3.1%</td>
+              <td class="td-num">580</td>
+              <td class="td-num td-hl-green">1.0%</td>
+              <td class="td-num td-hl-green">−2.1pp</td>
+            </tr>
+            <tr>
+              <td>Late 3d</td>
+              <td class="td-num">361</td>
+              <td class="td-num">0.6%</td>
+              <td class="td-num">269</td>
+              <td class="td-num">0.5%</td>
+              <td class="td-num td-muted">−0.2pp</td>
+            </tr>
+            <tr>
+              <td>Late 4d+</td>
+              <td class="td-num td-muted">420</td>
+              <td class="td-num td-muted">0.7%</td>
+              <td class="td-num td-muted">404</td>
+              <td class="td-num td-muted">0.7%</td>
+              <td class="td-num td-muted">−0.0pp</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Where payment-pending orders actually land after simulation (n=5,341)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>From bucket (actual)</th>
+              <th>To bucket (simulated)</th>
+              <th class="td-num">Orders</th>
+              <th class="td-num">% of pmt orders</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="td-focus">
+              <td class="td-bold">Late 1d</td>
+              <td class="td-bold td-hl-green">On-Time</td>
+              <td class="td-num td-bold">1,844</td>
+              <td class="td-num td-hl-green">34.5%</td>
+            </tr>
+            <tr>
+              <td>On-Time</td>
+              <td>On-Time</td>
+              <td class="td-num">1,361</td>
+              <td class="td-num td-muted">25.5%</td>
+            </tr>
+            <tr class="td-focus">
+              <td class="td-bold">Late 2d</td>
+              <td class="td-bold td-hl-green">On-Time</td>
+              <td class="td-num td-bold">1,107</td>
+              <td class="td-num td-hl-green">20.7%</td>
+            </tr>
+            <tr>
+              <td>On-Time</td>
+              <td class="td-muted">Early 1d ⚠</td>
+              <td class="td-num">547</td>
+              <td class="td-num td-muted">10.2%</td>
+            </tr>
+            <tr>
+              <td>Late 2d</td>
+              <td>Late 1d</td>
+              <td class="td-num">104</td>
+              <td class="td-num td-muted">1.9%</td>
+            </tr>
+            <tr>
+              <td class="td-muted">Late 3d / 4d+</td>
+              <td class="td-muted">Late 1d / 2d / unchanged</td>
+              <td class="td-num td-muted">108</td>
+              <td class="td-num td-muted">2.0%</td>
+            </tr>
+            <tr>
+              <td class="td-muted">Early 1d</td>
+              <td class="td-muted">Early 1d / 2d / 3d</td>
+              <td class="td-num td-muted">102</td>
+              <td class="td-num td-muted">1.9%</td>
+            </tr>
+            <tr>
+              <td class="td-muted">Late 1d</td>
+              <td class="td-muted">Early 1d / unchanged</td>
+              <td class="td-num td-muted">130</td>
+              <td class="td-num td-muted">2.4%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="finding finding-green">
+        <div class="finding-label">Simulation Result</div>
+        <p>Eliminating payment pending would recover <strong>5.4pp of lateness</strong> — moving On-Time from 75.3% to 79.5%, and Late from 13.5% to 8.1%. The two largest winning moves are 1,844 Late 1d → On-Time and 1,107 Late 2d → On-Time directly. Late 2d jumping two buckets to On-Time happens because payment resolution at those orders is fast enough (once released) that the simulated AWB date lands comfortably within the dispatch promise window.</p>
+      </div>
+
+      <div class="finding" style="background:var(--amber-dim);border-left-color:var(--amber);">
+        <div class="finding-label" style="color:var(--amber);">What the Fix Does Not Address</div>
+        <p><strong>8.1% of the superset remains late</strong> even with payment pending fully eliminated. Late 3d and Late 4d+ barely move (−0.2pp and 0pp). These are driven entirely by other mechanisms — the invoice pipeline delay and HA/doctor call SLA issues identified in A.5 below.</p>
+        <p><strong>Side effect:</strong> 547 currently On-Time pmt orders would shift into Early 1d dispatch if payment resolved at baseline speed (+1.1pp in Early). This is because their invoice creation is early enough that a 0.4h AWB print moves pickup to the day before the dispatch promise. Not a customer harm, but a downstream TAT promise inaccuracy to account for.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- A.5 Rejected Hypotheses -->
+    <div class="subsection">
+      <h3>A.5 — Hypotheses Tested and Rejected</h3>
 
       <div class="rejected">
         <div class="rejected-header">
