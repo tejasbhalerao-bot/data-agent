@@ -2144,3 +2144,116 @@ Explanation: actual courier cutoff is slightly later than the WH promise timesta
 ### Verdict
 
 The rule engine applies D+1 correctly for these orders (WH promise is at/after cutoff). Early 1d manifests because the warehouse consistently packs 33 minutes before its own promise — catching the courier in a window the system believed was already closed. The dispatch promise is already committed to D+1 and cannot adjust at packing time.
+
+---
+
+## #56 — Switched-Courier Early 1d: Timestamp-Level Investigation
+
+**Request:** For the switched-courier Early 1d cohort (n=2,273, 36.6% of all Early 1d) in the Non-SDD Inventory egregious superset, investigate at timestamp level what drives same-day dispatch when the dispatch promise is D+1 and the shipping courier differs from the digitised courier.
+
+### Cohort sizes
+
+| Group | n |
+|---|---|
+| Switched-courier Early 1d (subject) | 2,273 |
+| Same-courier Early 1d (comparison) | 3,195 |
+| Switched-courier On-Time (baseline) | 11,700 |
+
+### AWB vs WH promise gap: overall distribution
+
+Positive = AWB before WH promise; Negative = AWB after.
+
+| Bucket | Switched Early 1d | Same-courier Early 1d | Switched On-Time |
+|---|---|---|---|
+| > 4h before | 0.8% | 2.3% | 0.2% |
+| 1–4h before | 2.1% | 4.4% | 0.4% |
+| 30–60m before | 25.3% | 48.1% | 6.0% |
+| 0–30m before | 21.2% | 27.8% | 7.8% |
+| 0–30m after | 13.5% | 8.3% | 6.2% |
+| 30m–2h after | 19.5% | 5.2% | 14.1% |
+| > 2h after | 17.6% | 3.8% | 65.4% |
+| **% AWB before WH promise** | **49.5%** | **82.6%** | **14.4%** |
+| **Median gap** | **−0.02h** | **+0.55h** | **−4.17h** |
+
+### Calendar-day relationship
+
+| Relationship | Switched Early 1d | Same-courier Early 1d |
+|---|---|---|
+| AWB 1d before WH promise date | 0.8% | 2.2% |
+| Same day | 96.0% | 96.4% |
+| AWB after WH promise date | 3.1% | 1.4% |
+
+### Sub-group split at timestamp level
+
+| Sub-group | n | % of switched Early 1d |
+|---|---|---|
+| AWB before WH promise (WH finished early) | 1,124 | 49.5% |
+| AWB after WH promise (WH overran promise) | 1,149 | 50.5% |
+
+### WH promise hour by sub-group
+
+| WH promise hour | Sub-group A: AWB before (n=1,124) | Sub-group B: AWB after (n=1,149) | Same-courier Early 1d (n=3,195) |
+|---|---|---|---|
+| 12:00 | 1.2% | 7.9% | 1.2% |
+| 13:00 | 5.3% | **23.6%** | 3.6% |
+| 14:00 | 4.3% | 12.0% | 1.5% |
+| 15:00 | 5.3% | 8.7% | 4.2% |
+| 16:00 | 13.9% | 13.6% | 11.4% |
+| 17:00 | **30.7%** | 11.2% | **28.0%** |
+| 18:00 | **21.5%** | 7.6% | **28.3%** |
+| 19:00 | 11.3% | 3.6% | 9.4% |
+
+Cumulative thresholds:
+
+| Threshold | Sub-group A (AWB before) | Sub-group B (AWB after) | Same-courier |
+|---|---|---|---|
+| WH promise ≥ 14:00 | 91.6% | 61.8% | 91.6% |
+| WH promise ≥ 16:00 | 82.0% | 41.1% | 85.9% |
+| WH promise ≥ 17:00 | 68.1% | 27.5% | 74.5% |
+| WH promise ≥ 18:00 | 37.5% | 16.3% | 46.5% |
+
+Sub-group A mirrors same-courier exactly on the late-afternoon WH promise concentration. Sub-group B is skewed to early afternoon (13:00 peak at 23.6%), implying the original courier's cutoff was around noon.
+
+### Sub-group B overshoot (AWB after WH promise)
+
+| Metric | Value |
+|---|---|
+| n | 1,149 |
+| Median overshoot (awb − wh_promise) | 1.22h |
+| p25 | 0.47h |
+| p75 | 2.69h |
+| % within 1h | 43.9% |
+| % within 2h | 65.3% |
+| % > 4h | 14.5% |
+
+| Overshoot bucket | Share |
+|---|---|
+| 0–30 minutes | 26.6% |
+| 30 min – 1h | 17.2% |
+| 1–2h | 21.4% |
+| 2–4h | 20.2% |
+| > 4h | 14.5% |
+
+### AWB print hour by sub-group
+
+| AWB print hour | Sub-group A (AWB before) | Sub-group B (AWB after) |
+|---|---|---|
+| 13:00 | 4.8% | 5.7% |
+| 14:00 | 3.8% | 9.4% |
+| 15:00 | 10.3% | **17.4%** |
+| 16:00 | **26.2%** | 22.1% |
+| 17:00 | 24.5% | 19.1% |
+| 18:00 | 16.5% | 12.2% |
+| 19:00 | 7.9% | 6.0% |
+
+Sub-group B AWB is left-shifted relative to A — printing earlier in the afternoon, consistent with the earlier WH promise (13:00 rather than 17:00).
+
+### Verdict
+
+The switched-courier group splits almost exactly in half at the timestamp level:
+
+**Sub-group A (49.5%)** — mirrors same-courier. WH promise at 17–18:00 (68.1% ≥ 17:00). WH packs before its own promise. Courier switch is incidental — occurred for capacity or routing reasons independent of the timing. Early 1d outcome would likely have materialised with the original courier too.
+
+**Sub-group B (50.5%)** — different mechanism. WH promise at 13:00 (23.6%) reflects an original courier with a noon cutoff. System set D+1 correctly. WH overran its own promise by a median of 1.22h. Original courier was already gone; a replacement courier with a later same-day cutoff was assigned. Replacement courier collected same-day, leaving the D+1 dispatch promise stranded.
+
+**Shared structural root cause:** the dispatch promise is computed once at digitisation using the original courier's cutoff. It is never recalculated when a different courier is assigned at shipping. The replacement courier's actual capability renders the original promise stale.

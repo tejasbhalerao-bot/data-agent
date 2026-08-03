@@ -712,8 +712,81 @@ tbody tr:hover td { background: var(--surface-alt); }
 
       <p>510 same-courier Early 1d orders have AWB printing <em>after</em> the WH promise timestamp — yet the courier collects same-day. The overshoot is small: median 0.47h (28 minutes), with 84.7% within 2h of the WH promise. WH promises in this group are also concentrated in the 17:00–18:00 window. The most likely explanation: the actual courier cutoff is a fixed time that is slightly later than the WH promise timestamp. WH finishes 28 minutes past the WH promise but still inside the real cutoff window.</p>
 
-      <h4>Switched-courier group — n=2,271 (36.6% of Early 1d)</h4>
-      <p style="color:var(--text-2);font-size:0.87rem;">Analysis in progress. The same-courier mechanism (WH promise set at cutoff, WH packs just before) does not fully apply here — a courier change at shipping time means the assigned courier's cutoff may differ from the one the rule engine used to set the dispatch promise. This group will be examined separately.</p>
+      <h4>Switched-courier group — n=2,273 (36.6% of Early 1d)</h4>
+
+      <p>When the shipping courier differs from the digitised courier, the dispatch promise is never recalculated — it was set at digitisation using the <em>original</em> courier's cutoff and stays fixed. At timestamp granularity, the switched-courier group splits almost exactly in half, each half driven by a distinct mechanism.</p>
+
+      <p>The clearest signal is the WH promise hour. The two sub-groups look nothing alike:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>WH promise hour</th>
+              <th class="td-num">Sub-group A: AWB before<br><span style="font-weight:500;font-size:0.78rem">n=1,124 (49.5%)</span></th>
+              <th class="td-num">Sub-group B: AWB after<br><span style="font-weight:500;font-size:0.78rem">n=1,149 (50.5%)</span></th>
+              <th class="td-num">Same-courier Early 1d<br><span style="font-weight:500;font-size:0.78rem">n=3,195</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>12:00</td><td class="td-num">1.2%</td><td class="td-num">7.9%</td><td class="td-num">1.2%</td></tr>
+            <tr><td>13:00</td><td class="td-num">5.3%</td><td class="td-num"><strong>23.6%</strong></td><td class="td-num">3.6%</td></tr>
+            <tr><td>14:00</td><td class="td-num">4.3%</td><td class="td-num">12.0%</td><td class="td-num">1.5%</td></tr>
+            <tr><td>15:00</td><td class="td-num">5.3%</td><td class="td-num">8.7%</td><td class="td-num">4.2%</td></tr>
+            <tr><td>16:00</td><td class="td-num">13.9%</td><td class="td-num">13.6%</td><td class="td-num">11.4%</td></tr>
+            <tr><td>17:00</td><td class="td-num"><strong>30.7%</strong></td><td class="td-num">11.2%</td><td class="td-num"><strong>28.0%</strong></td></tr>
+            <tr><td>18:00</td><td class="td-num"><strong>21.5%</strong></td><td class="td-num">7.6%</td><td class="td-num"><strong>28.3%</strong></td></tr>
+            <tr><td>19:00</td><td class="td-num">11.3%</td><td class="td-num">3.6%</td><td class="td-num">9.4%</td></tr>
+            <tr style="border-top:2px solid var(--border-ui);font-weight:600">
+              <td>WH promise ≥ 17:00</td>
+              <td class="td-num">68.1%</td>
+              <td class="td-num">27.5%</td>
+              <td class="td-num">74.5%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 style="margin-top:1.4rem">Sub-group A — AWB before WH promise (49.5%, n=1,124): same mechanism as same-courier</h4>
+
+      <p>The WH promise hour profile for sub-group A is nearly indistinguishable from same-courier Early 1d: 68.1% of orders have WH promise at 17:00 or later, versus 74.5% for same-courier. The warehouse packs before its own promise, the original courier's cutoff is what drove the D+1 dispatch promise, and same-day pickup happens. The courier switch here is incidental — it occurred for capacity or routing reasons, not because of a timing failure. The outcome (Early 1d) would likely have materialised even if the original courier had been kept.</p>
+
+      <h4 style="margin-top:1.4rem">Sub-group B — AWB after WH promise (50.5%, n=1,149): original courier had an early cutoff</h4>
+
+      <p>Sub-group B is structurally different. The WH promise is set in the early afternoon — 13:00 for 23.6% of orders, with 50.2% falling before 15:00. This implies the <em>original</em> courier operated an early same-day cutoff, likely around noon. The rule engine correctly set D+1 given that cutoff. But the warehouse then overran its WH promise, meaning the original courier was already gone before the order was ready. A replacement courier — with a later cutoff — was assigned at shipping. The replacement courier collected the order same-day, despite the D+1 promise remaining in place.</p>
+
+      <p>The overshoot — how far past the WH promise the AWB printed — was concentrated in the first two hours:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>AWB overshoot past WH promise</th>
+              <th class="td-num">Share of sub-group B</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>0–30 minutes</td><td class="td-num">26.6%</td></tr>
+            <tr><td>30 min – 1 hour</td><td class="td-num">17.2%</td></tr>
+            <tr><td>1 – 2 hours</td><td class="td-num">21.4%</td></tr>
+            <tr><td>2 – 4 hours</td><td class="td-num">20.2%</td></tr>
+            <tr><td>&gt; 4 hours</td><td class="td-num">14.5%</td></tr>
+            <tr style="border-top:2px solid var(--border-ui);font-weight:600">
+              <td>Median overshoot</td>
+              <td class="td-num">1.22 h</td>
+            </tr>
+            <tr style="font-weight:600">
+              <td>Within 2 h of WH promise</td>
+              <td class="td-num">65.3%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="finding finding-amber" style="margin-top:1.4rem">
+        <div class="finding-label">Switched-Courier Root Cause — Two Mechanisms, One Structural Gap</div>
+        <p>Both sub-groups share a single structural gap: the dispatch promise is computed once at digitisation using the original courier's cutoff, and is never updated when a different courier is assigned at shipping. Sub-group A (49.5%) mirrors the same-courier story — WH promise at 17–18:00, WH packs early, courier switch is incidental. Sub-group B (50.5%) follows a different path: the original courier's early cutoff (~12:00) forced a D+1 promise; the warehouse overran by a median of <strong>1.22 hours</strong>; the replacement courier — with a later same-day cutoff — rescued the dispatch. In both cases, the replacement courier's actual capability renders the original dispatch promise stale.</p>
+      </div>
 
       <p style="color:var(--text-2);font-size:0.83rem;">The remaining 11.9% of Early 1d orders have a null on either the digitised or shipping delivery partner field and cannot be classified.</p>
     </div>
