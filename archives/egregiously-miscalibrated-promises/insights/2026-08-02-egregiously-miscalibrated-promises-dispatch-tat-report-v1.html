@@ -517,9 +517,9 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- A.2 Early 1d -->
     <div class="subsection">
-      <h3>A.2 — Early 1d: The Dispatch Promise Assumes a Courier Lead-Time That Does Not Exist</h3>
+      <h3>A.2 — Early 1d: The Rule Engine Was Right — But the Warehouse Packed Just Before the Cutoff</h3>
 
-      <p>The digitised dispatch promise is constructed as <strong>WH promise date + 1 day</strong>, on the assumption that couriers need one day after AWB is printed to collect the order. The data shows this assumption is wrong.</p>
+      <p>The rule engine sets <code>dispatch_promise = D+1</code> when the WH promise time falls at or after the courier's same-day collection cutoff. The logic is correct: if the warehouse will not be ready until after the courier has left, the earliest pickup is the following day. Early 1d orders are not a rule failure — they are cases where the warehouse finished <em>before</em> the cutoff the system assumed it would miss.</p>
 
       <div class="stat-row">
         <div class="stat">
@@ -583,32 +583,139 @@ tbody tr:hover td { background: var(--surface-alt); }
       </div>
 
       <div class="finding">
-        <div class="finding-label">Mechanism Proven</div>
-        <p>Courier same-day pickup is constant across all dispatch buckets. The sole determinant of whether an order is Early 1d, On-Time, or Late 1d is <strong>when the AWB is printed relative to the dispatch promise</strong>. The dispatch promise's 1-day courier buffer is structurally wrong for 98.7% of orders.</p>
+        <div class="finding-label">Mechanism</div>
+        <p>Courier same-day pickup is universal across all dispatch buckets (92–99%). The sole determinant of dispatch deviation is <strong>when AWB is printed relative to the dispatch promise date</strong>. For Early 1d orders, AWB is always printed the calendar day before the promise. The question is why.</p>
       </div>
 
-      <h4>Two sub-mechanisms explain why AWB gets printed 1 day early</h4>
+      <h4>Same-courier group — n=3,195 (51.5% of Early 1d)</h4>
 
-      <div class="mech-grid">
-        <div class="mech-card">
-          <div class="mech-card-header">
-            <span class="mech-card-pct">51.5%</span>
-            <span class="mech-card-label">of Early 1d — Same courier</span>
-          </div>
-          <p><span class="mech-key">Warehouse packed early.</span> 82.6% of same-courier Early 1d orders had the AWB printed before the WH promise. The WH promise was set after the courier cutoff (hence the D+1 dispatch promise), but the warehouse finished packing before the cutoff arrived. Same courier came same day. Dispatch landed a day early.</p>
-          <p>The remaining 17.3% (WH packed late, same courier) cannot be fully explained without courier cutoff timestamps in the data.</p>
-        </div>
-        <div class="mech-card">
-          <div class="mech-card-header">
-            <span class="mech-card-pct">36.6%</span>
-            <span class="mech-card-label">of Early 1d — Switched courier</span>
-          </div>
-          <p><span class="mech-key">Original courier's cutoff was missed; replacement courier had a later cutoff.</span> 50.5% of switched-courier Early 1d orders had the WH packing late (after WH promise), meaning the original courier's cutoff was already gone. A replacement courier with a later same-day cutoff was allocated, came same day, and the order dispatched a day before the digitised promise.</p>
-          <p>The remaining 49.5% had WH packing early — both factors co-occurred.</p>
-        </div>
+      <p>The analysis below covers orders where the digitised and shipping courier are identical. This isolates the WH-promise-vs-cutoff dynamic without courier-switch confounding.</p>
+
+      <h4>The root divergence: WH promise is set at the courier cutoff</h4>
+
+      <p>The single biggest difference between same-courier Early 1d and On-Time orders is <em>when</em> the WH promise is set in the day — not how fast the warehouse packs relative to it.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>WH promise hour</th>
+              <th class="td-num">Early 1d (n=3,195)</th>
+              <th class="td-num">On-Time (n=28,178)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="td-muted">06:00–13:00</td><td class="td-num td-muted">6.5%</td><td class="td-num">50.3%</td></tr>
+            <tr><td class="td-muted">14:00–15:00</td><td class="td-num td-muted">5.7%</td><td class="td-num">12.3%</td></tr>
+            <tr><td>16:00</td><td class="td-num">11.4%</td><td class="td-num">5.0%</td></tr>
+            <tr class="td-focus">
+              <td class="td-bold">17:00</td>
+              <td class="td-num td-hl-accent td-bold">28.0%</td>
+              <td class="td-num">4.4%</td>
+            </tr>
+            <tr class="td-focus">
+              <td class="td-bold">18:00</td>
+              <td class="td-num td-hl-accent td-bold">28.3%</td>
+              <td class="td-num">4.5%</td>
+            </tr>
+            <tr><td class="td-muted">19:00+</td><td class="td-num td-muted">20.1%</td><td class="td-num td-muted">23.5%</td></tr>
+          </tbody>
+        </table>
       </div>
 
-      <p style="color:var(--text-2);font-size:0.83rem;">The remaining 11.9% of Early 1d orders have a null on either the digitised or shipping delivery partner field and cannot be classified into either sub-mechanism.</p>
+      <p><strong>74.5% of same-courier Early 1d orders have a WH promise at 17:00 or later</strong>, versus 32.3% for On-Time. The 17:00–18:00 window accounts for 56.3% of Early 1d WH promises alone — a 10× concentration relative to the On-Time baseline (8.9%). The rule engine sees these late-evening WH promises and correctly concludes the courier cutoff will be missed. It sets <code>dispatch_promise = D+1</code>.</p>
+
+      <p>For On-Time orders, WH promises are spread across the morning and afternoon (50.3% before 14:00). The system predicts same-day pickup, and it is right.</p>
+
+      <h4>The warehouse finishes 33 minutes before it promised — every time</h4>
+
+      <p>For 96.4% of same-courier Early 1d orders, the AWB print date and the WH promise date are the <em>same calendar day</em>. The gap is intra-day. Here is the full distribution of <code>(digitised_wh_promise − awb_sticker_printed_ts)</code> in hours:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>AWB vs WH promise timestamp</th>
+              <th class="td-num">Early 1d %</th>
+              <th class="td-num">On-Time %</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="td-muted">AWB &gt; 4h before WH promise</td><td class="td-num td-muted">2.3%</td><td class="td-num td-muted">0.1%</td></tr>
+            <tr><td>AWB 1–2h before</td><td class="td-num">4.4%</td><td class="td-num td-muted">0.4%</td></tr>
+            <tr class="td-focus">
+              <td class="td-bold">AWB 30–60m before WH promise</td>
+              <td class="td-num td-hl-accent td-bold">48.1%</td>
+              <td class="td-num td-muted">7.1%</td>
+            </tr>
+            <tr class="td-focus">
+              <td class="td-bold">AWB 0–30m before WH promise</td>
+              <td class="td-num td-hl-accent td-bold">27.8%</td>
+              <td class="td-num td-muted">9.8%</td>
+            </tr>
+            <tr><td class="td-muted">AWB 0–30m after WH promise</td><td class="td-num td-muted">8.3%</td><td class="td-num td-muted">7.7%</td></tr>
+            <tr><td class="td-muted">AWB 30m–2h after WH promise</td><td class="td-num td-muted">5.2%</td><td class="td-num">17.9%</td></tr>
+            <tr><td class="td-muted">AWB &gt; 2h after WH promise</td><td class="td-num td-muted">3.8%</td><td class="td-num">56.9%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.83rem;color:var(--text-2);">Positive gap = AWB before WH promise. Median gap: Early 1d = +0.55h (33 min). On-Time = −2.77h (AWB 2h 46m after WH promise).</p>
+
+      <p><strong>75.9% of same-courier Early 1d orders have AWB printing within 0–60 minutes before the WH promise.</strong> The warehouse is consistently finishing just inside the window the system said it would miss. The D+1 dispatch promise was already set and cannot be updated at the point of packing.</p>
+
+      <p>The On-Time contrast sharpens the picture: 74.8% of On-Time orders have AWB printing <em>after</em> the WH promise (median 2h 46m over). On-Time is on-time not because the warehouse is faster — it is because the WH promise was set early enough in the day that running over still lands before the courier cutoff.</p>
+
+      <h4>AWB print timing confirms the mechanism</h4>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Hour</th>
+              <th class="td-num">WH promise — Early 1d</th>
+              <th class="td-num">WH promise — On-Time</th>
+              <th class="td-num">AWB print — Early 1d</th>
+              <th class="td-num">AWB print — On-Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="td-muted">10:00–13:00</td><td class="td-num td-muted">3.2%</td><td class="td-num">33.1%</td><td class="td-num td-muted">4.6%</td><td class="td-num">38.6%</td></tr>
+            <tr><td>14:00–15:00</td><td class="td-num">5.7%</td><td class="td-num">12.3%</td><td class="td-num">10.6%</td><td class="td-num">24.3%</td></tr>
+            <tr class="td-focus">
+              <td class="td-bold">16:00</td>
+              <td class="td-num">11.4%</td><td class="td-num td-muted">5.0%</td>
+              <td class="td-num td-hl-accent td-bold">25.2%</td><td class="td-num">10.8%</td>
+            </tr>
+            <tr class="td-focus">
+              <td class="td-bold">17:00</td>
+              <td class="td-num td-hl-accent td-bold">28.0%</td><td class="td-num td-muted">4.4%</td>
+              <td class="td-num td-hl-accent td-bold">24.7%</td><td class="td-num td-muted">8.3%</td>
+            </tr>
+            <tr class="td-focus">
+              <td class="td-bold">18:00</td>
+              <td class="td-num td-hl-accent td-bold">28.3%</td><td class="td-num td-muted">4.5%</td>
+              <td class="td-num">20.4%</td><td class="td-num td-muted">3.7%</td>
+            </tr>
+            <tr><td class="td-muted">19:00+</td><td class="td-num td-muted">20.1%</td><td class="td-num td-muted">23.5%</td><td class="td-num td-muted">13.6%</td><td class="td-num td-muted">2.3%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>WH promises peak at 17:00–18:00. AWB prints peak at 16:00–17:00 — one hour earlier. The warehouse is finishing just before it promised, catching the courier in the window the system said was closed.</p>
+
+      <div class="finding finding-green">
+        <div class="finding-label">Same-Courier Root Cause — Confirmed</div>
+        <p>The rule engine is not wrong. For 74.5% of same-courier Early 1d orders, the WH promise is set at 17:00 or later — at or after the courier's same-day cutoff. D+1 is the correct system response. But the warehouse packs a median of <strong>33 minutes</strong> before its own promise, slipping in under the cutoff and triggering same-day pickup. The dispatch promise, already committed to D+1, cannot adjust.</p>
+      </div>
+
+      <h4>The 16.6% exception: AWB just past the WH promise, courier still comes (n=510)</h4>
+
+      <p>510 same-courier Early 1d orders have AWB printing <em>after</em> the WH promise timestamp — yet the courier collects same-day. The overshoot is small: median 0.47h (28 minutes), with 84.7% within 2h of the WH promise. WH promises in this group are also concentrated in the 17:00–18:00 window. The most likely explanation: the actual courier cutoff is a fixed time that is slightly later than the WH promise timestamp. WH finishes 28 minutes past the WH promise but still inside the real cutoff window.</p>
+
+      <h4>Switched-courier group — n=2,271 (36.6% of Early 1d)</h4>
+      <p style="color:var(--text-2);font-size:0.87rem;">Analysis in progress. The same-courier mechanism (WH promise set at cutoff, WH packs just before) does not fully apply here — a courier change at shipping time means the assigned courier's cutoff may differ from the one the rule engine used to set the dispatch promise. This group will be examined separately.</p>
+
+      <p style="color:var(--text-2);font-size:0.83rem;">The remaining 11.9% of Early 1d orders have a null on either the digitised or shipping delivery partner field and cannot be classified.</p>
     </div>
 
     <hr class="divider">

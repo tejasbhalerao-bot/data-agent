@@ -2058,3 +2058,89 @@ Cohort sizes: Late 1d n = 1,001 (30.7% of 3,265). On-Time n = 13,229.
 |---|---|---|---|
 | Call-required | 69% | Late doctor confirmation | dr_promise→dr_confirm: 169m vs 41m (4×) |
 | Non-call | 31% | Unknown WH pipeline delay | wh_promise→invoice: 499m vs 245m (2×) |
+
+---
+
+## #55 — Same-courier Early 1d: timestamp-level verification of the courier-cutoff rule (Non-SDD Inventory)
+
+Request: For the same-courier Early 1d cohort (n=3,195, 51.5% of all Early 1d), verify at timestamp level whether the WH promise is set at the courier cutoff window and whether AWB prints just before it.
+
+Script: `archives/egregiously-miscalibrated-promises/scripts/2026-08-03-investigate-early-1d-same-courier-v1.py`
+
+Cohort sizes: Same-courier Early 1d = 3,195. Same-courier On-Time = 28,178.
+
+### WH promise hour-of-day distribution
+
+| WH promise hour | Early 1d % | On-Time % |
+|---|---|---|
+| 06:00–13:00 | 6.5% | 50.3% |
+| 14:00–15:00 | 5.7% | 12.3% |
+| 16:00 | 11.4% | 5.0% |
+| **17:00** | **28.0%** | 4.4% |
+| **18:00** | **28.3%** | 4.5% |
+| 19:00+ | 20.1% | 23.5% |
+
+74.5% of same-courier Early 1d have WH promise ≥ 17:00 vs 32.3% for On-Time.
+
+Cumulative WH promise thresholds:
+
+| WH promise ≥ hour | Early 1d % | On-Time % |
+|---|---|---|
+| 14:00 | 91.6% | 49.6% |
+| 15:00 | 90.1% | 43.2% |
+| 16:00 | 85.9% | 37.3% |
+| 17:00 | 74.5% | 32.3% |
+| 18:00 | 46.5% | 27.9% |
+
+### AWB vs WH promise timestamp gap distribution
+
+| Gap bucket | Early 1d % | On-Time % |
+|---|---|---|
+| AWB > 4h before WH promise | 2.3% | 0.1% |
+| AWB 1–2h before | 4.4% | 0.4% |
+| **AWB 30–60m before** | **48.1%** | 7.1% |
+| **AWB 0–30m before** | **27.8%** | 9.8% |
+| AWB 0–30m after | 8.3% | 7.7% |
+| AWB 30m–2h after | 5.2% | 17.9% |
+| AWB > 2h after | 3.8% | 56.9% |
+
+Median gap: Early 1d = +0.55h (+33 min, AWB before WH promise). On-Time = −2.77h (AWB 2h 46m after WH promise).
+
+75.9% of same-courier Early 1d orders have AWB within 0–60 minutes before WH promise.
+
+### Calendar-day relationship
+
+| Calendar relationship | Early 1d % | On-Time % |
+|---|---|---|
+| AWB 1d before WH promise | 2.2% | 0.1% |
+| **Same calendar day** | **96.4%** | 76.6% |
+| AWB after WH promise | 1.4% | 23.4% |
+
+96.4% of same-courier Early 1d are intra-day — AWB and WH promise on the same calendar date.
+
+### WH promise hour vs AWB print hour (combined view)
+
+| Hour | WH promise Early 1d% | WH promise On-Time% | AWB Early 1d% | AWB On-Time% |
+|---|---|---|---|---|
+| 10:00–13:00 | 3.2% | 33.1% | 4.6% | 38.6% |
+| 14:00–15:00 | 5.7% | 12.3% | 10.6% | 24.3% |
+| 16:00 | 11.4% | 5.0% | **25.2%** | 10.8% |
+| **17:00** | **28.0%** | 4.4% | **24.7%** | 8.3% |
+| **18:00** | **28.3%** | 4.5% | 20.4% | 3.7% |
+| 19:00+ | 20.1% | 23.5% | 13.6% | 2.3% |
+
+WH promises peak at 17:00–18:00; AWB prints peak at 16:00–17:00 — one hour earlier.
+
+### The 16.6% exception (n=510): AWB after WH promise, courier still comes same day
+
+- Median AWB overshoot past WH promise: 0.47h (28 minutes)
+- p75 overshoot: 1.19h
+- % within 2h of WH promise: 84.7%
+- WH promise concentrated at 18:00 (24.5%) and 16:00–17:00 (24%)
+- AWB prints at 17:00–19:00
+
+Explanation: actual courier cutoff is slightly later than the WH promise timestamp. WH finishes 28 minutes past WH promise but inside the real cutoff window.
+
+### Verdict
+
+The rule engine applies D+1 correctly for these orders (WH promise is at/after cutoff). Early 1d manifests because the warehouse consistently packs 33 minutes before its own promise — catching the courier in a window the system believed was already closed. The dispatch promise is already committed to D+1 and cannot adjust at packing time.
