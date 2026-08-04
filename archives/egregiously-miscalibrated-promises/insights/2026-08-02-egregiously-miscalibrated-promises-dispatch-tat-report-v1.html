@@ -1607,6 +1607,190 @@ tbody tr:hover td { background: var(--surface-alt); }
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION D — IMPACT SIMULATIONS
+  ════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">Section D</span>
+      <h2>Impact Simulations</h2>
+    </div>
+
+    <p>Payment pending was already simulated in A.4 (5.4pp lateness reduction, 2,951 orders rescued). Three additional fixes are simulated here: Doctor SLA enforcement for call-required orders, HA call SLA enforcement, and TAT recalibration. All runs are against the same 57,688 egregious orders.</p>
+
+    <!-- D.1 Doctor SLA fix -->
+    <div class="subsection">
+      <h3>D.1 — Simulation: Doctor SLA Fix</h3>
+      <p>Mechanic: for <code>DOCTOR_AND_HA_CALL_REQUIRED</code> or <code>HA_CALL_REQUIRED</code> orders in the Late dispatch group where <code>dr_confirm_ts &gt; digitised_wh_promise</code> — simulate that doctor confirmation arrived on time: <strong>delivery_sim = dispatch_promise + actual_TAT</strong>.</p>
+      <p><strong>Scope:</strong> 1,578 late-dispatch call-required orders with confirmed late doctor sign-off.</p>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-num green">1,124</div>
+          <div class="stat-label">Orders rescued (exit egregious)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num green">71.2%</div>
+          <div class="stat-label">Of the 1,578 in-scope orders</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">1.2%</div>
+          <div class="stat-label">Of all 96,424 egregious orders</div>
+        </div>
+      </div>
+
+      <h4>Delivery deviation distribution shift (in-scope 1,578 orders)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bucket</th>
+              <th class="td-num">Before</th>
+              <th class="td-num">After</th>
+              <th class="td-num">Δ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Early 2d</td><td class="td-num td-bold">89</td><td class="td-num">6</td><td class="td-num td-hl-green">−83</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">320</td><td class="td-num td-hl-green">+320</td></tr>
+            <tr class="td-focus"><td class="td-bold">Late 1d (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">749</td><td class="td-num td-hl-green">+749</td></tr>
+            <tr><td>Late 2d</td><td class="td-num td-bold">952</td><td class="td-num">193</td><td class="td-num td-hl-green">−759</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">298</td><td class="td-num">72</td><td class="td-num td-hl-green">−226</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">93</td><td class="td-num">41</td><td class="td-num td-hl-amber">−52</td></tr>
+            <tr><td>Late 5d+</td><td class="td-num">133</td><td class="td-num">40</td><td class="td-num td-hl-amber">−93</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="finding finding-green">
+        <div class="finding-label">Simulation Result</div>
+        <p>On-time doctor confirmation rescues <strong>1,124 orders (71.2% of the call-required late-dispatch scope)</strong>. The primary Late 2d cohort (952 orders) drops to 193 — a 80% reduction. 1.2% of all egregious orders exit. The residual 454 orders (28.8%) remain egregious even with on-time confirmation, suggesting additional delay layers (e.g. late invoice, separate WH issue).</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- D.2 HA call SLA fix -->
+    <div class="subsection">
+      <h3>D.2 — Simulation: HA Call SLA Fix</h3>
+      <p>Mechanic: for <code>DOCTOR_AND_HA_CALL_REQUIRED</code> or <code>HA_CALL_REQUIRED</code> orders in the Late 3d+ dispatch group — simulate that the HA call completed same-day, allowing dispatch on promise: <strong>delivery_sim = dispatch_promise + actual_TAT</strong>.</p>
+      <p><strong>Scope:</strong> 443 Late 3d+ HA-involved orders (the tail where the HA call compound delay causes the most extreme deviations).</p>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-num green">391</div>
+          <div class="stat-label">Orders rescued (exit egregious)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num green">88.3%</div>
+          <div class="stat-label">Of the 443 in-scope orders</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">0.4%</div>
+          <div class="stat-label">Of all 96,424 egregious orders</div>
+        </div>
+      </div>
+
+      <h4>Delivery deviation distribution shift (in-scope 443 orders)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bucket</th>
+              <th class="td-num">Before</th>
+              <th class="td-num">After</th>
+              <th class="td-num">Δ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="td-focus"><td class="td-bold">Early 1d (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">163</td><td class="td-num td-hl-green">+163</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">180</td><td class="td-num td-hl-green">+180</td></tr>
+            <tr class="td-focus"><td class="td-bold">Late 1d (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">48</td><td class="td-num td-hl-green">+48</td></tr>
+            <tr><td>Late 2d</td><td class="td-num td-bold">97</td><td class="td-num">12</td><td class="td-num td-hl-green">−85</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">112</td><td class="td-num">4</td><td class="td-num td-hl-green">−108</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">76</td><td class="td-num">6</td><td class="td-num td-hl-green">−70</td></tr>
+            <tr><td>Late 5d+</td><td class="td-num">158</td><td class="td-num">1</td><td class="td-num td-hl-green">−157</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="finding finding-green">
+        <div class="finding-label">Simulation Result</div>
+        <p>Same-day HA call SLA rescues <strong>391 orders (88.3%)</strong> of the Late 3d+ HA-involved scope. Late 5d+ nearly empties (158 → 1). This is a small-volume fix (0.4% of all egregious) but extremely high within-scope efficacy — the HA call is almost always the sole delay driver for these orders.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- D.3 TAT recalibration -->
+    <div class="subsection">
+      <h3>D.3 — Simulation: TAT Recalibration</h3>
+      <p>Two variants: (a) use <code>shipping_delivery_promise</code> as the new TAT anchor from actual pickup — the shipping-layer override available today; (b) perfect recalibration where <strong>delivery_sim = actual_pickup + actual_TAT</strong>.</p>
+
+      <h4>D.3a — Shipping-based TAT (using shipping_delivery_promise from actual pickup)</h4>
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-num green">31,269</div>
+          <div class="stat-label">Orders rescued (54.2% of segment)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num green">32.4%</div>
+          <div class="stat-label">Of all 96,424 egregious orders</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num amber">26,419</div>
+          <div class="stat-label">Still egregious after shipping-based TAT</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bucket</th>
+              <th class="td-num">Before</th>
+              <th class="td-num">After</th>
+              <th class="td-num">Δ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Early 3d</td><td class="td-num">5,457</td><td class="td-num">1,895</td><td class="td-num td-hl-green">−3,562</td></tr>
+            <tr><td>Early 2d</td><td class="td-num td-bold">28,760</td><td class="td-num">9,602</td><td class="td-num td-hl-green">−19,158</td></tr>
+            <tr class="td-focus"><td class="td-bold">Early 1d (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">17,976</td><td class="td-num td-hl-green">+17,976</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">9,107</td><td class="td-num td-hl-green">+9,107</td></tr>
+            <tr class="td-focus"><td class="td-bold">Late 1d (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">4,186</td><td class="td-num td-hl-green">+4,186</td></tr>
+            <tr><td>Late 2d</td><td class="td-num">13,765</td><td class="td-num">6,853</td><td class="td-num td-hl-amber">−6,912</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">4,545</td><td class="td-num">3,096</td><td class="td-num td-hl-amber">−1,449</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">2,007</td><td class="td-num">1,406</td><td class="td-num td-hl-amber">−601</td></tr>
+            <tr><td>Late 5d+</td><td class="td-num">2,202</td><td class="td-num">1,482</td><td class="td-num td-hl-amber">−720</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="finding finding-amber">
+        <div class="finding-label">Simulation Result</div>
+        <p>The shipping-based TAT recalibration rescues <strong>31,269 orders (54.2%)</strong> — larger than the WH fix but still leaves 26,419 egregious. The limitation: the shipping_delivery_promise values are themselves derived from the same stale digitised lookup in most cases and are only partially corrected. The Late 2d–5d+ cohorts, where the lookup under-estimates transit, shrink meaningfully but are not eliminated.</p>
+      </div>
+
+      <h4>D.3b — Perfect TAT recalibration (delivery_sim = actual_pickup + actual_TAT)</h4>
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-num green">57,688</div>
+          <div class="stat-label">Orders rescued (100% of segment)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num green">59.8%</div>
+          <div class="stat-label">Of all 96,424 egregious orders</div>
+        </div>
+      </div>
+
+      <div class="finding finding-green">
+        <div class="finding-label">Simulation Result — Upper Bound</div>
+        <p>A fully recalibrated TAT lookup (matching actuals for every courier × pincode × zone combination) rescues <strong>all 57,688</strong> Non-SDD Inventory egregious orders — 59.8% of the full egregious set. This is the ceiling, not a realistic point estimate. The shipping-based variant (D.3a) shows what's achievable today with the existing shipping layer; the gap of 26,419 orders represents where the shipping lookup itself needs to be updated.</p>
+      </div>
+    </div>
+  </div>
+
   <footer class="report-footer">
     <span>Source: all-orders-july-2026.csv · 57,688 Non-SDD Inventory egregious orders</span>
     <span>Analysis period: July 2026 · Report date: 2026-08-02</span>

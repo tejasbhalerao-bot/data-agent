@@ -2470,3 +2470,274 @@ SDD Inventory egregious (n=3,955) has two structurally distinct failure modes:
 |---|---|---|---|---|
 | Late WH → Late Delivery | C59+C60+C61 | 2,847 | 72.0% | WH misses its SDD processing window; no single dominant driver — payment pending (11.9%) and doctor confirmation (25.1%) are partial contributors |
 | Early WH + Late Delivery | C62+C63 | 932 | 23.6% | SDD delivery promised (0-day TAT) but courier actually takes 2–3 days — TAT model failure |
+
+---
+
+## #59 — Impact Simulations: All Four Segments, All Problem Statements
+
+Simulated counterfactual impact for every identified root cause across all four egregious segments. Mechanics: WH fix uses `dispatch_sim = date(invoice_create_ts + 0.4h) + TAT_days`; TAT fix uses `delivery_sim = actual_pickup + actual_TAT`; payment pending fix uses `AWB_sim = invoice + 0.4h` for pmt-pending orders; doctor confirmation fix uses `AWB_sim = digitised_wh_promise + 25min`; SDD eligibility fix uses `delivery_promise_sim = actual_pickup + 2d`. Total egregious set: **96,424 orders**.
+
+### Section A — Non-SDD Non-Inventory (n=29,813, 30.9% of all egregious)
+
+#### A.1 — WH Promise Fix
+
+| Metric | Value |
+|---|---|
+| Orders in scope | 29,803 |
+| Currently egregious | 29,803 |
+| Rescued (exit egregious) | 22,541 |
+| % of segment | 75.6% |
+| % of all egregious | 23.4% |
+
+| Bucket | Before | After | Δ |
+|---|---|---|---|
+| Early 5d+ | 203 | 1 | −202 |
+| Early 4d | 1,542 | 20 | −1,522 |
+| Early 3d | 6,978 | 597 | −6,381 |
+| Early 2d | 18,949 | 4,639 | −14,310 |
+| Early 1d | 0 | 14,621 | +14,621 |
+| On-Time | 0 | 7,358 | +7,358 |
+| Late 1d | 0 | 562 | +562 |
+| Late 2d | 1,194 | 350 | −844 |
+| Late 3d | 450 | 756 | +306 |
+| Late 4d | 232 | 442 | +210 |
+| Late 5d+ | 255 | 457 | +202 |
+
+**Residual (24.4%, 7,272 orders):** the stale-TAT cohort — WH fix alone insufficient because transit TAT lookup independently miscalibrates delivery by ≥2 days.
+
+#### A.2 — WH Fix + TAT Recalibration (Combined, Upper Bound)
+
+| Metric | Value |
+|---|---|
+| Rescued | 29,813 |
+| % of segment | 100.0% |
+| % of all egregious | 30.9% |
+| Incremental over WH fix alone | 7,272 |
+
+All 29,813 orders exit. Every bucket reaches On-Time by construction (delivery_sim = actual_pickup + actual_TAT).
+
+---
+
+### Section B — SDD Non-Inventory (n=4,591, 4.8% of all egregious)
+
+#### B.1 — WH Promise Fix
+
+| Metric | Value |
+|---|---|
+| Orders in scope | 4,590 |
+| Currently egregious | 4,590 |
+| Rescued | 4,212 |
+| % of segment | 91.8% |
+| % of all egregious | 4.4% |
+
+| Bucket | Before | After | Δ |
+|---|---|---|---|
+| Early 3d | 307 | 0 | −307 |
+| Early 2d | 3,861 | 0 | −3,861 |
+| Early 1d | 0 | 216 | +216 |
+| On-Time | 0 | 2,410 | +2,410 |
+| Late 1d | 0 | 1,586 | +1,586 |
+| Late 2d | 239 | 27 | −212 |
+| Late 3d | 96 | 131 | +35 |
+| Late 4d | 46 | 107 | +61 |
+| Late 5d+ | 41 | 113 | +72 |
+
+**Residual (8.2%, 378 orders):** Late 3d–5d+ tail from non-Cohort-69 orders. No TAT fix needed (SDD couriers correct); residual driven by different mechanisms not in scope.
+
+---
+
+### Section C — Non-SDD Inventory (n=57,688, 59.8% of all egregious)
+
+#### C.1 — Doctor SLA Fix
+
+Scope: 1,578 late-dispatch DOCTOR_AND_HA_CALL_REQUIRED / HA_CALL_REQUIRED orders where dr_confirm_ts > digitised_wh_promise. Simulate: delivery_sim = dispatch_promise + actual_TAT.
+
+| Metric | Value |
+|---|---|
+| Orders in scope | 1,578 |
+| Rescued | 1,124 |
+| % of in-scope | 71.2% |
+| % of all egregious | 1.2% |
+
+| Bucket | Before | After | Δ |
+|---|---|---|---|
+| Early 2d | 89 | 6 | −83 |
+| Early 1d | 0 | 55 | +55 |
+| On-Time | 0 | 320 | +320 |
+| Late 1d | 0 | 749 | +749 |
+| Late 2d | 952 | 193 | −759 |
+| Late 3d | 298 | 72 | −226 |
+| Late 4d | 93 | 41 | −52 |
+| Late 5d+ | 133 | 40 | −93 |
+
+**Residual (28.8%, 454 orders):** still egregious after on-time confirmation — additional delay layers upstream.
+
+#### C.2 — HA Call SLA Fix
+
+Scope: 443 Late 3d+ HA-involved orders. Simulate: delivery_sim = dispatch_promise + actual_TAT.
+
+| Metric | Value |
+|---|---|
+| Orders in scope | 443 |
+| Rescued | 391 |
+| % of in-scope | 88.3% |
+| % of all egregious | 0.4% |
+
+| Bucket | Before | After | Δ |
+|---|---|---|---|
+| Early 1d | 0 | 163 | +163 |
+| On-Time | 0 | 180 | +180 |
+| Late 1d | 0 | 48 | +48 |
+| Late 2d | 97 | 12 | −85 |
+| Late 3d | 112 | 4 | −108 |
+| Late 4d | 76 | 6 | −70 |
+| Late 5d+ | 158 | 1 | −157 |
+
+**Note:** Payment pending (A.4) already simulated in earlier session — 2,951 orders rescued, 5.4pp lateness reduction.
+
+#### C.3a — TAT Recalibration (Shipping-Based: delivery_sim = actual_pickup + shipping_delivery_promise)
+
+| Metric | Value |
+|---|---|
+| Orders in scope | 57,688 |
+| Rescued | 31,269 |
+| % of segment | 54.2% |
+| % of all egregious | 32.4% |
+
+| Bucket | Before | After | Δ |
+|---|---|---|---|
+| Early 3d | 5,457 | 1,895 | −3,562 |
+| Early 2d | 28,760 | 9,602 | −19,158 |
+| Early 1d | 0 | 17,976 | +17,976 |
+| On-Time | 0 | 9,107 | +9,107 |
+| Late 1d | 0 | 4,186 | +4,186 |
+| Late 2d | 13,765 | 6,853 | −6,912 |
+| Late 3d | 4,545 | 3,096 | −1,449 |
+| Late 4d | 2,007 | 1,406 | −601 |
+| Late 5d+ | 2,202 | 1,482 | −720 |
+
+**Limitation:** shipping_delivery_promise is itself derived from the stale digitised lookup in most cases; only partially corrected. Residual 26,419 orders need shipping lookup update.
+
+#### C.3b — TAT Recalibration (Perfect: delivery_sim = actual_pickup + actual_TAT)
+
+| Metric | Value |
+|---|---|
+| Rescued | 57,688 |
+| % of segment | 100.0% |
+| % of all egregious | 59.8% |
+
+Upper bound. All egregious orders exit by construction. Gap vs shipping-based (26,419 orders) is where the shipping lookup itself must be updated.
+
+---
+
+### Section D — SDD Inventory (n=3,955, 4.1% of all egregious)
+
+Mode 1 (Late WH + Late Delivery): n=2,847. Mode 2 (Early WH + Late Delivery): n=932.
+
+#### D.1 — Payment Pending Fix (Mode 1 only)
+
+In-scope: 338 pmt-pending orders within Mode 1. AWB_sim = invoice + 0.4h; delivery_sim = date(AWB_sim) + actual_TAT.
+
+| Metric | Value |
+|---|---|
+| Orders in scope | 2,847 |
+| Rescued | 158 |
+| % of Mode 1 | 5.5% |
+| % of all egregious | 0.2% |
+
+| Bucket | Before | After | Δ |
+|---|---|---|---|
+| On-Time | 0 | 20 | +20 |
+| Late 1d | 0 | 138 | +138 |
+| Late 2d | 1,764 | 1,684 | −80 |
+| Late 3d | 604 | 556 | −48 |
+| Late 4d | 233 | 217 | −16 |
+| Late 5d+ | 246 | 232 | −14 |
+
+#### D.2 — Doctor Confirmation Fix (Mode 1 only)
+
+In-scope: 715 orders where dr_confirm_ts > digitised_wh_promise. AWB_sim = digitised_wh_promise + 25min; delivery_sim = date(AWB_sim) + actual_TAT.
+
+| Metric | Value |
+|---|---|
+| Orders in scope | 2,847 |
+| Rescued | 229 |
+| % of Mode 1 | 8.0% |
+| % of all egregious | 0.2% |
+
+| Bucket | Before | After | Δ |
+|---|---|---|---|
+| Early 1d | 0 | 4 | +4 |
+| On-Time | 0 | 66 | +66 |
+| Late 1d | 0 | 159 | +159 |
+| Late 2d | 1,764 | 1,637 | −127 |
+| Late 3d | 604 | 543 | −61 |
+| Late 4d | 233 | 218 | −15 |
+| Late 5d+ | 246 | 220 | −26 |
+
+#### D.3 — Combined Mode 1 Fix (Payment Pending + Doctor Confirmation)
+
+| Metric | Value |
+|---|---|
+| Orders in scope | 2,847 |
+| Rescued | 342 |
+| % of Mode 1 | 12.0% |
+| % of all egregious | 0.4% |
+
+| Bucket | Before | After | Δ |
+|---|---|---|---|
+| Early 1d | 0 | 3 | +3 |
+| On-Time | 0 | 73 | +73 |
+| Late 1d | 0 | 266 | +266 |
+| Late 2d | 1,764 | 1,581 | −183 |
+| Late 3d | 604 | 509 | −95 |
+| Late 4d | 233 | 207 | −26 |
+| Late 5d+ | 246 | 208 | −38 |
+
+**Key finding:** Even with both fixes combined, 2,505 Mode 1 orders (88%) remain egregious. The primary fix for Mode 1 must be operational SLA enforcement, not targeted upstream triggers.
+
+#### D.4 — SDD Eligibility Fix (Mode 2 only)
+
+delivery_promise_sim = actual_pickup + 2d (replace SDD 0-day promise with 2-day non-SDD TAT).
+
+| Metric | Value |
+|---|---|
+| Orders in scope | 932 |
+| Rescued | 670 |
+| % of Mode 2 | 71.9% |
+| % of all egregious | 0.7% |
+
+| Bucket | Before | After | Δ |
+|---|---|---|---|
+| Early 1d | 0 | 6 | +6 |
+| On-Time | 0 | 306 | +306 |
+| Late 1d | 0 | 358 | +358 |
+| Late 2d | 556 | 153 | −403 |
+| Late 3d | 202 | 72 | −130 |
+| Late 4d | 105 | 18 | −87 |
+| Late 5d+ | 69 | 19 | −50 |
+
+**Residual (28.1%, 262 orders):** routes where even a 2-day promise is violated — need courier-level TAT audit or reassignment.
+
+#### D.5 — Full SDD Inventory Fix (Mode 1 Combined + Mode 2 SDD Eligibility)
+
+Total in scope: 3,779 orders (rows with sufficient data across both modes).
+
+| Metric | Value |
+|---|---|
+| Orders in scope | 3,779 |
+| Rescued | 1,012 |
+| % of in-scope SDD Inv | 26.8% |
+| % of all egregious | 1.0% |
+
+| Bucket | Before | After | Δ |
+|---|---|---|---|
+| Early 1d | 0 | 9 | +9 |
+| On-Time | 0 | 379 | +379 |
+| Late 1d | 0 | 624 | +624 |
+| Late 2d | 2,320 | 1,734 | −586 |
+| Late 3d | 806 | 581 | −225 |
+| Late 4d | 338 | 225 | −113 |
+| Late 5d+ | 315 | 227 | −88 |
+
+**Conclusion:** SDD Inventory is the hardest segment — all identifiable fixes combined rescue only 26.8%. The dominant Mode 1 mass (2,505 remaining orders) requires an operational SLA enforcement program, not promise-model changes.

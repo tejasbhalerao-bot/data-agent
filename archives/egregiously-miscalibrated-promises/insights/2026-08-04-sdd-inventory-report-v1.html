@@ -638,6 +638,210 @@ tbody tr:hover td { background: var(--surface-alt); }
     </div>
   </div>
 
+  <!-- ── Section E: Impact Simulations ── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-tag">Section E</span>
+      <h2>Impact Simulations</h2>
+    </div>
+
+    <p>For each identified driver, how many of the 3,955 egregious SDD Inventory orders would exit the egregious set if the fix were applied? Mode 1 (2,847 orders, Late WH + Late Delivery) and Mode 2 (932 orders, Early WH + Late Delivery) are simulated separately, then combined.</p>
+
+    <!-- E.1 Payment pending -->
+    <h3>E.1 — Payment Pending Fix (Mode 1)</h3>
+    <p>Mechanic: for payment-pending orders, <strong>AWB_sim = invoice_create_ts + 0.4h</strong>; pickup_sim = date(AWB_sim); delivery_sim = pickup_sim + actual_TAT. In-scope: 338 pmt-pending orders within Mode 1.</p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num" style="color: var(--green)">158</div>
+        <div class="stat-label">Orders rescued from Mode 1 (2,847)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color: var(--green)">5.5%</div>
+        <div class="stat-label">Of Mode 1 egregious orders</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0.2%</div>
+        <div class="stat-label">Of all 96,424 egregious orders</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bucket</th><th class="r">Before</th><th class="r">After</th><th class="r">Δ</th></tr></thead>
+        <tbody>
+          <tr><td class="em">On-Time (exits)</td><td class="r">0</td><td class="r">20</td><td class="r" style="color:var(--green)">+20</td></tr>
+          <tr><td class="em">Late 1d (exits)</td><td class="r">0</td><td class="r">138</td><td class="r" style="color:var(--green)">+138</td></tr>
+          <tr><td>Late 2d</td><td class="r">1,764</td><td class="r">1,684</td><td class="r" style="color:var(--green)">−80</td></tr>
+          <tr><td>Late 3d</td><td class="r">604</td><td class="r">556</td><td class="r" style="color:var(--green)">−48</td></tr>
+          <tr><td>Late 4d</td><td class="r">233</td><td class="r">217</td><td class="r" style="color:var(--green)">−16</td></tr>
+          <tr><td>Late 5d+</td><td class="r">246</td><td class="r">232</td><td class="r" style="color:var(--green)">−14</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding finding-amber">
+      <strong>Limited impact.</strong> Payment pending affects only 338 of 2,847 Mode 1 orders (11.9%), and not all of those exit egregious — 158 rescued (5.5%). The mechanism matters for those 338, but Mode 1's primary driver is the remaining ~63% with neither payment hold nor late doctor confirmation. The fix is necessary but not sufficient.
+    </div>
+
+    <hr class="divider">
+
+    <!-- E.2 Doctor confirmation -->
+    <h3>E.2 — Doctor Confirmation Fix (Mode 1)</h3>
+    <p>Mechanic: for orders where <strong>dr_confirm_ts &gt; digitised_wh_promise</strong>, simulate on-time confirmation: <strong>AWB_sim = digitised_wh_promise + 25min</strong>; pickup_sim = date(AWB_sim); delivery_sim = pickup_sim + actual_TAT. In-scope: 715 late-confirmation orders within Mode 1.</p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num" style="color: var(--green)">229</div>
+        <div class="stat-label">Orders rescued from Mode 1 (2,847)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color: var(--green)">8.0%</div>
+        <div class="stat-label">Of Mode 1 egregious orders</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0.2%</div>
+        <div class="stat-label">Of all 96,424 egregious orders</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bucket</th><th class="r">Before</th><th class="r">After</th><th class="r">Δ</th></tr></thead>
+        <tbody>
+          <tr><td class="em">On-Time (exits)</td><td class="r">0</td><td class="r">66</td><td class="r" style="color:var(--green)">+66</td></tr>
+          <tr><td class="em">Late 1d (exits)</td><td class="r">0</td><td class="r">159</td><td class="r" style="color:var(--green)">+159</td></tr>
+          <tr><td>Late 2d</td><td class="r">1,764</td><td class="r">1,637</td><td class="r" style="color:var(--green)">−127</td></tr>
+          <tr><td>Late 3d</td><td class="r">604</td><td class="r">543</td><td class="r" style="color:var(--green)">−61</td></tr>
+          <tr><td>Late 4d</td><td class="r">233</td><td class="r">218</td><td class="r" style="color:var(--green)">−15</td></tr>
+          <tr><td>Late 5d+</td><td class="r">246</td><td class="r">220</td><td class="r" style="color:var(--green)">−26</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding finding-amber">
+      <strong>Modest but real.</strong> Doctor confirmation fix rescues 229 orders (8.0%) — more than payment pending alone, but still only a partial lever. The residual confirms that the majority of Mode 1 lateness is neither payment hold nor late doctor sign-off; it is diffuse operational delay in WH processing that has no single upstream trigger to fix.
+    </div>
+
+    <hr class="divider">
+
+    <!-- E.3 Combined Mode 1 -->
+    <h3>E.3 — Combined Mode 1 Fix (Payment Pending + Doctor Confirmation)</h3>
+    <p>Apply both fixes simultaneously: payment-pending orders use the invoice+0.4h AWB; late-confirmation orders use the wh_promise+25min AWB. Non-overlapping cohorts combined.</p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num" style="color: var(--green)">342</div>
+        <div class="stat-label">Orders rescued from Mode 1 (2,847)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color: var(--green)">12.0%</div>
+        <div class="stat-label">Of Mode 1 egregious orders</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0.4%</div>
+        <div class="stat-label">Of all 96,424 egregious orders</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bucket</th><th class="r">Before</th><th class="r">After</th><th class="r">Δ</th></tr></thead>
+        <tbody>
+          <tr><td class="em">On-Time (exits)</td><td class="r">0</td><td class="r">73</td><td class="r" style="color:var(--green)">+73</td></tr>
+          <tr><td class="em">Late 1d (exits)</td><td class="r">0</td><td class="r">266</td><td class="r" style="color:var(--green)">+266</td></tr>
+          <tr><td>Late 2d</td><td class="r">1,764</td><td class="r">1,581</td><td class="r" style="color:var(--green)">−183</td></tr>
+          <tr><td>Late 3d</td><td class="r">604</td><td class="r">509</td><td class="r" style="color:var(--green)">−95</td></tr>
+          <tr><td>Late 4d</td><td class="r">233</td><td class="r">207</td><td class="r" style="color:var(--green)">−26</td></tr>
+          <tr><td>Late 5d+</td><td class="r">246</td><td class="r">208</td><td class="r" style="color:var(--green)">−38</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding finding-amber">
+      <strong>Combined fixes only reach 12% of Mode 1.</strong> Even resolving both payment pending and late doctor confirmation simultaneously rescues only 342 of 2,847 Mode 1 orders. The remaining 2,505 (88%) have operational WH delays with no identifiable single upstream cause. Mode 1 requires an operational SLA enforcement program across the SDD packing window — not targeted point fixes.
+    </div>
+
+    <hr class="divider">
+
+    <!-- E.4 SDD eligibility fix (Mode 2) -->
+    <h3>E.4 — SDD Eligibility Fix (Mode 2)</h3>
+    <p>Mechanic: reconfigure these orders to a 2-day non-SDD TAT promise: <strong>delivery_promise_sim = actual_pickup + 2d</strong>. If the SDD designation were removed and a realistic 2-day TAT applied, how many orders exit egregious?</p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num" style="color: var(--green)">670</div>
+        <div class="stat-label">Orders rescued from Mode 2 (932)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color: var(--green)">71.9%</div>
+        <div class="stat-label">Of Mode 2 egregious orders</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0.7%</div>
+        <div class="stat-label">Of all 96,424 egregious orders</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bucket</th><th class="r">Before</th><th class="r">After</th><th class="r">Δ</th></tr></thead>
+        <tbody>
+          <tr><td class="em">Early 1d (exits)</td><td class="r">0</td><td class="r">6</td><td class="r" style="color:var(--green)">+6</td></tr>
+          <tr><td class="em">On-Time (exits)</td><td class="r">0</td><td class="r">306</td><td class="r" style="color:var(--green)">+306</td></tr>
+          <tr><td class="em">Late 1d (exits)</td><td class="r">0</td><td class="r">358</td><td class="r" style="color:var(--green)">+358</td></tr>
+          <tr><td>Late 2d</td><td class="r">556</td><td class="r">153</td><td class="r" style="color:var(--green)">−403</td></tr>
+          <tr><td>Late 3d</td><td class="r">202</td><td class="r">72</td><td class="r" style="color:var(--green)">−130</td></tr>
+          <tr><td>Late 4d</td><td class="r">105</td><td class="r">18</td><td class="r" style="color:var(--green)">−87</td></tr>
+          <tr><td>Late 5d+</td><td class="r">69</td><td class="r">19</td><td class="r" style="color:var(--green)">−50</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding finding-green">
+      <strong>High within-scope efficacy.</strong> Removing the SDD designation (replacing it with a 2-day non-SDD TAT promise) rescues <strong>670 of 932 Mode 2 orders (71.9%)</strong>. Late 2d drops from 556 to 153. The residual 262 orders (28.1%) are routes where even a 2-day promise is violated by the courier — those need courier-level TAT audit or reassignment.
+    </div>
+
+    <hr class="divider">
+
+    <!-- E.5 Full combined -->
+    <h3>E.5 — Full SDD Inventory Fix (Mode 1 Combined + Mode 2 SDD Eligibility)</h3>
+    <p>Combines E.3 (Mode 1 payment pending + doctor confirmation) with E.4 (Mode 2 SDD eligibility reclassification). Total orders in scope: 3,779 (rows with sufficient data for both modes).</p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num" style="color: var(--green)">1,012</div>
+        <div class="stat-label">Total orders rescued</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color: var(--green)">26.8%</div>
+        <div class="stat-label">Of in-scope SDD Inventory egregious</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">1.0%</div>
+        <div class="stat-label">Of all 96,424 egregious orders</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bucket</th><th class="r">Before</th><th class="r">After</th><th class="r">Δ</th></tr></thead>
+        <tbody>
+          <tr><td class="em">On-Time (exits)</td><td class="r">0</td><td class="r">379</td><td class="r" style="color:var(--green)">+379</td></tr>
+          <tr><td class="em">Late 1d (exits)</td><td class="r">0</td><td class="r">624</td><td class="r" style="color:var(--green)">+624</td></tr>
+          <tr><td>Late 2d</td><td class="r">2,320</td><td class="r">1,734</td><td class="r" style="color:var(--green)">−586</td></tr>
+          <tr><td>Late 3d</td><td class="r">806</td><td class="r">581</td><td class="r" style="color:var(--green)">−225</td></tr>
+          <tr><td>Late 4d</td><td class="r">338</td><td class="r">225</td><td class="r" style="color:var(--green)">−113</td></tr>
+          <tr><td>Late 5d+</td><td class="r">315</td><td class="r">227</td><td class="r" style="color:var(--green)">−88</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding finding-blue">
+      <strong>SDD Inventory is the hardest segment to rescue.</strong> Even applying all identifiable fixes — eliminating payment holds, enforcing doctor confirmation SLAs, and reclassifying ineligible SDD routes — only 1,012 of 3,779 orders exit egregious (26.8%). The dominant Mode 1 mass (2,505 remaining orders) has no single upstream lever. The primary intervention for SDD Inventory must be <strong>operational</strong>: enforce the SDD packing window SLA across the warehouse, not just targeted promise-model fixes.
+    </div>
+  </div>
+
 </div>
 </body>
 </html>

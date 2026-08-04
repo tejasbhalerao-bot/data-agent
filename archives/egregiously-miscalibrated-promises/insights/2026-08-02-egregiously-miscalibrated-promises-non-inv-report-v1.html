@@ -800,6 +800,99 @@ tbody tr:hover td { background: var(--surface-alt); }
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION E — IMPACT SIMULATIONS
+  ════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">Section E</span>
+      <h2>Impact Simulations</h2>
+    </div>
+
+    <p>For each identified fix, how many of the 29,813 egregious orders would exit the egregious set (|delivery deviation| &lt; 2 days) if the fix were applied? Simulations are run on the same July 2026 dataset. Mechanics below.</p>
+
+    <!-- E.1 WH promise fix -->
+    <div class="subsection">
+      <h3>E.1 — Simulation: WH Promise Fix</h3>
+      <p>Mechanic: <strong>dispatch_sim = date(invoice_create_ts + 0.4h)</strong>; delivery_sim = dispatch_sim + TAT_days. Replaces the WH-anchored dispatch promise with what dispatch timing would actually be if the WH model used invoice-to-AWB actuals.</p>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-num green">22,541</div>
+          <div class="stat-label">Orders rescued (exit egregious)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num green">75.6%</div>
+          <div class="stat-label">Of this segment's egregious orders</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">23.4%</div>
+          <div class="stat-label">Of all 96,424 egregious orders</div>
+        </div>
+      </div>
+
+      <h4>Delivery deviation distribution shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bucket</th>
+              <th class="td-num">Before</th>
+              <th class="td-num">After</th>
+              <th class="td-num">Δ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Early 5d+</td><td class="td-num">203</td><td class="td-num">1</td><td class="td-num td-hl-green">−202</td></tr>
+            <tr><td>Early 4d</td><td class="td-num">1,542</td><td class="td-num">20</td><td class="td-num td-hl-green">−1,522</td></tr>
+            <tr><td>Early 3d</td><td class="td-num">6,978</td><td class="td-num">597</td><td class="td-num td-hl-green">−6,381</td></tr>
+            <tr><td>Early 2d</td><td class="td-num td-bold">18,949</td><td class="td-num">4,639</td><td class="td-num td-hl-green">−14,310</td></tr>
+            <tr class="td-focus"><td class="td-bold">Early 1d (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">14,621</td><td class="td-num td-hl-green">+14,621</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">7,358</td><td class="td-num td-hl-green">+7,358</td></tr>
+            <tr><td>Late 1d (exits egregious)</td><td class="td-num">0</td><td class="td-num">562</td><td class="td-num td-hl-green">+562</td></tr>
+            <tr><td>Late 2d</td><td class="td-num">1,194</td><td class="td-num">350</td><td class="td-num td-hl-amber">−844</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">450</td><td class="td-num">756</td><td class="td-num td-hl-red">+306</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">232</td><td class="td-num">442</td><td class="td-num td-hl-red">+210</td></tr>
+            <tr><td>Late 5d+</td><td class="td-num">255</td><td class="td-num">457</td><td class="td-num td-hl-red">+202</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="finding finding-green">
+        <div class="finding-label">Simulation Result</div>
+        <p>The WH fix alone rescues <strong>22,541 orders (75.6%)</strong>. The dominant Early 2d cohort collapses from 18,949 to 4,639. Nearly 7,400 orders reach On-Time, and 14,600 more reach Early 1d (no longer egregious). <strong>Residual: 7,262 orders (24.4%)</strong> remain egregious — these are the stale-TAT cohort where the WH fix alone is insufficient because the TAT lookup independently miscalibrates delivery timing by ≥2 days.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- E.2 WH + TAT combined fix -->
+    <div class="subsection">
+      <h3>E.2 — Simulation: WH Fix + TAT Recalibration (Combined — Maximum Potential)</h3>
+      <p>Mechanic: <strong>delivery_sim = actual_pickup + actual_TAT</strong>. All orders exit the egregious set by construction. This represents the upper bound — 100% rescue — assuming both the WH promise and the transit TAT lookup are perfectly recalibrated to match actuals.</p>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-num green">29,813</div>
+          <div class="stat-label">Orders rescued (100% of segment)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num green">30.9%</div>
+          <div class="stat-label">Of all 96,424 egregious orders</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">7,272</div>
+          <div class="stat-label">Additional orders vs WH fix alone</div>
+        </div>
+      </div>
+
+      <div class="finding finding-green">
+        <div class="finding-label">Simulation Result</div>
+        <p>Combining the WH promise fix with a TAT lookup recalibration reaches <strong>100% rescue</strong> — all 29,813 egregious orders exit. The incremental gain over the WH fix alone is <strong>7,272 orders</strong> (the stale-TAT residual). The WH fix is the higher-leverage lever in isolation (75.6%); the TAT recalibration is the necessary complement to reach full coverage.</p>
+      </div>
+    </div>
+  </div>
+
   <footer class="report-footer">
     <span>Source: all-orders-july-2026.csv · 29,813 Non-SDD Non-Inventory egregious orders</span>
     <span>Analysis period: July 2026 · Report date: 2026-08-02</span>
