@@ -1,0 +1,698 @@
+<!doctype html>
+<title>Why SDD Non-Inventory Orders Miss Their Delivery Promise</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* ── Tokens ─────────────────────────────────────────────── */
+:root {
+  --bg:               #EDF1F7;
+  --surface:          #FFFFFF;
+  --surface-alt:      #F4F7FC;
+  --text:             #162032;
+  --text-2:           #52657D;
+  --text-3:           #8A9BAD;
+  --accent:           #1C4E8A;
+  --accent-dim:       #D6E4F5;
+  --green:            #1B6840;
+  --green-dim:        #DDF0E7;
+  --amber:            #8A5700;
+  --amber-dim:        #FFF0CC;
+  --red:              #962020;
+  --red-dim:          #FDEAEA;
+  --border:           #C8D4E3;
+  --rule:             #B0BFD4;
+  --r:                5px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:             #0D1219;
+    --surface:        #141E2B;
+    --surface-alt:    #1A2535;
+    --text:           #C8D6EA;
+    --text-2:         #8A9EBA;
+    --text-3:         #556070;
+    --accent:         #4F90CC;
+    --accent-dim:     #0E2040;
+    --green:          #3AAD72;
+    --green-dim:      #0A2218;
+    --amber:          #CFA030;
+    --amber-dim:      #261A00;
+    --red:            #E06060;
+    --red-dim:        #280E0E;
+    --border:         #243347;
+    --rule:           #1E2D40;
+  }
+}
+:root[data-theme="light"] {
+  --bg:#EDF1F7;--surface:#FFFFFF;--surface-alt:#F4F7FC;
+  --text:#162032;--text-2:#52657D;--text-3:#8A9BAD;
+  --accent:#1C4E8A;--accent-dim:#D6E4F5;
+  --green:#1B6840;--green-dim:#DDF0E7;
+  --amber:#8A5700;--amber-dim:#FFF0CC;
+  --red:#962020;--red-dim:#FDEAEA;
+  --border:#C8D4E3;--rule:#B0BFD4;
+}
+:root[data-theme="dark"] {
+  --bg:#0D1219;--surface:#141E2B;--surface-alt:#1A2535;
+  --text:#C8D6EA;--text-2:#8A9EBA;--text-3:#556070;
+  --accent:#4F90CC;--accent-dim:#0E2040;
+  --green:#3AAD72;--green-dim:#0A2218;
+  --amber:#CFA030;--amber-dim:#261A00;
+  --red:#E06060;--red-dim:#280E0E;
+  --border:#243347;--rule:#1E2D40;
+}
+
+/* ── Reset / Base ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.65;
+  padding: 0 1rem 4rem;
+}
+a { color: var(--accent); }
+
+/* ── Layout ─────────────────────────────────────────────── */
+.page { max-width: 860px; margin: 0 auto; }
+
+/* ── Masthead ───────────────────────────────────────────── */
+.masthead {
+  padding: 3rem 0 2rem;
+  border-bottom: 2px solid var(--accent);
+  margin-bottom: 2.5rem;
+}
+.masthead-eyebrow {
+  font-size: 0.72rem;
+  font-family: ui-monospace, 'SF Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+.masthead h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+  text-wrap: balance;
+  margin-bottom: 0.75rem;
+}
+.masthead-sub {
+  font-size: 1.05rem;
+  color: var(--text-2);
+  max-width: 60ch;
+  line-height: 1.5;
+}
+
+/* ── Scope bar ──────────────────────────────────────────── */
+.scope {
+  background: var(--accent-dim);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--r);
+  padding: 1rem 1.25rem;
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.scope-item { display: flex; flex-direction: column; gap: 0.15rem; }
+.scope-label {
+  font-size: 0.68rem;
+  font-family: ui-monospace, 'SF Mono', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.scope-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Section headers ────────────────────────────────────── */
+.section { margin-bottom: 3rem; }
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--rule);
+}
+.section-tag {
+  font-family: ui-monospace, 'SF Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.subsection { margin-bottom: 2rem; }
+.subsection h3 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.75rem;
+  text-wrap: balance;
+}
+.subsection h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 1.25rem 0 0.5rem;
+}
+
+p { margin-bottom: 0.85rem; font-size: 0.95rem; max-width: 72ch; }
+p:last-child { margin-bottom: 0; }
+
+/* ── Stat row ───────────────────────────────────────────── */
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 0.85rem 1.1rem;
+  min-width: 130px;
+  flex: 1;
+}
+.stat-num {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.stat-num.green  { color: var(--green); }
+.stat-num.red    { color: var(--red); }
+.stat-num.amber  { color: var(--amber); }
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  margin-top: 0.2rem;
+  line-height: 1.3;
+}
+
+/* ── Tables ─────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; margin: 1rem 0 1.5rem; border-radius: var(--r); border: 1px solid var(--border); }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.87rem;
+  font-variant-numeric: tabular-nums;
+  background: var(--surface);
+}
+thead th {
+  background: var(--surface-alt);
+  color: var(--text-2);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 0.55rem 0.9rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--text);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--surface-alt); }
+.td-num { text-align: right; }
+.td-bold { font-weight: 600; }
+.td-hl-accent { color: var(--accent); font-weight: 600; }
+.td-hl-green  { color: var(--green);  font-weight: 600; }
+.td-hl-red    { color: var(--red);    font-weight: 600; }
+.td-hl-amber  { color: var(--amber);  font-weight: 600; }
+.td-muted { color: var(--text-3); }
+.td-focus { background: var(--accent-dim) !important; }
+
+/* ── Finding boxes ──────────────────────────────────────── */
+.finding {
+  background: var(--accent-dim);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 0.9rem 1.1rem;
+  margin: 1.25rem 0;
+  font-size: 0.92rem;
+}
+.finding-label {
+  font-family: ui-monospace, 'SF Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+}
+.finding p { max-width: 100%; color: var(--text); }
+.finding-green { background: var(--green-dim); border-left-color: var(--green); }
+.finding-green .finding-label { color: var(--green); }
+.finding-amber { background: var(--amber-dim); border-left-color: var(--amber); }
+.finding-amber .finding-label { color: var(--amber); }
+
+/* ── Flow ───────────────────────────────────────────────── */
+.flow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 1rem 0;
+  font-size: 0.82rem;
+}
+.flow-step {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 0.45rem 0.75rem;
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.flow-step.problem  { border-color: var(--red);   color: var(--red);   background: var(--red-dim);   }
+.flow-step.outcome  { border-color: var(--amber);  color: var(--amber); background: var(--amber-dim); }
+.flow-step.ok       { border-color: var(--green);  color: var(--green); background: var(--green-dim); }
+.flow-arrow { padding: 0 0.3rem; color: var(--text-3); font-size: 0.85rem; }
+
+/* ── Comparison band ────────────────────────────────────── */
+.compare-band {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 0.85rem 1.1rem;
+  margin: 1rem 0;
+  font-size: 0.87rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.compare-col { flex: 1; min-width: 200px; }
+.compare-col-label {
+  font-family: ui-monospace, 'SF Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 0.4rem;
+}
+.compare-col ul { padding-left: 1.1rem; }
+.compare-col li { margin-bottom: 0.2rem; color: var(--text-2); }
+.compare-col li strong { color: var(--text); }
+
+/* ── Divider ────────────────────────────────────────────── */
+.divider { border: none; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+/* ── Footer ─────────────────────────────────────────────── */
+.report-footer {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.78rem;
+  color: var(--text-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+@media (max-width: 600px) {
+  .stat { min-width: 110px; }
+  .compare-col { min-width: 100%; }
+}
+</style>
+
+<div class="page">
+
+  <!-- ── Masthead ─────────────────────────────────────────── -->
+  <header class="masthead">
+    <div class="masthead-eyebrow">Egregiously Miscalibrated Promises · SDD Non-Inventory · July 2026</div>
+    <h1>Why SDD Non-Inventory Orders<br>Miss Their Delivery Promise</h1>
+    <p class="masthead-sub">A single miscalibration drives 90.8% of the problem: the WH promise assumes Non-Inventory procurement time that does not exist. The same root cause as Non-SDD Non-Inventory — but more extreme, and with no compounding TAT layer.</p>
+  </header>
+
+  <!-- ── Scope ────────────────────────────────────────────── -->
+  <div class="scope">
+    <div class="scope-item">
+      <span class="scope-label">Dataset</span>
+      <span class="scope-value">July 2026 orders</span>
+    </div>
+    <div class="scope-item">
+      <span class="scope-label">Filter</span>
+      <span class="scope-value">SDD · Non-Inventory · |delivery deviation| ≥ 2 days</span>
+    </div>
+    <div class="scope-item">
+      <span class="scope-label">Superset size</span>
+      <span class="scope-value">4,591 orders</span>
+    </div>
+    <div class="scope-item">
+      <span class="scope-label">% of all egregious</span>
+      <span class="scope-value">4.8%</span>
+    </div>
+    <div class="scope-item">
+      <span class="scope-label">Dominant cohort</span>
+      <span class="scope-value">WH Early + Dispatch Early + Delivery Early — 90.8%</span>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION A — WAREHOUSE DEVIATION
+  ════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">Section A</span>
+      <h2>Warehouse Deviation — The Promise Assumes Procurement Time That Does Not Exist</h2>
+    </div>
+
+    <p>The pattern mirrors Non-SDD Non-Inventory exactly: <strong>the warehouse is early in 97%+ of egregious orders</strong>. The WH promise is set assuming Non-Inventory SKUs need to be sourced after order placement — but the SKU is already available and the order is invoiced far before the promise window opens. The miscalibration here is <em>more extreme</em> than the Non-SDD equivalent: the median WH gap is nearly 35 hours.</p>
+
+    <!-- A.1 WH distribution -->
+    <div class="subsection">
+      <h3>A.1 — WH Deviation Distribution</h3>
+
+      <p>WH deviation = <code>digitised_wh_promise − awb_sticker_printed_ts</code> in hours. Positive = AWB printed before the WH promise (Early).</p>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-num">89.4%</div>
+          <div class="stat-label">WH Early &gt;24 hrs — nearly 9 in 10 orders had AWB printed more than a full day before the WH promise</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num amber">34.8h</div>
+          <div class="stat-label">Median WH gap — the warehouse finishes packing nearly 35 hours before the promise opens on the typical order</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num red">100%</div>
+          <div class="stat-label">WH Early &gt;4 hrs — not a single order in Cohort 69 has a sub-4-hour early gap</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>WH Deviation (AWB-based)</th>
+              <th class="td-num">Count</th>
+              <th class="td-num">% of SDD Non-Inv</th>
+              <th class="td-num">Ref: Non-SDD Non-Inv</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="td-focus"><td class="td-bold">Early &gt;24 hrs</td><td class="td-num td-bold">3,724</td><td class="td-num td-hl-accent">89.4%</td><td class="td-num td-muted">46.3%</td></tr>
+            <tr class="td-focus"><td class="td-bold">Early 12–24 hrs</td><td class="td-num td-bold">302</td><td class="td-num td-hl-accent">7.2%</td><td class="td-num td-muted">10.3%</td></tr>
+            <tr class="td-focus"><td class="td-bold">Early 8–12 hrs</td><td class="td-num td-bold">72</td><td class="td-num td-hl-accent">1.7%</td><td class="td-num td-muted">12.2%</td></tr>
+            <tr class="td-focus"><td class="td-bold">Early 4–8 hrs</td><td class="td-num td-bold">69</td><td class="td-num td-hl-accent">1.7%</td><td class="td-num td-muted">20.9%</td></tr>
+            <tr><td class="td-muted">Early &lt;4 hrs</td><td class="td-num td-muted">0</td><td class="td-num td-muted">0.0%</td><td class="td-num td-muted">6.0%</td></tr>
+            <tr><td class="td-muted">On-Time</td><td class="td-num td-muted">0</td><td class="td-num td-muted">0.0%</td><td class="td-num td-muted">0.0%</td></tr>
+            <tr><td class="td-muted">Late (all buckets)</td><td class="td-num td-muted">0</td><td class="td-num td-muted">0.0%</td><td class="td-num td-muted">3.6%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p style="color:var(--text-2);font-size:0.83rem;">The WH early pattern is more extreme and more concentrated here than in Non-SDD Non-Inventory. In Non-SDD Non-Inv, 46.3% were Early &gt;24h with a spread across the 4–12h buckets. In SDD Non-Inv, 89.4% are Early &gt;24h with nothing below 4h.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- A.2 Why early / invoice check -->
+    <div class="subsection">
+      <h3>A.2 — Why the Warehouse Is Early: The WH Promise Is Built on a Wrong Procurement Assumption</h3>
+
+      <p>The WH promise for SDD Non-Inventory orders assumes the SKU must be sourced after order placement. For this set, that assumption is wrong: the SKU is already available and the order is invoiced well before the promise window opens.</p>
+
+      <p>The invoice-based measurement confirms this is not a payment-pending artefact: switching from AWB to <code>invoice_create_ts</code> (fires at order confirmation, before any payment state) produces a distribution that is virtually identical — the early signal is at invoicing, not AWB printing.</p>
+
+      <div class="finding">
+        <div class="finding-label">Core Finding</div>
+        <p>In Cohort 69 (WH Early + Dispatch Early + Delivery Early, n=4,167 — 90.8%), zero orders had the invoice created <em>after</em> the WH promise. Procurement and invoicing were complete before the WH promise opened in every single order. The <code>SDD_NON_INVENTORY</code> WH processing time is set assuming procurement time that does not exist for this SKU category.</p>
+      </div>
+
+      <h4>AWB vs invoice comparison confirms payment pending is not the driver</h4>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>WH Deviation Bucket</th>
+              <th class="td-num">AWB-based</th>
+              <th class="td-num">Invoice-based</th>
+              <th class="td-num">Delta</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="td-bold">Early &gt;24 hrs</td><td class="td-num td-hl-accent">89.4%</td><td class="td-num td-hl-accent">90.7%</td><td class="td-num">+1.3pp</td></tr>
+            <tr><td class="td-bold">Early 12–24 hrs</td><td class="td-num">7.2%</td><td class="td-num">6.5%</td><td class="td-num td-muted">−0.7pp</td></tr>
+            <tr><td class="td-bold">Early 8–12 hrs</td><td class="td-num">1.7%</td><td class="td-num">1.7%</td><td class="td-num td-muted">0.0pp</td></tr>
+            <tr><td class="td-bold">Early 4–8 hrs</td><td class="td-num">1.7%</td><td class="td-num">1.2%</td><td class="td-num td-muted">−0.5pp</td></tr>
+            <tr><td class="td-bold">Invoice after WH promise</td><td class="td-num td-muted">—</td><td class="td-num td-hl-green">0 orders</td><td class="td-num td-muted">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The two distributions are essentially identical — payment pending has no footprint here. The median invoice gap is +35.3h vs +34.8h for AWB. The hold is at procurement (upstream of invoicing), not at payment.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION B — DISPATCH DEVIATION
+  ════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">Section B</span>
+      <h2>Dispatch Deviation — A Direct Consequence, More Extreme Than Non-SDD Non-Inventory</h2>
+    </div>
+
+    <p><strong>Dispatch deviation</strong> = <code>DATE(digitised_dispatch_promise) − DATE(pickup_time)</code> in calendar days. As in Non-SDD Non-Inventory, dispatch deviation here is a mechanical consequence of WH deviation — the courier picks up on the same calendar day the AWB is printed, so the full WH gap translates directly into early dispatch.</p>
+
+    <!-- B.1 Distribution -->
+    <div class="subsection">
+      <h3>B.1 — Distribution Across Dispatch Buckets</h3>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-num amber">54.3%</div>
+          <div class="stat-label">Dispatch Early 2d — courier picks up 2 calendar days before the dispatch promise (~2,264 orders)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num amber">41.8%</div>
+          <div class="stat-label">Dispatch Early 3d — courier picks up 3 calendar days before the dispatch promise (~1,742 orders)</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3.6%</div>
+          <div class="stat-label">Dispatch Early 1d — pickup 1 day early (~148 orders)</div>
+        </div>
+      </div>
+
+      <p>96.1% of Cohort 69 has dispatch 2d or 3d early. Compare to Non-SDD Non-Inventory (Cohort 40): 54.8% Early 1d, 32.6% Early 2d — the SDD Non-Inventory dispatch gap is one full calendar day larger on average, directly proportional to the larger WH gap.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- B.2 Mechanism -->
+    <div class="subsection">
+      <h3>B.2 — The Mechanism: AWB Print Date = Pickup Date</h3>
+
+      <p>Across all analyses in this project, one constant holds: <strong>couriers collect on the same calendar day the AWB is printed</strong>. This means dispatch deviation is set entirely by when the AWB is printed — which for SDD Non-Inventory happens 35 hours before the WH promise on median.</p>
+
+      <div class="flow">
+        <span class="flow-step problem">WH promise too late</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Invoice fires ~35h early</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">AWB printed ~35h early</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step">Courier collects same day</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step outcome">Dispatch 2–3d early</span>
+      </div>
+
+      <p>The dispatch promise is derived from the WH promise. When the WH promise is miscalibrated 2–3 calendar days late, so is the dispatch promise — and same-day courier collection ensures the full miscalibration is realised.</p>
+
+      <div class="finding finding-green">
+        <div class="finding-label">Single Lever for Dispatch</div>
+        <p>Fixing the WH promise is the <strong>only intervention needed to correct dispatch deviation</strong>. The dispatch formula is structurally correct — the WH promise anchor it is built on is wrong. Correct the anchor, and dispatch corrects automatically.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION C — DELIVERY TAT: NOT AN INDEPENDENT PROBLEM
+  ════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">Section C</span>
+      <h2>Delivery TAT — Couriers Are Performing; This Is Not an Independent Problem</h2>
+    </div>
+
+    <p>In Non-SDD Non-Inventory, the delivery TAT was an <em>independent</em> second failure layer — even after correcting for dispatch, 68.8% of orders had a transit TAT mismatch driven by a stale lookup table. <strong>This compound layer does not exist for SDD Non-Inventory.</strong> The SDD couriers are delivering as promised.</p>
+
+    <!-- C.1 Promised vs actual TAT -->
+    <div class="subsection">
+      <h3>C.1 — Promised TAT vs Actual TAT</h3>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Transit TAT</th>
+              <th class="td-num">Same-day (0d)</th>
+              <th class="td-num">Next-day (1d)</th>
+              <th class="td-num">2d+</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-bold">Promised TAT <span style="font-weight:400;color:var(--text-2)">(delivery_promise − dispatch_promise)</span></td>
+              <td class="td-num td-hl-green">83.5%</td>
+              <td class="td-num">16.5%</td>
+              <td class="td-num td-muted">0.0%</td>
+            </tr>
+            <tr>
+              <td class="td-bold">Actual TAT <span style="font-weight:400;color:var(--text-2)">(delivery_attempt − pickup)</span></td>
+              <td class="td-num td-hl-green">52.1%</td>
+              <td class="td-num">47.9%</td>
+              <td class="td-num td-muted">0.1%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Promised and actual TAT are both 0–1 days. The median <code>digitised_delivery_tat_mins</code> is 0 minutes — the system is promising same-day delivery, and couriers are largely delivering same-day or next-day. The TAT lookup is not stale for SDD lanes.</p>
+
+      <div class="finding finding-green">
+        <div class="finding-label">Key Contrast With Non-SDD Non-Inventory</div>
+        <p>Non-SDD Non-Inventory had two independent failure layers: (1) WH promise over-padded, (2) transit TAT lookup stale — requiring two separate fixes. SDD Non-Inventory has <strong>one failure layer only</strong>. SDD couriers are delivering in 0–1 days as promised. The delivery gap of 2–3 days is entirely a downstream consequence of the early dispatch, not a separate miscalibration.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- C.2 How the delivery gap is produced -->
+    <div class="subsection">
+      <h3>C.2 — How a 2–3 Day Delivery Gap Is Produced From a 0–1 Day TAT</h3>
+
+      <p>The delivery date gap is <code>DATE(digitised_delivery_promise) − DATE(delivery_attempt_time)</code>. For Cohort 69: 92.6% Early 2d, 7.4% Early 3d. This seems inconsistent with a 0–1 day TAT — but the arithmetic is straightforward:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Example (Early 2d case)</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Dispatch promise</td><td class="td-bold">July 10</td></tr>
+            <tr><td>Delivery promise (0d TAT → same day as dispatch promise)</td><td class="td-bold">July 10</td></tr>
+            <tr><td>AWB printed (2d early)</td><td class="td-bold">July 8</td></tr>
+            <tr><td>Courier collects</td><td class="td-bold">July 8</td></tr>
+            <tr><td>Delivery attempt (0d TAT → same day as pickup)</td><td class="td-bold">July 8</td></tr>
+            <tr style="border-top:2px solid var(--border)"><td class="td-bold">Delivery gap</td><td class="td-bold td-hl-accent">July 10 − July 8 = Early 2d ✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The courier delivers same-day — exactly as the SDD TAT specifies. The 2-day gap in the customer's experience is entirely a consequence of the dispatch happening 2 days before the promise, which in turn comes from the WH completing 35 hours before the WH promise. Fix the WH promise and the delivery date corrects automatically.</p>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION D — FIX DIRECTIONS
+  ════════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-tag">Section D</span>
+      <h2>Fix Directions</h2>
+    </div>
+
+    <div class="finding finding-amber">
+      <div class="finding-label">Simpler than Non-SDD Non-Inventory</div>
+      <p>Non-SDD Non-Inventory required two fixes: recalibrate the WH promise AND recalibrate the transit TAT lookup. SDD Non-Inventory requires <strong>one fix only</strong>. The SDD TAT lookup is correctly configured and does not need to be touched. The entire 90.8% Cohort 69 is addressed by a single configuration change.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Affected orders</th>
+            <th>Fix direction</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-bold">WH promise miscalibrated — <code>SDD_NON_INVENTORY</code> processing time assumes procurement lead time that does not exist</td>
+            <td class="td-num">4,167 (90.8%)</td>
+            <td>Recalibrate the <code>SDD_NON_INVENTORY</code> WH processing time using actual invoice-to-AWB timing distributions. The median gap is 35 hours — the processing time config is set at least 35 hours too long for this SKU category. The WH promise should reflect when Non-Inventory SKUs are actually available, not when sourcing is assumed to complete.</td>
+          </tr>
+          <tr>
+            <td class="td-bold">Dispatch early — direct consequence of WH miscalibration; no independent fix needed</td>
+            <td class="td-num">~4,000 (87%+)</td>
+            <td>Corrects automatically when the WH promise is fixed. The dispatch formula is structurally correct.</td>
+          </tr>
+          <tr>
+            <td class="td-bold">Delivery date gap — entirely driven by early dispatch; SDD TAT is correctly configured</td>
+            <td class="td-num">4,167 (90.8%)</td>
+            <td>No TAT recalibration needed. SDD couriers deliver in 0–1 days as promised. The delivery date corrects automatically when dispatch corrects.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="compare-band">
+      <div class="compare-col">
+        <div class="compare-col-label">Non-SDD Non-Inventory (Cohort 40)</div>
+        <ul>
+          <li>WH Early &gt;24h: <strong>46.3%</strong></li>
+          <li>Median WH gap: <strong>~24h</strong></li>
+          <li>Dispatch: mostly <strong>Early 1–2d</strong></li>
+          <li>TAT layer: <strong>independent failure</strong> (stale lookup)</li>
+          <li>Fixes needed: <strong>2</strong> (WH promise + TAT lookup)</li>
+        </ul>
+      </div>
+      <div class="compare-col">
+        <div class="compare-col-label">SDD Non-Inventory (Cohort 69) — this report</div>
+        <ul>
+          <li>WH Early &gt;24h: <strong>89.4%</strong></li>
+          <li>Median WH gap: <strong>34.8h</strong></li>
+          <li>Dispatch: mostly <strong>Early 2–3d</strong></li>
+          <li>TAT layer: <strong>no issue</strong> (SDD couriers performing)</li>
+          <li>Fixes needed: <strong>1</strong> (WH processing time only)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer class="report-footer">
+    <span>Source: all-orders-july-2026.csv · 4,591 SDD Non-Inventory egregious orders</span>
+    <span>Analysis period: July 2026 · Report date: 2026-08-04</span>
+  </footer>
+
+</div>
