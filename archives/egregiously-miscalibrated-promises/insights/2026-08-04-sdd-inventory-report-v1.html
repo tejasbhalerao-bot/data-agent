@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why SDD Inventory Orders Miss Their Delivery Promise</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-mono: 'SF Mono', 'Fira Mono', 'Consolas', monospace;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --bg:           #EDF1F7;
+  --surface:      #FFFFFF;
+  --surface-alt:  #F4F7FC;
+  --border:       #D4DCE8;
+  --border-light: #E4EAF2;
+
+  --text-1: #1A2333;
+  --text-2: #4A5568;
+  --text-3: #8896AA;
+
+  --accent:     #1C4E8A;
+  --accent-dim: #EBF1FA;
+
+  --green:      #1A7A5E;
+  --green-bg:   #E6F4EF;
+  --green-border:#B2D8C8;
+
+  --amber:      #92400E;
+  --amber-bg:   #FEF3C7;
+  --amber-border:#F6D860;
+
+  --red:        #9A2E10;
+  --red-bg:     #FEE9E3;
+  --red-border: #F4A58A;
+
+  --blue:       #1C4E8A;
+  --blue-bg:    #EBF1FA;
+  --blue-border:#A8C4E8;
+
+  --radius: 8px;
+  --shadow: 0 1px 4px rgba(26,35,51,0.08), 0 1px 2px rgba(26,35,51,0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:           #0D1219;
+    --surface:      #131C28;
+    --surface-alt:  #1A2535;
+    --border:       rgba(255,255,255,0.08);
+    --border-light: rgba(255,255,255,0.05);
+
+    --text-1: #E8EDF4;
+    --text-2: #8896AA;
+    --text-3: #4A5568;
+
+    --accent:     #4F90CC;
+    --accent-dim: rgba(79,144,204,0.12);
+
+    --green:       #00C49A;
+    --green-bg:    rgba(0,196,154,0.10);
+    --green-border:rgba(0,196,154,0.25);
+
+    --amber:       #F59E0B;
+    --amber-bg:    rgba(245,158,11,0.10);
+    --amber-border:rgba(245,158,11,0.30);
+
+    --red:         #F87171;
+    --red-bg:      rgba(248,113,113,0.10);
+    --red-border:  rgba(248,113,113,0.30);
+
+    --blue:        #4F90CC;
+    --blue-bg:     rgba(79,144,204,0.10);
+    --blue-border: rgba(79,144,204,0.30);
+
+    --shadow: 0 1px 4px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg:#0D1219; --surface:#131C28; --surface-alt:#1A2535;
+  --border:rgba(255,255,255,0.08); --border-light:rgba(255,255,255,0.05);
+  --text-1:#E8EDF4; --text-2:#8896AA; --text-3:#4A5568;
+  --accent:#4F90CC; --accent-dim:rgba(79,144,204,0.12);
+  --green:#00C49A; --green-bg:rgba(0,196,154,0.10); --green-border:rgba(0,196,154,0.25);
+  --amber:#F59E0B; --amber-bg:rgba(245,158,11,0.10); --amber-border:rgba(245,158,11,0.30);
+  --red:#F87171; --red-bg:rgba(248,113,113,0.10); --red-border:rgba(248,113,113,0.30);
+  --blue:#4F90CC; --blue-bg:rgba(79,144,204,0.10); --blue-border:rgba(79,144,204,0.30);
+  --shadow:0 1px 4px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+}
+:root[data-theme="light"] {
+  --bg:#EDF1F7; --surface:#FFFFFF; --surface-alt:#F4F7FC;
+  --border:#D4DCE8; --border-light:#E4EAF2;
+  --text-1:#1A2333; --text-2:#4A5568; --text-3:#8896AA;
+  --accent:#1C4E8A; --accent-dim:#EBF1FA;
+  --green:#1A7A5E; --green-bg:#E6F4EF; --green-border:#B2D8C8;
+  --amber:#92400E; --amber-bg:#FEF3C7; --amber-border:#F6D860;
+  --red:#9A2E10; --red-bg:#FEE9E3; --red-border:#F4A58A;
+  --blue:#1C4E8A; --blue-bg:#EBF1FA; --blue-border:#A8C4E8;
+  --shadow:0 1px 4px rgba(26,35,51,0.08), 0 1px 2px rgba(26,35,51,0.05);
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text-1);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+
+/* ── Masthead ── */
+.masthead { margin-bottom: 36px; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 12px;
+}
+h1 {
+  font-family: var(--font-serif);
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-1);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  margin-bottom: 12px;
+}
+.subtitle {
+  font-size: 1rem;
+  color: var(--text-2);
+  line-height: 1.6;
+  max-width: 640px;
+}
+.divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+/* ── Scope bar ── */
+.scope-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px 24px;
+  margin-bottom: 40px;
+}
+.scope-item {}
+.scope-label {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 4px;
+}
+.scope-value { font-size: 0.95rem; font-weight: 700; color: var(--text-1); }
+
+/* ── Sections ── */
+.section { margin-bottom: 52px; }
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.section-tag {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.section-head h2 {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-1);
+  line-height: 1.3;
+  text-wrap: balance;
+}
+h3 { font-size: 0.9rem; font-weight: 700; color: var(--text-1); margin: 24px 0 10px; }
+
+p { color: var(--text-2); margin-bottom: 14px; line-height: 1.65; }
+p strong { color: var(--text-1); }
+p em { font-style: italic; }
+
+/* ── Stat row ── */
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
+}
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  flex: 1;
+  min-width: 150px;
+}
+.stat-num {
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.stat-label { font-size: 0.75rem; color: var(--text-2); line-height: 1.4; }
+
+/* ── Tables ── */
+.table-wrap { overflow-x: auto; margin: 16px 0 24px; border-radius: var(--radius); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+thead th {
+  background: var(--surface-alt);
+  padding: 9px 12px;
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+thead th.r { text-align: right; }
+tbody td { padding: 8px 12px; border-bottom: 1px solid var(--border-light); color: var(--text-2); font-variant-numeric: tabular-nums; }
+tbody td.r { text-align: right; }
+tbody td.em { color: var(--text-1); font-weight: 600; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--surface-alt); }
+.bar-cell { display: flex; align-items: center; gap: 8px; }
+.bar { height: 5px; border-radius: 3px; background: var(--accent); opacity: 0.55; min-width: 2px; flex-shrink: 0; }
+
+/* ── Finding boxes ── */
+.finding {
+  border-left: 3px solid var(--border);
+  background: var(--surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 16px;
+  margin: 20px 0;
+  font-size: 0.875rem;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+.finding strong { color: var(--text-1); }
+.finding-green  { border-left-color: var(--green);  background: var(--green-bg); }
+.finding-amber  { border-left-color: var(--amber);  background: var(--amber-bg); }
+.finding-red    { border-left-color: var(--red);    background: var(--red-bg); }
+.finding-blue   { border-left-color: var(--blue);   background: var(--blue-bg); }
+
+/* ── Mode cards ── */
+.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+@media (max-width: 640px) { .mode-grid { grid-template-columns: 1fr; } }
+.mode-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.mode-card .mode-pct {
+  font-size: 2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.mode-card .mode-name { font-size: 0.8rem; font-weight: 700; color: var(--text-1); margin-bottom: 8px; }
+.mode-card .mode-desc { font-size: 0.8rem; color: var(--text-2); line-height: 1.5; }
+.mode-card.red  { border-left: 3px solid var(--red);   }
+.mode-card.amber { border-left: 3px solid var(--amber); }
+.mode-card.red  .mode-pct { color: var(--red);   }
+.mode-card.amber .mode-pct { color: var(--amber); }
+
+/* ── Fix direction ── */
+.fix-table { margin: 20px 0; }
+.fix-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 10px;
+  font-size: 0.82rem;
+}
+.fix-col { padding: 12px 14px; }
+.fix-col:not(:last-child) { border-right: 1px solid var(--border); }
+.fix-label { background: var(--surface-alt); font-weight: 700; color: var(--text-1); font-size: 0.76rem; }
+.fix-problem { background: var(--surface); color: var(--text-2); }
+.fix-action { background: var(--surface); color: var(--text-2); }
+.fix-action strong { color: var(--accent); }
+.fix-header { background: var(--surface-alt); font-size: 0.63rem; font-family: var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); }
+
+@media (prefers-reduced-motion: no-preference) {
+  tbody tr { transition: background 0.1s; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ── Masthead ── -->
+  <div class="masthead">
+    <p class="eyebrow">Egregiously Miscalibrated Promises · SDD Inventory · July 2026</p>
+    <h1>Why SDD Inventory Orders Miss Their Delivery Promise</h1>
+    <p class="subtitle">Two structurally distinct failure modes — one where the warehouse is late, one where the warehouse is ready but the SDD delivery promise can't be kept. Unlike the other three segments, there is no single root cause.</p>
+  </div>
+  <hr class="divider">
+
+  <!-- ── Scope bar ── -->
+  <div class="scope-bar">
+    <div class="scope-item">
+      <div class="scope-label">Dataset</div>
+      <div class="scope-value">July 2026 orders</div>
+    </div>
+    <div class="scope-item">
+      <div class="scope-label">Filter</div>
+      <div class="scope-value">SDD · Inventory · |delivery deviation| ≥ 2 days</div>
+    </div>
+    <div class="scope-item">
+      <div class="scope-label">Superset size</div>
+      <div class="scope-value">3,955 orders</div>
+    </div>
+    <div class="scope-item">
+      <div class="scope-label">% of all egregious</div>
+      <div class="scope-value">4.1%</div>
+    </div>
+    <div class="scope-item">
+      <div class="scope-label">Dominant pattern</div>
+      <div class="scope-value">Late Delivery — 95.6% of orders</div>
+    </div>
+  </div>
+
+  <!-- ── Two Failure Modes Overview ── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-tag">Overview</span>
+      <h2>Two Failure Modes, Two Different Root Causes</h2>
+    </div>
+
+    <p>SDD Inventory is the only segment in this project where late delivery dominates (95.6%). But the mechanism is not uniform. The cross-tab reveals two structurally different groups that require separate diagnosis.</p>
+
+    <div class="mode-grid">
+      <div class="mode-card red">
+        <div class="mode-pct">72.0%</div>
+        <div class="mode-name">Mode 1 — Late WH → Late Delivery</div>
+        <div class="mode-desc">Cohorts C59+C60+C61 (n=2,847). The warehouse misses its SDD processing window. Delivery is late because the order was never ready in time. No single dominant driver — payment pending and doctor confirmation are partial contributors.</div>
+      </div>
+      <div class="mode-card amber">
+        <div class="mode-pct">23.6%</div>
+        <div class="mode-name">Mode 2 — WH Ready, SDD Promise Broken</div>
+        <div class="mode-desc">Cohorts C62+C63 (n=932). The warehouse finishes early or on time. The problem is the courier: 100% of these orders carry a 0-day (same-day) delivery TAT promise, but the courier actually takes 2–3 days.</div>
+      </div>
+    </div>
+
+    <h3>Cross-tab (C59–C68)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Cohort</th>
+            <th>WH</th>
+            <th>Dispatch</th>
+            <th>Delivery</th>
+            <th class="r">n</th>
+            <th class="r">% of SDD Inv</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="em">C59</td><td>Late</td><td>On-Time</td><td>Late</td><td class="r">1,468</td><td class="r">37.1%</td><td><div class="bar-cell"><div class="bar" style="width:148px"></div></div></td></tr>
+          <tr><td class="em">C60</td><td>Late</td><td>Early</td><td>Late</td><td class="r">742</td><td class="r">18.8%</td><td><div class="bar-cell"><div class="bar" style="width:75px"></div></div></td></tr>
+          <tr><td class="em">C61</td><td>Late</td><td>Late</td><td>Late</td><td class="r">637</td><td class="r">16.1%</td><td><div class="bar-cell"><div class="bar" style="width:64px"></div></div></td></tr>
+          <tr><td class="em">C62</td><td>Early</td><td>On-Time</td><td>Late</td><td class="r">525</td><td class="r">13.3%</td><td><div class="bar-cell"><div class="bar" style="width:53px; opacity:0.35"></div></div></td></tr>
+          <tr><td class="em">C63</td><td>Early</td><td>Early</td><td>Late</td><td class="r">399</td><td class="r">10.1%</td><td><div class="bar-cell"><div class="bar" style="width:40px; opacity:0.35"></div></div></td></tr>
+          <tr><td class="em">C64</td><td>Late</td><td>Early</td><td>Early</td><td class="r">81</td><td class="r">2.0%</td><td></td></tr>
+          <tr><td class="em">C65</td><td>Late</td><td>On-Time</td><td>Early</td><td class="r">46</td><td class="r">1.2%</td><td></td></tr>
+          <tr><td class="em">C66</td><td>Early</td><td>Early</td><td>Early</td><td class="r">45</td><td class="r">1.1%</td><td></td></tr>
+          <tr><td>C67–C68</td><td colspan="3">Other</td><td class="r">11</td><td class="r">0.3%</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── Section A: Mode 1 ── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-tag">Section A</span>
+      <h2>Mode 1 — The Warehouse Misses Its SDD Window</h2>
+    </div>
+
+    <p>Cohorts C59+C60+C61 (72.0%, n=2,847): warehouse is late, delivery is late. Unlike Non-Inventory segments where the WH problem was concentrated in a single extreme bucket, <strong>SDD Inventory WH lateness is spread across all magnitude buckets</strong>. Median lateness is 4 hours — small in absolute terms, but enough to miss a same-day delivery window.</p>
+
+    <h3>A.1 — WH Deviation Magnitude</h3>
+    <p>WH deviation = <code>awb_sticker_printed_ts − digitised_wh_promise</code> in hours. Positive = AWB printed after the WH promise (Late).</p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num">+4.0h</div>
+        <div class="stat-label">Median WH lateness — a 4-hour slip is enough to miss the SDD pickup window</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">20.7%</div>
+        <div class="stat-label">Late >24h — vs 51.5% in Non-SDD Non-Inv; lateness here is smaller but constant</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">50.2%</div>
+        <div class="stat-label">Late >4h — half the Late WH group missed the window by more than 4 hours</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>WH Deviation Bucket</th>
+            <th class="r">n</th>
+            <th class="r">% of Late-WH Group</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="em">Late &gt;24 hrs</td><td class="r">590</td><td class="r">20.7%</td><td><div class="bar-cell"><div class="bar" style="width:83px"></div></div></td></tr>
+          <tr><td>Late 12–24 hrs</td><td class="r">366</td><td class="r">12.9%</td><td><div class="bar-cell"><div class="bar" style="width:52px"></div></div></td></tr>
+          <tr><td>Late 8–12 hrs</td><td class="r">162</td><td class="r">5.7%</td><td><div class="bar-cell"><div class="bar" style="width:23px"></div></div></td></tr>
+          <tr><td>Late 4–8 hrs</td><td class="r">310</td><td class="r">10.9%</td><td><div class="bar-cell"><div class="bar" style="width:44px"></div></div></td></tr>
+          <tr><td>Late 2–4 hrs</td><td class="r">360</td><td class="r">12.6%</td><td><div class="bar-cell"><div class="bar" style="width:50px"></div></div></td></tr>
+          <tr><td>Late 1–2 hrs</td><td class="r">323</td><td class="r">11.3%</td><td><div class="bar-cell"><div class="bar" style="width:45px"></div></div></td></tr>
+          <tr><td>Late 30–60 min</td><td class="r">263</td><td class="r">9.2%</td><td><div class="bar-cell"><div class="bar" style="width:37px"></div></div></td></tr>
+          <tr><td class="em">Late &lt;30 min</td><td class="r">473</td><td class="r">16.6%</td><td><div class="bar-cell"><div class="bar" style="width:66px"></div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding finding-amber">
+      The distribution is flat across all magnitude buckets — no single dominant spike. This contrasts sharply with Non-Inventory segments (89.4% >24h for SDD Non-Inv, 46.3% for Non-SDD Non-Inv). SDD Inventory WH lateness is not caused by a single structural miscalibration — it reflects the SDD window being narrow enough that routine operational delays of any size (payment holds, doctor sign-off, packing time) cascade into a missed promise.
+    </div>
+
+    <h3>A.2 — Payment Pending (Mirror of H9)</h3>
+    <p>In Non-SDD Inventory, payment pending dominated the Late >24h WH bucket at 64%. For SDD Inventory, the pattern is much weaker — and not monotonic.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>WH Deviation Bucket</th>
+            <th class="r">n</th>
+            <th class="r">With Payment Pending</th>
+            <th class="r">%</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Late &gt;24 hrs</td><td class="r">590</td><td class="r">108</td><td class="r">18.3%</td><td><div class="bar-cell"><div class="bar" style="width:37px"></div></div></td></tr>
+          <tr><td class="em">Late 12–24 hrs</td><td class="r">366</td><td class="r">126</td><td class="r em">34.4%</td><td><div class="bar-cell"><div class="bar" style="width:69px"></div></div></td></tr>
+          <tr><td>Late 8–12 hrs</td><td class="r">162</td><td class="r">19</td><td class="r">11.7%</td><td><div class="bar-cell"><div class="bar" style="width:23px"></div></div></td></tr>
+          <tr><td>Late 4–8 hrs</td><td class="r">310</td><td class="r">43</td><td class="r">13.9%</td><td><div class="bar-cell"><div class="bar" style="width:28px"></div></div></td></tr>
+          <tr><td>Late 2–4 hrs</td><td class="r">360</td><td class="r">15</td><td class="r">4.2%</td><td><div class="bar-cell"><div class="bar" style="width:8px"></div></div></td></tr>
+          <tr><td>Late 1–2 hrs</td><td class="r">323</td><td class="r">11</td><td class="r">3.4%</td><td><div class="bar-cell"><div class="bar" style="width:7px"></div></div></td></tr>
+          <tr><td>Late 30–60 min</td><td class="r">263</td><td class="r">7</td><td class="r">2.7%</td><td><div class="bar-cell"><div class="bar" style="width:5px"></div></div></td></tr>
+          <tr><td>Late &lt;30 min</td><td class="r">473</td><td class="r">9</td><td class="r">1.9%</td><td><div class="bar-cell"><div class="bar" style="width:4px"></div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Overall: 338 of 2,847 Late WH orders (11.9%) had a payment pending event.</strong> Payment pending explains a minority of the WH lateness here — and the pattern is not monotonic (12–24h peaks at 34.4%, while >24h is only 18.3%). Compare to Non-SDD Inventory where payment pending was 64% of the Late >24h bucket.</p>
+
+    <h3>A.3 — Doctor Confirmation (Mirror of H12)</h3>
+    <p>0% of SDD Inventory orders lack a doctor leg — all 3,955 orders have <code>dr_confirm_ts</code>. Late confirmation = <code>dr_confirm_ts > digitised_wh_promise</code>.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>WH Deviation Bucket</th>
+            <th class="r">n</th>
+            <th class="r">Dr Confirm Late</th>
+            <th class="r">%</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Late &gt;24 hrs</td><td class="r">590</td><td class="r">179</td><td class="r">30.3%</td><td><div class="bar-cell"><div class="bar" style="width:60px"></div></div></td></tr>
+          <tr><td>Late 12–24 hrs</td><td class="r">366</td><td class="r">82</td><td class="r">22.4%</td><td><div class="bar-cell"><div class="bar" style="width:45px"></div></div></td></tr>
+          <tr><td>Late 8–12 hrs</td><td class="r">162</td><td class="r">51</td><td class="r">31.5%</td><td><div class="bar-cell"><div class="bar" style="width:63px"></div></div></td></tr>
+          <tr><td class="em">Late 4–8 hrs</td><td class="r">310</td><td class="r em">180</td><td class="r em">58.1%</td><td><div class="bar-cell"><div class="bar" style="width:116px"></div></div></td></tr>
+          <tr><td>Late 2–4 hrs</td><td class="r">360</td><td class="r">111</td><td class="r">30.8%</td><td><div class="bar-cell"><div class="bar" style="width:62px"></div></div></td></tr>
+          <tr><td>Late 1–2 hrs</td><td class="r">323</td><td class="r">75</td><td class="r">23.2%</td><td><div class="bar-cell"><div class="bar" style="width:46px"></div></div></td></tr>
+          <tr><td>Late 30–60 min</td><td class="r">263</td><td class="r">32</td><td class="r">12.2%</td><td><div class="bar-cell"><div class="bar" style="width:24px"></div></div></td></tr>
+          <tr><td>Late &lt;30 min</td><td class="r">473</td><td class="r">5</td><td class="r">1.1%</td><td><div class="bar-cell"><div class="bar" style="width:2px"></div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Overall: 715 of 2,847 (25.1%) had late doctor confirmation.</strong> The 4–8h bucket peaks at 58.1% — a delayed sign-off by a few hours directly causes the order to miss the SDD pickup cutoff. But the pattern is non-monotonic (>24h drops to 30.3%), suggesting doctor confirmation is one of several independent contributors, not the root cause.</p>
+
+    <div class="finding finding-amber">
+      <strong>Mode 1 verdict.</strong> Neither payment pending (11.9%) nor doctor confirmation (25.1%) individually explains the WH lateness. Together they partially account for it — but roughly 63% of the Late WH group has neither. The SDD window is narrow enough that ordinary operational variance (minor delays in packing, prescriptions, courier cutoffs) cascades to egregious delivery misses without any single structural failure. This is operationally different from the other three segments and requires a different intervention: SDD operational SLA enforcement, not promise recalibration.
+    </div>
+  </div>
+
+  <!-- ── Section B: Mode 2 ── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-tag">Section B</span>
+      <h2>Mode 2 — SDD Is Promised but Not Delivered</h2>
+    </div>
+
+    <p>Cohorts C62+C63 (23.6%, n=932): the warehouse is ready on time or early, the order is dispatched on time or early — but the courier takes 2–3 days on a promise of zero.</p>
+
+    <h3>B.1 — Promised vs Actual Delivery TAT</h3>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Promised 0-day TAT — every order in this group is a same-day delivery promise</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0.6%</div>
+        <div class="stat-label">Actually delivered same-day (1d actual TAT) — 99.4% fail on the courier leg</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">2–3 days</div>
+        <div class="stat-label">Typical actual TAT — 32.8% take 2 days, 38.4% take 3 days</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Actual TAT (pickup → delivery)</th>
+            <th class="r">n</th>
+            <th class="r">% of C62+C63</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1 day (same/next day)</td><td class="r">6</td><td class="r">0.6%</td><td></td></tr>
+          <tr><td class="em">2 days</td><td class="r">306</td><td class="r em">32.8%</td><td><div class="bar-cell"><div class="bar" style="width:131px; opacity:0.65"></div></div></td></tr>
+          <tr><td class="em">3 days</td><td class="r">358</td><td class="r em">38.4%</td><td><div class="bar-cell"><div class="bar" style="width:154px; opacity:0.65"></div></div></td></tr>
+          <tr><td>4 days</td><td class="r">153</td><td class="r">16.4%</td><td><div class="bar-cell"><div class="bar" style="width:66px; opacity:0.4"></div></div></td></tr>
+          <tr><td>5 days</td><td class="r">72</td><td class="r">7.7%</td><td><div class="bar-cell"><div class="bar" style="width:31px; opacity:0.4"></div></div></td></tr>
+          <tr><td>6 days+</td><td class="r">37</td><td class="r">4.0%</td><td><div class="bar-cell"><div class="bar" style="width:16px; opacity:0.4"></div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>B.2 — Delivery Date Gap</h3>
+    <p>Date gap = <code>DATE(delivery_attempt) − DATE(delivery_promise)</code>. Positive = later than promised.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Delivery Date Gap</th>
+            <th class="r">n</th>
+            <th class="r">% of C62+C63</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="em">Late 2d</td><td class="r">556</td><td class="r em">59.7%</td><td><div class="bar-cell"><div class="bar" style="width:180px; opacity:0.65"></div></div></td></tr>
+          <tr><td class="em">Late 3d</td><td class="r">202</td><td class="r em">21.7%</td><td><div class="bar-cell"><div class="bar" style="width:65px; opacity:0.65"></div></div></td></tr>
+          <tr><td>Late 4d</td><td class="r">105</td><td class="r">11.3%</td><td><div class="bar-cell"><div class="bar" style="width:34px; opacity:0.4"></div></div></td></tr>
+          <tr><td>Late 5d</td><td class="r">48</td><td class="r">5.2%</td><td><div class="bar-cell"><div class="bar" style="width:16px; opacity:0.4"></div></div></td></tr>
+          <tr><td>Late 6d+</td><td class="r">21</td><td class="r">2.3%</td><td><div class="bar-cell"><div class="bar" style="width:7px; opacity:0.4"></div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="finding finding-red">
+      <strong>Mode 2 verdict.</strong> The warehouse did its job. The problem is that these 932 orders carry an SDD same-day promise at digitisation, but the courier delivers in 2–3 days — consistent with a standard non-SDD route. The SDD designation is either wrong at the pincode/route level, or the SDD courier assignment is not being honoured post-dispatch. Either way, this is a <strong>TAT model failure</strong>: SDD is being promised to customers for routes and orders that the fulfilment chain cannot actually serve same-day.
+    </div>
+  </div>
+
+  <!-- ── Section C: WH Processing Type ── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-tag">Section C</span>
+      <h2>WH Processing Type — No Misconfiguration</h2>
+    </div>
+
+    <p>100% of the 3,955 SDD Inventory egregious orders have <code>wh_processing_type = SDD_INVENTORY</code>. This rules out processing type misconfiguration as a driver of either failure mode.</p>
+
+    <div class="finding finding-green">
+      <strong>No misconfiguration.</strong> Unlike Non-Inventory segments where a wrong WH processing type model was the root cause, SDD Inventory orders are correctly tagged. The problems are operational (Mode 1) and structural in the SDD promise model (Mode 2).
+    </div>
+  </div>
+
+  <!-- ── Section D: Fix Direction ── -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-tag">Section D</span>
+      <h2>Fix Direction</h2>
+    </div>
+
+    <p>Two failure modes require two separate interventions. Unlike the Non-Inventory segments (one lever each), SDD Inventory needs both an operational and a structural fix.</p>
+
+    <div class="fix-table">
+      <div class="fix-row">
+        <div class="fix-col fix-header fix-label">Mode</div>
+        <div class="fix-col fix-header">Problem</div>
+        <div class="fix-col fix-header">Fix direction</div>
+      </div>
+      <div class="fix-row">
+        <div class="fix-col fix-label">Mode 1<br><span style="font-size:0.7rem;font-weight:400;color:var(--text-3)">72% · C59+60+61</span></div>
+        <div class="fix-col fix-problem">WH misses SDD processing window. Payment pending (12%) and doctor confirmation (25%) are partial contributors; ~63% have neither. Operational variance across all delay magnitudes.</div>
+        <div class="fix-col fix-action"><strong>SDD operational SLA enforcement:</strong> enforce WH processing SLAs specific to the SDD window (packing cutoff, doctor sign-off cutoff, payment resolution SLA). A promise recalibration will not fix operational delays.</div>
+      </div>
+      <div class="fix-row">
+        <div class="fix-col fix-label">Mode 2<br><span style="font-size:0.7rem;font-weight:400;color:var(--text-3)">23.6% · C62+C63</span></div>
+        <div class="fix-col fix-problem">WH ready on time, but SDD courier takes 2–3 days on a 0-day promise. Actual TAT is non-SDD in practice.</div>
+        <div class="fix-col fix-action"><strong>SDD eligibility audit:</strong> identify pincodes / routes where actual courier TAT is consistently >1 day and remove SDD eligibility flag, or reconfigure to a non-SDD promise. Alternatively, audit courier assignment to confirm SDD-configured couriers are being dispatched.</div>
+      </div>
+    </div>
+
+    <div class="finding finding-blue">
+      <strong>Contrast with other segments.</strong> Non-SDD Non-Inventory and SDD Non-Inventory had a single dominant cohort (&gt;87%) and a single root cause (WH processing time model). Non-SDD Inventory had complex multi-layer failures but each layer was diagnosable to a single mechanism. SDD Inventory is the only segment where two independent mechanisms coexist with comparable weight, and where the primary fix is operational rather than promise-model recalibration.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

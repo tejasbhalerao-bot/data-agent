@@ -2336,3 +2336,137 @@ SDD couriers are delivering in 0–1 days as expected. The egregious gap is enti
 **Hypothesis confirmed and strengthened.** The root cause for Cohort 69 is identical to Cohort 40: the WH processing time model for Non-Inventory SKUs assumes procurement time that does not exist — the SKU is already available at order placement, so the order is invoiced and packed immediately, far before the WH promise.
 
 Key difference from Cohort 40: the miscalibration is more severe (89.4% >24h vs 51.5%) and there is **no stale transit TAT compound layer** — SDD couriers deliver in 0–1 days as promised, so the delivery TAT is not independently miscalibrated. A single fix (recalibrate SDD_Non_Inventory WH processing time using actual invoice-to-AWB timings) addresses 100% of Cohort 69.
+
+---
+
+## #58 — SDD Inventory Egregious: Two-Mode Root Cause Analysis
+
+**Request:** For the SDD Inventory egregious set (n=3,955), characterize root causes: WH deviation magnitude and payment pending / doctor confirmation checks for the Late WH group (C59+C60+C61, 72%), and delivery TAT analysis for the Early WH + Late Delivery group (C62+C63, 23.6%).
+
+### Part 1 — Cross-tab (confirms analysis #14)
+
+n=3,955 (reference: 3,954 — 1-order delta, negligible).
+
+| Cohort | WH | Dispatch | Delivery | n | % of SDD Inv |
+|---|---|---|---|---|---|
+| C59 | Late | On-Time | Late | 1,468 | 37.1% |
+| C60 | Late | Early | Late | 742 | 18.8% |
+| C61 | Late | Late | Late | 637 | 16.1% |
+| C62 | Early | On-Time | Late | 525 | 13.3% |
+| C63 | Early | Early | Late | 399 | 10.1% |
+| C64 | Late | Early | Early | 81 | 2.0% |
+| C65 | Late | On-Time | Early | 46 | 1.2% |
+| C66 | Early | Early | Early | 45 | 1.1% |
+| C67 | Early | Late | Late | 8 | 0.2% |
+| C68 | Early | On-Time | Early | 3 | 0.1% |
+
+**Late WH + Late Delivery group (C59+C60+C61): 2,847 (72.0%)**
+**Early WH + Late Delivery group (C62+C63): 932 (23.6%)**
+
+### Part 2 — WH deviation magnitude for Late WH group
+
+WH deviation = `awb_sticker_printed_ts − digitised_wh_promise` in hours. Positive = AWB printed after WH promise (Late).
+
+| Bucket | n | % of Late-WH group |
+|---|---|---|
+| Late >24 hrs | 590 | 20.7% |
+| Late 12–24 hrs | 366 | 12.9% |
+| Late 8–12 hrs | 162 | 5.7% |
+| Late 4–8 hrs | 310 | 10.9% |
+| Late 2–4 hrs | 360 | 12.6% |
+| Late 1–2 hrs | 323 | 11.3% |
+| Late 30–60 min | 263 | 9.2% |
+| Late <30 min | 473 | 16.6% |
+| Early (any) | 0 | 0.0% |
+
+- **Median WH lateness:** +4.02h
+- **% Late >24h:** 20.7%
+- **% Late >4h:** 50.2%
+
+Distribution is spread across all buckets — no single dominant spike. Compare to Non-SDD Non-Inventory (46.3% >24h) and SDD Non-Inventory (89.4% >24h). The SDD Inventory late WH pattern is operationally diffuse, consistent with SDD's narrow delivery window amplifying routine delays of all magnitudes.
+
+### Part 3 — Payment pending check for Late WH group
+
+Reference: Non-SDD Inventory H9 — 64% of Late >24h had payment_pending_ts.
+
+| Bucket | n | With Pmt Pending | % |
+|---|---|---|---|
+| Late >24 hrs | 590 | 108 | 18.3% |
+| Late 12–24 hrs | 366 | 126 | 34.4% |
+| Late 8–12 hrs | 162 | 19 | 11.7% |
+| Late 4–8 hrs | 310 | 43 | 13.9% |
+| Late 2–4 hrs | 360 | 15 | 4.2% |
+| Late 1–2 hrs | 323 | 11 | 3.4% |
+| Late 30–60 min | 263 | 7 | 2.7% |
+| Late <30 min | 473 | 9 | 1.9% |
+
+**Overall Late WH group with payment pending: 338 (11.9%)**
+
+Payment pending is NOT monotonic with WH lateness severity. The 12–24h bucket peaks at 34.4% while the worst bucket (>24h) is only 18.3%. Payment pending is a minor factor in SDD Inventory — far weaker than in Non-SDD Inventory (where it dominated the >24h tail at 64%).
+
+### Part 4 — Doctor confirmation check for Late WH group
+
+`dr_confirm_ts > digitised_wh_promise` = confirmation arrived after WH promise window opened.
+0 orders had no `dr_confirm_ts` — all SDD Inventory orders have a doctor leg.
+
+Reference: Non-SDD Inventory H12 — 49–55% late confirmation in Late WH buckets.
+
+| Bucket | n | Dr Confirm Late | % |
+|---|---|---|---|
+| Late >24 hrs | 590 | 179 | 30.3% |
+| Late 12–24 hrs | 366 | 82 | 22.4% |
+| Late 8–12 hrs | 162 | 51 | 31.5% |
+| Late 4–8 hrs | 310 | 180 | 58.1% |
+| Late 2–4 hrs | 360 | 111 | 30.8% |
+| Late 1–2 hrs | 323 | 75 | 23.2% |
+| Late 30–60 min | 263 | 32 | 12.2% |
+| Late <30 min | 473 | 5 | 1.1% |
+
+**Overall Late WH group: 715 late confirmation (25.1%)**
+
+Doctor confirmation peaks at the 4–8h bucket (58.1%) — orders where the WH is 4–8h late are most likely to have a late doctor sign-off. But the overall rate (25.1%) is lower than Non-SDD Inventory H12 levels. Doctor confirmation is a real but partial contributor — explains roughly 1 in 4 Late WH orders.
+
+### Part 5 — Delivery TAT for Early WH + Late Delivery group (C62+C63)
+
+n=932. WH ready on time or early; order dispatched; delivery still late vs promise.
+
+**A. Promised TAT (delivery_promise − dispatch_promise):**
+- 0d (same-day): 932 (100.0%)
+- `digitised_delivery_tat_mins` median: 0 min — 100% are SDD same-day promises
+
+**B. Actual TAT (delivery_attempt_date − pickup_date):**
+
+| Actual TAT | n | % |
+|---|---|---|
+| 1d | 6 | 0.6% |
+| 2d | 306 | 32.8% |
+| 3d | 358 | 38.4% |
+| 4d | 153 | 16.4% |
+| 5d | 72 | 7.7% |
+| 6d | 18 | 1.9% |
+| 7d+ | 19 | 2.0% |
+
+**C. Delivery date gap (delivery_attempt − delivery_promise) [positive = late]:**
+
+| Gap | n | % |
+|---|---|---|
+| Late 2d | 556 | 59.7% |
+| Late 3d | 202 | 21.7% |
+| Late 4d | 105 | 11.3% |
+| Late 5d | 48 | 5.2% |
+| Late 6d+ | 21 | 2.3% |
+
+**Verdict for Mode 2:** The WH performs correctly (early or on-time). The dispatch is on-time or early. But the delivery TAT promise is 0 days (same-day) for 100% of this group, and the courier takes 2–3 actual days. SDD is being promised but not delivered. This is a TAT model failure — these orders are tagged SDD at digitisation but the courier's actual delivery speed is non-SDD (2–3 days). Mechanism: either the SDD pincode/route coverage is incorrect, or the SDD courier assignment is not honoured post-dispatch.
+
+### Part 6 — WH processing type
+
+100% of SDD Inventory egregious orders have `wh_processing_type = SDD_INVENTORY`. No misconfiguration.
+
+### Summary
+
+SDD Inventory egregious (n=3,955) has two structurally distinct failure modes:
+
+| Mode | Cohorts | n | % | Root cause |
+|---|---|---|---|---|
+| Late WH → Late Delivery | C59+C60+C61 | 2,847 | 72.0% | WH misses its SDD processing window; no single dominant driver — payment pending (11.9%) and doctor confirmation (25.1%) are partial contributors |
+| Early WH + Late Delivery | C62+C63 | 932 | 23.6% | SDD delivery promised (0-day TAT) but courier actually takes 2–3 days — TAT model failure |
