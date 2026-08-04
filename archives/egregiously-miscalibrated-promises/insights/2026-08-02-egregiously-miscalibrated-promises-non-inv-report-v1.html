@@ -408,7 +408,7 @@ tbody tr:hover td { background: var(--surface-alt); }
       <h2>Warehouse Deviation — The Promise Assumes Procurement Time That Does Not Exist</h2>
     </div>
 
-    <p>Unlike the Inventory set, where warehouse lateness is the primary problem, the Non-Inventory set has the opposite failure: <strong>the warehouse is early in 96.4% of egregious orders</strong>. The WH promise is set on the assumption that procuring Non-Inventory SKUs takes several hours — but the data shows the order is invoiced and ready far before the promise window opens.</p>
+    <p>Unlike the Inventory set, the Non-Inventory set has the opposite failure: <strong>the warehouse is early in 96.4% of egregious orders</strong>. The WH promise assumes Non-Inventory procurement takes hours — but orders are invoiced and ready far before the promise window opens.</p>
 
     <!-- A.1 WH distribution -->
     <div class="subsection">
@@ -463,13 +463,13 @@ tbody tr:hover td { background: var(--surface-alt); }
     <div class="subsection">
       <h3>A.2 — Why the Warehouse Is Early: The WH Promise Is Built on a Wrong Procurement Assumption</h3>
 
-      <p>The WH promise for Non-Inventory orders is constructed with a lead time that assumes the SKU needs to be sourced after order placement. The data shows this assumption is wrong for this set: the SKU is available and the order is invoiced within hours of placement — far before the promise window opens.</p>
+      <p>The WH promise assumes the SKU must be sourced after order placement. For this set, that assumption is wrong: the SKU is available and the order is invoiced within hours of placement — far before the promise window opens.</p>
 
-      <p>The invoice-based measurement confirms this is not a payment-pending artefact. When we measure WH deviation using <code>invoice_create_ts</code> (which fires at order confirmation, before any payment state) rather than AWB print time, the distribution is <em>more extreme</em> on the early side, not less — because invoice fires even closer to order placement than AWB does.</p>
+      <p>The invoice-based measurement confirms this is not a payment-pending artefact: switching from AWB to <code>invoice_create_ts</code> (fires at order confirmation, before any payment state) makes the early-side distribution <em>more extreme</em>, not less.</p>
 
       <div class="finding">
         <div class="finding-label">Core Finding</div>
-        <p>In Cohort 40 (WH Early + Dispatch Early + Delivery Early, n=26,134 — the dominant 87.7% cohort), zero orders had the invoice created <em>after</em> the WH promise. The procurement and invoicing leg was complete before the WH promise opened in every single order. The WH promise model does not reflect how Non-Inventory procurement actually works for this SKU category.</p>
+        <p>In Cohort 40 (WH Early + Dispatch Early + Delivery Early, n=26,134 — 87.7%), zero orders had the invoice created <em>after</em> the WH promise. Procurement and invoicing were complete before the WH promise opened in every single order. The WH promise model does not reflect how Non-Inventory procurement actually works.</p>
       </div>
 
       <h4>AWB vs invoice comparison confirms payment pending is not the driver</h4>
@@ -494,7 +494,7 @@ tbody tr:hover td { background: var(--surface-alt); }
         </table>
       </div>
 
-      <p>The 1.1pp delta between the two measurements — 328 orders — is the entire payment-pending footprint in this segment. An order that appears WH Late by AWB but WH Early by invoice had its payment cleared after invoicing, delaying the AWB print past the WH promise. For 98.9% of orders, payment pending has no effect on WH timing — the invoice clears so early that payment resolution, if any, completes well before the WH promise window.</p>
+      <p>The 1.1pp delta — 328 orders — is the entire payment-pending footprint. An order that appears WH Late by AWB but WH Early by invoice had payment clear after invoicing, delaying AWB past the WH promise. For 98.9% of orders, the invoice clears so early that payment resolution completes well before the WH promise.</p>
     </div>
 
     <hr class="divider">
@@ -503,13 +503,13 @@ tbody tr:hover td { background: var(--surface-alt); }
     <div class="subsection">
       <h3>A.3 — Payment Pending: A Brake, Not a Driver</h3>
 
-      <p>In the Non-SDD Inventory set, payment pending is a primary driver of late dispatch — it causes WH holds that push AWB printing past the dispatch promise date, with a 68.2% rate in the Late 2d dispatch cohort. In this set, the dynamic is inverted.</p>
+      <p>In the Inventory set, payment pending drives late dispatch — 68.2% rate in Late 2d. Here, the dynamic is inverted.</p>
 
-      <p>Because invoices fire so far before the WH promise, a payment hold — even if it delays AWB printing by several hours — typically resolves before the WH promise opens. In the small number of cases (1.1%) where the hold is long enough to push past the WH promise, payment pending is visible in the AWB measurement. But critically, delaying an already-very-early AWB closer to the WH promise often means the order dispatches <em>on time</em> rather than early — payment pending acts as an unintentional corrective brake on early dispatch.</p>
+      <p>Because invoices fire so far before the WH promise, even a multi-hour payment hold typically resolves before the WH promise opens. In the 1.1% of cases where the hold pushes past the promise, it shows up in the AWB measurement. Crucially, delaying an already-early AWB closer to the WH promise often means the order dispatches <em>on time</em> — payment pending acts as an unintentional corrective brake on early dispatch.</p>
 
       <div class="finding finding-amber">
         <div class="finding-label">Key contrast with Inventory</div>
-        <p>Payment pending's role is reversed in this segment. In Inventory it is a problem driver (causing late dispatch). In Non-Inventory it is a minor brake — the 1.1% of orders where it delays AWB past the WH promise are orders that would otherwise dispatch even earlier. Payment pending is not a fix, but its footprint is diagnostic: it confirms that the WH promise is so miscalibrated on the early side that even payment holds rarely push into "late" territory.</p>
+        <p>Payment pending's role is reversed here. In Inventory it drives late dispatch; in Non-Inventory it is a minor brake — the 1.1% of orders where it delays AWB past the WH promise would otherwise dispatch even earlier. Its footprint is also diagnostic: the WH promise is so miscalibrated early that even payment holds rarely push into "late" territory.</p>
       </div>
     </div>
   </div>
@@ -524,7 +524,7 @@ tbody tr:hover td { background: var(--surface-alt); }
       <h2>Dispatch Deviation — A Direct Consequence of Warehouse Earliness</h2>
     </div>
 
-    <p><strong>Dispatch deviation</strong> is measured as <code>DATE(digitised_dispatch_promise) − DATE(pickup_time)</code> in calendar days. Unlike the Inventory set where dispatch has its own independent failure modes, dispatch deviation in Non-Inventory is almost entirely a mechanical consequence of the WH deviation in Section A.</p>
+    <p><strong>Dispatch deviation</strong> = <code>DATE(digitised_dispatch_promise) − DATE(pickup_time)</code> in calendar days. Unlike the Inventory set — which has independent dispatch failure modes — dispatch deviation here is almost entirely a mechanical consequence of WH deviation (Section A).</p>
 
     <!-- B.1 Distribution -->
     <div class="subsection">
@@ -545,7 +545,7 @@ tbody tr:hover td { background: var(--surface-alt); }
         </div>
       </div>
 
-      <p>87.4% of this superset has an early dispatch. Late dispatch is a negligible tail (&lt;5%). This is the inverse of the Inventory set where late dispatch drove the majority of egregious outcomes.</p>
+      <p>87.4% have an early dispatch; late dispatch is a negligible tail (&lt;5%) — the inverse of the Inventory set.</p>
     </div>
 
     <hr class="divider">
@@ -554,9 +554,9 @@ tbody tr:hover td { background: var(--surface-alt); }
     <div class="subsection">
       <h3>B.2 — The Mechanism: AWB Print Date = Pickup Date</h3>
 
-      <p>The data from the Non-Inventory and Inventory analyses establishes one universal constant: <strong>couriers collect the order on the same calendar day the AWB is printed</strong>. This holds across both segments, all dispatch buckets, and all courier partners.</p>
+      <p>Both analyses establish one constant: <strong>couriers collect on the same calendar day the AWB is printed</strong>. This holds across all dispatch buckets and all courier partners.</p>
 
-      <p>Because the AWB print date is effectively the dispatch date, the entire dispatch deviation is determined upstream — by when the AWB is printed. And the AWB is printed when the order is ready to ship, which for Non-Inventory happens far before the WH promise.</p>
+      <p>Because AWB print date = dispatch date, dispatch deviation is determined entirely by when the AWB is printed — which for Non-Inventory happens far before the WH promise.</p>
 
       <div class="flow">
         <span class="flow-step problem">WH promise too late</span>
@@ -570,11 +570,11 @@ tbody tr:hover td { background: var(--surface-alt); }
         <span class="flow-step outcome">Dispatch 1–2d early</span>
       </div>
 
-      <p>The dispatch promise itself is derived from the WH promise (<code>WH promise date + courier lead time buffer</code>). Both are wrong for the same root reason. When the WH promise is miscalibrated by 1–2 days on the early side, the dispatch promise is also miscalibrated by 1–2 days — and the courier's same-day collection behaviour ensures the full miscalibration is realised.</p>
+      <p>The dispatch promise is derived from the WH promise (<code>WH promise date + courier lead time buffer</code>). Both are wrong for the same root reason: when the WH promise is miscalibrated 1–2 days early, so is the dispatch promise — and same-day courier collection ensures the full miscalibration is realised.</p>
 
       <div class="finding finding-green">
         <div class="finding-label">Single Lever for Dispatch</div>
-        <p>Fixing the WH promise — calibrating it to match actual Non-Inventory procurement and invoicing timelines — is the <strong>only intervention needed to correct dispatch deviation</strong>. There is no independent dispatch-layer failure. The dispatch promise model is correct in structure; the WH promise anchor it is built on is wrong. Correct the anchor, and dispatch corrects automatically. Payment pending will create a small (&lt;1.1%) late-dispatch tail regardless, which is negligible.</p>
+        <p>Fixing the WH promise is the <strong>only intervention needed to correct dispatch deviation</strong>. The dispatch model is structurally correct — the WH promise anchor it is built on is wrong. Correct the anchor, and dispatch corrects automatically. A small (&lt;1.1%) late-dispatch tail from payment pending is acceptable.</p>
       </div>
     </div>
   </div>
@@ -589,9 +589,9 @@ tbody tr:hover td { background: var(--surface-alt); }
       <h2>Delivery TAT Deviation — An Independent Failure Layer From a Stale Lookup</h2>
     </div>
 
-    <p><strong>Delivery TAT deviation</strong> compares the promised transit window (<code>digitised_delivery_promise − digitised_dispatch_promise</code> in days) against actual transit (<code>delivery_attempt_time − pickup_time</code> in days). This metric is independent of dispatch timing — it measures only whether the courier's speed matched what was promised, regardless of when they picked up.</p>
+    <p><strong>Delivery TAT deviation</strong> = promised transit (<code>digitised_delivery_promise − digitised_dispatch_promise</code>) vs actual transit (<code>delivery_attempt_time − pickup_time</code>) in days. Independent of dispatch timing — it measures only whether courier speed matched the promise.</p>
 
-    <p>This is where Non-Inventory diverges from the simple "WH miscalibration causes everything" story. Even if dispatch were fixed, <strong>68.8% of orders would still have a delivery TAT deviation</strong> — the courier delivers in a different number of days than both the digitised and shipping promises say.</p>
+    <p>This is where the "WH miscalibration causes everything" story breaks down. Even if dispatch were fixed, <strong>68.8% of orders would still have a delivery TAT deviation</strong> — the courier delivers in a different number of days than either promise layer says.</p>
 
     <!-- C.1 Distribution -->
     <div class="subsection">
@@ -697,7 +697,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
       <div class="finding">
         <div class="finding-label">Key Divergence from Inventory</div>
-        <p>In the Inventory set, the shipping layer at least partially corrected (H8 dominant for Early 2d). In Non-Inventory's dominant Early 1d bucket, <strong>the shipping layer makes zero correction in 60.8% of same-courier cases</strong>. The courier's actual lane performance is not feeding back into either the digitised or shipping TAT lookup for these routes. The lookup is more stale for Non-Inventory lanes than Inventory lanes.</p>
+        <p>In Inventory, the shipping layer at least partially corrected (H8 dominant for Early 2d). In Non-Inventory's dominant Early 1d bucket, <strong>shipping makes zero correction in 60.8% of same-courier cases</strong>. Lane performance is not feeding back into either promise layer. The lookup is more stale for Non-Inventory lanes.</p>
       </div>
 
       <h4>Failure mode 2 — Early 2d/3d: shipping partially corrects but undershoots (H8 dominant)</h4>
@@ -717,7 +717,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
       <h4>Failure mode 3 — Late 3d+ (n=1,325): courier cannot meet any promise, no system correction</h4>
 
-      <p>H5 (both changed: 38.3%) and H7 (neither changed: 37.1%) split the Late 3d+ cohort roughly equally. Same-courier Late 3d+ orders show the pattern starkly: dig=2d/ship=2d/act=5d (11.6%), dig=3d/ship=3d/act=6d (9.9%) — the courier takes 3+ days longer than promised with no correction in either layer. These are specific pincode/zone combinations where courier capacity or geography creates systematic underperformance that neither the digitised nor shipping lookup has captured.</p>
+      <p>H5 (both changed: 38.3%) and H7 (neither changed: 37.1%) split Late 3d+ roughly equally. Same-courier orders show it starkly: dig=2d/ship=2d/act=5d (11.6%), dig=3d/ship=3d/act=6d (9.9%) — courier takes 3+ days longer than promised with no correction in either layer. These are pincode/zone combinations with systematic underperformance that neither lookup has captured.</p>
     </div>
 
     <hr class="divider">
@@ -745,7 +745,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
       <div class="finding finding-green">
         <div class="finding-label">Root Cause — Confirmed</div>
-        <p>The transit TAT lookup table is stale for Non-Inventory lanes, and <strong>more stale than for Inventory</strong>. For Inventory, the shipping layer partially corrects via H8 for the Early 2d lanes. For Non-Inventory's dominant Early 1d lanes, the shipping layer applies zero correction — 60.8% of same-courier Early 1d orders have identical digitised and shipping TAT, with the courier reliably delivering 1 day faster. The same fix applies to both segments: recalibrate the TAT lookup using rolling actuals per lane. Non-Inventory lanes must be explicitly included in the recalibration perimeter.</p>
+        <p>The transit TAT lookup is stale for Non-Inventory lanes, and <strong>more stale than for Inventory</strong>. For Inventory, shipping partially corrects via H8 for Early 2d lanes. For Non-Inventory's dominant Early 1d lanes, shipping applies zero correction — 60.8% of same-courier Early 1d orders have identical digitised and shipping TAT. The fix is the same: recalibrate the TAT lookup using rolling actuals per lane, explicitly including Non-Inventory lanes.</p>
       </div>
     </div>
   </div>
@@ -773,17 +773,17 @@ tbody tr:hover td { background: var(--surface-alt); }
           <tr>
             <td class="td-bold">WH promise miscalibrated — assumes procurement lead time that does not exist for Non-Inventory SKUs</td>
             <td class="td-num">28,750 (96.4%)</td>
-            <td>Recalibrate the WH promise for Non-Inventory order types using actual invoice-to-AWB timing distributions. The WH promise should reflect when Non-Inventory SKUs are actually available, not when Inventory procurement is expected to complete.</td>
+            <td>Recalibrate the WH promise using actual invoice-to-AWB timing distributions for Non-Inventory orders. The promise should reflect when SKUs are actually available, not when Inventory procurement is expected to complete.</td>
           </tr>
           <tr>
             <td class="td-bold">Dispatch early — direct consequence of WH miscalibration; no independent fix needed</td>
             <td class="td-num">~26,000 (87.4%)</td>
-            <td>Corrects automatically when the WH promise is fixed. The dispatch promise formula is structurally sound — it is built on the WH promise anchor, which is the only thing that needs changing. Payment pending will leave a &lt;1.1% residual late-dispatch tail that is acceptable without further intervention.</td>
+            <td>Corrects automatically when the WH promise is fixed. The dispatch formula is structurally sound; the WH anchor is the only thing that needs changing. Payment pending leaves a &lt;1.1% residual late-dispatch tail — acceptable without further intervention.</td>
           </tr>
           <tr>
             <td class="td-bold">Delivery TAT Early 1d — shipping layer makes zero correction; lookup over-estimates transit</td>
             <td class="td-num">15,101 (50.7%)</td>
-            <td>Include Non-Inventory lanes explicitly in the transit TAT recalibration. The Early 1d failure is unique to Non-Inventory: unlike Inventory where shipping partially corrects, these lanes have no recalibration signal reaching either promise layer. Priority: the 3d→2d and 4d→3d combos (dig=ship, courier 1d faster) account for the majority of this cohort.</td>
+            <td>Include Non-Inventory lanes explicitly in the transit TAT recalibration. Unlike Inventory, where shipping partially corrects, these lanes have no signal reaching either promise layer. Priority: 3d→2d and 4d→3d combos (dig=ship, courier 1d faster) account for the majority.</td>
           </tr>
           <tr>
             <td class="td-bold">Delivery TAT Early 2d/3d — shipping partially corrects but undershoots</td>
@@ -793,7 +793,7 @@ tbody tr:hover td { background: var(--surface-alt); }
           <tr>
             <td class="td-bold">Delivery TAT Late 3d+ — hard routes with no promise correction in either layer</td>
             <td class="td-num">1,325 (4.4%)</td>
-            <td>Identify the specific pincode × courier × zone combinations driving Late 3d+. These lanes need individual lookup corrections — the global recalibration may not reach them if actual volume is low. Consider whether the courier assigned to these routes is the right one, or whether a TAT buffer should be applied.</td>
+            <td>Identify specific pincode × courier × zone combinations driving Late 3d+. These lanes need individual lookup corrections — the global recalibration may not reach them at low volume. Consider whether the assigned courier is right, or whether a TAT buffer should be applied.</td>
           </tr>
         </tbody>
       </table>
