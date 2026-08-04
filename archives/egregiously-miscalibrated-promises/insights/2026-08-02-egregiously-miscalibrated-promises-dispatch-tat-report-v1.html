@@ -1796,6 +1796,52 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <hr class="divider">
 
+    <!-- D.1–D.4 Combined -->
+    <div class="subsection">
+      <h3>D.1–D.4 Combined: All Process Fixes Applied Simultaneously &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">6,759 exit egregious (11.72%)</span></h3>
+      <p>D.1 through D.4 applied in a single pass per order. Where an order is in scope for multiple fixes, all shifts are summed before evaluating the new deviation — each order is rescued at most once. Naive additive sum across individual simulations would have predicted 11.91%; actual is <strong>11.72%</strong> (overlap between fix scopes accounts for the 0.19pp gap).</p>
+
+      <h4>1 · Group-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Group</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
+          <tbody>
+            <tr><td>Early</td><td class="td-num">61.0%</td><td class="td-num">61.3%</td><td class="td-num td-muted">+0.3pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time</td><td class="td-num">0.0%</td><td class="td-num td-bold td-hl-green">1.8%</td><td class="td-num td-hl-green">+1.8pp</td></tr>
+            <tr><td>Late</td><td class="td-num td-bold">39.0%</td><td class="td-num">36.9%</td><td class="td-num td-hl-green">−2.1pp</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>2 · Day-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Bucket</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
+          <tbody>
+            <tr><td>Early 5d+</td><td class="td-num">0.21%</td><td class="td-num">0.18%</td><td class="td-num td-hl-green">−0.03pp</td></tr>
+            <tr><td>Early 4d</td><td class="td-num">1.44%</td><td class="td-num">1.17%</td><td class="td-num td-hl-green">−0.27pp</td></tr>
+            <tr><td>Early 3d</td><td class="td-num">9.46%</td><td class="td-num">8.33%</td><td class="td-num td-hl-green">−1.13pp</td></tr>
+            <tr><td class="td-bold">Early 2d</td><td class="td-num td-bold">49.85%</td><td class="td-num">44.56%</td><td class="td-num td-hl-green">−5.30pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">Early 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold td-hl-green">7.04%</td><td class="td-num td-hl-green">+7.04pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold td-hl-green">1.78%</td><td class="td-num td-hl-green">+1.78pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">Late 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold td-hl-green">2.90%</td><td class="td-num td-hl-green">+2.90pp</td></tr>
+            <tr><td class="td-bold">Late 2d</td><td class="td-num td-bold">23.86%</td><td class="td-num">19.91%</td><td class="td-num td-hl-green">−3.95pp</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">7.88%</td><td class="td-num">7.28%</td><td class="td-num td-hl-green">−0.60pp</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">3.48%</td><td class="td-num">3.30%</td><td class="td-num td-hl-green">−0.18pp</td></tr>
+            <tr><td>Late 5d+</td><td class="td-num">3.82%</td><td class="td-num">3.55%</td><td class="td-num td-hl-green">−0.27pp</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-3);margin-top:-0.75rem;">✓ = exits egregious set. % of full 57,688 segment. The 7.04pp Early 1d exit is driven almost entirely by D.4 (warehouse dispatch). The 2.90pp Late 1d and 1.78pp On-Time exits are driven primarily by D.1 (payment pending).</p>
+
+      <div class="finding finding-amber">
+        <div class="finding-label">Combined Process Fix Ceiling</div>
+        <p><strong>6,759 orders exit egregious (11.72%)</strong> when all four upstream process fixes are applied together. Late drops from 39.0% → 36.9% (−2.1pp). The dominant day-level moves: Early 2d (−5.30pp, driven by D.4) and Late 2d (−3.95pp, driven by D.1). The 11.72% is the realistic ceiling for process fixes alone — the remaining <strong>36.9% Late and 86.3% of egregious Early orders are unreachable without D.5 TAT recalibration</strong>.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
     <!-- D.5 TAT recalibration -->
     <div class="subsection">
       <h3>D.5 — TAT Recalibration &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 57,688 (full segment)</span></h3>
