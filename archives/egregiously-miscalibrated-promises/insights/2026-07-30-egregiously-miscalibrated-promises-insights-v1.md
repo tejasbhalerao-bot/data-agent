@@ -2257,3 +2257,82 @@ The switched-courier group splits almost exactly in half at the timestamp level:
 **Sub-group B (50.5%)** — different mechanism. WH promise at 13:00 (23.6%) reflects an original courier with a noon cutoff. System set D+1 correctly. WH overran its own promise by a median of 1.22h. Original courier was already gone; a replacement courier with a later same-day cutoff was assigned. Replacement courier collected same-day, leaving the D+1 dispatch promise stranded.
 
 **Shared structural root cause:** the dispatch promise is computed once at digitisation using the original courier's cutoff. It is never recalculated when a different courier is assigned at shipping. The replacement courier's actual capability renders the original promise stale.
+
+---
+
+## #57 — SDD Non-Inventory Cohort 69 validation
+
+**Request:** Validate whether Cohort 69 (SDD Non-Inventory, WH Early + Dispatch Early + Delivery Early) has the same root cause as Non-SDD Non-Inventory Cohort 40 — WH promise assumes procurement time that does not exist for Non-Inventory SKUs.
+
+### Cohort sizing
+
+| Segment | n | % of SDD Non-Inv |
+|---|---|---|
+| SDD Non-Inventory egregious (all) | 4,591 | 100% |
+| Cohort 69 (WH+Disp+Del Early) | 4,167 | 90.8% |
+
+### Part 2 — WH deviation magnitude (AWB-based)
+
+| WH Deviation | n | % of Cohort 69 |
+|---|---|---|
+| Early >24 hrs | 3,724 | 89.4% |
+| Early 12–24 hrs | 302 | 7.2% |
+| Early 8–12 hrs | 72 | 1.7% |
+| Early 4–8 hrs | 69 | 1.7% |
+| Early <4 hrs | 0 | 0.0% |
+| Late (any) | 0 | 0.0% |
+
+Median WH gap: **+34.79h**. 100% of orders are Early >4h — no orders in the sub-4h buckets at all.
+
+Ref comparison: Cohort 40 (Non-SDD Non-Inv) was 51.5% >24h, 21.2% 4–8h. Cohort 69 is far more extreme.
+
+### Part 3 — Invoice vs AWB (payment pending check)
+
+Invoice fires before WH promise in 100% of orders — 0 invoices after the WH promise, identical to Cohort 40. Median invoice gap: +35.33h. Payment pending is not a factor.
+
+| Bucket | n | % |
+|---|---|---|
+| Invoice Early >24 hrs | 3,778 | 90.7% |
+| Invoice Early 12–24 hrs | 269 | 6.5% |
+| Invoice Early 8–12 hrs | 69 | 1.7% |
+| Invoice Early 4–8 hrs | 51 | 1.2% |
+| Invoice <4 hrs Early or Late | 0 | 0.0% |
+
+### Part 4 — Dispatch deviation magnitude
+
+| Dispatch Dev | n | % |
+|---|---|---|
+| Early 3d | 1,742 | 41.8% |
+| Early 2d | 2,264 | 54.3% |
+| Early 1d | 148 | 3.6% |
+| Early 4d | 13 | 0.3% |
+
+Dispatch is 2–3 days early (vs 1–2 days for Cohort 40) — directly proportional to the larger WH gap.
+
+### Part 5 — Delivery promise structure
+
+**Promised TAT (delivery_promise − dispatch_promise in calendar days):**
+- 0d (same-day): 83.5%
+- 1d: 16.5%
+- Median digitised_delivery_tat_mins: 0 min
+
+**Actual TAT (delivery_attempt_date − pickup_date):**
+- 0d (same-day): 52.1%
+- 1d: 47.9%
+- 2d: 0.1%
+
+**Delivery date gap (delivery_promise − delivery_attempt):**
+- Early 2d: 3,860 (92.6%)
+- Early 3d: 307 (7.4%)
+
+SDD couriers are delivering in 0–1 days as expected. The egregious gap is entirely from dispatch happening 2–3 days before the dispatch promise, which in turn is driven by the WH over-padding. No stale transit TAT layer — promised and actual TAT match.
+
+### Part 6 — WH processing type
+
+100% of Cohort 69 orders have `wh_processing_type = SDD_NON_INVENTORY`. No misconfiguration.
+
+### Verdict
+
+**Hypothesis confirmed and strengthened.** The root cause for Cohort 69 is identical to Cohort 40: the WH processing time model for Non-Inventory SKUs assumes procurement time that does not exist — the SKU is already available at order placement, so the order is invoiced and packed immediately, far before the WH promise.
+
+Key difference from Cohort 40: the miscalibration is more severe (89.4% >24h vs 51.5%) and there is **no stale transit TAT compound layer** — SDD couriers deliver in 0–1 days as promised, so the delivery TAT is not independently miscalibrated. A single fix (recalibrate SDD_Non_Inventory WH processing time using actual invoice-to-AWB timings) addresses 100% of Cohort 69.
