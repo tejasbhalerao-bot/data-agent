@@ -1620,17 +1620,17 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- D.1 Doctor SLA fix -->
     <div class="subsection">
-      <h3>D.1 — Doctor SLA Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 1,578 · rescues 1,124 (71.2%)</span></h3>
-      <p>For <code>DOCTOR_AND_HA_CALL_REQUIRED</code> / <code>HA_CALL_REQUIRED</code> Late-dispatch orders with late <code>dr_confirm_ts</code>: <strong>delivery_sim = dispatch_promise + actual_TAT</strong>.</p>
+      <h3>D.1 — Doctor SLA Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 2,616 · rescues 199 (7.6%)</span></h3>
+      <p>For call-required Late-dispatch orders with late <code>dr_confirm_ts</code>. Corrected mechanic: <strong>dr_lag = dr_confirm_ts − digitised_dr_promise</strong>; <strong>delivery_sim = delivery_attempt_time − dr_lag</strong>. All downstream intervals preserved exactly. Scope: orders where <code>dr_confirm_ts &gt; digitised_dr_promise</code>.</p>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Group</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
           <tbody>
-            <tr><td>Early</td><td class="td-num">6.5%</td><td class="td-num">10.3%</td><td class="td-num td-muted">+3.8pp</td></tr>
-            <tr class="td-focus"><td class="td-bold">On-Time</td><td class="td-num">0.0%</td><td class="td-num td-bold td-hl-green">20.3%</td><td class="td-num td-hl-green">+20.3pp</td></tr>
-            <tr><td>Late</td><td class="td-num td-bold">93.5%</td><td class="td-num">69.4%</td><td class="td-num td-hl-green">−24.1pp</td></tr>
+            <tr><td>Early</td><td class="td-num">7.0%</td><td class="td-num">7.5%</td><td class="td-num td-muted">+0.5pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time</td><td class="td-num">0.0%</td><td class="td-num td-bold td-hl-green">1.3%</td><td class="td-num td-hl-green">+1.3pp</td></tr>
+            <tr><td>Late</td><td class="td-num td-bold">93.0%</td><td class="td-num">91.1%</td><td class="td-num td-hl-green">−1.9pp</td></tr>
           </tbody>
         </table>
       </div>
@@ -1640,25 +1640,23 @@ tbody tr:hover td { background: var(--surface-alt); }
         <table>
           <thead><tr><th>Bucket</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
           <tbody>
-            <tr><td>Early 5d+</td><td class="td-num td-muted">—</td><td class="td-num">0.2%</td><td class="td-num td-muted">+0.2pp</td></tr>
-            <tr><td>Early 4d</td><td class="td-num">0.1%</td><td class="td-num">1.0%</td><td class="td-num td-muted">+0.9pp</td></tr>
-            <tr><td>Early 3d</td><td class="td-num">0.8%</td><td class="td-num">5.3%</td><td class="td-num td-muted">+4.5pp</td></tr>
-            <tr><td>Early 2d</td><td class="td-num">5.6%</td><td class="td-num">0.4%</td><td class="td-num td-hl-green">−5.2pp</td></tr>
-            <tr class="td-focus"><td>Early 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num">3.5%</td><td class="td-num td-hl-green">+3.5pp</td></tr>
-            <tr class="td-focus"><td class="td-bold">On-Time ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">20.3%</td><td class="td-num td-hl-green">+20.3pp</td></tr>
-            <tr class="td-focus"><td class="td-bold">Late 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">47.5%</td><td class="td-num td-hl-green">+47.5pp</td></tr>
-            <tr><td class="td-bold">Late 2d</td><td class="td-num td-bold">60.3%</td><td class="td-num">12.2%</td><td class="td-num td-hl-green">−48.1pp</td></tr>
-            <tr><td>Late 3d</td><td class="td-num">18.9%</td><td class="td-num">4.6%</td><td class="td-num td-hl-green">−14.3pp</td></tr>
-            <tr><td>Late 4d</td><td class="td-num">5.9%</td><td class="td-num">2.6%</td><td class="td-num td-hl-green">−3.3pp</td></tr>
-            <tr><td>Late 5d+</td><td class="td-num">8.4%</td><td class="td-num">2.5%</td><td class="td-num td-hl-green">−5.9pp</td></tr>
+            <tr><td>Early 3d</td><td class="td-num">0.6%</td><td class="td-num">1.0%</td><td class="td-num td-muted">+0.4pp</td></tr>
+            <tr><td>Early 2d</td><td class="td-num">6.2%</td><td class="td-num">5.9%</td><td class="td-num td-hl-green">−0.3pp</td></tr>
+            <tr class="td-focus"><td>Early 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num">0.4%</td><td class="td-num td-hl-green">+0.4pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">1.3%</td><td class="td-num td-hl-green">+1.3pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">Late 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">5.9%</td><td class="td-num td-hl-green">+5.9pp</td></tr>
+            <tr><td class="td-bold">Late 2d</td><td class="td-num td-bold">60.1%</td><td class="td-num">55.7%</td><td class="td-num td-hl-green">−4.4pp</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">18.4%</td><td class="td-num">16.4%</td><td class="td-num td-hl-green">−2.0pp</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">6.6%</td><td class="td-num">6.0%</td><td class="td-num td-hl-green">−0.6pp</td></tr>
+            <tr><td>Late 5d+</td><td class="td-num">7.8%</td><td class="td-num">7.1%</td><td class="td-num td-hl-green">−0.7pp</td></tr>
           </tbody>
         </table>
       </div>
-      <p style="font-size:0.8rem;color:var(--text-3);margin-top:-0.75rem;">✓ = exits egregious set. Before shows — where the bucket cannot appear in the all-egregious baseline.</p>
+      <p style="font-size:0.8rem;color:var(--text-3);margin-top:-0.75rem;">✓ = exits egregious set. Before shows — where the bucket cannot appear in the all-egregious baseline. Early group includes egregious-early orders (Early 2d+) present before the fix.</p>
 
-      <div class="finding finding-green">
+      <div class="finding finding-amber">
         <div class="finding-label">Simulation Result</div>
-        <p>Late group drops from <strong>93.5% → 69.4%</strong>. Late 2d collapses from 60.3% → 12.2%; Late 1d (47.5%) exits egregious. Residual: <strong>28.8%</strong> remain egregious even with on-time confirmation — additional upstream delays.</p>
+        <p>Doctor confirmation was typically only <strong>hours late</strong> (median ~169 min), not days. Correcting only that lag — without touching TAT or any other downstream interval — shifts delivery by those same hours. Very few orders cross a calendar day boundary. Late 2d drops 4.4pp (60.1% → 55.7%) and only <strong>199 orders (7.6%)</strong> exit egregious. The doctor SLA is a real problem but a weak lever for delivery deviation at the 2-day egregious threshold.</p>
       </div>
     </div>
 
@@ -1666,17 +1664,17 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- D.2 HA call SLA fix -->
     <div class="subsection">
-      <h3>D.2 — HA Call SLA Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 443 · rescues 391 (88.3%)</span></h3>
-      <p>For Late 3d+ HA-involved orders — simulate same-day HA call completion: <strong>delivery_sim = dispatch_promise + actual_TAT</strong>.</p>
+      <h3>D.2 — HA Call SLA Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 317 · rescues 209 (65.9%)</span></h3>
+      <p>Scope: Late 3d+ HA-involved orders where the HA call bled into the next calendar day (<code>DATE(invoice_create_ts) &gt; DATE(dr_confirm_ts)</code>). Mechanic: <strong>ha_excess = DATE(invoice_create_ts) − DATE(dr_confirm_ts)</strong> in days; <strong>delivery_sim = delivery_attempt_time − ha_excess days</strong>. All downstream intervals preserved.</p>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Group</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
           <tbody>
-            <tr><td>Early</td><td class="td-num">0.0%</td><td class="td-num">43.3%</td><td class="td-num td-hl-green">+43.3pp</td></tr>
-            <tr class="td-focus"><td class="td-bold">On-Time</td><td class="td-num">0.0%</td><td class="td-num td-bold td-hl-green">40.6%</td><td class="td-num td-hl-green">+40.6pp</td></tr>
-            <tr><td>Late</td><td class="td-num td-bold">100.0%</td><td class="td-num">16.0%</td><td class="td-num td-hl-green">−84.0pp</td></tr>
+            <tr><td>Early</td><td class="td-num">0.0%</td><td class="td-num">34.4%</td><td class="td-num td-hl-green">+34.4pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time</td><td class="td-num">0.0%</td><td class="td-num td-bold td-hl-green">27.4%</td><td class="td-num td-hl-green">+27.4pp</td></tr>
+            <tr><td>Late</td><td class="td-num td-bold">100.0%</td><td class="td-num">38.2%</td><td class="td-num td-hl-green">−61.8pp</td></tr>
           </tbody>
         </table>
       </div>
@@ -1686,23 +1684,24 @@ tbody tr:hover td { background: var(--surface-alt); }
         <table>
           <thead><tr><th>Bucket</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
           <tbody>
-            <tr class="td-focus"><td>Early 3d</td><td class="td-num td-muted">—</td><td class="td-num">1.1%</td><td class="td-num td-hl-green">+1.1pp</td></tr>
-            <tr class="td-focus"><td>Early 2d</td><td class="td-num td-muted">—</td><td class="td-num">5.4%</td><td class="td-num td-hl-green">+5.4pp</td></tr>
-            <tr class="td-focus"><td>Early 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">36.8%</td><td class="td-num td-hl-green">+36.8pp</td></tr>
-            <tr class="td-focus"><td class="td-bold">On-Time ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">40.6%</td><td class="td-num td-hl-green">+40.6pp</td></tr>
-            <tr class="td-focus"><td>Late 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num">10.8%</td><td class="td-num td-hl-green">+10.8pp</td></tr>
-            <tr><td>Late 2d</td><td class="td-num">21.9%</td><td class="td-num">2.7%</td><td class="td-num td-hl-green">−19.2pp</td></tr>
-            <tr><td>Late 3d</td><td class="td-num">25.3%</td><td class="td-num">0.9%</td><td class="td-num td-hl-green">−24.4pp</td></tr>
-            <tr><td>Late 4d</td><td class="td-num">17.2%</td><td class="td-num">1.4%</td><td class="td-num td-hl-green">−15.8pp</td></tr>
-            <tr><td class="td-bold">Late 5d+</td><td class="td-num td-bold">35.7%</td><td class="td-num">0.2%</td><td class="td-num td-hl-green">−35.5pp</td></tr>
+            <tr><td>Early 4d</td><td class="td-num td-muted">—</td><td class="td-num">0.3%</td><td class="td-num td-muted">+0.3pp</td></tr>
+            <tr><td>Early 3d</td><td class="td-num td-muted">—</td><td class="td-num">1.9%</td><td class="td-num td-muted">+1.9pp</td></tr>
+            <tr><td>Early 2d</td><td class="td-num td-muted">—</td><td class="td-num">8.8%</td><td class="td-num td-muted">+8.8pp</td></tr>
+            <tr class="td-focus"><td>Early 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">23.3%</td><td class="td-num td-hl-green">+23.3pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">27.4%</td><td class="td-num td-hl-green">+27.4pp</td></tr>
+            <tr class="td-focus"><td>Late 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num">15.1%</td><td class="td-num td-hl-green">+15.1pp</td></tr>
+            <tr><td>Late 2d</td><td class="td-num">17.7%</td><td class="td-num">11.4%</td><td class="td-num td-hl-green">−6.3pp</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">25.6%</td><td class="td-num">5.4%</td><td class="td-num td-hl-green">−20.2pp</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">16.1%</td><td class="td-num">2.2%</td><td class="td-num td-hl-green">−13.9pp</td></tr>
+            <tr><td class="td-bold">Late 5d+</td><td class="td-num td-bold">40.7%</td><td class="td-num">4.1%</td><td class="td-num td-hl-green">−36.6pp</td></tr>
           </tbody>
         </table>
       </div>
-      <p style="font-size:0.8rem;color:var(--text-3);margin-top:-0.75rem;">✓ = exits egregious set. Early 2d/3d appear in After because some orders overshoot On-Time — not failures, just the mechanic of fixing a Late order pushing delivery earlier than promise.</p>
+      <p style="font-size:0.8rem;color:var(--text-3);margin-top:-0.75rem;">✓ = exits egregious set. Early 4d/3d/2d in After are still egregious (over-corrected — HA call dragged 3–5+ days, removing it pushes delivery well before promise). Early 1d and Late 1d exit egregious. Before shows — for buckets that can't appear when all orders are Late.</p>
 
       <div class="finding finding-green">
         <div class="finding-label">Simulation Result</div>
-        <p>Late group collapses from <strong>100% → 16.0%</strong>. Late 5d+ nearly disappears (35.7% → 0.2%). 40.6% of orders reach On-Time, 36.8% reach Early 1d. High within-scope efficacy (88.3%) — HA call is almost always the sole delay driver for these orders.</p>
+        <p>65.9% of in-scope orders exit egregious. Late 5d+ collapses from 40.7% → 4.1%; Late 3d from 25.6% → 5.4%. The 35/317 orders that land in Early 4d/3d/2d after correction are <strong>still egregious</strong> — their HA call was so long (3–5+ days) that removing it over-corrects. The 11% residual Late egregious had additional upstream delays beyond the HA call.</p>
       </div>
     </div>
 
