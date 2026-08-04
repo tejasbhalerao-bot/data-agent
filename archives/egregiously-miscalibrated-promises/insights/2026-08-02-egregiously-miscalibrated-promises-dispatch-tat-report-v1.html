@@ -1349,64 +1349,73 @@ tbody tr:hover td { background: var(--surface-alt); }
               <th class="td-num">Orders</th>
               <th class="td-num">% of Non-SDD Inv</th>
               <th class="td-num">% of Egregious</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td class="td-muted">Early 5d+</td><td class="td-num td-muted">101</td><td class="td-num td-muted">0.2%</td><td class="td-num td-muted">0.1%</td></tr>
-            <tr><td class="td-muted">Early 4d</td><td class="td-num td-muted">670</td><td class="td-num td-muted">1.2%</td><td class="td-num td-muted">0.7%</td></tr>
+            <tr><td class="td-muted">Early 5d+</td><td class="td-num td-muted">101</td><td class="td-num td-muted">0.2%</td><td class="td-num td-muted">0.1%</td><td class="td-muted" style="font-size:0.78rem">Not analysed</td></tr>
+            <tr><td class="td-muted">Early 4d</td><td class="td-num td-muted">670</td><td class="td-num td-muted">1.2%</td><td class="td-num td-muted">0.7%</td><td class="td-muted" style="font-size:0.78rem">Not analysed</td></tr>
             <tr class="td-focus">
               <td class="td-bold">Early 3d</td>
               <td class="td-num td-bold">4,920</td>
               <td class="td-num td-hl-accent">8.5%</td>
               <td class="td-num">5.1%</td>
+              <td style="font-size:0.78rem;color:var(--accent-text);font-weight:600">Root cause ↓ B.3</td>
             </tr>
             <tr class="td-focus">
               <td class="td-bold">Early 2d</td>
               <td class="td-num td-bold">25,355</td>
               <td class="td-num td-hl-accent">44.0%</td>
               <td class="td-num">26.3%</td>
+              <td style="font-size:0.78rem;color:var(--accent-text);font-weight:600">Root cause ↓ B.3</td>
             </tr>
             <tr class="td-focus">
               <td class="td-bold">Early 1d</td>
               <td class="td-num td-bold">4,298</td>
               <td class="td-num td-hl-accent">7.5%</td>
               <td class="td-num">4.5%</td>
+              <td style="font-size:0.78rem;color:var(--accent-text);font-weight:600">Root cause ↓ B.3</td>
             </tr>
             <tr>
               <td>On-Time</td>
               <td class="td-num">1,779</td>
               <td class="td-num">3.1%</td>
               <td class="td-num">1.8%</td>
+              <td style="font-size:0.78rem;color:var(--text-3)">Excluded — baseline</td>
             </tr>
             <tr class="td-focus-red">
               <td class="td-bold">Late 1d</td>
               <td class="td-num td-bold">3,331</td>
               <td class="td-num td-hl-red">5.8%</td>
               <td class="td-num">3.5%</td>
+              <td style="font-size:0.78rem;color:var(--err-fg);font-weight:600">Root cause ↓ B.3</td>
             </tr>
             <tr class="td-focus-red">
               <td class="td-bold">Late 2d</td>
               <td class="td-num td-bold">9,978</td>
               <td class="td-num td-hl-red">17.3%</td>
               <td class="td-num">10.3%</td>
+              <td style="font-size:0.78rem;color:var(--err-fg);font-weight:600">Root cause ↓ B.3</td>
             </tr>
             <tr class="td-focus-red">
               <td class="td-bold">Late 3d</td>
               <td class="td-num td-bold">3,774</td>
               <td class="td-num td-hl-red">6.5%</td>
               <td class="td-num">3.9%</td>
+              <td style="font-size:0.78rem;color:var(--err-fg);font-weight:600">Root cause ↓ B.3</td>
             </tr>
             <tr class="td-focus-red">
               <td class="td-bold">Late 4d</td>
               <td class="td-num td-bold">1,694</td>
               <td class="td-num td-hl-red">2.9%</td>
               <td class="td-num">1.8%</td>
+              <td style="font-size:0.78rem;color:var(--err-fg);font-weight:600">Root cause ↓ B.3</td>
             </tr>
-            <tr><td class="td-muted">Late 5d+</td><td class="td-num td-muted">1,788</td><td class="td-num td-muted">3.1%</td><td class="td-num td-muted">1.9%</td></tr>
+            <tr><td class="td-muted">Late 5d+</td><td class="td-num td-muted">1,788</td><td class="td-num td-muted">3.1%</td><td class="td-num td-muted">1.9%</td><td class="td-muted" style="font-size:0.78rem">Not analysed</td></tr>
           </tbody>
         </table>
       </div>
-      <p style="color:var(--text-2);font-size:0.83rem;">The highlighted cohorts span 53,350 orders — 92.5% of the entire superset. On-Time is only 3.1%. This is not operational variance; it is systemic promise miscalibration.</p>
+      <p style="color:var(--text-2);font-size:0.83rem;">The 7 highlighted cohorts span 53,350 orders (92.5% of Non-SDD Inv) and are the focus of Section B.3. The remaining 4,338 orders (7.5%) — Early 4d+ (771, 1.4%), On-Time (1,779, 3.1%), and Late 5d+ (1,788, 3.1%) — are excluded from root cause analysis; see the note at the bottom of B.3.</p>
     </div>
 
     <hr class="divider">
@@ -1541,6 +1550,15 @@ tbody tr:hover td { background: var(--surface-alt); }
       <div class="finding finding-green">
         <div class="finding-label">Root Cause — Confirmed Across All 7 Cohorts</div>
         <p>The transit TAT lookup table is stale for a significant subset of pincode/courier/zone lanes. It systematically over-estimates transit for some lanes (producing Early cohorts) and under-estimates for others (producing Late cohorts). The shipping layer adds no correction in 84–85% of late same-courier cases. <strong>One fix addresses all seven cohorts: recalibrate the transit TAT lookup using rolling actuals per lane.</strong></p>
+      </div>
+
+      <div style="margin-top:1.25rem;padding:0.85rem 1rem;background:var(--surface-2);border:1px solid var(--border-ui);border-radius:var(--radius-sm);font-size:0.82rem;color:var(--text-2);line-height:1.6">
+        <strong style="color:var(--text-1)">Cohorts not included in this analysis</strong> — Three cohorts totalling 4,338 orders (7.5% of Non-SDD Inv) are excluded from B.3:
+        <ul style="margin-top:0.5rem;padding-left:1.25rem">
+          <li><strong style="color:var(--text-1)">Early 4d+</strong> (Early 5d+ + Early 4d combined) — 771 orders, 1.4%. Noise-level volume; same stale-lookup root cause but insufficient scale to analyse separately.</li>
+          <li><strong style="color:var(--text-1)">On-Time TAT</strong> — 1,779 orders, 3.1%. The courier matched the promise — these are correct outcomes, not a miscalibration problem.</li>
+          <li><strong style="color:var(--text-1)">Late 5d+</strong> — 1,788 orders, 3.1%. Same stale-lookup root cause as the Late cohorts above, but too small a tail to prioritise a separate fix path.</li>
+        </ul>
       </div>
     </div>
   </div>
