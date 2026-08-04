@@ -1616,7 +1616,7 @@ tbody tr:hover td { background: var(--surface-alt); }
       <h2>Impact Simulations</h2>
     </div>
 
-    <p>Payment pending was already simulated in A.4 (−5.4pp lateness, 2,951 orders rescued). Three additional fixes simulated here. Each shows two views: (1) Early / On-Time / Late group shift, (2) day-level bucket shift — both as % of orders in scope. All rows are egregious before; non-egregious rows appear only in the After column.</p>
+    <p>Payment pending was already simulated in A.4 (−5.4pp lateness, 2,951 orders rescued). Four additional fixes simulated here. Each shows two views: (1) Early / On-Time / Late group shift, (2) day-level bucket shift — both as % of orders in scope. All rows are egregious before; non-egregious rows appear only in the After column.</p>
 
     <!-- D.1 Doctor SLA fix -->
     <div class="subsection">
@@ -1704,12 +1704,57 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <hr class="divider">
 
-    <!-- D.3 TAT recalibration -->
+    <!-- D.3 Warehouse Early dispatch fix -->
     <div class="subsection">
-      <h3>D.3 — TAT Recalibration &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 57,688 (full segment)</span></h3>
+      <h3>D.3 — Warehouse Early Dispatch Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 57,688 · 6,207 orders shifted · 3,944 exit egregious (6.84%)</span></h3>
+      <p>Scope: all 6,207 orders with Early 1d dispatch deviation (<code>DATE(digitised_dispatch_promise) − DATE(pickup_time) = 1</code>). Mechanic: if the warehouse dispatches on the promise date instead of 1 day early, all downstream intervals are preserved — <strong>delivery_sim = delivery_attempt_time + 1 day</strong>. Both tables show % of the full 57,688 segment.</p>
+
+      <h4>1 · Group-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Group</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
+          <tbody>
+            <tr><td>Early</td><td class="td-num">61.0%</td><td class="td-num">61.0%</td><td class="td-num td-muted">0.0pp</td></tr>
+            <tr><td>On-Time</td><td class="td-num">0.0%</td><td class="td-num">0.0%</td><td class="td-num td-muted">0.0pp</td></tr>
+            <tr><td>Late</td><td class="td-num td-bold">39.0%</td><td class="td-num">39.0%</td><td class="td-num td-muted">0.0pp</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>2 · Day-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Bucket</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
+          <tbody>
+            <tr><td>Early 5d+</td><td class="td-num">0.21%</td><td class="td-num">0.15%</td><td class="td-num td-hl-green">−0.06pp</td></tr>
+            <tr><td>Early 4d</td><td class="td-num">1.44%</td><td class="td-num">1.04%</td><td class="td-num td-hl-green">−0.40pp</td></tr>
+            <tr><td>Early 3d</td><td class="td-num">9.46%</td><td class="td-num">7.76%</td><td class="td-num td-hl-green">−1.70pp</td></tr>
+            <tr><td class="td-bold">Early 2d</td><td class="td-num td-bold">49.85%</td><td class="td-num">45.18%</td><td class="td-num td-hl-green">−4.67pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">Early 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold td-hl-green">6.84%</td><td class="td-num td-hl-green">+6.84pp</td></tr>
+            <tr><td>Late 2d</td><td class="td-num">23.86%</td><td class="td-num">23.22%</td><td class="td-num td-hl-green">−0.64pp</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">7.88%</td><td class="td-num">8.29%</td><td class="td-num td-hl-amber">+0.41pp</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">3.48%</td><td class="td-num">3.58%</td><td class="td-num td-hl-amber">+0.10pp</td></tr>
+            <tr><td>Late 5d+</td><td class="td-num">3.82%</td><td class="td-num">3.95%</td><td class="td-num td-hl-amber">+0.13pp</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-3);margin-top:-0.75rem;">✓ = exits egregious set. % of full 57,688 segment. Late 1d omitted (0.00pp change).</p>
+
+      <div class="finding finding-green">
+        <div class="finding-label">Simulation Result</div>
+        <p><strong>3,944 orders exit egregious (6.84%)</strong> — the largest single rescue of any upstream process fix, concentrated in the Early 2d boundary bucket (−4.67pp). The group-level split does not move at all: rescued orders shift from Early 2d to Early 1d (still in the Early group, just no longer egregious), while Late orders are unaffected at the group level. This is structurally different from D.1 and D.2 — those fixes rescued Late orders; this fix exclusively reduces Early severity.</p>
+        <p><strong>Side effect:</strong> 0.64pp of Late orders that happened to have Early dispatch but terrible TAT now deliver 1 day later after the fix, pushing them from Late 2d into Late 3d+ (Late 3d: +0.41pp, Late 4d: +0.10pp, Late 5d+: +0.13pp). Net across the segment: 3,944 rescued vs ≈369 worsened. The fix is strongly positive but the worsening of these Late orders should be tracked.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- D.4 TAT recalibration -->
+    <div class="subsection">
+      <h3>D.4 — TAT Recalibration &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 57,688 (full segment)</span></h3>
       <p>Two variants: (a) use <code>shipping_delivery_promise</code> as the new TAT anchor from actual pickup; (b) perfect recalibration where <strong>delivery_sim = actual_pickup + actual_TAT</strong>.</p>
 
-      <h4>D.3a — Shipping-based TAT &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">rescues 31,269 (54.2%)</span></h4>
+      <h4>D.4a — Shipping-based TAT &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">rescues 31,269 (54.2%)</span></h4>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
@@ -1749,7 +1794,7 @@ tbody tr:hover td { background: var(--surface-alt); }
         <p>Shipping-based TAT rescues <strong>54.2%</strong>. Early 2d drops from 49.9% → 16.6%. Late 2d halves from 23.9% → 11.9%. Residual: <strong>45.8%</strong> — shipping_delivery_promise is itself derived from the stale digitised lookup in most cases and is only partially corrected.</p>
       </div>
 
-      <h4>D.3b — Perfect TAT recalibration &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">rescues 57,688 (100%)</span></h4>
+      <h4>D.4b — Perfect TAT recalibration &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">rescues 57,688 (100%)</span></h4>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
