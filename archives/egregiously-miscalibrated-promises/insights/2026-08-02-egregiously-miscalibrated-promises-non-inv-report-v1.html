@@ -809,58 +809,49 @@ tbody tr:hover td { background: var(--surface-alt); }
       <h2>Impact Simulations</h2>
     </div>
 
-    <p>For each identified fix, how many of the 29,813 egregious orders would exit the egregious set (|delivery deviation| &lt; 2 days) if the fix were applied? Simulations are run on the same July 2026 dataset. Mechanics below.</p>
+    <p>Two views per simulation — (1) Early / On-Time / Late group shift, (2) day-level bucket shift — both as % of orders in scope. All rows are egregious before; non-egregious rows appear only in the After column.</p>
 
     <!-- E.1 WH promise fix -->
     <div class="subsection">
-      <h3>E.1 — Simulation: WH Promise Fix</h3>
-      <p>Mechanic: <strong>dispatch_sim = date(invoice_create_ts + 0.4h)</strong>; delivery_sim = dispatch_sim + TAT_days. Replaces the WH-anchored dispatch promise with what dispatch timing would actually be if the WH model used invoice-to-AWB actuals.</p>
+      <h3>E.1 — WH Promise Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 29,803 · rescues 22,541 (75.6%)</span></h3>
+      <p>Mechanic: <strong>dispatch_sim = date(invoice_create_ts + 0.4h)</strong>; delivery_sim = dispatch_sim + TAT_days.</p>
 
-      <div class="stat-row">
-        <div class="stat">
-          <div class="stat-num green">22,541</div>
-          <div class="stat-label">Orders rescued (exit egregious)</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num green">75.6%</div>
-          <div class="stat-label">Of this segment's egregious orders</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">23.4%</div>
-          <div class="stat-label">Of all 96,424 egregious orders</div>
-        </div>
-      </div>
-
-      <h4>Delivery deviation distribution shift</h4>
+      <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>Bucket</th>
-              <th class="td-num">Before</th>
-              <th class="td-num">After</th>
-              <th class="td-num">Δ</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Group</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
           <tbody>
-            <tr><td>Early 5d+</td><td class="td-num">203</td><td class="td-num">1</td><td class="td-num td-hl-green">−202</td></tr>
-            <tr><td>Early 4d</td><td class="td-num">1,542</td><td class="td-num">20</td><td class="td-num td-hl-green">−1,522</td></tr>
-            <tr><td>Early 3d</td><td class="td-num">6,978</td><td class="td-num">597</td><td class="td-num td-hl-green">−6,381</td></tr>
-            <tr><td>Early 2d</td><td class="td-num td-bold">18,949</td><td class="td-num">4,639</td><td class="td-num td-hl-green">−14,310</td></tr>
-            <tr class="td-focus"><td class="td-bold">Early 1d (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">14,621</td><td class="td-num td-hl-green">+14,621</td></tr>
-            <tr class="td-focus"><td class="td-bold">On-Time (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">7,358</td><td class="td-num td-hl-green">+7,358</td></tr>
-            <tr><td>Late 1d (exits egregious)</td><td class="td-num">0</td><td class="td-num">562</td><td class="td-num td-hl-green">+562</td></tr>
-            <tr><td>Late 2d</td><td class="td-num">1,194</td><td class="td-num">350</td><td class="td-num td-hl-amber">−844</td></tr>
-            <tr><td>Late 3d</td><td class="td-num">450</td><td class="td-num">756</td><td class="td-num td-hl-red">+306</td></tr>
-            <tr><td>Late 4d</td><td class="td-num">232</td><td class="td-num">442</td><td class="td-num td-hl-red">+210</td></tr>
-            <tr><td>Late 5d+</td><td class="td-num">255</td><td class="td-num">457</td><td class="td-num td-hl-red">+202</td></tr>
+            <tr><td>Early</td><td class="td-num">92.8%</td><td class="td-num">66.7%</td><td class="td-num td-hl-amber">−26.1pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time</td><td class="td-num">0.0%</td><td class="td-num td-bold td-hl-green">24.7%</td><td class="td-num td-hl-green">+24.7pp</td></tr>
+            <tr><td>Late</td><td class="td-num">7.2%</td><td class="td-num">8.6%</td><td class="td-num td-muted">+1.4pp</td></tr>
           </tbody>
         </table>
       </div>
 
+      <h4>2 · Day-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Bucket</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
+          <tbody>
+            <tr><td>Early 5d+</td><td class="td-num">0.7%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−0.7pp</td></tr>
+            <tr><td>Early 4d</td><td class="td-num">5.2%</td><td class="td-num">0.1%</td><td class="td-num td-hl-green">−5.1pp</td></tr>
+            <tr><td>Early 3d</td><td class="td-num">23.4%</td><td class="td-num">2.0%</td><td class="td-num td-hl-green">−21.4pp</td></tr>
+            <tr><td class="td-bold">Early 2d</td><td class="td-num td-bold">63.6%</td><td class="td-num">15.6%</td><td class="td-num td-hl-green">−48.0pp</td></tr>
+            <tr class="td-focus"><td>Early 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">49.1%</td><td class="td-num td-hl-green">+49.1pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">24.7%</td><td class="td-num td-hl-green">+24.7pp</td></tr>
+            <tr class="td-focus"><td>Late 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num">1.9%</td><td class="td-num td-hl-green">+1.9pp</td></tr>
+            <tr><td>Late 2d</td><td class="td-num">4.0%</td><td class="td-num">1.2%</td><td class="td-num td-hl-green">−2.8pp</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">1.5%</td><td class="td-num">2.5%</td><td class="td-num td-muted">+1.0pp</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">0.8%</td><td class="td-num">1.5%</td><td class="td-num td-muted">+0.7pp</td></tr>
+            <tr><td>Late 5d+</td><td class="td-num">0.9%</td><td class="td-num">1.5%</td><td class="td-num td-muted">+0.6pp</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-3);margin-top:-0.75rem;">✓ = exits egregious set (|dev| &lt; 2d). Before column shows — for these rows since they cannot appear in the all-egregious baseline.</p>
+
       <div class="finding finding-green">
         <div class="finding-label">Simulation Result</div>
-        <p>The WH fix alone rescues <strong>22,541 orders (75.6%)</strong>. The dominant Early 2d cohort collapses from 18,949 to 4,639. Nearly 7,400 orders reach On-Time, and 14,600 more reach Early 1d (no longer egregious). <strong>Residual: 7,262 orders (24.4%)</strong> remain egregious — these are the stale-TAT cohort where the WH fix alone is insufficient because the TAT lookup independently miscalibrates delivery timing by ≥2 days.</p>
+        <p>The dominant Early 2d cohort collapses from <strong>63.6% → 15.6%</strong>. 24.7% of orders reach On-Time; 49.1% reach Early 1d. Residual: <strong>24.4% remain egregious</strong> — the stale-TAT cohort, unaffected by the WH fix.</p>
       </div>
     </div>
 
@@ -868,27 +859,42 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- E.2 WH + TAT combined fix -->
     <div class="subsection">
-      <h3>E.2 — Simulation: WH Fix + TAT Recalibration (Combined — Maximum Potential)</h3>
-      <p>Mechanic: <strong>delivery_sim = actual_pickup + actual_TAT</strong>. All orders exit the egregious set by construction. This represents the upper bound — 100% rescue — assuming both the WH promise and the transit TAT lookup are perfectly recalibrated to match actuals.</p>
+      <h3>E.2 — WH Fix + TAT Recalibration (Upper Bound) &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 29,813 · rescues 29,813 (100%)</span></h3>
+      <p>Mechanic: <strong>delivery_sim = actual_pickup + actual_TAT</strong>. Every order reaches On-Time by construction.</p>
 
-      <div class="stat-row">
-        <div class="stat">
-          <div class="stat-num green">29,813</div>
-          <div class="stat-label">Orders rescued (100% of segment)</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num green">30.9%</div>
-          <div class="stat-label">Of all 96,424 egregious orders</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">7,272</div>
-          <div class="stat-label">Additional orders vs WH fix alone</div>
-        </div>
+      <h4>1 · Group-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Group</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
+          <tbody>
+            <tr><td>Early</td><td class="td-num">92.8%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−92.8pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time</td><td class="td-num">0.0%</td><td class="td-num td-bold td-hl-green">100.0%</td><td class="td-num td-hl-green">+100.0pp</td></tr>
+            <tr><td>Late</td><td class="td-num">7.2%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−7.2pp</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>2 · Day-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Bucket</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
+          <tbody>
+            <tr><td>Early 5d+</td><td class="td-num">0.7%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−0.7pp</td></tr>
+            <tr><td>Early 4d</td><td class="td-num">5.2%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−5.2pp</td></tr>
+            <tr><td>Early 3d</td><td class="td-num">23.4%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−23.4pp</td></tr>
+            <tr><td class="td-bold">Early 2d</td><td class="td-num td-bold">63.6%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−63.6pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold td-hl-green">100.0%</td><td class="td-num td-hl-green">+100.0pp</td></tr>
+            <tr><td>Late 2d</td><td class="td-num">4.0%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−4.0pp</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">1.5%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−1.5pp</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">0.8%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−0.8pp</td></tr>
+            <tr><td>Late 5d+</td><td class="td-num">0.9%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−0.9pp</td></tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="finding finding-green">
-        <div class="finding-label">Simulation Result</div>
-        <p>Combining the WH promise fix with a TAT lookup recalibration reaches <strong>100% rescue</strong> — all 29,813 egregious orders exit. The incremental gain over the WH fix alone is <strong>7,272 orders</strong> (the stale-TAT residual). The WH fix is the higher-leverage lever in isolation (75.6%); the TAT recalibration is the necessary complement to reach full coverage.</p>
+        <div class="finding-label">Simulation Result — Upper Bound</div>
+        <p>WH + TAT combined reaches <strong>100%</strong>. Incremental gain over E.1 (WH fix alone): <strong>7,272 orders / 24.4 pp</strong> — the stale-TAT residual that only the TAT recalibration can reach.</p>
       </div>
     </div>
   </div>

@@ -699,61 +699,48 @@ tbody tr:hover td { background: var(--surface-alt); }
       <h2>Impact Simulation</h2>
     </div>
 
-    <p>SDD Non-Inventory has a single root cause and a single lever. One simulation suffices: recalibrate the WH processing time so the dispatch promise reflects actual invoice-to-AWB timing.</p>
+    <p>Two views — (1) Early / On-Time / Late group shift, (2) day-level bucket shift — both as % of orders in scope (n=4,590). All rows are egregious before; non-egregious rows appear only in the After column.</p>
 
     <!-- E.1 WH promise fix -->
     <div class="subsection">
-      <h3>E.1 — Simulation: WH Promise Fix</h3>
-      <p>Mechanic: <strong>dispatch_sim = date(invoice_create_ts + 0.4h)</strong>; delivery_sim = dispatch_sim + TAT_days. SDD TAT is correctly configured (0–1d actuals match promise), so there is no secondary TAT fix needed.</p>
+      <h3>E.1 — WH Promise Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 4,590 · rescues 4,212 (91.8%)</span></h3>
+      <p>Mechanic: <strong>dispatch_sim = date(invoice_create_ts + 0.4h)</strong>; delivery_sim = dispatch_sim + TAT_days. SDD TAT is correctly configured (0–1d actuals match promise) — no TAT fix needed.</p>
 
-      <div class="stat-row">
-        <div class="stat">
-          <div class="stat-num green">4,212</div>
-          <div class="stat-label">Orders rescued (exit egregious)</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num green">91.8%</div>
-          <div class="stat-label">Of this segment's egregious orders</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">4.4%</div>
-          <div class="stat-label">Of all 96,424 egregious orders</div>
-        </div>
-      </div>
-
-      <h4>Delivery deviation distribution shift</h4>
+      <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>Bucket</th>
-              <th class="td-num">Before</th>
-              <th class="td-num">After</th>
-              <th class="td-num">Δ</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Group</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
           <tbody>
-            <tr><td>Early 3d</td><td class="td-num td-bold">307</td><td class="td-num">0</td><td class="td-num td-hl-green">−307</td></tr>
-            <tr><td>Early 2d</td><td class="td-num td-bold">3,861</td><td class="td-num">0</td><td class="td-num td-hl-green">−3,861</td></tr>
-            <tr class="td-focus"><td class="td-bold">Early 1d (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">216</td><td class="td-num td-hl-green">+216</td></tr>
-            <tr class="td-focus"><td class="td-bold">On-Time (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">2,410</td><td class="td-num td-hl-green">+2,410</td></tr>
-            <tr class="td-focus"><td class="td-bold">Late 1d (exits egregious)</td><td class="td-num">0</td><td class="td-num td-bold">1,586</td><td class="td-num td-hl-green">+1,586</td></tr>
-            <tr><td>Late 2d</td><td class="td-num">239</td><td class="td-num">27</td><td class="td-num td-hl-amber">−212</td></tr>
-            <tr><td>Late 3d</td><td class="td-num">96</td><td class="td-num">131</td><td class="td-num td-hl-red">+35</td></tr>
-            <tr><td>Late 4d</td><td class="td-num">46</td><td class="td-num">107</td><td class="td-num td-hl-red">+61</td></tr>
-            <tr><td>Late 5d+</td><td class="td-num">41</td><td class="td-num">113</td><td class="td-num td-hl-red">+72</td></tr>
+            <tr><td>Early</td><td class="td-num">90.8%</td><td class="td-num">4.7%</td><td class="td-num td-hl-green">−86.1pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time</td><td class="td-num">0.0%</td><td class="td-num td-bold td-hl-green">52.5%</td><td class="td-num td-hl-green">+52.5pp</td></tr>
+            <tr><td>Late</td><td class="td-num">9.2%</td><td class="td-num">42.8%</td><td class="td-num td-muted">+33.6pp</td></tr>
           </tbody>
         </table>
       </div>
+      <p style="font-size:0.8rem;color:var(--text-3);margin-top:-0.75rem;">Late group increases because Early 2d/3d orders whose simulated delivery overshoots On-Time land in Late 1d–5d+. Late 1d (34.6%) exits egregious; remaining Late 3d–5d+ (7.7%) are the residual.</p>
+
+      <h4>2 · Day-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Bucket</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
+          <tbody>
+            <tr><td class="td-bold">Early 3d</td><td class="td-num td-bold">6.7%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−6.7pp</td></tr>
+            <tr><td class="td-bold">Early 2d</td><td class="td-num td-bold">84.1%</td><td class="td-num">0.0%</td><td class="td-num td-hl-green">−84.1pp</td></tr>
+            <tr class="td-focus"><td>Early 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num">4.7%</td><td class="td-num td-hl-green">+4.7pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">52.5%</td><td class="td-num td-hl-green">+52.5pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">Late 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">34.6%</td><td class="td-num td-hl-green">+34.6pp</td></tr>
+            <tr><td>Late 2d</td><td class="td-num">5.2%</td><td class="td-num">0.6%</td><td class="td-num td-hl-green">−4.6pp</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">2.1%</td><td class="td-num">2.9%</td><td class="td-num td-muted">+0.8pp</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">1.0%</td><td class="td-num">2.3%</td><td class="td-num td-muted">+1.3pp</td></tr>
+            <tr><td>Late 5d+</td><td class="td-num">0.9%</td><td class="td-num">2.5%</td><td class="td-num td-muted">+1.6pp</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-3);margin-top:-0.75rem;">✓ = exits egregious set. Before column shows — for these rows since they cannot appear in the all-egregious baseline.</p>
 
       <div class="finding finding-green">
         <div class="finding-label">Simulation Result</div>
-        <p>The WH processing time fix rescues <strong>4,212 orders (91.8%)</strong> of the SDD Non-Inventory egregious set. Early 3d and Early 2d collapse to zero. 2,410 orders reach On-Time, and 1,586 more reach Late 1d (no longer egregious). <strong>Residual: 378 orders (8.2%)</strong> — these are the Late 3d–5d+ tail from the non-Cohort-69 orders, driven by different mechanisms not captured in this simulation.</p>
-      </div>
-
-      <div class="finding finding-amber">
-        <div class="finding-label">Note on Late 3d–5d+ increase</div>
-        <p>The simulated Late 3d–5d+ counts increase (+168 combined) because some Early 2d/3d orders shift past On-Time into the Late side when the dispatch sim moves earlier than actual delivery. This is a mechanical artifact of couriers delivering later than the simulated promise, not new failures created by the fix.</p>
+        <p>Early 2d collapses from <strong>84.1% → 0%</strong>; Early 3d from <strong>6.7% → 0%</strong>. 52.5% of orders reach On-Time, 34.6% reach Late 1d. Residual egregious: <strong>8.2%</strong> (Late 2d–5d+ tail, non-Cohort-69 orders driven by separate mechanisms).</p>
       </div>
     </div>
   </div>
