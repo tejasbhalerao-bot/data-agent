@@ -514,6 +514,134 @@
 
   </section>
 
+  <!-- Block 2: Root Causes -->
+  <section class="section">
+    <div class="eyebrow">Block 2 · Pillar 1</div>
+    <h1 style="font-size:2rem; font-weight:750; letter-spacing:-0.025em; line-height:1.2; text-wrap:balance; color:var(--text-1); margin-top:0.5rem; margin-bottom:1rem;">Root Causes — The 5 Problems Driving Egregious Miscalibration</h1>
+    <p style="font-size:0.95rem; color:var(--text-2); line-height:1.7; margin-bottom:0;">The stage breakdown above shows where the promise breaks. Each problem block below names the root cause, quantifies its footprint in the egregious cohort, and states the impact on the 15.3% figure if resolved.</p>
+  </section>
+
+  <!-- Problem 1: WH Non-Inventory Promise -->
+  <section class="section">
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;">
+
+      <!-- Problem header -->
+      <div style="padding:1.5rem 1.5rem 0;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.35rem;">Problem 1 of 5 &nbsp;·&nbsp; Block 2, Pillar 1</div>
+        <h2 style="font-size:1.2rem; font-weight:750; letter-spacing:-0.02em; color:var(--text-1); text-wrap:balance; margin-bottom:1rem;">WH Non-Inventory Promise</h2>
+      </div>
+
+      <!-- Problem -->
+      <div style="padding:0 1.5rem 1.25rem;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.4rem;">Problem</div>
+        <p style="font-size:0.88rem; color:var(--text-2); line-height:1.65;">The WH promise allocates a procurement time buffer for Non-Inventory orders — but the buffer is far larger than what procurement actually takes. The warehouse procures much faster than the promise assumes, so the dispatch date ends up later than it needs to be.</p>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--border); margin:0;">
+
+      <!-- Example flow -->
+      <div style="padding:1.25rem 1.5rem;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.75rem;">Example flow — Non-SDD Non-Inventory order</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; min-width:500px;">
+            <tbody>
+              <!-- Actual row -->
+              <tr>
+                <td style="width:68px; padding-right:0.5rem; font-size:0.6rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#1A7A6E; vertical-align:middle; white-space:nowrap;">Actual</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:var(--ok-bg); border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:var(--ok-fg); line-height:1.3;">Order placed + invoice fires<br><span style="font-size:0.58rem; font-weight:500; opacity:0.8;">Day 0</span></div>
+                </td>
+                <td style="padding:0.28rem 0; text-align:center; color:var(--text-3); font-size:0.75rem;">›</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:var(--ok-bg); border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:var(--ok-fg); line-height:1.3;">AWB printed<br><span style="font-size:0.58rem; font-weight:500; opacity:0.8;">Day 0–1</span></div>
+                </td>
+                <td style="padding:0.28rem 0; text-align:center; color:var(--text-3); font-size:0.75rem;">›</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:var(--ok-bg); border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:var(--ok-fg); line-height:1.3;">Courier picks up<br><span style="font-size:0.58rem; font-weight:500; opacity:0.8;">Day 0–1</span></div>
+                </td>
+                <td style="padding:0.28rem 0; text-align:center; color:var(--text-3); font-size:0.75rem;">›</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:var(--ok-bg); border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:var(--ok-fg); line-height:1.3;">Delivery attempt<br><span style="font-size:0.58rem; font-weight:500; opacity:0.8;">Day 2–3</span></div>
+                </td>
+              </tr>
+              <!-- Divider -->
+              <tr>
+                <td></td>
+                <td colspan="7" style="padding:0.2rem 0;"><hr style="border:none; border-top:1px dashed var(--border-ui);"></td>
+              </tr>
+              <!-- Promised row -->
+              <tr>
+                <td style="width:68px; padding-right:0.5rem; font-size:0.6rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#C1440E; vertical-align:middle; white-space:nowrap;">Promised</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:#FEE2D5; border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:#9A2E10; line-height:1.3;">WH promise opens<br><span style="font-weight:400; font-size:0.58rem;">← buffer over-estimated</span><br><span style="font-size:0.58rem; font-weight:500; opacity:0.8;">Day 2</span></div>
+                </td>
+                <td style="padding:0.28rem 0; text-align:center; color:var(--text-3); font-size:0.75rem;">›</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:#FEE2D5; border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:#9A2E10; line-height:1.3;">Dispatch promise<br><span style="font-size:0.58rem; font-weight:500; opacity:0.8;">Day 3</span></div>
+                </td>
+                <td style="padding:0.28rem 0; text-align:center; color:var(--text-3); font-size:0.75rem;">›</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:#FEE2D5; border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:#9A2E10; line-height:1.3;">Delivery promise<br><span style="font-size:0.58rem; font-weight:500; opacity:0.8;">Day 5</span></div>
+                </td>
+                <td style="padding:0.28rem 0;"></td>
+                <td style="padding:0.28rem 0.3rem;"><div style="opacity:0; pointer-events:none; border-radius:6px; padding:0.32rem 0.4rem;">&nbsp;</div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--border); margin:0;">
+
+      <!-- Quantification -->
+      <div style="padding:1.25rem 1.5rem;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.75rem;">Quantification</div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.75rem;">
+          <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 0.9rem;">
+            <div style="font-size:1.3rem; font-weight:750; color:#185FA5; letter-spacing:-0.02em; font-variant-numeric:tabular-nums;">35.7%</div>
+            <div style="font-size:0.68rem; color:var(--text-2); margin-top:0.2rem; line-height:1.4;">of egregious cohort affected<br>(34,404 orders)</div>
+          </div>
+          <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 0.9rem;">
+            <div style="font-size:1.3rem; font-weight:750; color:#185FA5; letter-spacing:-0.02em; font-variant-numeric:tabular-nums;">32.4h</div>
+            <div style="font-size:0.68rem; color:var(--text-2); margin-top:0.2rem; line-height:1.4;">median gap — invoice creation to WH promise opening</div>
+          </div>
+          <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 0.9rem;">
+            <div style="font-size:1.3rem; font-weight:750; color:#185FA5; letter-spacing:-0.02em; font-variant-numeric:tabular-nums;">26.7–50.4h</div>
+            <div style="font-size:0.68rem; color:var(--text-2); margin-top:0.2rem; line-height:1.4;">IQR — invoice creation to WH promise opening</div>
+          </div>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--border); margin:0;">
+
+      <!-- Impact -->
+      <div style="padding:1.25rem 1.5rem;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.75rem;">Impact if addressed</div>
+        <div style="display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;">
+          <div>
+            <div style="font-size:2rem; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-0.03em; color:var(--text-2);">15.3%</div>
+            <div style="font-size:0.62rem; color:var(--text-3); margin-top:0.1rem;">egregious rate today</div>
+          </div>
+          <div style="font-size:1.2rem; color:var(--text-3);">→</div>
+          <div>
+            <div style="font-size:2rem; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-0.03em; color:var(--ok-fg);">~11.1%</div>
+            <div style="font-size:0.62rem; color:var(--text-3); margin-top:0.1rem;">if fully resolved</div>
+          </div>
+          <div style="font-size:0.75rem; color:var(--text-2); line-height:1.5; margin-left:0.5rem;">−4.2pp &nbsp;·&nbsp; 26,753 orders rescued<br>on 628K attempted-orders base</div>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--border); margin:0;">
+
+      <!-- Dependencies -->
+      <div style="padding:1.25rem 1.5rem;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.6rem;">Dependencies</div>
+        <div style="display:inline-flex; align-items:center; background:var(--surface-2); border:1px solid var(--border-ui); border-radius:999px; padding:0.3rem 0.85rem; font-size:0.75rem; font-weight:700; color:var(--text-1);">Warehouse Ops</div>
+      </div>
+
+    </div>
+  </section>
+
 </div>
 </body>
 </html>
