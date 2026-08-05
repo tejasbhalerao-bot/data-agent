@@ -813,7 +813,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- E.1 WH promise fix -->
     <div class="subsection">
-      <h3>E.1 — WH Promise Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 29,803 · rescues 22,541 (75.6%)</span></h3>
+      <h3>E.1 — Non-Inventory WH Promise Calibration &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 29,803 · rescues 22,541 (75.6%)</span></h3>
       <p>Mechanic: <strong>dispatch_sim = date(invoice_create_ts + 0.4h)</strong>; delivery_sim = dispatch_sim + TAT_days.</p>
 
       <h4>1 · Group-level shift</h4>
@@ -859,7 +859,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- E.2 Warehouse early 1d dispatch fix -->
     <div class="subsection">
-      <h3>E.2 — Warehouse Early 1d Dispatch Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">16,327 orders shifted · 11,783 exit egregious (39.52%)</span></h3>
+      <h3>E.2 — Warehouse Early 1d Dispatch &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">16,327 orders shifted · 11,783 exit egregious (39.52%)</span></h3>
       <p>Scope: all 16,327 orders where <code>DATE(digitised_dispatch_promise) − DATE(pickup_time) = 1</code> (pickup 1 day before the dispatch promise). Mechanic: <strong>new_delivery_promise = DATE(pickup_time) + (digitised_delivery_promise − digitised_dispatch_promise).days</strong>; classify <code>delivery_attempt_time</code> against <code>new_delivery_promise</code>. Both tables show % of the full 29,813 egregious segment.</p>
 
       <h4>1 · Group-level shift</h4>
@@ -904,7 +904,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- E.3 Payment pending fix -->
     <div class="subsection">
-      <h3>E.3 — Payment Pending Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">1,622 in scope (5.4%) · 190 exit egregious (0.64%) · 494 worsen (1.66%)</span></h3>
+      <h3>E.3 — Payment Pending &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">1,622 in scope (5.4%) · 190 exit egregious (0.64%) · 494 worsen (1.66%)</span></h3>
       <p>Scope: 1,622 orders with <code>payment_pending_ts</code> non-empty (5.4% of segment). Mechanic: <strong>baseline_gap = median(DATE(pickup_time) − DATE(invoice_create_ts)) for non-pmt-pending orders = 0 days</strong>; <strong>sim_pickup = DATE(invoice_create_ts) + baseline_gap</strong>; <strong>new_delivery_attempt = sim_pickup + (DATE(delivery_attempt_time) − DATE(pickup_time))</strong>; classify against <code>digitised_delivery_promise</code>. Both tables show % of the full 29,813 segment.</p>
 
       <h4>1 · Group-level shift</h4>
@@ -951,7 +951,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- E.4 WH + TAT combined fix -->
     <div class="subsection">
-      <h3>E.4 — WH Fix + TAT Recalibration (Upper Bound) &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 29,813 · rescues 29,813 (100%)</span></h3>
+      <h3>E.4 — TAT Recalibration (Upper Bound) &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 29,813 · rescues 29,813 (100%)</span></h3>
       <p>Mechanic: <strong>delivery_sim = actual_pickup + actual_TAT</strong>. Every order reaches On-Time by construction.</p>
 
       <h4>1 · Group-level shift</h4>
