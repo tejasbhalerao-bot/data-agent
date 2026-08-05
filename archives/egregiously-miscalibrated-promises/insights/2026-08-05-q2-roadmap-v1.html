@@ -154,6 +154,54 @@
       padding: 2rem 1.5rem;
     }
 
+    .mechanism {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .mechanism-block h3 {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 0.75rem;
+    }
+
+    .mechanism-block p {
+      color: var(--text-2);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 0.65rem;
+    }
+
+    .mechanism-block p:last-child { margin-bottom: 0; }
+
+    .mechanism-block ol {
+      padding-left: 1.25rem;
+      color: var(--text-2);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 0.65rem;
+    }
+
+    .mechanism-block ol li { margin-bottom: 0.25rem; }
+
+    .mechanism-block .governance-callout {
+      background: var(--accent-dim);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius-xs);
+      padding: 0.75rem 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .mechanism-block .governance-callout p {
+      color: var(--accent-text);
+      margin-bottom: 0;
+    }
+
     /* ── Header ── */
     .page-header {
       margin-bottom: 3rem;
@@ -243,6 +291,27 @@
       </svg>
     </div>
   </section>
+
+  <!-- Mechanism + Governance -->
+  <div class="mechanism">
+    <div class="mechanism-block">
+      <h3>The Mechanism</h3>
+      <p>Every point of promise accuracy rewards twice:</p>
+      <ol>
+        <li>A lower ETA at checkout wins the order</li>
+        <li>A kept promise at the doorstep wins the customer back</li>
+      </ol>
+      <p>Repeat orders and improved conversion raise order density per lane, sharpening our ETA model, earning us the right to tighten the promise further.</p>
+      <p><strong>Growth this quarter compounds our ability to grow next quarter.</strong></p>
+    </div>
+    <div class="mechanism-block">
+      <h3>Governance</h3>
+      <p>The loop has one condition: promises get shorter only as fast as accuracy allows. Aggressive ETAs that we can't consistently keep don't win customers — they generate RTOs, erode trust, and inflate cost.</p>
+      <div class="governance-callout">
+        <p>On-time delivery is non-negotiable. It is not a metric we optimise when convenient — it is the flywheel that makes everything else work.</p>
+      </div>
+    </div>
+  </div>
 
 </div>
 </body>
