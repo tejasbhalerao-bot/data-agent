@@ -1621,7 +1621,7 @@ tbody tr:hover td { background: var(--surface-alt); }
     <!-- D.1 Payment Pending fix — delivery view -->
     <div class="subsection">
       <h3>D.1 — Payment Pending Fix (Delivery View) &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 57,688 · 5,341 pmt-pending · 3,847 shifted · 2,518 exit egregious (4.36%)</span></h3>
-      <p>A.4 showed payment pending in terms of dispatch deviation. This section shows the same fix's impact on the delivery deviation distribution. Mechanic: <strong>sim_awb = invoice_create_ts + 0.4h</strong> (non-pmt baseline); <strong>sim_pickup = DATE(sim_awb)</strong>; <strong>delta = DATE(pickup_time) − sim_pickup</strong>; <strong>delivery_sim = delivery_attempt_time − delta days</strong>. All downstream intervals preserved exactly.</p>
+      <p><strong>What we're simulating:</strong> For 5,341 orders (9.3% of segment), payment confirmation was pending at the time of dispatch — the shipping label couldn't be printed until payment cleared, which pushed the courier pickup to the next day and caused a late delivery. This simulation asks: <em>if these orders had been dispatched on the same day as their invoice (as quickly as orders without a payment delay), would they still have been late?</em> The courier's actual transit time is held constant — only the pickup date shifts. A.4 showed this same fix's impact on dispatch deviation; this section shows the downstream effect on delivery deviation.</p>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
@@ -1668,7 +1668,7 @@ tbody tr:hover td { background: var(--surface-alt); }
     <!-- D.2 Doctor SLA fix -->
     <div class="subsection">
       <h3>D.2 — Doctor SLA Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 57,688 · 2,616 orders shifted · 199 exit egregious (0.3%)</span></h3>
-      <p>For call-required Late-dispatch orders with late <code>dr_confirm_ts</code>. Mechanic: <strong>dr_lag = dr_confirm_ts − digitised_dr_promise</strong>; <strong>delivery_sim = delivery_attempt_time − dr_lag</strong>. All downstream intervals preserved exactly. Both tables show % of the full 57,688 egregious segment.</p>
+      <p><strong>What we're simulating:</strong> For prescription orders, a doctor must confirm the prescription before the invoice can be raised and the shipping label printed. When the doctor's confirmation arrives late — past the promised confirmation time — everything downstream shifts: invoice, AWB, courier pickup, and delivery. This simulation asks: <em>if the doctor had confirmed on time, would these orders still have been egregious?</em> The courier's actual transit time is held constant — only the invoice-and-pickup timing shifts forward by however many hours the doctor was late. Both tables show % of the full 57,688 egregious segment.</p>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
@@ -1711,7 +1711,7 @@ tbody tr:hover td { background: var(--surface-alt); }
     <!-- D.3 HA call SLA fix -->
     <div class="subsection">
       <h3>D.3 — HA Call SLA Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 57,688 · 317 orders shifted · 209 exit egregious (0.4%)</span></h3>
-      <p>Scope: Late 3d+ HA-involved orders where the HA call bled into the next calendar day (<code>DATE(invoice_create_ts) &gt; DATE(dr_confirm_ts)</code>). Mechanic: <strong>ha_excess = DATE(invoice_create_ts) − DATE(dr_confirm_ts)</strong> in days; <strong>delivery_sim = delivery_attempt_time − ha_excess days</strong>. Both tables show % of the full 57,688 segment.</p>
+      <p><strong>What we're simulating:</strong> For orders that required a Health Advisor call after doctor confirmation, the HA conversation sometimes ran past midnight — meaning the invoice was only raised the following calendar day, pushing pickup and delivery out by a full day. This simulation asks: <em>if the HA call had completed on the same day as the doctor's confirmation, would these Late 3d+ orders have been less egregious?</em> The courier's actual transit time is held constant — only the invoice and pickup date shifts back by the number of calendar days the HA call crossed over. Both tables show % of the full 57,688 segment.</p>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
@@ -1754,7 +1754,7 @@ tbody tr:hover td { background: var(--surface-alt); }
     <!-- D.4 Warehouse Early dispatch fix -->
     <div class="subsection">
       <h3>D.4 — Warehouse Early Dispatch Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 57,688 · 6,207 orders shifted · 3,944 exit egregious (6.84%)</span></h3>
-      <p>Scope: all 6,207 orders with Early 1d dispatch deviation (<code>DATE(digitised_dispatch_promise) − DATE(pickup_time) = 1</code>). Mechanic: if the warehouse dispatches on the promise date instead of 1 day early, all downstream intervals are preserved — <strong>delivery_sim = delivery_attempt_time + 1 day</strong>. Both tables show % of the full 57,688 segment.</p>
+      <p><strong>What we're simulating:</strong> 6,207 orders were picked up by the courier exactly one day before the promised dispatch date — the warehouse dispatched early. Because the courier's actual transit time is the same regardless of when it starts, delivery also landed one day earlier than it would have on-promise dispatch. This simulation asks: <em>if the warehouse had dispatched on the promised date rather than a day early, would these Early-egregious orders have landed within the acceptable window?</em> The courier's actual transit time is held constant — only the dispatch and delivery dates shift forward by one day. Both tables show % of the full 57,688 segment.</p>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
