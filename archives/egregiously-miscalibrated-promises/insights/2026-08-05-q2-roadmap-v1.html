@@ -125,6 +125,27 @@
       padding: 3rem 2rem 6rem;
     }
 
+    .section {
+      margin-top: 2.5rem;
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 1rem;
+    }
+
+    .growth-loop-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem 1.5rem;
+    }
+
     /* ── Header ── */
     .page-header {
       margin-bottom: 3rem;
@@ -156,6 +177,69 @@
     <div class="eyebrow">Logistics · Q2 2026</div>
     <h1>Q2 Roadmap</h1>
   </header>
+
+  <!-- Growth Loop -->
+  <section class="section">
+    <div class="section-label">The Logistics Growth Loop</div>
+    <div class="growth-loop-wrap">
+      <svg viewBox="0 0 760 205" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+        <defs>
+          <marker id="arr-up" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto">
+            <path d="M0,8 L4,0 L8,8" fill="none" stroke="#C4A882" stroke-width="1.5" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr-right" markerWidth="8" markerHeight="8" refX="1" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8" fill="none" stroke="#C4A882" stroke-width="1.5" stroke-linejoin="round"/>
+          </marker>
+          <marker id="arr-down" markerWidth="8" markerHeight="8" refX="4" refY="1" orient="auto">
+            <path d="M0,0 L4,8 L8,0" fill="none" stroke="#C4A882" stroke-width="1.5" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- Box 1: Better promises -->
+        <rect x="15" y="18" width="130" height="62" rx="12" fill="#F4873E"/>
+        <text x="80" y="43" text-anchor="middle" fill="#fff" font-weight="750" font-size="14.5" font-family="ui-rounded,sans-serif">Better</text>
+        <text x="80" y="62" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="12" font-family="ui-rounded,sans-serif">promises</text>
+
+        <!-- Arrow 1→2 -->
+        <line x1="146" y1="49" x2="170" y2="49" stroke="#C4A882" stroke-width="1.5" marker-end="url(#arr-right)"/>
+
+        <!-- Box 2: Conversion gained -->
+        <rect x="172" y="18" width="130" height="62" rx="12" fill="#F4873E"/>
+        <text x="237" y="43" text-anchor="middle" fill="#fff" font-weight="750" font-size="14.5" font-family="ui-rounded,sans-serif">Conversion</text>
+        <text x="237" y="62" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="12" font-family="ui-rounded,sans-serif">gained</text>
+
+        <!-- Arrow 2→3 -->
+        <line x1="303" y1="49" x2="327" y2="49" stroke="#C4A882" stroke-width="1.5" marker-end="url(#arr-right)"/>
+
+        <!-- Box 3: On-time delivery given -->
+        <rect x="329" y="18" width="140" height="62" rx="12" fill="#F4873E"/>
+        <text x="399" y="43" text-anchor="middle" fill="#fff" font-weight="750" font-size="14.5" font-family="ui-rounded,sans-serif">On-time</text>
+        <text x="399" y="62" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="12" font-family="ui-rounded,sans-serif">delivery given</text>
+
+        <!-- Arrow 3→4 -->
+        <line x1="470" y1="49" x2="494" y2="49" stroke="#C4A882" stroke-width="1.5" marker-end="url(#arr-right)"/>
+
+        <!-- Box 4: Retention gain -->
+        <rect x="496" y="18" width="130" height="62" rx="12" fill="#F4873E"/>
+        <text x="561" y="43" text-anchor="middle" fill="#fff" font-weight="750" font-size="14.5" font-family="ui-rounded,sans-serif">Retention</text>
+        <text x="561" y="62" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="12" font-family="ui-rounded,sans-serif">gain</text>
+
+        <!-- Arrow 4→Accurate (down) -->
+        <line x1="615" y1="81" x2="615" y2="118" stroke="#C4A882" stroke-width="1.5" marker-end="url(#arr-down)"/>
+
+        <!-- Box 5: Accurate promises -->
+        <rect x="550" y="120" width="130" height="62" rx="12" fill="#1A7A6E"/>
+        <text x="615" y="145" text-anchor="middle" fill="#fff" font-weight="750" font-size="14.5" font-family="ui-rounded,sans-serif">Accurate</text>
+        <text x="615" y="164" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="12" font-family="ui-rounded,sans-serif">promises</text>
+
+        <!-- Feedback loop: left side of Accurate → bottom left → up to Better -->
+        <path d="M550,151 L46,151 L46,82" stroke="#C4A882" stroke-width="1.5" fill="none" marker-end="url(#arr-up)"/>
+
+        <!-- Feedback label -->
+        <text x="295" y="170" text-anchor="middle" fill="#8B6E52" font-size="11.5" font-family="ui-rounded,sans-serif">↻  order density sharpens ETA accuracy</text>
+      </svg>
+    </div>
+  </section>
 
 </div>
 </body>
