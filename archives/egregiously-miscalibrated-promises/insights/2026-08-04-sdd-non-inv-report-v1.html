@@ -703,8 +703,8 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- E.1 WH promise fix -->
     <div class="subsection">
-      <h3>E.1 — WH Promise Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 4,590 · rescues 4,212 (91.8%)</span></h3>
-      <p>Mechanic: <strong>dispatch_sim = date(invoice_create_ts + 0.4h)</strong>; delivery_sim = dispatch_sim + TAT_days. SDD TAT is correctly configured (0–1d actuals match promise) — no TAT fix needed.</p>
+      <h3>E.1 — Non-Inventory WH Promise Calibration &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 4,590 · rescues 4,212 (91.8%)</span></h3>
+      <p><strong>What we're simulating:</strong> For SDD Non-Inventory orders, goods are already in the warehouse when the order is placed — there is no procurement wait. But the WH promise was built assuming procurement takes time, so it sets the dispatch date far later than it needs to be. This simulation asks: <em>if the delivery promise had been set based on when the order was actually invoiced (goods confirmed ready), would these orders still have been egregious?</em> The courier's actual transit time is held constant — only the promise date changes. Unlike Non-SDD Non-Inventory, there is no stale courier TAT layer here: SDD couriers deliver in 0–1 days as promised, so the WH miscalibration is the single root cause and fixing it alone is sufficient.</p>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
