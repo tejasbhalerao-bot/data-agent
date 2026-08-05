@@ -656,7 +656,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- E.1 Payment pending -->
     <h3>E.1 — Payment Pending Fix (Mode 1) &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 2,847 · rescues 158 (5.5%)</span></h3>
-    <p>For pmt-pending orders: <strong>AWB_sim = invoice_create_ts + 0.4h</strong>; pickup_sim = date(AWB_sim); delivery_sim = pickup_sim + actual_TAT. In-scope: 338 pmt-pending within Mode 1.</p>
+    <p><strong>What we're simulating:</strong> 338 of the 2,847 Mode 1 orders had payment confirmation pending at dispatch time — the shipping label couldn't be printed until payment cleared, which delayed the courier pickup. This simulation asks: <em>if these orders had been dispatched on the same day as their invoice (as quickly as orders without a payment delay), would they still have missed the delivery promise?</em> The courier's actual transit time is held constant — only the pickup date shifts earlier.</p>
 
     <h4>1 · Group-level shift</h4>
     <div class="table-wrap">
@@ -694,7 +694,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- E.2 Doctor confirmation -->
     <h3>E.2 — Doctor Confirmation Fix (Mode 1) &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 2,847 · rescues 229 (8.0%)</span></h3>
-    <p>For orders where <strong>dr_confirm_ts &gt; digitised_wh_promise</strong>, simulate on-time confirmation: <strong>AWB_sim = digitised_wh_promise + 25min</strong>; pickup_sim = date(AWB_sim); delivery_sim = pickup_sim + actual_TAT. In-scope: 715 within Mode 1.</p>
+    <p><strong>What we're simulating:</strong> 715 of the 2,847 Mode 1 orders had the doctor's prescription confirmation arrive after the WH processing window had already closed — pushing the invoice, AWB print, and courier pickup to the next day. This simulation asks: <em>if the doctor had confirmed on time (by the WH promise window), would the order have dispatched that same day and avoided missing the delivery promise?</em> The courier's actual transit time is held constant — only the pickup date shifts earlier.</p>
 
     <h4>1 · Group-level shift</h4>
     <div class="table-wrap">
@@ -732,7 +732,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- E.3 Combined Mode 1 -->
     <h3>E.3 — Combined Mode 1 Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 2,847 · rescues 342 (12.0%)</span></h3>
-    <p>Payment-pending orders use invoice+0.4h AWB; late-confirmation orders use wh_promise+25min AWB. Non-overlapping cohorts combined.</p>
+    <p><strong>What we're simulating:</strong> Both fixes applied simultaneously in a single pass — payment-pending orders dispatched on invoice day (E.1), and late-doctor-confirmation orders dispatched on the day the WH window closes (E.2). The two cohorts do not overlap, so each order gets exactly the fix that applies to it and is counted as rescued at most once.</p>
 
     <h4>1 · Group-level shift</h4>
     <div class="table-wrap">
@@ -770,7 +770,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- E.4 SDD eligibility fix (Mode 2) -->
     <h3>E.4 — SDD Eligibility Fix (Mode 2) &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 932 · rescues 670 (71.9%)</span></h3>
-    <p>Reconfigure to a 2-day non-SDD TAT promise: <strong>delivery_promise_sim = actual_pickup + 2d</strong>.</p>
+    <p><strong>What we're simulating:</strong> 932 Mode 2 orders had the warehouse ready on time, but the courier took 2–3 days to deliver — incompatible with an SDD promise. These orders should arguably not have been eligible for SDD at all. This simulation asks: <em>if these orders had been promised a standard 2-day non-SDD delivery instead of same-day, would they have been within the acceptable window?</em> The courier's actual transit time is held constant — only the delivery promise changes.</p>
 
     <h4>1 · Group-level shift</h4>
     <div class="table-wrap">
@@ -809,7 +809,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <!-- E.5 Full combined -->
     <h3>E.5 — Full Combined Fix &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 3,779 · rescues 1,012 (26.8%)</span></h3>
-    <p>Combines E.3 (Mode 1: payment pending + doctor confirmation) with E.4 (Mode 2: SDD eligibility reclassification). Total in scope: 3,779 orders.</p>
+    <p><strong>What we're simulating:</strong> All fixes applied together — E.3 (Mode 1: payment pending + doctor confirmation) for the 2,847 late-WH orders, and E.4 (Mode 2: SDD eligibility reclassification) for the 932 WH-ready orders. Mode 1 and Mode 2 are structurally separate segments with no overlap, so this is a clean union. Each order is rescued at most once.</p>
 
     <h4>1 · Group-level shift</h4>
     <div class="table-wrap">
