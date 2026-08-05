@@ -641,6 +641,124 @@
     </div>
   </section>
 
+  <!-- Problem 2: Payment Pending -->
+  <section class="section">
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;">
+
+      <!-- Header -->
+      <div style="padding:1.5rem 1.5rem 0;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.35rem;">Problem 2 of 5 &nbsp;·&nbsp; Pillar 1</div>
+        <h2 style="font-size:1.2rem; font-weight:750; letter-spacing:-0.02em; color:var(--text-1); text-wrap:balance; margin-bottom:1rem;">Payment Pending</h2>
+      </div>
+
+      <!-- Problem -->
+      <div style="padding:0 1.5rem 1.25rem;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.4rem;">Problem</div>
+        <p style="font-size:0.88rem; color:var(--text-2); line-height:1.65;">For prepaid orders, the promise is set at the moment of order placement — assuming the warehouse can begin processing immediately. But the WH can only start after payment is confirmed. When confirmation is delayed, the warehouse holds the order: AWB printing is deferred until payment clears, the courier misses its pickup window, and dispatch cascades a full calendar day late.</p>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--border); margin:0;">
+
+      <!-- Example flow -->
+      <div style="padding:1.25rem 1.5rem;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.75rem;">Example flow — Non-SDD Inventory prepaid order</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; min-width:520px;">
+            <tbody>
+              <tr>
+                <td style="width:68px; padding-right:0.5rem; font-size:0.6rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#1A7A6E; vertical-align:middle; white-space:nowrap;">Actual</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:var(--ok-bg); border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:var(--ok-fg); line-height:1.3;">Order placed<br><span style="font-size:0.58rem; font-weight:500; opacity:0.8;">Day 0</span></div>
+                </td>
+                <td style="padding:0.28rem 0; text-align:center; color:var(--text-3); font-size:0.75rem;">›</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:#FEE2D5; border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:#9A2E10; line-height:1.3;">Payment pending<br><span style="font-weight:400;font-size:0.58rem;">← 20–25h hold</span><span style="display:block;font-size:0.58rem; font-weight:500; opacity:0.8;">Day 0–1</span></div>
+                </td>
+                <td style="padding:0.28rem 0; text-align:center; color:var(--text-3); font-size:0.75rem;">›</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:var(--ok-bg); border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:var(--ok-fg); line-height:1.3;">Payment clears<br>AWB printed<span style="display:block;font-size:0.58rem; font-weight:500; opacity:0.8;">Day 1–2</span></div>
+                </td>
+                <td style="padding:0.28rem 0; text-align:center; color:var(--text-3); font-size:0.75rem;">›</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:var(--ok-bg); border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:var(--ok-fg); line-height:1.3;">Delivery attempt<span style="display:block;font-size:0.58rem; font-weight:500; opacity:0.8;">Day 3–4</span></div>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td colspan="7" style="padding:0.2rem 0;"><hr style="border:none; border-top:1px dashed var(--border-ui);"></td>
+              </tr>
+              <tr>
+                <td style="width:68px; padding-right:0.5rem; font-size:0.6rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#C1440E; vertical-align:middle; white-space:nowrap;">Promised</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:#FEE2D5; border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:#9A2E10; line-height:1.3;">Promise set<br><span style="font-weight:400;font-size:0.58rem;">← assumes WH starts now</span><span style="display:block;font-size:0.58rem; font-weight:500; opacity:0.8;">Day 0</span></div>
+                </td>
+                <td style="padding:0.28rem 0; text-align:center; color:var(--text-3); font-size:0.75rem;">›</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:#FEE2D5; border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:#9A2E10; line-height:1.3;">Dispatch promise<span style="display:block;font-size:0.58rem; font-weight:500; opacity:0.8;">Day 1</span></div>
+                </td>
+                <td style="padding:0.28rem 0; text-align:center; color:var(--text-3); font-size:0.75rem;">›</td>
+                <td style="padding:0.28rem 0.3rem;">
+                  <div style="background:#FEE2D5; border-radius:6px; padding:0.32rem 0.4rem; text-align:center; font-size:0.63rem; font-weight:600; color:#9A2E10; line-height:1.3;">Delivery promise<span style="display:block;font-size:0.58rem; font-weight:500; opacity:0.8;">Day 2</span></div>
+                </td>
+                <td style="padding:0.28rem 0;"></td>
+                <td style="padding:0.28rem 0.3rem;"><div style="opacity:0; pointer-events:none; border-radius:6px; padding:0.32rem 0.4rem;">&nbsp;</div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--border); margin:0;">
+
+      <!-- Quantification -->
+      <div style="padding:1.25rem 1.5rem;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.75rem;">Quantification</div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.75rem;">
+          <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 0.9rem;">
+            <div style="font-size:1.3rem; font-weight:750; color:#185FA5; letter-spacing:-0.02em; font-variant-numeric:tabular-nums;">2.8%</div>
+            <div style="font-size:0.68rem; color:var(--text-2); margin-top:0.2rem; line-height:1.4;">of egregious cohort affected<br>(2,676 orders)</div>
+          </div>
+          <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 0.9rem;">
+            <div style="font-size:1.3rem; font-weight:750; color:#185FA5; letter-spacing:-0.02em; font-variant-numeric:tabular-nums;">24.5h</div>
+            <div style="font-size:0.68rem; color:var(--text-2); margin-top:0.2rem; line-height:1.4;">median payment hold — invoice to AWB print</div>
+          </div>
+          <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 0.9rem;">
+            <div style="font-size:1.3rem; font-weight:750; color:#185FA5; letter-spacing:-0.02em; font-variant-numeric:tabular-nums;">19.7–26.8h</div>
+            <div style="font-size:0.68rem; color:var(--text-2); margin-top:0.2rem; line-height:1.4;">IQR — invoice to AWB print</div>
+          </div>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--border); margin:0;">
+
+      <!-- Impact -->
+      <div style="padding:1.25rem 1.5rem;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.75rem;">Impact if addressed</div>
+        <div style="display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;">
+          <div>
+            <div style="font-size:2rem; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-0.03em; color:var(--text-2);">15.3%</div>
+            <div style="font-size:0.62rem; color:var(--text-3); margin-top:0.1rem;">egregious rate today</div>
+          </div>
+          <div style="font-size:1.2rem; color:var(--text-3);">→</div>
+          <div>
+            <div style="font-size:2rem; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:-0.03em; color:var(--ok-fg);">~14.9%</div>
+            <div style="font-size:0.62rem; color:var(--text-3); margin-top:0.1rem;">if fully resolved</div>
+          </div>
+          <div style="font-size:0.75rem; color:var(--text-2); line-height:1.5; margin-left:0.5rem;">−0.39pp &nbsp;·&nbsp; 2,676 orders rescued<br>on 628K attempted-orders base</div>
+        </div>
+      </div>
+
+      <hr style="border:none; border-top:1px solid var(--border); margin:0;">
+
+      <!-- Dependencies -->
+      <div style="padding:1.25rem 1.5rem;">
+        <div style="font-size:0.6rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.6rem;">Dependencies</div>
+        <div style="display:inline-flex; align-items:center; background:var(--surface-2); border:1px solid var(--border-ui); border-radius:999px; padding:0.3rem 0.85rem; font-size:0.75rem; font-weight:700; color:var(--text-1);">Warehouse Ops</div>
+      </div>
+
+    </div>
+  </section>
+
 </div>
 </body>
 </html>
