@@ -432,7 +432,7 @@
     <h1 style="font-size:2rem; font-weight:750; letter-spacing:-0.025em; line-height:1.2; text-wrap:balance; color:var(--text-1); margin-top:0.5rem; margin-bottom:1.25rem;">Reliability — Getting the Promise Right</h1>
 
     <p style="font-size:0.95rem; color:var(--text-2); line-height:1.7; margin-bottom:0.5rem;">15.3% of our delivery-attempted orders are egregiously miscalibrated — off by 2 or more calendar days. These are not random failures. The breakdown below shows exactly where in the order journey the promise breaks.</p>
-    <p style="font-size:0.72rem; color:var(--text-3); margin-bottom:1.5rem; font-variant-numeric:tabular-nums;">Base: egregious cohort · 96,047 orders · July 2026</p>
+    <p style="font-size:0.72rem; color:var(--text-3); margin-bottom:1.5rem; font-variant-numeric:tabular-nums;">Base: egregious cohort · 96,424 orders · July 2026</p>
 
     <!-- Stage breakdown table -->
     <div style="overflow-x:auto; margin-bottom:1.5rem;">
@@ -448,39 +448,53 @@
         </thead>
         <tbody>
           <tr>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-1); font-weight:600;">Doctor</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-2);">Doctor promise vs. actual confirmation</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#185FA5;">49.0%</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#27500A;">26.9%</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#791F1F;">24.1%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-1); font-weight:600;">Doctor Cx</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-2);">Doctor promise vs. actual confirmation time</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#185FA5;">57.3%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#27500A;">0.9%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#791F1F;">41.8%</td>
           </tr>
           <tr style="background:var(--surface-2);">
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-1); font-weight:600;">Doctor Ops</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-2);">Doctor promise vs. actual call time</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; font-weight:700; color:#185FA5;">77.0%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#27500A;">0.1%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#791F1F;">22.9%</td>
+          </tr>
+          <tr>
             <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-1); font-weight:600;">Warehouse</td>
             <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-2);">Dispatch promise vs. AWB print time</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; font-weight:700; color:#185FA5;">85.5%</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#27500A;">0.1%</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#791F1F;">14.4%</td>
-          </tr>
-          <tr>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-1); font-weight:600;">Dispatch</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-2);">Dispatch promise date vs. courier pickup date</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#185FA5;">42.9%</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#27500A;">44.4%</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#791F1F;">12.8%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; font-weight:700; color:#185FA5;">89.2%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#27500A;">0.0%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#791F1F;">10.8%</td>
           </tr>
           <tr style="background:var(--surface-2);">
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-1); font-weight:600;">Delivery</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-2);">Delivery promise date vs. attempt date</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; font-weight:700; color:#185FA5;">65.8%</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; font-weight:700; color:#27500A;">0.0%</td>
-            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; font-weight:700; color:#791F1F;">34.2%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-1); font-weight:600;">Dispatch</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-2);">Dispatch promise date vs. courier pickup date</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#185FA5;">41.0%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#27500A;">49.7%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#791F1F;">9.3%</td>
           </tr>
           <tr>
-            <td style="padding:0.4rem 0.75rem; color:var(--text-1); font-weight:600;">Delivery TAT</td>
-            <td style="padding:0.4rem 0.75rem; color:var(--text-2);">Promised courier TAT vs. actual courier TAT</td>
-            <td style="padding:0.4rem 0.75rem; text-align:right; color:#185FA5;">52.0%</td>
-            <td style="padding:0.4rem 0.75rem; text-align:right; color:#27500A;">14.7%</td>
-            <td style="padding:0.4rem 0.75rem; text-align:right; color:#791F1F;">33.3%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-1); font-weight:600;">Delivery Cx</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-2);">Delivery promise date vs. attempt date</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; font-weight:700; color:#185FA5;">70.0%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#27500A;">0.0%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#791F1F;">30.0%</td>
+          </tr>
+          <tr style="background:var(--surface-2);">
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-1); font-weight:600;">Delivery TAT</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); color:var(--text-2);">Promised courier TAT vs. actual courier TAT</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#185FA5;">59.4%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#27500A;">11.0%</td>
+            <td style="padding:0.4rem 0.75rem; border-bottom:1px solid var(--border); text-align:right; color:#791F1F;">29.7%</td>
+          </tr>
+          <tr>
+            <td style="padding:0.4rem 0.75rem; color:var(--text-1); font-weight:600;">Shipping TAT</td>
+            <td style="padding:0.4rem 0.75rem; color:var(--text-2);">Shipping courier's TAT promise vs. actual courier TAT</td>
+            <td style="padding:0.4rem 0.75rem; text-align:right; color:#185FA5;">52.8%</td>
+            <td style="padding:0.4rem 0.75rem; text-align:right; color:#27500A;">23.7%</td>
+            <td style="padding:0.4rem 0.75rem; text-align:right; color:#791F1F;">23.5%</td>
           </tr>
         </tbody>
       </table>
@@ -489,12 +503,12 @@
     <!-- Two key findings -->
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
       <div style="background:var(--surface-2); border:1px solid var(--border); border-left:3px solid #B5D4F4; border-radius:var(--radius-xs); padding:0.85rem 1rem;">
-        <div style="font-size:1.4rem; font-weight:750; color:#185FA5; font-variant-numeric:tabular-nums; letter-spacing:-0.02em; margin-bottom:0.25rem;">42.9%</div>
-        <p style="font-size:0.8rem; color:var(--text-2); line-height:1.6; margin:0;">of egregious orders are picked up by the courier <strong>before the promised dispatch date</strong> — the promise is already broken before the order leaves the warehouse.</p>
+        <div style="font-size:1.4rem; font-weight:750; color:#185FA5; font-variant-numeric:tabular-nums; letter-spacing:-0.02em; margin-bottom:0.25rem;">89.2%</div>
+        <p style="font-size:0.8rem; color:var(--text-2); line-height:1.6; margin:0;">of egregious orders had the warehouse finish packing <strong>before the promised dispatch time</strong> — the breakdown is not at the warehouse, it starts at how we set the promise.</p>
       </div>
       <div style="background:var(--surface-2); border:1px solid var(--border); border-left:3px solid #B5D4F4; border-radius:var(--radius-xs); padding:0.85rem 1rem;">
-        <div style="font-size:1.4rem; font-weight:750; color:#185FA5; font-variant-numeric:tabular-nums; letter-spacing:-0.02em; margin-bottom:0.25rem;">65.8%</div>
-        <p style="font-size:0.8rem; color:var(--text-2); line-height:1.6; margin:0;">of egregious orders reach the customer <strong>before they were expecting the order</strong> — driving missed deliveries, re-attempts, and RTOs.</p>
+        <div style="font-size:1.4rem; font-weight:750; color:#185FA5; font-variant-numeric:tabular-nums; letter-spacing:-0.02em; margin-bottom:0.25rem;">70.0%</div>
+        <p style="font-size:0.8rem; color:var(--text-2); line-height:1.6; margin:0;">of egregious orders arrive <strong>before the customer was expecting them</strong> — the order showed up when the customer wasn't home, driving re-attempts and RTOs.</p>
       </div>
     </div>
 
