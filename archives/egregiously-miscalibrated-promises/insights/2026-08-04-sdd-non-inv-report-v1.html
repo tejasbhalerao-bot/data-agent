@@ -475,6 +475,57 @@ tbody tr:hover td { background: var(--surface-alt); }
 
       <p>The two distributions are essentially identical — payment pending has no footprint here. The median invoice gap is +35.3h vs +34.8h for AWB. The hold is at procurement (upstream of invoicing), not at payment.</p>
     </div>
+
+    <!-- A.3 Promise pipeline anatomy -->
+    <div class="subsection">
+      <h3>A.3 — Promise Pipeline Anatomy: Where the Gap Originates</h3>
+
+      <p>The 90.7% WH Early &gt;24 hrs figure is a timestamp-level measurement. Measuring the same thing at the date level — <code>DATE(digitised_wh_promise) − DATE(invoice_create_ts)</code> — gives 90.9%, confirming the result is not an artefact of within-day timing. The chart below shows how this 90.9% is structured across promise configurations.</p>
+
+      <h4>Chart 1 — DATE(dr_promise) → DATE(wh_promise) gap</h4>
+      <p style="margin-bottom:0.75rem;">The internal promise pipeline sets the WH promise a fixed number of calendar days after the doctor promise. For this cohort, every order falls on exactly 1, 2, or 3 days — no fractional gaps. Two configurations dominate.</p>
+
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:1rem 1.25rem; margin-bottom:1.5rem;">
+        <div id="chart-dr-wh" style="display:flex; flex-direction:column; gap:6px;"></div>
+        <div style="display:flex; gap:1.5rem; margin-top:1rem; font-size:0.75rem; color:var(--text-3); font-family:ui-monospace,'SF Mono',monospace; letter-spacing:0.04em;">
+          <span>n = 4,591 orders</span>
+          <span>Base: SDD Non-Inventory egregious cohort · July 2026</span>
+        </div>
+      </div>
+
+      <h4>Chart 2 — WH Early attribution by dr→wh gap group</h4>
+      <p style="margin-bottom:0.75rem;">Each bar shows the full breakdown of <code>DATE(wh_promise) − DATE(invoice_create_ts)</code> within that dr→wh group. The coloured segments are the WH-early orders; grey is not early. The bottom table shows each group's contribution to the 90.9% overall.</p>
+
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--r); padding:1rem 1.25rem; margin-bottom:1rem;">
+        <div style="font-size:0.72rem; font-family:ui-monospace,'SF Mono',monospace; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-3); margin-bottom:0.9rem;">Each bar = 100% of that dr→wh group</div>
+        <div id="chart-attr" style="display:flex; flex-direction:column; gap:7px;"></div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:1rem;">
+          <div style="display:flex; align-items:center; gap:5px; font-size:0.75rem; color:var(--text-2);">
+            <div style="width:10px; height:10px; border-radius:2px; background:#8A9BAD; flex-shrink:0;"></div>Not early (invoice ≥ wh date)
+          </div>
+          <div style="display:flex; align-items:center; gap:5px; font-size:0.75rem; color:var(--text-2);">
+            <div style="width:10px; height:10px; border-radius:2px; background:var(--accent); flex-shrink:0;"></div>WH early 1d
+          </div>
+          <div style="display:flex; align-items:center; gap:5px; font-size:0.75rem; color:var(--text-2);">
+            <div style="width:10px; height:10px; border-radius:2px; background:#0C447C; flex-shrink:0;"></div>WH early 2d
+          </div>
+          <div style="display:flex; align-items:center; gap:5px; font-size:0.75rem; color:var(--text-2);">
+            <div style="width:10px; height:10px; border-radius:2px; background:#042C53; flex-shrink:0;"></div>WH early 3d
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--accent-dim); border:1px solid var(--border); border-radius:var(--r); padding:0.85rem 1.1rem; margin-bottom:1rem;">
+        <div style="font-size:0.68rem; font-family:ui-monospace,'SF Mono',monospace; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-bottom:0.5rem;">Attribution — contribution to 90.9% overall (% of all 4,590 orders)</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;" id="attr-breakdown"></div>
+      </div>
+
+      <div class="finding">
+        <div class="finding-label">Key Finding</div>
+        <p>The 90.9% WH Early ≥1d is almost entirely structural: the 2d dr→wh group alone accounts for 52pp (38.2pp via WH early 2d + 13.8pp via WH early 1d). The 1d group contributes 35.8pp. The promise pipeline configuration — not order-level variation — determines which early bucket an order lands in.</p>
+      </div>
+    </div>
   </div>
 
 
@@ -751,3 +802,103 @@ tbody tr:hover td { background: var(--surface-alt); }
   </footer>
 
 </div>
+
+<script>
+(function() {
+  var accent     = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()     || '#1C4E8A';
+  var textMuted  = getComputedStyle(document.documentElement).getPropertyValue('--text-3').trim()     || '#8A9BAD';
+  var text2      = getComputedStyle(document.documentElement).getPropertyValue('--text-2').trim()     || '#52657D';
+  var surfaceAlt = getComputedStyle(document.documentElement).getPropertyValue('--surface-alt').trim() || '#F4F7FC';
+
+  /* ── Chart 1: dr→wh date gap ────────────────────────── */
+  var drWh = [
+    { label: '1d', n: 2039, pct: 44.4 },
+    { label: '2d', n: 2406, pct: 52.4 },
+    { label: '3d', n: 146,  pct: 3.2  },
+  ];
+  var maxPct1 = 52.4;
+  var c1 = document.getElementById('chart-dr-wh');
+  drWh.forEach(function(d) {
+    var w = (d.pct / maxPct1 * 100).toFixed(1);
+    var isPrimary = d.pct === maxPct1;
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;';
+    row.innerHTML =
+      '<div style="width:24px;text-align:right;font-size:12px;color:' + text2 + ';font-variant-numeric:tabular-nums;flex-shrink:0;">' + d.label + '</div>' +
+      '<div style="flex:1;background:' + surfaceAlt + ';border-radius:3px;height:28px;overflow:hidden;">' +
+        '<div style="width:' + w + '%;height:100%;background:' + (isPrimary ? accent : '#8A9BAD') + ';border-radius:3px;display:flex;align-items:center;">' +
+          '<span style="padding:0 8px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;">' + d.pct + '%&nbsp;&nbsp;' + d.n.toLocaleString() + '</span>' +
+        '</div>' +
+      '</div>';
+    c1.appendChild(row);
+  });
+
+  /* ── Chart 2: attribution stacked bars ──────────────── */
+  var COLORS = {
+    'none':   '#8A9BAD',
+    'early1': accent,
+    'early2': '#0C447C',
+    'early3': '#042C53',
+  };
+  var groups = [
+    {
+      label: '1d',
+      total: 2039,
+      segs: [
+        { key: 'none',   pct: 19.3, label: '19.3%' },
+        { key: 'early1', pct: 80.7, label: '80.7% · Early 1d' },
+      ]
+    },
+    {
+      label: '2d',
+      total: 2406,
+      segs: [
+        { key: 'none',   pct: 0.9,  label: '' },
+        { key: 'early1', pct: 26.3, label: '26.3% · E1d' },
+        { key: 'early2', pct: 72.8, label: '72.8% · Early 2d' },
+      ]
+    },
+    {
+      label: '3d',
+      total: 146,
+      segs: [
+        { key: 'none',   pct: 0.7,  label: '' },
+        { key: 'early1', pct: 2.7,  label: '' },
+        { key: 'early2', pct: 79.5, label: '79.5% · E2d' },
+        { key: 'early3', pct: 17.1, label: '17.1%' },
+      ]
+    },
+  ];
+  var c2 = document.getElementById('chart-attr');
+  groups.forEach(function(g) {
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;';
+    var segsHtml = g.segs.map(function(s) {
+      return '<div style="width:' + s.pct + '%;height:100%;background:' + COLORS[s.key] + ';display:flex;align-items:center;justify-content:center;overflow:hidden;">' +
+        (s.label ? '<span style="font-size:11px;font-weight:600;color:#fff;padding:0 5px;white-space:nowrap;">' + s.label + '</span>' : '') +
+      '</div>';
+    }).join('');
+    row.innerHTML =
+      '<div style="width:24px;text-align:right;font-size:12px;color:' + text2 + ';flex-shrink:0;">' + g.label + '</div>' +
+      '<div style="flex:1;height:30px;display:flex;border-radius:3px;overflow:hidden;gap:1px;background:' + surfaceAlt + ';">' + segsHtml + '</div>';
+    c2.appendChild(row);
+  });
+
+  /* ── Attribution breakdown grid ─────────────────────── */
+  var items = [
+    { key: '1d dr→wh → WH Early 1d', val: '35.8pp', color: accent },
+    { key: '2d dr→wh → WH Early 1d', val: '13.8pp', color: accent },
+    { key: '2d dr→wh → WH Early 2d', val: '38.2pp', color: '#0C447C' },
+    { key: '3d dr→wh → WH Early (any)', val: '3.2pp', color: '#042C53' },
+  ];
+  var bd = document.getElementById('attr-breakdown');
+  items.forEach(function(item) {
+    var cell = document.createElement('div');
+    cell.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:4px;background:rgba(0,0,0,0.04);font-size:12px;';
+    cell.innerHTML =
+      '<span style="color:' + text2 + ';">' + item.key + '</span>' +
+      '<span style="font-weight:700;font-variant-numeric:tabular-nums;color:' + item.color + ';">' + item.val + '</span>';
+    bd.appendChild(cell);
+  });
+})();
+</script>
