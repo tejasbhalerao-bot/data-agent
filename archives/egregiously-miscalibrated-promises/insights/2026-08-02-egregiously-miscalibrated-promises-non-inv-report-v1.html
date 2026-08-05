@@ -814,7 +814,7 @@ tbody tr:hover td { background: var(--surface-alt); }
     <!-- E.1 WH promise fix -->
     <div class="subsection">
       <h3>E.1 — Non-Inventory WH Promise Calibration &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 29,803 · rescues 22,541 (75.6%)</span></h3>
-      <p>Mechanic: <strong>dispatch_sim = date(invoice_create_ts + 0.4h)</strong>; delivery_sim = dispatch_sim + TAT_days.</p>
+      <p><strong>What we're simulating:</strong> For Non-Inventory orders, goods are already in the warehouse when the order is placed — there is no procurement wait. But the WH promise was built assuming procurement takes time, so it sets the dispatch date far later than it needs to be. This simulation asks: <em>if the delivery promise had been set based on when the order was actually invoiced (goods confirmed ready), would these orders still have been egregious?</em> The courier's actual transit time is held constant — only the promise date changes.</p>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
@@ -860,7 +860,7 @@ tbody tr:hover td { background: var(--surface-alt); }
     <!-- E.2 Payment pending -->
     <div class="subsection">
       <h3>E.2 — Payment Pending &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">1,622 in scope (5.4%) · 190 exit egregious (0.64%) · 494 worsen (1.66%)</span></h3>
-      <p>Scope: 1,622 orders with <code>payment_pending_ts</code> non-empty (5.4% of segment). Mechanic: <strong>baseline_gap = median(DATE(pickup_time) − DATE(invoice_create_ts)) for non-pmt-pending orders = 0 days</strong>; <strong>sim_pickup = DATE(invoice_create_ts) + baseline_gap</strong>; <strong>new_delivery_attempt = sim_pickup + (DATE(delivery_attempt_time) − DATE(pickup_time))</strong>; classify against <code>digitised_delivery_promise</code>. Both tables show % of the full 29,813 segment.</p>
+      <p><strong>What we're simulating:</strong> For 1,622 orders (5.4% of segment), payment confirmation was pending at the time of dispatch — the shipping label couldn't be printed until payment cleared, which delayed when the courier picked up the order. This simulation asks: <em>if these orders had been dispatched on the same day as their invoice (as quickly as orders without a payment delay), how would the delivery deviation change?</em> The courier's actual transit time is held constant — only the pickup date shifts. Both tables show % of the full 29,813 segment.</p>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
