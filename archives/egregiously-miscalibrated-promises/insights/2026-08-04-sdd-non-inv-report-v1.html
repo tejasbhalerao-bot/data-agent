@@ -351,7 +351,7 @@ tbody tr:hover td { background: var(--surface-alt); }
   <header class="masthead">
     <div class="masthead-eyebrow">Egregiously Miscalibrated Promises · SDD Non-Inventory · July 2026</div>
     <h1>Why SDD Non-Inventory Orders<br>Miss Their Delivery Promise</h1>
-    <p class="masthead-sub">A single miscalibration drives 90.8% of the problem: the WH promise assumes Non-Inventory procurement time that does not exist. The same root cause as Non-SDD Non-Inventory — but more extreme, and with no compounding TAT layer.</p>
+    <p class="masthead-sub">A single miscalibration drives 90.8% of the problem: the WH promise over-estimates the time needed to procure Non-Inventory SKUs. The warehouse procures far faster than the buffer assumes, making the dispatch date later than it needs to be. The same root cause as Non-SDD Non-Inventory — but more extreme, and with no compounding TAT layer.</p>
   </header>
 
   <!-- ── Scope ────────────────────────────────────────────── -->
@@ -385,10 +385,10 @@ tbody tr:hover td { background: var(--surface-alt); }
   <div class="section">
     <div class="section-header">
       <span class="section-tag">Section A</span>
-      <h2>Warehouse Deviation — The Promise Assumes Procurement Time That Does Not Exist</h2>
+      <h2>Warehouse Deviation — The Promise Over-Estimates Procurement Time</h2>
     </div>
 
-    <p>The pattern mirrors Non-SDD Non-Inventory exactly: <strong>the warehouse is early in 97%+ of egregious orders</strong>. The WH promise is set assuming Non-Inventory SKUs need to be sourced after order placement — but the SKU is already available and the order is invoiced far before the promise window opens. The miscalibration here is <em>more extreme</em> than the Non-SDD equivalent: the median WH gap is nearly 35 hours.</p>
+    <p>The pattern mirrors Non-SDD Non-Inventory exactly: <strong>the warehouse is early in 97%+ of egregious orders</strong>. The WH promise allocates procurement time for Non-Inventory SKUs — but the buffer is far larger than what procurement actually takes. The warehouse procures and invoices the order well before the WH promise window opens. The miscalibration here is <em>more extreme</em> than the Non-SDD equivalent: the median WH gap is nearly 35 hours.</p>
 
     <!-- A.1 WH distribution -->
     <div class="subsection">
@@ -442,13 +442,13 @@ tbody tr:hover td { background: var(--surface-alt); }
     <div class="subsection">
       <h3>A.2 — Why the Warehouse Is Early: The WH Promise Is Built on a Wrong Procurement Assumption</h3>
 
-      <p>The WH promise for SDD Non-Inventory orders assumes the SKU must be sourced after order placement. For this set, that assumption is wrong: the SKU is already available and the order is invoiced well before the promise window opens.</p>
+      <p>The WH promise for SDD Non-Inventory orders does allocate procurement time — but the buffer is far larger than what procurement actually takes. The warehouse procures and invoices the order well before the WH promise window opens, meaning the dispatch date is set later than it needs to be.</p>
 
       <p>The invoice-based measurement confirms this is not a payment-pending artefact: switching from AWB to <code>invoice_create_ts</code> (fires at order confirmation, before any payment state) produces a distribution that is virtually identical — the early signal is at invoicing, not AWB printing.</p>
 
       <div class="finding">
         <div class="finding-label">Core Finding</div>
-        <p>In Cohort 69 (WH Early + Dispatch Early + Delivery Early, n=4,167 — 90.8%), zero orders had the invoice created <em>after</em> the WH promise. Procurement and invoicing were complete before the WH promise opened in every single order. The <code>SDD_NON_INVENTORY</code> WH processing time is set assuming procurement time that does not exist for this SKU category.</p>
+        <p>In Cohort 69 (WH Early + Dispatch Early + Delivery Early, n=4,167 — 90.8%), zero orders had the invoice created <em>after</em> the WH promise. In every single order, procurement was complete and the order invoiced before the WH promise window opened. The <code>SDD_NON_INVENTORY</code> procurement time buffer is so over-estimated that the warehouse consistently finishes 35+ hours before the promise opens.</p>
       </div>
 
       <h4>AWB vs invoice comparison confirms payment pending is not the driver</h4>
@@ -699,9 +699,9 @@ tbody tr:hover td { background: var(--surface-alt); }
         </thead>
         <tbody>
           <tr>
-            <td class="td-bold">WH promise miscalibrated — <code>SDD_NON_INVENTORY</code> processing time assumes procurement lead time that does not exist</td>
+            <td class="td-bold">WH promise miscalibrated — <code>SDD_NON_INVENTORY</code> processing time over-estimates how long Non-Inventory procurement takes</td>
             <td class="td-num">4,167 (90.8%)</td>
-            <td>Recalibrate the <code>SDD_NON_INVENTORY</code> WH processing time using actual invoice-to-AWB timing distributions. The median gap is 35 hours — the processing time config is set at least 35 hours too long for this SKU category. The WH promise should reflect when Non-Inventory SKUs are actually available, not when sourcing is assumed to complete.</td>
+            <td>Recalibrate the <code>SDD_NON_INVENTORY</code> WH processing time using actual invoice-to-AWB timing distributions. The median gap is 35 hours — the procurement time buffer is at least 35 hours too long for this SKU category. Shorten the buffer to reflect how fast Non-Inventory procurement actually completes.</td>
           </tr>
           <tr>
             <td class="td-bold">Dispatch early — direct consequence of WH miscalibration; no independent fix needed</td>
@@ -755,7 +755,7 @@ tbody tr:hover td { background: var(--surface-alt); }
     <!-- E.1 WH promise fix -->
     <div class="subsection">
       <h3>E.1 — Non-Inventory WH Promise Calibration &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 4,590 · rescues 4,212 (91.8%)</span></h3>
-      <p><strong>What we're simulating:</strong> For SDD Non-Inventory orders, goods are already in the warehouse when the order is placed — there is no procurement wait. But the WH promise was built assuming procurement takes time, so it sets the dispatch date far later than it needs to be. This simulation asks: <em>if the delivery promise had been set based on when the order was actually invoiced (goods confirmed ready), would these orders still have been egregious?</em> The courier's actual transit time is held constant — only the promise date changes. Unlike Non-SDD Non-Inventory, there is no stale courier TAT layer here: SDD couriers deliver in 0–1 days as promised, so the WH miscalibration is the single root cause and fixing it alone is sufficient.</p>
+      <p><strong>What we're simulating:</strong> For SDD Non-Inventory orders, the WH promise allocates a procurement time buffer that is far larger than what procurement actually takes — the warehouse invoices the order well before the promise window opens, pushing the dispatch date later than it needs to be. This simulation asks: <em>if the delivery promise had been anchored to actual invoice time instead of the over-estimated procurement buffer, would these orders still have been egregious?</em> The courier's actual transit time is held constant — only the promise date changes. Unlike Non-SDD Non-Inventory, there is no stale courier TAT layer here: SDD couriers deliver in 0–1 days as promised, so the WH miscalibration is the single root cause and fixing it alone is sufficient.</p>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">

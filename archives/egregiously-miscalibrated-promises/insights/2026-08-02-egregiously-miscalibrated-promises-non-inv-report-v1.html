@@ -405,7 +405,7 @@ tbody tr:hover td { background: var(--surface-alt); }
   <div class="section">
     <div class="section-header">
       <span class="section-tag">Section A</span>
-      <h2>Warehouse Deviation — The Promise Assumes Procurement Time That Does Not Exist</h2>
+      <h2>Warehouse Deviation — The Promise Over-Estimates Procurement Time</h2>
     </div>
 
     <p>Unlike the Inventory set, the Non-Inventory set has the opposite failure: <strong>the warehouse is early in 96.4% of egregious orders</strong>. The WH promise assumes Non-Inventory procurement takes hours — but orders are invoiced and ready far before the promise window opens.</p>
@@ -463,13 +463,13 @@ tbody tr:hover td { background: var(--surface-alt); }
     <div class="subsection">
       <h3>A.2 — Why the Warehouse Is Early: The WH Promise Is Built on a Wrong Procurement Assumption</h3>
 
-      <p>The WH promise assumes the SKU must be sourced after order placement. For this set, that assumption is wrong: the SKU is available and the order is invoiced within hours of placement — far before the promise window opens.</p>
+      <p>The WH promise does assume procurement time for Non-Inventory orders — but the time it buffers is far larger than what procurement actually takes. The warehouse procures and invoices the order within hours of placement, well before the WH promise window opens. The buffer is overly conservative, not the assumption of procurement itself.</p>
 
       <p>The invoice-based measurement confirms this is not a payment-pending artefact: switching from AWB to <code>invoice_create_ts</code> (fires at order confirmation, before any payment state) makes the early-side distribution <em>more extreme</em>, not less.</p>
 
       <div class="finding">
         <div class="finding-label">Core Finding</div>
-        <p>In Cohort 40 (WH Early + Dispatch Early + Delivery Early, n=26,134 — 87.7%), zero orders had the invoice created <em>after</em> the WH promise. Procurement and invoicing were complete before the WH promise opened in every single order. The WH promise model does not reflect how Non-Inventory procurement actually works.</p>
+        <p>In Cohort 40 (WH Early + Dispatch Early + Delivery Early, n=26,134 — 87.7%), zero orders had the invoice created <em>after</em> the WH promise. In every single order, procurement was complete and the order invoiced before the WH promise window even opened. The procurement time buffer in the WH promise is so over-estimated that the warehouse finishes well before the promise opens — not by minutes, but by hours to days.</p>
       </div>
 
       <h4>AWB vs invoice comparison confirms payment pending is not the driver</h4>
@@ -771,9 +771,9 @@ tbody tr:hover td { background: var(--surface-alt); }
         </thead>
         <tbody>
           <tr>
-            <td class="td-bold">WH promise miscalibrated — assumes procurement lead time that does not exist for Non-Inventory SKUs</td>
+            <td class="td-bold">WH promise miscalibrated — over-estimates procurement time for Non-Inventory SKUs</td>
             <td class="td-num">28,750 (96.4%)</td>
-            <td>Recalibrate the WH promise using actual invoice-to-AWB timing distributions for Non-Inventory orders. The promise should reflect when SKUs are actually available, not when Inventory procurement is expected to complete.</td>
+            <td>Recalibrate the WH promise using actual invoice-to-AWB timing distributions for Non-Inventory orders. The procurement time buffer is over-estimated — shorten it to reflect how fast Non-Inventory procurement actually completes.</td>
           </tr>
           <tr>
             <td class="td-bold">Dispatch early — direct consequence of WH miscalibration; no independent fix needed</td>
@@ -814,7 +814,7 @@ tbody tr:hover td { background: var(--surface-alt); }
     <!-- E.1 WH promise fix -->
     <div class="subsection">
       <h3>E.1 — Non-Inventory WH Promise Calibration &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 29,803 · rescues 22,541 (75.6%)</span></h3>
-      <p><strong>What we're simulating:</strong> For Non-Inventory orders, goods are already in the warehouse when the order is placed — there is no procurement wait. But the WH promise was built assuming procurement takes time, so it sets the dispatch date far later than it needs to be. This simulation asks: <em>if the delivery promise had been set based on when the order was actually invoiced (goods confirmed ready), would these orders still have been egregious?</em> The courier's actual transit time is held constant — only the promise date changes.</p>
+      <p><strong>What we're simulating:</strong> For Non-Inventory orders, the WH promise allocates a procurement time buffer that is far larger than what procurement actually takes — the warehouse invoices the order well before the promise window opens. This simulation asks: <em>if the delivery promise had been anchored to actual invoice time instead of the over-estimated procurement buffer, would these orders still have been egregious?</em> The courier's actual transit time is held constant — only the promise date changes.</p>
 
       <h4>1 · Group-level shift</h4>
       <div class="table-wrap">
