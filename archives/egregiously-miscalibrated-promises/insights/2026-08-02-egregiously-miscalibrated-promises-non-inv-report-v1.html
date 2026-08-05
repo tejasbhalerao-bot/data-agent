@@ -904,9 +904,68 @@ tbody tr:hover td { background: var(--surface-alt); }
 
     <hr class="divider">
 
-    <!-- E.3 TAT recalibration upper bound -->
+    <!-- E.3 Combined WH Promise + Payment Pending -->
     <div class="subsection">
-      <h3>E.3 — TAT Recalibration (Upper Bound) &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 29,813 · rescues 29,813 (100%)</span></h3>
+      <h3>E.3 — Combined: WH Promise Calibration + Payment Pending &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">rescues 22,458 (75.3%) · worsened 1,314 (4.4%)</span></h3>
+      <p><strong>What we're simulating:</strong> Both fixes applied simultaneously — the delivery promise is recalibrated to invoice timing (E.1), and for payment-pending orders the pickup is also moved to invoice day (E.2). Each order is rescued at most once. The question: is the combined fix better than WH promise calibration alone?</p>
+
+      <h4>1 · Group-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Group</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
+          <tbody>
+            <tr><td>Early</td><td class="td-num">92.9%</td><td class="td-num">67.5%</td><td class="td-num td-hl-amber">−25.3pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time</td><td class="td-num">0.0%</td><td class="td-num td-bold td-hl-green">24.2%</td><td class="td-num td-hl-green">+24.2pp</td></tr>
+            <tr><td>Late</td><td class="td-num">7.1%</td><td class="td-num">8.3%</td><td class="td-num td-muted">+1.2pp</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>2 · Day-level shift</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Bucket</th><th class="td-num">Before</th><th class="td-num">After</th><th class="td-num">Δ</th></tr></thead>
+          <tbody>
+            <tr><td>Early 5d+</td><td class="td-num">0.68%</td><td class="td-num">0.00%</td><td class="td-num td-hl-green">−0.68pp</td></tr>
+            <tr><td>Early 4d</td><td class="td-num">5.18%</td><td class="td-num">0.08%</td><td class="td-num td-hl-green">−5.10pp</td></tr>
+            <tr><td>Early 3d</td><td class="td-num">23.42%</td><td class="td-num">2.16%</td><td class="td-num td-hl-green">−21.26pp</td></tr>
+            <tr><td class="td-bold">Early 2d</td><td class="td-num td-bold">63.57%</td><td class="td-num">16.06%</td><td class="td-num td-hl-green">−47.52pp</td></tr>
+            <tr class="td-focus"><td>Early 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">49.23%</td><td class="td-num td-hl-green">+49.23pp</td></tr>
+            <tr class="td-focus"><td class="td-bold">On-Time ✓</td><td class="td-num td-muted">—</td><td class="td-num td-bold">24.17%</td><td class="td-num td-hl-green">+24.17pp</td></tr>
+            <tr class="td-focus"><td>Late 1d ✓</td><td class="td-num td-muted">—</td><td class="td-num">1.93%</td><td class="td-num td-hl-green">+1.93pp</td></tr>
+            <tr><td>Late 2d</td><td class="td-num">4.00%</td><td class="td-num">1.22%</td><td class="td-num td-hl-green">−2.79pp</td></tr>
+            <tr><td>Late 3d</td><td class="td-num">1.51%</td><td class="td-num">2.29%</td><td class="td-num td-muted">+0.78pp</td></tr>
+            <tr><td>Late 4d</td><td class="td-num">0.78%</td><td class="td-num">1.41%</td><td class="td-num td-muted">+0.63pp</td></tr>
+            <tr><td>Late 5d+</td><td class="td-num">0.86%</td><td class="td-num">1.46%</td><td class="td-num td-muted">+0.61pp</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-3);margin-top:-0.75rem;">✓ = exits egregious set (|dev| &lt; 2d). % of full 29,813 segment.</p>
+
+      <h4>3 · Incremental impact of adding E.2 on top of E.1</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Metric</th><th class="td-num">E.1 alone</th><th class="td-num">E.1 + E.2 combined</th><th class="td-num">Δ from E.1</th></tr></thead>
+          <tbody>
+            <tr class="td-focus"><td class="td-bold">Rescued</td><td class="td-num">22,541 (75.6%)</td><td class="td-num">22,458 (75.3%)</td><td class="td-num td-hl-amber">−83 orders</td></tr>
+            <tr><td>Extra rescues (E.2 adds)</td><td class="td-num td-muted">—</td><td class="td-num">+104</td><td class="td-num">pmt Late orders now exit</td></tr>
+            <tr><td>Missed rescues (E.2 costs)</td><td class="td-num td-muted">—</td><td class="td-num">−187</td><td class="td-num td-hl-amber">pmt Early orders pushed deeper</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="finding finding-amber">
+        <div class="finding-label">Simulation Result — E.2 is Antagonistic to E.1 for This Segment</div>
+        <p>Adding the payment-pending fix on top of the WH promise calibration costs a net <strong>83 rescues (0.3 pp)</strong> vs applying E.1 alone. The mechanics: 1,622 pmt-pending orders are dominated by Early-egregious cases. When the delivery promise is correctly anchored to invoice day (E.1), pmt-pending orders where the payment delay happened to slow delivery into the rescue window are now re-exposed — the earlier simulated pickup overshoots the corrected promise again.</p>
+        <p>104 extra rescues come from pmt-pending Late orders that benefit from the combined fix. 187 rescues are lost from pmt-pending Early orders for which E.2 is harmful. The WH promise fix (E.1) is the dominant lever; E.2 is a modest negative for this segment and should be evaluated system-wide, not in isolation.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- E.4 TAT recalibration upper bound -->
+    <div class="subsection">
+      <h3>E.4 — TAT Recalibration (Upper Bound) &nbsp;<span style="font-weight:400;font-size:0.85rem;color:var(--text-2)">n = 29,813 · rescues 29,813 (100%)</span></h3>
       <p>Mechanic: <strong>delivery_sim = actual_pickup + actual_TAT</strong>. Every order reaches On-Time by construction.</p>
 
       <h4>1 · Group-level shift</h4>
@@ -941,7 +1000,7 @@ tbody tr:hover td { background: var(--surface-alt); }
 
       <div class="finding finding-green">
         <div class="finding-label">Simulation Result — Upper Bound</div>
-        <p>WH + TAT combined reaches <strong>100%</strong>. Incremental gain over E.1 (WH fix alone): <strong>7,272 orders / 24.4 pp</strong> — the stale-TAT residual that only the TAT recalibration can reach.</p>
+        <p>WH + TAT combined reaches <strong>100%</strong>. Incremental gain over E.1 (WH promise fix alone): <strong>7,272 orders / 24.4 pp</strong> — the stale-courier-TAT residual that only TAT recalibration can reach.</p>
       </div>
     </div>
   </div>

@@ -2741,3 +2741,47 @@ Total in scope: 3,779 orders (rows with sufficient data across both modes).
 | Late 5d+ | 315 | 227 | −88 |
 
 **Conclusion:** SDD Inventory is the hardest segment — all identifiable fixes combined rescue only 26.8%. The dominant Mode 1 mass (2,505 remaining orders) requires an operational SLA enforcement program, not promise-model changes.
+
+---
+
+## #60 — Non-SDD Non-Inventory Combined E.1 + E.2 Simulation
+
+Segment: Non-SDD Non-Inventory egregious, n = 29,813. Single-pass simulation: E.1 (WH Promise Calibration) applied to all orders; E.2 (Payment Pending) additionally applied to the 1,622 pmt-pending orders.
+
+**Group-level shift (% of 29,813 segment)**
+
+| Group | Before | After | Δ |
+|-------|--------|-------|---|
+| Early | 92.9% | 67.5% | −25.3pp |
+| On-Time | 0.0% | 24.2% | +24.2pp |
+| Late | 7.1% | 8.3% | +1.2pp |
+
+**Day-level shift (% of 29,813 segment)**
+
+| Bucket | Before | After | Δ |
+|--------|--------|-------|---|
+| Early 5d+ | 0.68% | 0.00% | −0.68pp |
+| Early 4d | 5.18% | 0.08% | −5.10pp |
+| Early 3d | 23.42% | 2.16% | −21.26pp |
+| Early 2d | 63.57% | 16.06% | −47.52pp |
+| Early 1d ✓ | — | 49.23% | +49.23pp |
+| On-Time ✓ | — | 24.17% | +24.17pp |
+| Late 1d ✓ | — | 1.93% | +1.93pp |
+| Late 2d | 4.00% | 1.22% | −2.79pp |
+| Late 3d | 1.51% | 2.29% | +0.78pp |
+| Late 4d | 0.78% | 1.41% | +0.63pp |
+| Late 5d+ | 0.86% | 1.46% | +0.61pp |
+
+**Total rescued: 22,458 (75.33%) · Total worsened: 1,314 (4.41%)**
+
+**Incremental impact of E.2 on top of E.1 (pmt-pending orders only)**
+
+| Metric | Count |
+|--------|-------|
+| Extra rescues (combined only — pmt Late) | +104 |
+| Missed rescues (E.1 alone only — pmt Early) | −187 |
+| Net vs E.1 alone | −83 orders (−0.28pp) |
+
+**E.1 alone: 22,541 (75.6%) · Combined E.1+E.2: 22,458 (75.3%)**
+
+Adding E.2 on top of E.1 is net negative for this segment: 187 Early-egregious pmt orders whose delayed actual pickup coincidentally placed delivery inside the corrected promise window under E.1 are re-exposed when the pickup is simulated earlier. Only 104 pmt Late orders benefit from the combined fix. WH promise calibration (E.1) remains the sole dominant lever for Non-SDD Non-Inventory.
