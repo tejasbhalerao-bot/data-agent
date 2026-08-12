@@ -2785,3 +2785,22 @@ Segment: Non-SDD Non-Inventory egregious, n = 29,813. Single-pass simulation: E.
 **E.1 alone: 22,541 (75.6%) · Combined E.1+E.2: 22,458 (75.3%)**
 
 Adding E.2 on top of E.1 is net negative for this segment: 187 Early-egregious pmt orders whose delayed actual pickup coincidentally placed delivery inside the corrected promise window under E.1 are re-exposed when the pickup is simulated earlier. Only 104 pmt Late orders benefit from the combined fix. WH promise calibration (E.1) remains the sole dominant lever for Non-SDD Non-Inventory.
+
+
+## #61 — RTO Rate Among Egregious Orders vs Non-Egregious Benchmark
+
+**Request:** Cross-reference the July 2026 egregious orders set against a provided list of RTO order_ids (June–July 2026) to determine what percentage of egregiously miscalibrated orders resulted in an RTO, and compare against the non-egregious RTO rate as a benchmark.
+
+**Data sources:**
+- Base: `all orders july.csv` — 803,997 July 2026 orders, 42 columns
+- RTO list: `query_result_2026-08-12T22_15_02.23822796+05_30.csv` — 111,259 rows, 110,271 unique order_ids (June–July 2026 RTOs)
+
+**Method:** Egregious defined as |DATE(digitised_delivery_promise) − DATE(delivery_attempt_time)| ≥ 2 days among orders with a delivery attempt. Cross-join on order_id.
+
+| Cohort | Orders | RTOs | RTO Rate |
+|--------|--------|------|----------|
+| Egregious | 96,424 | 6,961 | 7.22% |
+| Non-egregious (delivery-attempted) | 532,382 | 24,889 | 4.68% |
+| **Uplift** | | | **+2.54pp / 1.54×** |
+
+**Caveat:** RTO file covers June–July; base data is July only. June orders in the RTO file are excluded from the join (no match in base data) — so the 7.22% figure is clean. However, July orders that RTOd after July-end (e.g. late-July shipments bouncing back in August) are missed, making 7.22% a slight undercount.
