@@ -229,10 +229,70 @@
     </ul>
   </section>
 
-  <!-- 02 RETURNING USERS -->
+  <!-- 02 NEW USERS -->
   <section class="xp-section">
     <div class="section-header">
       <span class="section-num">02</span>
+      <span class="section-title">New Users</span>
+      <span class="section-sub">~1,000 per variant · directional</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Variant</th>
+            <th class="r">PDP → Order</th>
+            <th class="r">PDP → Cart</th>
+            <th class="r">Cart → Summary</th>
+            <th class="r">Summary → Order</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="winner-row">
+            <td class="row-label">Test 3 <span class="row-sub">Summary only</span></td>
+            <td class="r">17.09% <span class="delta pos">+4.60pp</span></td>
+            <td class="r">55.52% <span class="delta pos">+4.68pp</span></td>
+            <td class="r">47.96% <span class="delta pos">+5.21pp</span></td>
+            <td class="r">64.18% <span class="delta pos">+6.71pp</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Test 1 <span class="row-sub">Cart + Summary</span></td>
+            <td class="r">15.66% <span class="delta pos">+3.17pp</span></td>
+            <td class="r">53.21% <span class="delta pos">+2.37pp</span></td>
+            <td class="r">45.27% <span class="delta pos">+2.52pp</span></td>
+            <td class="r">65.02% <span class="delta pos">+7.55pp</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Test 2 <span class="row-sub">PDP + Cart + Summary</span></td>
+            <td class="r">13.98% <span class="delta pos">+1.49pp</span></td>
+            <td class="r">49.20% <span class="delta neg">−1.64pp</span></td>
+            <td class="r">42.13% <span class="delta neg">−0.62pp</span></td>
+            <td class="r">67.48% <span class="delta pos">+10.01pp</span></td>
+          </tr>
+          <tr class="ref-row">
+            <td class="row-label">Holdout <span class="row-sub">Existing · reference</span></td>
+            <td class="r">15.53%</td><td class="r">53.76%</td>
+            <td class="r">44.39%</td><td class="r">65.09%</td>
+          </tr>
+          <tr class="ref-row">
+            <td class="row-label">Control <span class="row-sub">Existing · baseline</span></td>
+            <td class="r">12.49%</td><td class="r">50.84%</td>
+            <td class="r">42.75%</td><td class="r">57.47%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="callouts">
+      <li><strong>Test 3 dominates early funnel for NUs</strong> — highest PDP→OP (+4.60pp), PDP→Cart (+4.68pp), and Cart→Summary (+5.21pp) vs control, all pointing to ETA early in the funnel suppressing add-to-cart before purchase intent forms.</li>
+      <li class="neg"><strong>Test 2 is the only treatment that hurts NUs</strong> — PDP→Cart drops to 49.20% vs 53.76% holdout (−4.56pp), confirmed in the Non-SDD cut (49.19% vs 53.61%); showing ETA on PDP creates friction for first-time buyers.</li>
+      <li class="warn"><strong>Sample size:</strong> ~1,000 NU per variant at PDP, dropping to ~150 at order placement — treat all NU findings as directional; a larger NU-targeted run is needed before acting on this segment separately.</li>
+    </ul>
+  </section>
+
+  <!-- 03 RETURNING USERS -->
+  <section class="xp-section">
+    <div class="section-header">
+      <span class="section-num">03</span>
       <span class="section-title">Returning Users</span>
       <span class="section-sub">~2,000 per variant · reliable</span>
     </div>
@@ -290,63 +350,82 @@
     </ul>
   </section>
 
-  <!-- 03 NEW USERS -->
+  <!-- 04 SAMPLE SIZE -->
   <section class="xp-section">
     <div class="section-header">
-      <span class="section-num">03</span>
-      <span class="section-title">New Users</span>
-      <span class="section-sub">~1,000 per variant · directional</span>
+      <span class="section-num">04</span>
+      <span class="section-title">Sample Size at PDP Entry</span>
+      <span class="section-sub">T1 · T2 · T3 · Control · Holdout</span>
     </div>
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>Variant</th>
-            <th class="r">PDP → Order</th>
-            <th class="r">PDP → Cart</th>
-            <th class="r">Cart → Summary</th>
-            <th class="r">Summary → Order</th>
+            <th>Segment</th>
+            <th class="r">Test 1</th>
+            <th class="r">Test 2</th>
+            <th class="r">Test 3</th>
+            <th class="r">Control</th>
+            <th class="r">Holdout</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="winner-row">
-            <td class="row-label">Test 3 <span class="row-sub">Summary only</span></td>
-            <td class="r">17.09% <span class="delta pos">+4.60pp</span></td>
-            <td class="r">55.52% <span class="delta pos">+4.68pp</span></td>
-            <td class="r">47.96% <span class="delta pos">+5.21pp</span></td>
-            <td class="r">64.18% <span class="delta pos">+6.71pp</span></td>
+          <tr>
+            <td class="row-label">All Users</td>
+            <td class="r">2,976</td><td class="r">2,989</td><td class="r">3,005</td>
+            <td class="r">2,938</td><td class="r">284,700</td>
           </tr>
           <tr>
-            <td class="row-label">Test 1 <span class="row-sub">Cart + Summary</span></td>
-            <td class="r">15.66% <span class="delta pos">+3.17pp</span></td>
-            <td class="r">53.21% <span class="delta pos">+2.37pp</span></td>
-            <td class="r">45.27% <span class="delta pos">+2.52pp</span></td>
-            <td class="r">65.02% <span class="delta pos">+7.55pp</span></td>
+            <td class="row-label">RU</td>
+            <td class="r">1,974</td><td class="r">1,988</td><td class="r">2,031</td>
+            <td class="r">1,986</td><td class="r">191,100</td>
           </tr>
           <tr>
-            <td class="row-label">Test 2 <span class="row-sub">PDP + Cart + Summary</span></td>
-            <td class="r">13.98% <span class="delta pos">+1.49pp</span></td>
-            <td class="r">49.20% <span class="delta neg">−1.64pp</span></td>
-            <td class="r">42.13% <span class="delta neg">−0.62pp</span></td>
-            <td class="r">67.48% <span class="delta pos">+10.01pp</span></td>
+            <td class="row-label">NU</td>
+            <td class="r">1,092</td><td class="r">994</td><td class="r">1,059</td>
+            <td class="r">1,017</td><td class="r">101,700</td>
           </tr>
-          <tr class="ref-row">
-            <td class="row-label">Holdout <span class="row-sub">Existing · reference</span></td>
-            <td class="r">15.53%</td><td class="r">53.76%</td>
-            <td class="r">44.39%</td><td class="r">65.09%</td>
+          <tr>
+            <td class="row-label">RU Non-SDD</td>
+            <td class="r">1,910</td><td class="r">1,945</td><td class="r">2,029</td>
+            <td class="r">1,933</td><td class="r">186,200</td>
           </tr>
-          <tr class="ref-row">
-            <td class="row-label">Control <span class="row-sub">Existing · baseline</span></td>
-            <td class="r">12.49%</td><td class="r">50.84%</td>
-            <td class="r">42.75%</td><td class="r">57.47%</td>
+          <tr>
+            <td class="row-label">NU Non-SDD</td>
+            <td class="r">1,072</td><td class="r">990</td><td class="r">1,059</td>
+            <td class="r">1,000</td><td class="r">100,500</td>
+          </tr>
+          <tr>
+            <td class="row-label">RU SDD</td>
+            <td class="r">89</td><td class="r">85</td>
+            <td class="r" style="color:var(--neg);font-weight:700;">4</td>
+            <td class="r">80</td><td class="r">7,811</td>
+          </tr>
+          <tr>
+            <td class="row-label">NU SDD</td>
+            <td class="r">24</td><td class="r">6</td>
+            <td class="r" style="color:var(--neg);font-weight:700;">0</td>
+            <td class="r">17</td><td class="r">1,420</td>
           </tr>
         </tbody>
       </table>
     </div>
     <ul class="callouts">
-      <li><strong>Test 3 dominates early funnel for NUs</strong> — highest PDP→OP (+4.60pp), PDP→Cart (+4.68pp), and Cart→Summary (+5.21pp) vs control, all pointing to ETA early in the funnel suppressing add-to-cart before purchase intent forms.</li>
-      <li class="neg"><strong>Test 2 is the only treatment that hurts NUs</strong> — PDP→Cart drops to 49.20% vs 53.76% holdout (−4.56pp), confirmed in the Non-SDD cut (49.19% vs 53.61%); showing ETA on PDP creates friction for first-time buyers.</li>
-      <li class="warn"><strong>Sample size:</strong> ~1,000 NU per variant at PDP, dropping to ~150 at order placement — treat all NU findings as directional; a larger NU-targeted run is needed before acting on this segment separately.</li>
+      <li class="neg"><strong>Test 3 SDD count is anomalous</strong> — RU SDD has only 4 users vs 85–89 in T1/T2; at 1% traffic the expected count is ~80, suggesting a logging or tagging issue for SDD users in Test 3.</li>
+      <li class="neg"><strong>SDD is unanalyzable across all variants</strong> — even T1 and T2 have at most 89 SDD users; no SDD-level finding from this experiment should be acted on.</li>
+      <li class="warn"><strong>NU is borderline</strong> — ~1,000 per variant at PDP drops to ~150 at checkout, making NU results directional until a larger run confirms them.</li>
+      <li><strong>Non-SDD mirrors the parent segment exactly</strong> — RU Non-SDD ≈ RU and NU Non-SDD ≈ NU (SDD is ~4% of RU, ~1.5% of NU), so the Non-SDD cut adds no incremental signal beyond the full segment.</li>
+    </ul>
+  </section>
+
+  <!-- NEXT STEPS -->
+  <section class="xp-section">
+    <div class="section-header">
+      <span class="section-num" style="color:var(--accent);">→</span>
+      <span class="section-title">Next Steps</span>
+    </div>
+    <ul class="callouts">
+      <li><strong>Scale all variants to 5% traffic</strong> — need stakeholder buy-in to increase T1/T2/T3/Control from ~1% to 5% each; at current volumes (~3,000 per variant) the experiment is significantly underpowered, and 5× the exposure will reach significance materially faster across both RU and NU.</li>
     </ul>
   </section>
 
