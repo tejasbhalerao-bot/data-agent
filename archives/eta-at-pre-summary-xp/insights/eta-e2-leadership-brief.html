@@ -1,0 +1,353 @@
+<title>ETA-E2 Experiment Results</title>
+<style>
+  :root {
+    --bg: #F7F8FC; --surface: #FFFFFF; --surface-2: #F0F2F9;
+    --border: #E2E5EF; --border-strong: #CBD0E4;
+    --text: #111318; --text-2: #5A6480; --text-3: #9BA3BE;
+    --accent: #2563EB; --accent-dim: #EEF3FE;
+    --pos: #15803D; --pos-bg: #DCFCE7;
+    --neg: #DC2626; --neg-bg: #FEE2E2;
+    --warn: #B45309; --warn-bg: #FEF3C7;
+    --winner: #7C3AED; --winner-bg: #F3F0FF;
+    --stripe: #F4F6FC;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111318; --surface: #1C2030; --surface-2: #232840;
+      --border: #2A2F46; --border-strong: #3A4160;
+      --text: #E6E9F4; --text-2: #8492B4; --text-3: #4A5270;
+      --accent: #4B83F0; --accent-dim: #1A2644;
+      --pos: #4ADE80; --pos-bg: #052E16;
+      --neg: #F87171; --neg-bg: #2D0A0A;
+      --warn: #FCD34D; --warn-bg: #2D1E02;
+      --winner: #A78BFA; --winner-bg: #1E1633;
+      --stripe: #1A1E30;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #F7F8FC; --surface: #FFFFFF; --surface-2: #F0F2F9;
+    --border: #E2E5EF; --border-strong: #CBD0E4;
+    --text: #111318; --text-2: #5A6480; --text-3: #9BA3BE;
+    --accent: #2563EB; --accent-dim: #EEF3FE;
+    --pos: #15803D; --pos-bg: #DCFCE7;
+    --neg: #DC2626; --neg-bg: #FEE2E2;
+    --warn: #B45309; --warn-bg: #FEF3C7;
+    --winner: #7C3AED; --winner-bg: #F3F0FF; --stripe: #F4F6FC;
+  }
+  :root[data-theme="dark"] {
+    --bg: #111318; --surface: #1C2030; --surface-2: #232840;
+    --border: #2A2F46; --border-strong: #3A4160;
+    --text: #E6E9F4; --text-2: #8492B4; --text-3: #4A5270;
+    --accent: #4B83F0; --accent-dim: #1A2644;
+    --pos: #4ADE80; --pos-bg: #052E16;
+    --neg: #F87171; --neg-bg: #2D0A0A;
+    --warn: #FCD34D; --warn-bg: #2D1E02;
+    --winner: #A78BFA; --winner-bg: #1E1633; --stripe: #1A1E30;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 48px 24px 80px;
+  }
+
+  .doc { max-width: 740px; margin: 0 auto; }
+
+  /* HEADER */
+  .header {
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--border-strong);
+  }
+  .eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+  .header h1 {
+    font-family: Georgia, serif; font-size: 24px; font-weight: normal;
+    color: var(--text); margin-bottom: 16px; text-wrap: balance;
+  }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-2);
+  }
+  .lbadge {
+    font-size: 10px; font-weight: 700; padding: 2px 6px;
+    border-radius: 3px; letter-spacing: 0.04em;
+    background: var(--accent-dim); color: var(--accent);
+  }
+  .lbadge.ho { background: var(--stripe); color: var(--text-3); }
+  .lbadge.cg { background: var(--stripe); color: var(--text-3); }
+  .meta-note { font-size: 12px; color: var(--text-3); }
+
+  /* SECTION */
+  .xp-section { margin-bottom: 52px; }
+  .section-header {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 16px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-strong);
+  }
+  .section-num {
+    font-family: Georgia, serif; font-size: 13px;
+    color: var(--text-3); letter-spacing: 0.04em;
+  }
+  .section-title {
+    font-size: 15px; font-weight: 700; color: var(--text);
+    letter-spacing: 0.02em;
+  }
+  .section-sub {
+    font-size: 12px; color: var(--text-3); margin-left: auto;
+  }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); }
+  th {
+    background: var(--surface-2); font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-3);
+    padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  th.r { text-align: right; }
+  td {
+    padding: 9px 12px; border-bottom: 1px solid var(--border);
+    font-variant-numeric: tabular-nums; vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: var(--stripe); }
+  td.r { text-align: right; }
+  .row-label { font-weight: 600; color: var(--text); font-size: 13px; }
+  .row-sub { display: block; color: var(--text-3); font-size: 11px; font-weight: 400; margin-top: 1px; }
+  .winner-row td { background: var(--winner-bg) !important; }
+  .winner-row .row-label { color: var(--winner); }
+  .ref-row td { opacity: 0.55; }
+
+  .delta {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    padding: 1px 5px; border-radius: 3px; margin-left: 4px; white-space: nowrap;
+  }
+  .delta.pos { color: var(--pos); background: var(--pos-bg); }
+  .delta.neg { color: var(--neg); background: var(--neg-bg); }
+
+  /* CALLOUTS */
+  .callouts { list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .callouts li {
+    padding: 9px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: 0 6px 6px 0;
+    font-size: 13.5px; color: var(--text-2); line-height: 1.5;
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .callouts li strong { color: var(--text); }
+  .callouts li.warn { border-left-color: var(--warn); }
+  .callouts li.neg  { border-left-color: var(--neg); }
+</style>
+
+<div class="doc">
+
+  <header class="header">
+    <div class="eyebrow">ETA-E2 · Experiment Results</div>
+    <h1>Where to Show Delivery ETA in the Purchase Funnel</h1>
+    <div class="legend">
+      <div class="legend-item"><span class="lbadge">T1</span> Cart + Summary (Non-SDD) · PDP + Cart + Summary (SDD)</div>
+      <div class="legend-item"><span class="lbadge">T2</span> PDP + Cart + Summary</div>
+      <div class="legend-item"><span class="lbadge">T3</span> Summary only</div>
+      <div class="legend-item"><span class="lbadge ho">H</span> Holdout (existing, 96% traffic)</div>
+    </div>
+    <div class="meta-note">Deltas vs. Control · ~3,000 users per variant at PDP · Aug 11 2026 onwards</div>
+  </header>
+
+  <!-- 01 OVERALL -->
+  <section class="xp-section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Overall</span>
+      <span class="section-sub">All eligible users · ETA ≤ 5 days</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Variant</th>
+            <th class="r">PDP → Order</th>
+            <th class="r">PDP → Cart</th>
+            <th class="r">Cart → Summary</th>
+            <th class="r">Summary → Order</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="winner-row">
+            <td class="row-label">Test 3 <span class="row-sub">Summary only</span></td>
+            <td class="r">18.24% <span class="delta pos">+2.65pp</span></td>
+            <td class="r">46.99% <span class="delta pos">+3.05pp</span></td>
+            <td class="r">56.94% <span class="delta pos">+5.58pp</span></td>
+            <td class="r">68.16% <span class="delta neg">−0.92pp</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Test 2 <span class="row-sub">PDP + Cart + Summary</span></td>
+            <td class="r">17.74% <span class="delta pos">+2.15pp</span></td>
+            <td class="r">44.41% <span class="delta pos">+0.47pp</span></td>
+            <td class="r">53.56% <span class="delta pos">+2.20pp</span></td>
+            <td class="r">74.57% <span class="delta pos">+5.49pp</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Test 1 <span class="row-sub">Cart + Summary</span></td>
+            <td class="r">17.64% <span class="delta pos">+2.05pp</span></td>
+            <td class="r">46.67% <span class="delta pos">+2.73pp</span></td>
+            <td class="r">53.42% <span class="delta pos">+2.06pp</span></td>
+            <td class="r">70.75% <span class="delta pos">+1.67pp</span></td>
+          </tr>
+          <tr class="ref-row">
+            <td class="row-label">Holdout <span class="row-sub">Existing · reference</span></td>
+            <td class="r">17.51%</td><td class="r">46.28%</td>
+            <td class="r">53.42%</td><td class="r">70.84%</td>
+          </tr>
+          <tr class="ref-row">
+            <td class="row-label">Control <span class="row-sub">Existing · baseline</span></td>
+            <td class="r">15.59%</td><td class="r">43.94%</td>
+            <td class="r">51.36%</td><td class="r">69.08%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="callouts">
+      <li><strong>Test 3 leads overall</strong> — showing ETA only at Summary produces the highest PDP→OP (18.24%) and the largest Cart→Summary lift (+5.58pp vs control), suggesting ETA shown too early creates drop-off before users commit.</li>
+      <li><strong>Test 2 closes best at checkout</strong> — full ETA visibility drives the highest Summary→OP (74.57%, +5.49pp), meaning customers who reach Summary with full ETA context are most likely to place an order.</li>
+      <li><strong>All three variants beat control</strong> — no ETA treatment degrades conversion; the question is where in the funnel it helps most.</li>
+      <li class="warn"><strong>Sample size:</strong> ~3,000 per variant at PDP, dropping to ~500 at order placement — results are directional until significance is confirmed.</li>
+    </ul>
+  </section>
+
+  <!-- 02 RETURNING USERS -->
+  <section class="xp-section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Returning Users</span>
+      <span class="section-sub">~2,000 per variant · reliable</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Variant</th>
+            <th class="r">PDP → Order</th>
+            <th class="r">PDP → Cart</th>
+            <th class="r">Cart → Summary</th>
+            <th class="r">Summary → Order</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="winner-row">
+            <td class="row-label">Test 2 <span class="row-sub">PDP + Cart + Summary</span></td>
+            <td class="r">19.37% <span class="delta pos">+2.10pp</span></td>
+            <td class="r">41.45% <span class="delta pos">+1.32pp</span></td>
+            <td class="r">60.44% <span class="delta pos">+3.23pp</span></td>
+            <td class="r">77.31% <span class="delta pos">+2.09pp</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Test 3 <span class="row-sub">Summary only</span></td>
+            <td class="r">18.46% <span class="delta pos">+1.19pp</span></td>
+            <td class="r">41.61% <span class="delta pos">+1.48pp</span></td>
+            <td class="r">63.08% <span class="delta pos">+5.87pp</span></td>
+            <td class="r">70.36% <span class="delta neg">−4.86pp</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Test 1 <span class="row-sub">Cart + Summary</span></td>
+            <td class="r">18.29% <span class="delta pos">+1.02pp</span></td>
+            <td class="r">42.05% <span class="delta pos">+1.92pp</span></td>
+            <td class="r">59.16% <span class="delta pos">+1.95pp</span></td>
+            <td class="r">73.52% <span class="delta neg">−1.70pp</span></td>
+          </tr>
+          <tr class="ref-row">
+            <td class="row-label">Holdout <span class="row-sub">Existing · reference</span></td>
+            <td class="r">18.33%</td><td class="r">41.60%</td>
+            <td class="r">59.83%</td><td class="r">73.65%</td>
+          </tr>
+          <tr class="ref-row">
+            <td class="row-label">Control <span class="row-sub">Existing · baseline</span></td>
+            <td class="r">17.27%</td><td class="r">40.13%</td>
+            <td class="r">57.21%</td><td class="r">75.22%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="callouts">
+      <li><strong>Test 2 is the clear RU winner</strong> — highest PDP→OP (19.37%) and best checkout close rate (77.31% Summary→OP), making full ETA visibility the right treatment for experienced users.</li>
+      <li><strong>Test 3 gains early but loses late</strong> — it achieves the biggest Cart→Summary lift (+5.87pp) but gives it back with the worst Summary→OP (70.36%, −4.86pp vs control), netting below Test 2 overall.</li>
+      <li><strong>Returning users respond better to more ETA, not less</strong> — they use delivery date as a planning input, and showing it earlier helps them commit rather than drop off.</li>
+      <li class="warn"><strong>Sample size:</strong> ~2,000 RU per variant at PDP, dropping to ~350 at order placement — this is the most reliable segment in the experiment.</li>
+    </ul>
+  </section>
+
+  <!-- 03 NEW USERS -->
+  <section class="xp-section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">New Users</span>
+      <span class="section-sub">~1,000 per variant · directional</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Variant</th>
+            <th class="r">PDP → Order</th>
+            <th class="r">PDP → Cart</th>
+            <th class="r">Cart → Summary</th>
+            <th class="r">Summary → Order</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="winner-row">
+            <td class="row-label">Test 3 <span class="row-sub">Summary only</span></td>
+            <td class="r">17.09% <span class="delta pos">+4.60pp</span></td>
+            <td class="r">55.52% <span class="delta pos">+4.68pp</span></td>
+            <td class="r">47.96% <span class="delta pos">+5.21pp</span></td>
+            <td class="r">64.18% <span class="delta pos">+6.71pp</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Test 1 <span class="row-sub">Cart + Summary</span></td>
+            <td class="r">15.66% <span class="delta pos">+3.17pp</span></td>
+            <td class="r">53.21% <span class="delta pos">+2.37pp</span></td>
+            <td class="r">45.27% <span class="delta pos">+2.52pp</span></td>
+            <td class="r">65.02% <span class="delta pos">+7.55pp</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Test 2 <span class="row-sub">PDP + Cart + Summary</span></td>
+            <td class="r">13.98% <span class="delta pos">+1.49pp</span></td>
+            <td class="r">49.20% <span class="delta neg">−1.64pp</span></td>
+            <td class="r">42.13% <span class="delta neg">−0.62pp</span></td>
+            <td class="r">67.48% <span class="delta pos">+10.01pp</span></td>
+          </tr>
+          <tr class="ref-row">
+            <td class="row-label">Holdout <span class="row-sub">Existing · reference</span></td>
+            <td class="r">15.53%</td><td class="r">53.76%</td>
+            <td class="r">44.39%</td><td class="r">65.09%</td>
+          </tr>
+          <tr class="ref-row">
+            <td class="row-label">Control <span class="row-sub">Existing · baseline</span></td>
+            <td class="r">12.49%</td><td class="r">50.84%</td>
+            <td class="r">42.75%</td><td class="r">57.47%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="callouts">
+      <li><strong>Test 3 dominates early funnel for NUs</strong> — highest PDP→OP (+4.60pp), PDP→Cart (+4.68pp), and Cart→Summary (+5.21pp) vs control, all pointing to ETA early in the funnel suppressing add-to-cart before purchase intent forms.</li>
+      <li class="neg"><strong>Test 2 is the only treatment that hurts NUs</strong> — PDP→Cart drops to 49.20% vs 53.76% holdout (−4.56pp), confirmed in the Non-SDD cut (49.19% vs 53.61%); showing ETA on PDP creates friction for first-time buyers.</li>
+      <li class="warn"><strong>Sample size:</strong> ~1,000 NU per variant at PDP, dropping to ~150 at order placement — treat all NU findings as directional; a larger NU-targeted run is needed before acting on this segment separately.</li>
+    </ul>
+  </section>
+
+</div>
