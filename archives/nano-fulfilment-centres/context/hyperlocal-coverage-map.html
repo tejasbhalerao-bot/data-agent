@@ -298,26 +298,51 @@ function doTSearch() {
   const q=(document.getElementById('tSearchInput')?.value||'').trim().toLowerCase();
   const resultEl=document.getElementById('tSearchResult');
   if(!q){if(resultEl)resultEl.textContent='';return;}
-  const m=TRAFFIC_GEO.features.filter(f=>{
+  const match=f=>{
     const p=f.properties;
-    if(T.searchType==='pincode') return p.p===q;
+    if(T.searchType==='pincode') return String(p.p)===q;
     if(T.searchType==='city') return (p.d||'').toLowerCase().includes(q);
     if(T.searchType==='state') return (p.s||'').toLowerCase().includes(q);
     return false;
+  };
+  const tMatches=TRAFFIC_GEO.features.filter(match);
+  const sMatches=PINCODE_GEO.features.filter(match);
+  const total=tMatches.length+sMatches.length;
+  if(!total){if(resultEl)resultEl.textContent='No matches';return;}
+  const parts=[];
+  if(tMatches.length) parts.push(`${tMatches.length} NFC traffic`);
+  if(sMatches.length) parts.push(`${sMatches.length} SDD`);
+  if(resultEl)resultEl.textContent=`${total} pincode${total>1?'s':''} found (${parts.join(', ')})`;
+  // Build combined bounds using cx/cy for traffic, computed centroid for SDD
+  const allLats=[], allLons=[];
+  tMatches.forEach(f=>{allLats.push(f.properties.cy);allLons.push(f.properties.cx);});
+  sMatches.forEach(f=>{
+    const ring=f.geometry.type==='Polygon'?f.geometry.coordinates[0]:f.geometry.coordinates[0][0];
+    allLats.push(ring.reduce((s,c)=>s+c[1],0)/ring.length);
+    allLons.push(ring.reduce((s,c)=>s+c[0],0)/ring.length);
   });
-  if(!m.length){if(resultEl)resultEl.textContent='No matches';return;}
-  if(resultEl)resultEl.textContent=`${m.length} pincode${m.length>1?'s':''} found`;
-  const lats=m.map(f=>f.properties.cy), lons=m.map(f=>f.properties.cx);
-  const minLat=lats.reduce((a,b)=>Math.min(a,b),90), maxLat=lats.reduce((a,b)=>Math.max(a,b),-90);
-  const minLon=lons.reduce((a,b)=>Math.min(a,b),180), maxLon=lons.reduce((a,b)=>Math.max(a,b),-180);
+  const minLat=allLats.reduce((a,b)=>Math.min(a,b),90), maxLat=allLats.reduce((a,b)=>Math.max(a,b),-90);
+  const minLon=allLons.reduce((a,b)=>Math.min(a,b),180), maxLon=allLons.reduce((a,b)=>Math.max(a,b),-180);
   const mxZ=T.searchType==='pincode'?14:T.searchType==='city'?10:7;
   map.fitBounds([[minLat,minLon],[maxLat,maxLon]],{padding:[40,40],maxZoom:mxZ});
-  if(T.mode==='boundaries'){
-    const pins=new Set(m.map(f=>f.properties.p));
+  // Highlight traffic matches (boundary mode)
+  if(T.mode==='boundaries'&&tMatches.length){
+    const pins=new Set(tMatches.map(f=>f.properties.p));
     tBoundaryLayer.eachLayer(l=>{
       if(pins.has(l.feature.properties.p)){
         l.setStyle({color:'#7c3aed',weight:2.5,fillColor:'#a78bfa',fillOpacity:0.95});
         setTimeout(()=>tBoundaryLayer.resetStyle(l),2500);
+      }
+    });
+  }
+  // Highlight SDD matches — geoLayer in map file, sddLayer in overlay
+  if(sMatches.length){
+    const _sdd=(typeof geoLayer!=='undefined')?geoLayer:sddLayer;
+    const sPins=new Set(sMatches.map(f=>String(f.properties.p)));
+    _sdd.eachLayer(l=>{
+      if(sPins.has(String(l.feature.properties.p))){
+        l.setStyle({color:'#b45309',weight:2.5,fillColor:'#fbbf24',fillOpacity:0.9,dashArray:null});
+        setTimeout(()=>_sdd.resetStyle(l),2500);
       }
     });
   }
