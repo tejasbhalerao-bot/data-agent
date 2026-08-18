@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warehouse Locations — Truemeds</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<style>
+  :root { --ink:#151a21; --paper:#f6f5f1; --panel:#fff; --line:#e4e1d8; --muted:#6b7280; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  #app { display:flex; flex-direction:column; height:100vh; }
+  header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 22px; background:var(--ink); color:#fff; flex-shrink:0; gap:16px; flex-wrap:wrap;
+  }
+  header h1 { font-size:16px; margin:0; font-weight:600; }
+  header span { font-size:12px; color:#a9b0bb; }
+  .stats { display:flex; gap:28px; }
+  .stat .num { font-size:20px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .stat .lbl { font-size:10.5px; color:#a9b0bb; text-transform:uppercase; letter-spacing:.06em; }
+  #body { flex:1; display:flex; min-height:0; }
+  #panel {
+    width:280px; flex-shrink:0; background:var(--panel); border-right:1px solid var(--line);
+    padding:16px; overflow-y:auto;
+  }
+  #panel h2 { font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); margin:18px 0 8px; }
+  #panel h2:first-child { margin-top:0; }
+  table.wh { width:100%; border-collapse:collapse; font-size:12px; }
+  table.wh th { text-align:left; font-weight:600; color:var(--muted); font-size:10.5px; text-transform:uppercase; padding:4px; border-bottom:1px solid var(--line); }
+  table.wh td { padding:6px 4px; border-bottom:1px solid #f0efe9; cursor:pointer; }
+  table.wh tr:hover td { background:#f0f9ff; }
+  .badge {
+    display:inline-block; padding:2px 6px; border-radius:10px; font-size:10px; font-weight:700;
+    letter-spacing:.04em;
+  }
+  .badge.fc { background:#fee2e2; color:#dc2626; }
+  .badge.mfc { background:#cffafe; color:#0891b2; }
+  .legend { background:rgba(255,255,255,.95); padding:10px 14px; border-radius:8px; box-shadow:0 1px 8px rgba(0,0,0,.15); font-size:12px; line-height:2; }
+  .legend strong { display:block; font-size:11px; font-weight:700; margin-bottom:4px; color:var(--ink); }
+  .dot { display:inline-flex; align-items:center; justify-content:center; border-radius:50%; font-size:8px; font-weight:700; color:#fff; margin-right:6px; vertical-align:middle; }
+  #map { flex:1; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div>
+      <h1>Warehouse Locations</h1>
+      <span>Active FCs and MFCs in Truemeds network · as of 2026-08-18</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="num" style="color:#fca5a5">5</div><div class="lbl">Fulfilment Centres</div></div>
+      <div class="stat"><div class="num" style="color:#67e8f9">13</div><div class="lbl">Micro FCs</div></div>
+      <div class="stat"><div class="num">18</div><div class="lbl">Total warehouses</div></div>
+    </div>
+  </header>
+  <div id="body">
+    <div id="panel">
+      <h2>Fulfilment Centres (FC)</h2>
+      <table class="wh">
+        <thead><tr><th>City</th><th>Pincode</th></tr></thead>
+        <tbody id="fcTable"></tbody>
+      </table>
+      <h2>Micro Fulfilment Centres (MFC)</h2>
+      <table class="wh">
+        <thead><tr><th>City</th><th>Pincode</th></tr></thead>
+        <tbody id="mfcTable"></tbody>
+      </table>
+    </div>
+    <div id="map"></div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const WAREHOUSES = [
+  {city:"Mumbai",          pin:"400079",lat:19.09246,lon:72.93162,type:"FC"},
+  {city:"Delhi",           pin:"110020",lat:28.5378, lon:77.27942,type:"FC"},
+  {city:"Kolkata (Howrah)",pin:"711302",lat:22.58204,lon:88.17241,type:"FC"},
+  {city:"Bengaluru",       pin:"560074",lat:12.88094,lon:77.42243,type:"FC"},
+  {city:"Lucknow",         pin:"226020",lat:26.89259,lon:80.91113,type:"FC"},
+  {city:"Ahmedabad",       pin:"382210",lat:22.96393,lon:72.4745, type:"MFC"},
+  {city:"Bhubaneswar",     pin:"751010",lat:20.28416,lon:85.87078,type:"MFC"},
+  {city:"Chandigarh",      pin:"160002",lat:30.69882,lon:76.78957,type:"MFC"},
+  {city:"Chennai",         pin:"600089",lat:13.03024,lon:80.18584,type:"MFC"},
+  {city:"Guwahati",        pin:"781035",lat:26.1089, lon:91.69108,type:"MFC"},
+  {city:"Hyderabad",       pin:"500037",lat:17.4918, lon:78.43136,type:"MFC"},
+  {city:"Indore",          pin:"452010",lat:22.75813,lon:75.88118,type:"MFC"},
+  {city:"Jaipur",          pin:"302006",lat:26.90373,lon:75.78241,type:"MFC"},
+  {city:"Nagpur",          pin:"440023",lat:21.10989,lon:78.87357,type:"MFC"},
+  {city:"Patna",           pin:"800026",lat:25.59054,lon:85.17457,type:"MFC"},
+  {city:"Pune",            pin:"412207",lat:18.56176,lon:74.11943,type:"MFC"},
+  {city:"Ranchi",          pin:"834010",lat:23.30922,lon:85.35414,type:"MFC"},
+  {city:"Varanasi",        pin:"221010",lat:25.29454,lon:82.99024,type:"MFC"},
+];
+
+function makeIcon(type) {
+  const isFc = type === 'FC';
+  const size = isFc ? 30 : 24;
+  const bg = isFc ? '#dc2626' : '#0891b2';
+  return L.divIcon({
+    className: '',
+    html: `<div style="background:${bg};border:2.5px solid #fff;border-radius:50%;width:${size}px;height:${size}px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:${isFc?9:8}px;font-weight:800;box-shadow:0 2px 8px rgba(0,0,0,.35);letter-spacing:.02em">${type}</div>`,
+    iconSize: [size, size],
+    iconAnchor: [size/2, size/2]
+  });
+}
+
+const map = L.map('map').setView([22, 80], 5);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+  subdomains:'abcd', maxZoom:19
+}).addTo(map);
+
+const layers = { FC: L.layerGroup().addTo(map), MFC: L.layerGroup().addTo(map) };
+
+const fcBody = document.getElementById('fcTable');
+const mfcBody = document.getElementById('mfcTable');
+
+WAREHOUSES.forEach(w => {
+  const marker = L.marker([w.lat, w.lon], { icon: makeIcon(w.type) });
+  marker.bindPopup(`<b style="font-size:13px">${w.city}</b><br><span style="color:#6b7280;font-size:12px">${w.type} · Pincode ${w.pin}</span>`);
+  marker.addTo(layers[w.type]);
+
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${w.city}</td><td style="color:#6b7280">${w.pin}</td>`;
+  tr.addEventListener('click', () => { map.setView([w.lat, w.lon], 13); marker.openPopup(); });
+  (w.type === 'FC' ? fcBody : mfcBody).appendChild(tr);
+});
+
+// Legend
+const legend = L.control({ position: 'bottomright' });
+legend.onAdd = () => {
+  const d = L.DomUtil.create('div', 'legend');
+  d.innerHTML = `<strong>Warehouse Types</strong>
+    <span class="dot" style="background:#dc2626;width:18px;height:18px">FC</span> Fulfilment Centre<br>
+    <span class="dot" style="background:#0891b2;width:16px;height:16px;font-size:7px">MFC</span> Micro FC`;
+  return d;
+};
+legend.addTo(map);
+</script>
+</body>
+</html>
