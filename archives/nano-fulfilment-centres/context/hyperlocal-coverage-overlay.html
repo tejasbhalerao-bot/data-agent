@@ -76,10 +76,10 @@
     padding:6px 14px; border-radius:20px; pointer-events:none; z-index:1000;
     white-space:nowrap; display:none;
   }
-  .legend-volume { margin: 12px 0 4px; }
-  .legend-volume > span { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+  .legend-volume { margin: 6px 0 10px; }
+  .legend-volume > span { font-size: 11px; color: var(--muted,#9ca3af); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
   .legend-bar { height: 8px; border-radius: 4px; margin: 5px 0 3px; background: linear-gradient(to right, #fed7aa, #f97316, #c2410c); }
-  .legend-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
+  .legend-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted,#9ca3af); }
 </style>
 </head>
 <body>
@@ -121,6 +121,9 @@
           <div class="lt-swatch" style="background:#0891b2;border-radius:50%"></div>
           Micro FCs
         </div>
+        <div class="toggle-pill on" id="pill-mfc"></div>
+      </div>
+
       <div class="layer-toggle" id="tog-traffic">
         <div class="lt-left">
           <div class="lt-swatch" style="background:#f97316;opacity:.7;border:1px solid #c2410c"></div>
@@ -133,9 +136,6 @@
         <div class="legend-bar"></div>
         <div class="legend-labels"><span>Low</span><span>High</span></div>
       </div>
-        <div class="toggle-pill on" id="pill-mfc"></div>
-      </div>
-
       <h2>SDD Coverage — top cities</h2>
       <table class="top">
         <thead><tr><th>City</th><th class="n">Pins</th></tr></thead>
@@ -182,6 +182,34 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   subdomains:'abcd', maxZoom:19
 }).addTo(map);
 
+// ── NFC Opportunity Traffic layer ─────────────────────────────
+const maxLogO = Math.log(Math.max(...TRAFFIC_GEO.features.map(f => f.properties.o || 1)) + 1);
+function trafficStyle(feature) {
+  const o = feature.properties.o || 0;
+  const opacity = o === 0 ? 0.06 : 0.08 + 0.47 * (Math.log(o + 1) / maxLogO);
+  return { color: '#c2410c', weight: 0.4, fillColor: '#f97316', fillOpacity: opacity };
+}
+const trafficLayer = L.geoJSON(TRAFFIC_GEO, {
+  style: trafficStyle,
+  onEachFeature(feature, layer) {
+    const p = feature.properties;
+    const conv = p.v > 0 ? (p.o / p.v * 100).toFixed(1) : '0.0';
+    layer.on({
+      mouseover(e) {
+        e.target.setStyle({ color: '#9a3412', weight: 1.2, fillColor: '#fb923c', fillOpacity: 0.75 });
+        hoverEl.style.display = 'block';
+        hoverEl.textContent = p.p + ' · ' + p.o.toLocaleString() + ' orders · ' + p.v.toLocaleString() + ' views · ' + conv + '% conv';
+      },
+      mouseout(e) { trafficLayer.resetStyle(e.target); hoverEl.style.display = 'none'; },
+      click(e) {
+        map.fitBounds(e.target.getBounds(), { maxZoom: 13, padding: [40, 40] });
+        L.popup().setLatLng(e.latlng)
+          .setContent('<b>Pincode ' + p.p + '</b><br><span style="color:#6b7280;font-size:12px">' + p.o.toLocaleString() + ' orders &nbsp;·&nbsp; ' + p.v.toLocaleString() + ' views<br>Conversion: ' + conv + '%</span>')
+          .openOn(map);
+      }
+    });
+  }
+}).addTo(map);
 // ── SDD Pincode polygon layer ──────────────────────────────────
 const hoverEl = document.getElementById('hoverInfo');
 const sddLayer = L.geoJSON(PINCODE_GEO, {
@@ -229,36 +257,6 @@ function makeIcon(type) {
 const fcLayer  = L.layerGroup().addTo(map);
 const mfcLayer = L.layerGroup().addTo(map);
 
-// ── NFC Opportunity Traffic layer ─────────────────────────────
-const maxLogO = Math.log(Math.max(...TRAFFIC_GEO.features.map(f => f.properties.o || 1)) + 1);
-function trafficStyle(feature) {
-  const o = feature.properties.o || 0;
-  const opacity = o === 0 ? 0.06 : 0.08 + 0.47 * (Math.log(o + 1) / maxLogO);
-  return { color: '#c2410c', weight: 0.4, fillColor: '#f97316', fillOpacity: opacity };
-}
-const trafficLayer = L.geoJSON(TRAFFIC_GEO, {
-  style: trafficStyle,
-  onEachFeature(feature, layer) {
-    const p = feature.properties;
-    const conv = p.v > 0 ? (p.o / p.v * 100).toFixed(1) : '0.0';
-    layer.on({
-      mouseover(e) {
-        e.target.setStyle({ color: '#9a3412', weight: 1.2, fillColor: '#fb923c', fillOpacity: 0.75 });
-        hoverEl.style.display = 'block';
-        hoverEl.textContent = `${p.p} · ${p.o.toLocaleString()} orders · ${p.v.toLocaleString()} views · ${conv}% conv`;
-      },
-      mouseout(e) { trafficLayer.resetStyle(e.target); hoverEl.style.display = 'none'; },
-      click(e) {
-        map.fitBounds(e.target.getBounds(), { maxZoom: 13, padding: [40, 40] });
-        L.popup().setLatLng(e.latlng)
-          .setContent(`<b>Pincode ${p.p}</b><br><span style="color:#6b7280;font-size:12px">${p.o.toLocaleString()} orders &nbsp;·&nbsp; ${p.v.toLocaleString()} views<br>Conversion: ${conv}%</span>`)
-          .openOn(map);
-      }
-    });
-  }
-});
-trafficLayer.addTo(map);
-
 WAREHOUSES.forEach(w => {
   const marker = L.marker([w.lat, w.lon], { icon: makeIcon(w.type), zIndexOffset: w.type==='FC' ? 1000 : 500 });
   marker.bindPopup(`<b style="font-size:13px">${w.city}</b><br><span style="color:#6b7280;font-size:12px">${w.type} · Pincode ${w.pin}</span>`);
@@ -287,7 +285,7 @@ CITIES.forEach(c => {
 });
 
 // ── Layer toggle logic ─────────────────────────────────────────
-const state = { sdd: true, fc: true, mfc: true };, traffic: true };
+const state = { sdd: true, fc: true, mfc: true , traffic: true };
 
 function toggle(key, layer) {
   state[key] = !state[key];
