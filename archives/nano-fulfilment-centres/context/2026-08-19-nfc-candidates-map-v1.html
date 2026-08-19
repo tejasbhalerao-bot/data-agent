@@ -80,8 +80,8 @@
   .legend-volume > span { font-size: 11px; color: var(--muted,#9ca3af); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
   .legend-bar { height: 8px; border-radius: 4px; margin: 5px 0 3px; background: linear-gradient(to right, #fed7aa, #f97316, #c2410c); }
   .legend-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted,#9ca3af); }
-  .seg { display:flex; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:3px; gap:3px; }
-  .seg button { flex:1; border:none; background:transparent; padding:7px 4px; border-radius:6px; font-size:12px; cursor:pointer; color:var(--muted); font-weight:600; transition:all .15s; }
+  .seg { display:flex; flex-wrap:wrap; background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:3px; gap:3px; }
+  .seg button { flex:1 1 auto; border:none; background:transparent; padding:5px 6px; border-radius:6px; font-size:11px; cursor:pointer; color:var(--muted); font-weight:600; transition:all .15s; white-space:nowrap; }
   .seg button.active { background:var(--ink); color:#fff; }
   .search-row { display:flex; gap:4px; margin-top:6px; }
   .search-row input { flex:1; padding:6px 8px; border:1px solid var(--line); border-radius:6px; font-size:12px; outline:none; background:#fff; }
