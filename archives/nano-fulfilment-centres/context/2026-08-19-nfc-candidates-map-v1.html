@@ -206,12 +206,41 @@
           </div>
           <div class="toggle-pill on" id="pill-districts"></div>
         </div>
-        <div class="layer-toggle" id="tog-nfc">
+        <div style="font-size:11px;color:#888;margin:6px 0 4px;letter-spacing:.03em;text-transform:uppercase">NFC Placements</div>
+        <div class="layer-toggle" id="tog-nfc1">
           <div class="lt-left">
-            <div class="lt-swatch" style="background:#f59e0b;border-radius:50%"></div>
-            NFC Placements
+            <div class="lt-swatch" style="background:#f59e0b;border-radius:50%;width:10px;height:10px"></div>
+            #1–30 · Very High
           </div>
-          <div class="toggle-pill on" id="pill-nfc"></div>
+          <div class="toggle-pill on" id="pill-nfc1"></div>
+        </div>
+        <div class="layer-toggle" id="tog-nfc2">
+          <div class="lt-left">
+            <div class="lt-swatch" style="background:#fb923c;border-radius:50%;width:8px;height:8px"></div>
+            #31–60 · High
+          </div>
+          <div class="toggle-pill" id="pill-nfc2"></div>
+        </div>
+        <div class="layer-toggle" id="tog-nfc3">
+          <div class="lt-left">
+            <div class="lt-swatch" style="background:#fbbf24;border-radius:50%;width:7px;height:7px"></div>
+            #61–100 · Medium-High
+          </div>
+          <div class="toggle-pill" id="pill-nfc3"></div>
+        </div>
+        <div class="layer-toggle" id="tog-nfc4">
+          <div class="lt-left">
+            <div class="lt-swatch" style="background:#d97706;border-radius:50%;width:6px;height:6px"></div>
+            #101–200 · Medium
+          </div>
+          <div class="toggle-pill" id="pill-nfc4"></div>
+        </div>
+        <div class="layer-toggle" id="tog-nfc5">
+          <div class="lt-left">
+            <div class="lt-swatch" style="background:#92400e;border-radius:50%;width:5px;height:5px"></div>
+            #201–513 · Remaining
+          </div>
+          <div class="toggle-pill" id="pill-nfc5"></div>
         </div>
 
         <div class="dist-legend">
@@ -1175,7 +1204,7 @@ const NFC_PLACEMENTS = [
   {"r":513,"dist":"Gumla","st":"Jharkhand","sc":4.6,"pin":"835207","cx":84.5853,"cy":22.993,"dpins":10,"dvw":594,"cpins":1,"cvw":376,"cpc":63.3}
 ];
 
-const state = { sdd: true, fc: true, mfc: true, dc: true, traffic: true, districts: true, nfc: true };
+const state = { sdd: true, fc: true, mfc: true, dc: true, traffic: true, districts: true, nfc1: true, nfc2: false, nfc3: false, nfc4: false, nfc5: false };
 
 function toggle(key, layer) {
   state[key] = !state[key];
@@ -1193,15 +1222,23 @@ document.getElementById('tog-districts').addEventListener('click', () => {
   }
 });
 
-// ── NFC Placement markers (one per qualifying district) ───────────────
+// ── NFC Placement markers — tiered by district leverage ───────────────
+const NFC_TIERS = [
+  { key: 'nfc1', min: 1,   max: 30,  color: '#f59e0b', r: 7,  rh: 10 },
+  { key: 'nfc2', min: 31,  max: 60,  color: '#fb923c', r: 6,  rh: 9  },
+  { key: 'nfc3', min: 61,  max: 100, color: '#fbbf24', r: 5,  rh: 8  },
+  { key: 'nfc4', min: 101, max: 200, color: '#d97706', r: 4,  rh: 7  },
+  { key: 'nfc5', min: 201, max: 999, color: '#92400e', r: 3,  rh: 6  },
+];
+
 let hoverRadius = null;
 
-const nfcMarkers = NFC_PLACEMENTS.map(p => {
+function makeNfcMarker(p, color, r, rh) {
   const m = L.circleMarker([p.cy, p.cx], {
-    radius: 6,
+    radius: r,
     color: '#ffffff',
-    weight: 1.5,
-    fillColor: '#f59e0b',
+    weight: 1.2,
+    fillColor: color,
     fillOpacity: 0.95,
     pane: 'markerPane',
   });
@@ -1213,33 +1250,46 @@ const nfcMarkers = NFC_PLACEMENTS.map(p => {
       `${p.cpins} pincodes · ${p.cvw.toLocaleString()} views within 10 km<br>` +
       `<b>${p.cpc}%</b> of district views covered`;
     el.style.display = 'block';
-    m.setStyle({ radius: 9, fillOpacity: 1 });
+    m.setStyle({ radius: rh, fillOpacity: 1 });
     if (hoverRadius) map.removeLayer(hoverRadius);
     hoverRadius = L.circle([p.cy, p.cx], {
       radius: 10000,
-      color: '#f59e0b',
+      color: color,
       weight: 1.5,
       dashArray: '6 4',
       fillOpacity: 0.06,
-      fillColor: '#f59e0b',
+      fillColor: color,
       interactive: false,
     }).addTo(map);
   });
   m.on('mouseout', () => {
     document.getElementById('hoverInfo').style.display = 'none';
-    m.setStyle({ radius: 6, fillOpacity: 0.95 });
+    m.setStyle({ radius: r, fillOpacity: 0.95 });
     if (hoverRadius) { map.removeLayer(hoverRadius); hoverRadius = null; }
   });
   m.on('click', () => map.setView([p.cy, p.cx], 11, { animate: true }));
   return m;
-});
+}
 
-const nfcLayer = L.layerGroup(nfcMarkers).addTo(map);
+const nfcLayers = {};
+NFC_TIERS.forEach(t => {
+  const markers = NFC_PLACEMENTS
+    .filter(p => p.r >= t.min && p.r <= t.max)
+    .map(p => makeNfcMarker(p, t.color, t.r, t.rh));
+  const lg = L.layerGroup(markers);
+  nfcLayers[t.key] = lg;
+  if (state[t.key]) lg.addTo(map);
 
-document.getElementById('tog-nfc').addEventListener('click', () => {
-  state.nfc = !state.nfc;
-  document.getElementById('pill-nfc').classList.toggle('on', state.nfc);
-  if (state.nfc) map.addLayer(nfcLayer); else map.removeLayer(nfcLayer);
+  document.getElementById(`tog-${t.key}`).addEventListener('click', () => {
+    state[t.key] = !state[t.key];
+    document.getElementById(`pill-${t.key}`).classList.toggle('on', state[t.key]);
+    if (state[t.key]) {
+      map.addLayer(lg);
+      lg.getLayers().forEach(m => m.redraw && m.redraw());
+    } else {
+      map.removeLayer(lg);
+    }
+  });
 });
 document.getElementById('tog-sdd').addEventListener('click', () => toggle('sdd', sddLayer));
 document.getElementById('tog-dc').addEventListener('click',  () => toggle('dc',  dcLayer));
