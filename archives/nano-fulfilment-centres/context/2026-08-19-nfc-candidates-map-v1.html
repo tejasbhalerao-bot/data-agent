@@ -184,7 +184,9 @@
         <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;margin:6px 0 4px">Metric</div>
         <div class="seg">
           <button id="tMetricOrders" class="active t-metric-btn">Orders</button>
+          <button id="tMetricOrdDay" class="t-metric-btn">Ord/Day</button>
           <button id="tMetricViews" class="t-metric-btn">Views</button>
+          <button id="tMetricVwDay" class="t-metric-btn">Views/Day</button>
           <button id="tMetricConv" class="t-metric-btn">Conv %</button>
           <button id="tMetricAvgTat" class="t-metric-btn">Avg TAT</button>
           <button id="tMetricMedTat" class="t-metric-btn">Med TAT</button>
@@ -292,21 +294,25 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 
 const T = { metric: 'o', mode: 'boundaries', visible: true, searchType: 'pincode' };
 const BUCKETS = {
-  o:    { thresholds:[3,7,19,41],    colors:['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026'] },
-  v:    { thresholds:[9,28,79,183], colors:['#f2f0f7','#cbc9e2','#9e9ac8','#756bb1','#54278f'] },
-  conv: { thresholds:[10,20,30,45],   colors:['#d73027','#fc8d59','#fee090','#91cf60','#1a9850'] },
-  at:   { thresholds:[1,2,3,4],      colors:['#1a9850','#91cf60','#fee090','#fc8d59','#d73027'] },
-  mt:   { thresholds:[1,2,3,4],      colors:['#1a9850','#91cf60','#fee090','#fc8d59','#d73027'] }
+  o:    { thresholds:[3,7,19,41],          colors:['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026'] },
+  od:   { thresholds:[0.1,0.25,0.65,1.35], colors:['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026'] },
+  v:    { thresholds:[9,28,79,183],        colors:['#f2f0f7','#cbc9e2','#9e9ac8','#756bb1','#54278f'] },
+  vd:   { thresholds:[0.3,0.9,2.5,6],     colors:['#f2f0f7','#cbc9e2','#9e9ac8','#756bb1','#54278f'] },
+  conv: { thresholds:[10,20,30,45],        colors:['#d73027','#fc8d59','#fee090','#91cf60','#1a9850'] },
+  at:   { thresholds:[1,2,3,4],            colors:['#1a9850','#91cf60','#fee090','#fc8d59','#d73027'] },
+  mt:   { thresholds:[1,2,3,4],            colors:['#1a9850','#91cf60','#fee090','#fc8d59','#d73027'] }
 };
 const BUCKET_LABELS = {
   o:    ['1–3 orders','4–7','8–19','20–41','42+'],
+  od:   ['≤0.1/day','0.1–0.25','0.25–0.65','0.65–1.35','1.35+'],
   v:    ['1–9 views','10–28','29–79','80–183','184+'],
+  vd:   ['≤0.3/day','0.3–0.9','0.9–2.5','2.5–6','6+'],
   conv: ['0–10%','11–20%','21–30%','31–45%','45%+'],
   at:   ['≤1 day','2 days','3 days','4 days','5+ days'],
   mt:   ['≤1 day','2 days','3 days','4 days','5+ days']
 };
 // ── Active bucket filters: OR within metric, AND across metrics ────────
-const ACTIVE_FILTERS = { o: new Set(), v: new Set(), conv: new Set(), at: new Set(), mt: new Set() };
+const ACTIVE_FILTERS = { o: new Set(), od: new Set(), v: new Set(), vd: new Set(), conv: new Set(), at: new Set(), mt: new Set() };
 
 function getBucket(p, m) {
   if ((m==='at'||m==='mt') && p[m]==null) return -1;
@@ -336,7 +342,7 @@ function clearAllFilters() {
 function applyFilters() {
   tBoundaryLayer.eachLayer(l => l.setStyle(tBoundaryStyle(l.feature)));
   if (T.mode === 'bubbles') {
-    const m = T.metric, maxV = m==='o'?MAX_O:m==='v'?MAX_V:100;
+    const m = T.metric, maxV = m==='o'?MAX_O:m==='od'?MAX_OD:m==='v'?MAX_V:m==='vd'?MAX_VD:100;
     tBubbleLayer.eachLayer(l => {
       const p = l._tProps, ok = passesFil(p);
       l.setRadius(ok ? 2+Math.sqrt(metricVal(p,m)/(maxV||1))*20 : 0);
@@ -346,7 +352,7 @@ function applyFilters() {
   updateTLegend();
 }
 
-function metricVal(p, m) { if(m==='conv') return p.v>0?p.o/p.v*100:0; if(m==='at'||m==='mt') return p[m]!=null?p[m]:-1; return p[m]||0; }
+function metricVal(p, m) { if(m==='conv') return p.v>0?p.o/p.v*100:0; if(m==='at'||m==='mt') return p[m]!=null?p[m]:-1; if(m==='od') return (p.o||0)/31; if(m==='vd') return (p.v||0)/31; return p[m]||0; }
 function bucketColor(p, m) {
   if((m==='at'||m==='mt')&&p[m]==null) return '#cbd5e1';
   const t=BUCKETS[m].thresholds, c=BUCKETS[m].colors, v=metricVal(p,m);
@@ -390,6 +396,8 @@ const tBoundaryLayer = L.geoJSON(TRAFFIC_GEO, {
 const tBubbleLayer = L.layerGroup();
 const MAX_O=TRAFFIC_GEO.features.reduce((m,f)=>Math.max(m,f.properties.o||0),0);
 const MAX_V=TRAFFIC_GEO.features.reduce((m,f)=>Math.max(m,f.properties.v||0),0);
+const MAX_OD=MAX_O/31;
+const MAX_VD=MAX_V/31;
 TRAFFIC_GEO.features.forEach(f=>{
   const p=f.properties;
   const r=2+Math.sqrt((p.o||0)/(MAX_O||1))*20;
@@ -403,7 +411,7 @@ TRAFFIC_GEO.features.forEach(f=>{
   tBubbleLayer.addLayer(mk);
 });
 function refreshTrafficMetric() {
-  const m=T.metric, maxV=m==='o'?MAX_O:m==='v'?MAX_V:100;
+  const m=T.metric, maxV=m==='o'?MAX_O:m==='od'?MAX_OD:m==='v'?MAX_V:m==='vd'?MAX_VD:100;
   tBoundaryLayer.eachLayer(l=>l.setStyle(tBoundaryStyle(l.feature)));
   tBubbleLayer.eachLayer(l=>{
     const p=l._tProps, ok=passesFil(p);
@@ -522,7 +530,7 @@ function doTSearch() {
 }
 document.querySelectorAll('.t-metric-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    const m={'tMetricOrders':'o','tMetricViews':'v','tMetricConv':'conv','tMetricAvgTat':'at','tMetricMedTat':'mt'}[btn.id];
+    const m={'tMetricOrders':'o','tMetricOrdDay':'od','tMetricViews':'v','tMetricVwDay':'vd','tMetricConv':'conv','tMetricAvgTat':'at','tMetricMedTat':'mt'}[btn.id];
     if(!m)return;
     T.metric=m;
     document.querySelectorAll('.t-metric-btn').forEach(b=>b.classList.remove('active'));
@@ -759,17 +767,20 @@ TRAFFIC_GEO.features.forEach(f => {
 });
 
 function renderCityTable(metric) {
-  const LABELS = { o:'Orders', v:'Views', conv:'Conv %', at:'Avg TAT', mt:'Med TAT' };
+  const LABELS = { o:'Orders', od:'Ord/Day', v:'Views', vd:'Views/Day', conv:'Conv %', at:'Avg TAT', mt:'Med TAT' };
   const hdr = document.getElementById('cityMetricHdr');
   if (hdr) hdr.textContent = LABELS[metric] || 'Orders';
   const isTat = metric === 'at' || metric === 'mt';
+  const isDayRate = metric === 'od' || metric === 'vd';
   const rows = Object.values(_cityAgg)
     .filter(c => isTat ? c.atN > 0 : c.o > 0)
     .map(c => {
       let num, val;
       if      (metric === 'o')    { num = c.o;            val = c.o.toLocaleString(); }
+      else if (metric === 'od')   { num = c.o/31;         val = num.toFixed(2)+'/day'; }
       else if (metric === 'v')    { num = c.v;            val = c.v.toLocaleString(); }
-      else if (metric === 'conv') { num = c.v > 0 ? c.o/c.v*100 : 0; val = c.v > 0 ? num.toFixed(1)+'%' : '\u2014'; }
+      else if (metric === 'vd')   { num = c.v/31;         val = num.toFixed(2)+'/day'; }
+      else if (metric === 'conv') { num = c.v > 0 ? c.o/c.v*100 : 0; val = c.v > 0 ? num.toFixed(1)+'%' : '—'; }
       else if (metric === 'at')   { num = c.atSum/c.atN; val = num.toFixed(1)+'d'; }
       else if (metric === 'mt')   { num = c.mtSum/c.atN; val = num.toFixed(1)+'d'; }
       return { name: c.name, num, val, lat: c.latSum/c.n, lon: c.lonSum/c.n };
