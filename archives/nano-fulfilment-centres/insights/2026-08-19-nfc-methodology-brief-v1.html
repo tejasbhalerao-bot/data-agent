@@ -266,6 +266,127 @@
     font-style: italic;
   }
 
+  /* ── Platform aggregate card ──────────────────────────────────────── */
+  .agg-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .agg-label {
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.1rem;
+  }
+  .agg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.25rem 2rem;
+  }
+  .agg-cell { display: flex; flex-direction: column; gap: 0.3rem; }
+  .agg-val {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, system-ui, sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .agg-val.agg-highlight { color: var(--accent); }
+  .agg-unit {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--muted);
+    margin-left: 0.3em;
+  }
+  .agg-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.45; }
+
+  /* ── NFC individual cards ─────────────────────────────────────────── */
+  .nfc-list { display: flex; flex-direction: column; gap: 1.25rem; }
+  .nfc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem 1.1rem;
+  }
+  .nfc-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+  .nfc-rank {
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    font-weight: bold;
+    color: #fff;
+    background: var(--accent);
+    border-radius: 4px;
+    padding: 0.2em 0.5em;
+    white-space: nowrap;
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+  }
+  .nfc-district {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, system-ui, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .nfc-state {
+    font-weight: 400;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .nfc-pin {
+    font-family: 'Courier New', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.2rem;
+  }
+  .nfc-narrative {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 0.9rem;
+    max-width: 62ch;
+  }
+  .nfc-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .nfc-metric {
+    display: flex;
+    flex-direction: column;
+    background: var(--mono-bg);
+    border-radius: 5px;
+    padding: 0.35rem 0.7rem;
+    min-width: 80px;
+  }
+  .nfc-metric.nfc-metric-hi { background: color-mix(in srgb, var(--accent) 12%, var(--mono-bg)); }
+  .nm-label {
+    font-family: 'Courier New', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.15rem;
+  }
+  .nm-val {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, system-ui, sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .nfc-metric.nfc-metric-hi .nm-val { color: var(--accent); }
+
   /* ── Responsive ───────────────────────────────────────────────────── */
   @media (max-width: 520px) {
     .spec-table td:first-child { width: auto; }
@@ -401,11 +522,218 @@
   <!-- ── 4. Recommendations ─────────────────────────────────────────── -->
   <section class="section">
     <div class="section-eyebrow">Recommendations</div>
-    <h2 class="section-title">Where to go from here</h2>
-    <div class="pending-box">
-      <span class="pending-label">In progress</span>
-      <span class="pending-text">Recommendations will be added in the next version of this document following a review of the district-level findings.</span>
+    <h2 class="section-title">Top 10 NFC openings — projected impact</h2>
+
+    <p style="margin-bottom:1.5rem">The following districts are recommended for the first wave of NFC openings, ranked by composite score. West Bengal districts have been excluded from this prioritisation. Impact is modelled at two levels: an aggregate platform view, followed by individual district narratives.</p>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:2rem;font-style:italic">Conversion uplift uses the observed 2.8pp delta between SDD and non-SDD pincodes on the Truemeds platform. Views held constant — no demand expansion modelled. TAT post-NFC assumed at 1 day (SDD). Data period: July 2026.</p>
+
+    <!-- ── Platform aggregate card ──────────────────────────────────── -->
+    <div class="agg-card">
+      <div class="agg-label">Platform-level impact · Top 10 NFCs combined</div>
+      <div class="agg-grid">
+        <div class="agg-cell">
+          <div class="agg-val">121</div>
+          <div class="agg-desc">pincodes brought into SDD serviceability</div>
+        </div>
+        <div class="agg-cell">
+          <div class="agg-val">2.5%</div>
+          <div class="agg-desc">of platform non-SDD orders currently in these areas</div>
+        </div>
+        <div class="agg-cell">
+          <div class="agg-val">2.5 → 2.46<span class="agg-unit">days</span></div>
+          <div class="agg-desc">platform weighted avg TAT after all 10 NFCs open</div>
+        </div>
+        <div class="agg-cell">
+          <div class="agg-val agg-highlight">+856</div>
+          <div class="agg-desc">incremental orders per month (+0.35% on non-SDD base)</div>
+        </div>
+      </div>
     </div>
+
+    <!-- ── Individual NFC cards ────────────────────────────────────── -->
+    <div class="nfc-list">
+
+      <div class="nfc-card">
+        <div class="nfc-header">
+          <div class="nfc-rank">#1</div>
+          <div>
+            <div class="nfc-district">Visakhapatnam <span class="nfc-state">Andhra Pradesh</span></div>
+            <div class="nfc-pin">Pincode 530009 · 22 pincodes in coverage radius</div>
+          </div>
+        </div>
+        <p class="nfc-narrative">An NFC at 530009 would bring 22 pincodes into SDD serviceability, covering 3,453 monthly views (0.3% of platform non-SDD). Current TAT in these pincodes averages 3.1 days — dropping to 1 day under SDD. Applying the 2.8pp conversion delta to 3,453 views yields <strong>+97 incremental orders per month</strong>, lifting conversion from 19.5% to 22.3%.</p>
+        <div class="nfc-metrics">
+          <div class="nfc-metric"><span class="nm-label">Views covered</span><span class="nm-val">3,453</span></div>
+          <div class="nfc-metric"><span class="nm-label">Current orders</span><span class="nm-val">672/mo</span></div>
+          <div class="nfc-metric"><span class="nm-label">TAT</span><span class="nm-val">3.1d → 1d</span></div>
+          <div class="nfc-metric"><span class="nm-label">Conv</span><span class="nm-val">19.5% → 22.3%</span></div>
+          <div class="nfc-metric nfc-metric-hi"><span class="nm-label">Extra orders</span><span class="nm-val">+97/mo</span></div>
+        </div>
+      </div>
+
+      <div class="nfc-card">
+        <div class="nfc-header">
+          <div class="nfc-rank">#4</div>
+          <div>
+            <div class="nfc-district">East Godavari <span class="nfc-state">Andhra Pradesh</span></div>
+            <div class="nfc-pin">Pincode 533103 · 10 pincodes in coverage radius</div>
+          </div>
+        </div>
+        <p class="nfc-narrative">An NFC at 533103 covers 10 pincodes with 1,036 monthly views and current TAT of 2.5 days. Conversion lifts from 17.6% to 20.4%, generating <strong>+29 incremental orders per month</strong>. The relatively low current conversion rate (lowest in this cohort) suggests meaningful fulfilment friction being resolved.</p>
+        <div class="nfc-metrics">
+          <div class="nfc-metric"><span class="nm-label">Views covered</span><span class="nm-val">1,036</span></div>
+          <div class="nfc-metric"><span class="nm-label">Current orders</span><span class="nm-val">182/mo</span></div>
+          <div class="nfc-metric"><span class="nm-label">TAT</span><span class="nm-val">2.5d → 1d</span></div>
+          <div class="nfc-metric"><span class="nm-label">Conv</span><span class="nm-val">17.6% → 20.4%</span></div>
+          <div class="nfc-metric nfc-metric-hi"><span class="nm-label">Extra orders</span><span class="nm-val">+29/mo</span></div>
+        </div>
+      </div>
+
+      <div class="nfc-card">
+        <div class="nfc-header">
+          <div class="nfc-rank">#5</div>
+          <div>
+            <div class="nfc-district">Surat <span class="nfc-state">Gujarat</span></div>
+            <div class="nfc-pin">Pincode 395012 · 20 pincodes in coverage radius</div>
+          </div>
+        </div>
+        <p class="nfc-narrative">Surat is the highest-view district in this cohort with 4,813 monthly views across 20 pincodes. TAT drops from 2.6 days to 1 day. The 2.8pp conversion uplift applied to 4,813 views yields <strong>+135 incremental orders per month</strong> — the second-largest individual NFC impact in the top 10.</p>
+        <div class="nfc-metrics">
+          <div class="nfc-metric"><span class="nm-label">Views covered</span><span class="nm-val">4,813</span></div>
+          <div class="nfc-metric"><span class="nm-label">Current orders</span><span class="nm-val">964/mo</span></div>
+          <div class="nfc-metric"><span class="nm-label">TAT</span><span class="nm-val">2.6d → 1d</span></div>
+          <div class="nfc-metric"><span class="nm-label">Conv</span><span class="nm-val">20.0% → 22.8%</span></div>
+          <div class="nfc-metric nfc-metric-hi"><span class="nm-label">Extra orders</span><span class="nm-val">+135/mo</span></div>
+        </div>
+      </div>
+
+      <div class="nfc-card">
+        <div class="nfc-header">
+          <div class="nfc-rank">#6</div>
+          <div>
+            <div class="nfc-district">Nashik <span class="nfc-state">Maharashtra</span></div>
+            <div class="nfc-pin">Pincode 422008 · 15 pincodes in coverage radius</div>
+          </div>
+        </div>
+        <p class="nfc-narrative">Nashik has the highest current TAT of any district in this cohort at 3.2 days, making it the strongest case for local infrastructure. 4,166 monthly views across 15 pincodes convert at 19.9% today. SDD would bring TAT to 1 day and conversion to 22.7%, yielding <strong>+117 incremental orders per month</strong>.</p>
+        <div class="nfc-metrics">
+          <div class="nfc-metric"><span class="nm-label">Views covered</span><span class="nm-val">4,166</span></div>
+          <div class="nfc-metric"><span class="nm-label">Current orders</span><span class="nm-val">828/mo</span></div>
+          <div class="nfc-metric"><span class="nm-label">TAT</span><span class="nm-val">3.2d → 1d</span></div>
+          <div class="nfc-metric"><span class="nm-label">Conv</span><span class="nm-val">19.9% → 22.7%</span></div>
+          <div class="nfc-metric nfc-metric-hi"><span class="nm-label">Extra orders</span><span class="nm-val">+117/mo</span></div>
+        </div>
+      </div>
+
+      <div class="nfc-card">
+        <div class="nfc-header">
+          <div class="nfc-rank">#7</div>
+          <div>
+            <div class="nfc-district">Jammu <span class="nfc-state">Jammu &amp; Kashmir</span></div>
+            <div class="nfc-pin">Pincode 180004 · 19 pincodes in coverage radius</div>
+          </div>
+        </div>
+        <p class="nfc-narrative">Jammu is the single highest-impact NFC in this cohort. 5,355 monthly views across 19 pincodes — 0.5% of all platform non-SDD views — currently see 3.1-day average TAT. Conversion moves from 21.0% to 23.8%, generating <strong>+150 incremental orders per month</strong>, the largest individual uplift of any recommended district.</p>
+        <div class="nfc-metrics">
+          <div class="nfc-metric"><span class="nm-label">Views covered</span><span class="nm-val">5,355</span></div>
+          <div class="nfc-metric"><span class="nm-label">Current orders</span><span class="nm-val">1,126/mo</span></div>
+          <div class="nfc-metric"><span class="nm-label">TAT</span><span class="nm-val">3.1d → 1d</span></div>
+          <div class="nfc-metric"><span class="nm-label">Conv</span><span class="nm-val">21.0% → 23.8%</span></div>
+          <div class="nfc-metric nfc-metric-hi"><span class="nm-label">Extra orders</span><span class="nm-val">+150/mo</span></div>
+        </div>
+      </div>
+
+      <div class="nfc-card">
+        <div class="nfc-header">
+          <div class="nfc-rank">#8</div>
+          <div>
+            <div class="nfc-district">Meerut <span class="nfc-state">Uttar Pradesh</span></div>
+            <div class="nfc-pin">Pincode 250003 · 5 pincodes in coverage radius</div>
+          </div>
+        </div>
+        <p class="nfc-narrative">Meerut is notable for high view density despite a small pincode footprint — 3,692 views concentrated across just 5 pincodes, implying significant urban demand concentration. TAT drops from 2.9 days to 1 day; conversion moves from 19.2% to 22.0%, producing <strong>+103 incremental orders per month</strong>.</p>
+        <div class="nfc-metrics">
+          <div class="nfc-metric"><span class="nm-label">Views covered</span><span class="nm-val">3,692</span></div>
+          <div class="nfc-metric"><span class="nm-label">Current orders</span><span class="nm-val">710/mo</span></div>
+          <div class="nfc-metric"><span class="nm-label">TAT</span><span class="nm-val">2.9d → 1d</span></div>
+          <div class="nfc-metric"><span class="nm-label">Conv</span><span class="nm-val">19.2% → 22.0%</span></div>
+          <div class="nfc-metric nfc-metric-hi"><span class="nm-label">Extra orders</span><span class="nm-val">+103/mo</span></div>
+        </div>
+      </div>
+
+      <div class="nfc-card">
+        <div class="nfc-header">
+          <div class="nfc-rank">#12</div>
+          <div>
+            <div class="nfc-district">Jalgaon <span class="nfc-state">Maharashtra</span></div>
+            <div class="nfc-pin">Pincode 425002 · 3 pincodes in coverage radius</div>
+          </div>
+        </div>
+        <p class="nfc-narrative">Jalgaon has the highest current conversion rate in this cohort at 22.4% — indicating demand that is already converting well despite 3.0-day TAT. The 2.8pp delta applied to 1,503 views yields <strong>+42 incremental orders per month</strong>, with conversion reaching 25.2% under SDD.</p>
+        <div class="nfc-metrics">
+          <div class="nfc-metric"><span class="nm-label">Views covered</span><span class="nm-val">1,503</span></div>
+          <div class="nfc-metric"><span class="nm-label">Current orders</span><span class="nm-val">336/mo</span></div>
+          <div class="nfc-metric"><span class="nm-label">TAT</span><span class="nm-val">3.0d → 1d</span></div>
+          <div class="nfc-metric"><span class="nm-label">Conv</span><span class="nm-val">22.4% → 25.2%</span></div>
+          <div class="nfc-metric nfc-metric-hi"><span class="nm-label">Extra orders</span><span class="nm-val">+42/mo</span></div>
+        </div>
+      </div>
+
+      <div class="nfc-card">
+        <div class="nfc-header">
+          <div class="nfc-rank">#13</div>
+          <div>
+            <div class="nfc-district">Amritsar <span class="nfc-state">Punjab</span></div>
+            <div class="nfc-pin">Pincode 143002 · 8 pincodes in coverage radius</div>
+          </div>
+        </div>
+        <p class="nfc-narrative">Amritsar has 2,904 monthly views across 8 pincodes with current TAT of 2.4 days. Conversion improves from 19.6% to 22.4%, generating <strong>+81 incremental orders per month</strong>. The relatively lower TAT baseline means the absolute TAT reduction is smaller here than in Nashik or Visakhapatnam, but view volume supports the placement.</p>
+        <div class="nfc-metrics">
+          <div class="nfc-metric"><span class="nm-label">Views covered</span><span class="nm-val">2,904</span></div>
+          <div class="nfc-metric"><span class="nm-label">Current orders</span><span class="nm-val">570/mo</span></div>
+          <div class="nfc-metric"><span class="nm-label">TAT</span><span class="nm-val">2.4d → 1d</span></div>
+          <div class="nfc-metric"><span class="nm-label">Conv</span><span class="nm-val">19.6% → 22.4%</span></div>
+          <div class="nfc-metric nfc-metric-hi"><span class="nm-label">Extra orders</span><span class="nm-val">+81/mo</span></div>
+        </div>
+      </div>
+
+      <div class="nfc-card">
+        <div class="nfc-header">
+          <div class="nfc-rank">#15</div>
+          <div>
+            <div class="nfc-district">Sundargarh <span class="nfc-state">Odisha</span></div>
+            <div class="nfc-pin">Pincode 769001 · 18 pincodes in coverage radius</div>
+          </div>
+        </div>
+        <p class="nfc-narrative">Sundargarh covers 18 pincodes with 2,024 monthly views and 2.6-day average TAT. At the lowest current conversion in this group (18.8%), the district has clear fulfilment-friction headroom. The 2.8pp delta translates to <strong>+57 incremental orders per month</strong>, bringing conversion to 21.6%.</p>
+        <div class="nfc-metrics">
+          <div class="nfc-metric"><span class="nm-label">Views covered</span><span class="nm-val">2,024</span></div>
+          <div class="nfc-metric"><span class="nm-label">Current orders</span><span class="nm-val">381/mo</span></div>
+          <div class="nfc-metric"><span class="nm-label">TAT</span><span class="nm-val">2.6d → 1d</span></div>
+          <div class="nfc-metric"><span class="nm-label">Conv</span><span class="nm-val">18.8% → 21.6%</span></div>
+          <div class="nfc-metric nfc-metric-hi"><span class="nm-label">Extra orders</span><span class="nm-val">+57/mo</span></div>
+        </div>
+      </div>
+
+      <div class="nfc-card">
+        <div class="nfc-header">
+          <div class="nfc-rank">#16</div>
+          <div>
+            <div class="nfc-district">Pashchim Champaran <span class="nfc-state">Bihar</span></div>
+            <div class="nfc-pin">Pincode 845438 · 1 pincode in coverage radius</div>
+          </div>
+        </div>
+        <p class="nfc-narrative">Pashchim Champaran presents a concentrated demand signal: 1,609 views and 336 orders in a single pincode at 2.4-day TAT and 20.9% conversion. The high view-to-pincode ratio points to a dense urban pocket. Conversion reaches 23.7% under SDD, yielding <strong>+45 incremental orders per month</strong>.</p>
+        <div class="nfc-metrics">
+          <div class="nfc-metric"><span class="nm-label">Views covered</span><span class="nm-val">1,609</span></div>
+          <div class="nfc-metric"><span class="nm-label">Current orders</span><span class="nm-val">336/mo</span></div>
+          <div class="nfc-metric"><span class="nm-label">TAT</span><span class="nm-val">2.4d → 1d</span></div>
+          <div class="nfc-metric"><span class="nm-label">Conv</span><span class="nm-val">20.9% → 23.7%</span></div>
+          <div class="nfc-metric nfc-metric-hi"><span class="nm-label">Extra orders</span><span class="nm-val">+45/mo</span></div>
+        </div>
+      </div>
+
+    </div><!-- /nfc-list -->
   </section>
 
 </div>
