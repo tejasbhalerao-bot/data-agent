@@ -1,0 +1,411 @@
+<title>Network Redesign Brief</title>
+<style>
+  /* ── Tokens ───────────────────────────────────────────────────────── */
+  :root {
+    --bg:       #ECEAE5;
+    --surface:  #F5F4F0;
+    --ink:      #171512;
+    --muted:    #6E6A63;
+    --accent:   #C03D08;
+    --border:   #D5D2CB;
+    --track:    #C03D08;
+    --mono-bg:  #E8E6E0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:       #131210;
+      --surface:  #1B1916;
+      --ink:      #EDE9E4;
+      --muted:    #8A857D;
+      --accent:   #E05020;
+      --border:   #2B2824;
+      --track:    #E05020;
+      --mono-bg:  #232018;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:       #131210;
+    --surface:  #1B1916;
+    --ink:      #EDE9E4;
+    --muted:    #8A857D;
+    --accent:   #E05020;
+    --border:   #2B2824;
+    --track:    #E05020;
+    --mono-bg:  #232018;
+  }
+
+  /* ── Reset & base ─────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, 'Palatino Linotype', Palatino, serif;
+    line-height: 1.75;
+    padding: 3rem 1.5rem 6rem;
+  }
+
+  /* ── Document container ───────────────────────────────────────────── */
+  .doc {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* ── Header ───────────────────────────────────────────────────────── */
+  .doc-header {
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--accent);
+    margin-bottom: 3.5rem;
+  }
+  .doc-meta {
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .doc-title {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', system-ui, sans-serif;
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--ink);
+    text-wrap: balance;
+    margin-bottom: 0.75rem;
+  }
+  .doc-subtitle {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 560px;
+  }
+
+  /* ── Section ──────────────────────────────────────────────────────── */
+  .section {
+    margin-bottom: 3.75rem;
+  }
+  .section-eyebrow {
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', system-ui, sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+    text-wrap: balance;
+  }
+  .section p {
+    font-size: 0.975rem;
+    color: var(--ink);
+    margin-bottom: 0.9rem;
+    max-width: 65ch;
+  }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* ── Spec table (Assumptions) ─────────────────────────────────────── */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+  .spec-table thead tr {
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-table th {
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: normal;
+    text-align: left;
+    padding: 0 1rem 0.6rem 0;
+  }
+  .spec-table th:last-child { padding-right: 0; }
+  .spec-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .spec-table tbody tr:last-child { border-bottom: none; }
+  .spec-table td {
+    padding: 0.75rem 1rem 0.75rem 0;
+    line-height: 1.55;
+  }
+  .spec-table td:last-child { padding-right: 0; }
+  .spec-table td:first-child {
+    color: var(--ink);
+    font-style: italic;
+    width: 35%;
+  }
+  .spec-table td:nth-child(2) {
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    font-size: 0.82rem;
+    color: var(--accent);
+    font-weight: bold;
+    width: 22%;
+    white-space: nowrap;
+  }
+  .spec-table td:nth-child(3) {
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+  .spec-wrapper { overflow-x: auto; }
+
+  /* ── Methodology steps ────────────────────────────────────────────── */
+  .steps {
+    position: relative;
+    list-style: none;
+    padding-left: 2.25rem;
+  }
+  .steps::before {
+    content: '';
+    position: absolute;
+    left: 0.55rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 1.5px;
+    background: var(--track);
+    opacity: 0.35;
+  }
+  .step {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+  .step:last-child { margin-bottom: 0; }
+  .step-num {
+    position: absolute;
+    left: -2.25rem;
+    top: 0.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', monospace;
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .step-label {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.005em;
+  }
+  .step p {
+    font-size: 0.9rem;
+    color: var(--ink);
+    line-height: 1.7;
+    max-width: 60ch;
+    margin-bottom: 0.5rem;
+  }
+  .step p:last-child { margin-bottom: 0; }
+
+  /* ── Tier table inside methodology ───────────────────────────────── */
+  .tier-list {
+    list-style: none;
+    margin-top: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .tier-list li {
+    font-size: 0.855rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    color: var(--ink);
+  }
+  .tier-tag {
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    background: var(--mono-bg);
+    color: var(--muted);
+    padding: 0.1em 0.45em;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── Recommendations placeholder ──────────────────────────────────── */
+  .pending-box {
+    border: 1.5px dashed var(--border);
+    border-radius: 6px;
+    padding: 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .pending-label {
+    font-family: 'Courier New', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .pending-text {
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ── Responsive ───────────────────────────────────────────────────── */
+  @media (max-width: 520px) {
+    .spec-table td:first-child { width: auto; }
+    .spec-table td:nth-child(2) { white-space: normal; }
+    .steps { padding-left: 1.75rem; }
+  }
+</style>
+
+<div class="doc">
+
+  <!-- ── Header ──────────────────────────────────────────────────────── -->
+  <header class="doc-header">
+    <div class="doc-meta">Truemeds · Network Strategy · August 2026</div>
+    <h1 class="doc-title">Network Redesign:<br>Nano Fulfilment Centre Site Selection</h1>
+    <p class="doc-subtitle">A methodology brief covering the approach used to identify and rank 513 candidate districts for NFC placement across India.</p>
+  </header>
+
+  <!-- ── 1. Objective ────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section-eyebrow">Objective</div>
+    <h2 class="section-title">Why this exercise exists</h2>
+    <p>Truemeds' current fulfilment network — Distribution Centres, Fulfilment Centres, and Micro FCs — provides same-day and next-day delivery to a defined set of pincodes. Outside this network, a material volume of organic demand exists: pincodes with views and orders in July 2026 that are receiving medicine through standard delivery, with average TATs that underserve their intent.</p>
+    <p>Nano Fulfilment Centres are a lighter asset class than MFCs — smaller footprint, lower capital requirement, designed to extend SDD/NDD coverage into urban and semi-urban pockets beyond hub reach. This exercise answers a precise question: <em>for each qualifying district in India, which single pincode, if a Nano FC were placed there, would bring the most unserved demand into hyperlocal serviceability?</em></p>
+    <p>The output is a ranked, geographically optimised list of 513 candidate districts, each with a specific recommended placement pincode, tiered by strategic leverage and visualised on an interactive map.</p>
+  </section>
+
+  <!-- ── 2. Assumptions ──────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section-eyebrow">Assumptions</div>
+    <h2 class="section-title">Parameters and their basis</h2>
+    <div class="spec-wrapper">
+      <table class="spec-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Rationale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Views weight in district scoring</td>
+            <td>50%</td>
+            <td>Primary demand signal. Views represent unmet intent — users who reached the platform but were not converted or not served locally.</td>
+          </tr>
+          <tr>
+            <td>Conversion rate weight in district scoring</td>
+            <td>25% (inverted)</td>
+            <td>Lower conversion in a high-view district suggests fulfilment friction, not low intent. Inverted so that harder-to-convert districts score higher.</td>
+          </tr>
+          <tr>
+            <td>Average TAT weight in district scoring</td>
+            <td>25%</td>
+            <td>Higher delivery times indicate greater improvement potential from local infrastructure. Median TAT was excluded — average carries more signal at this aggregation level.</td>
+          </tr>
+          <tr>
+            <td>NFC delivery radius</td>
+            <td>10 km</td>
+            <td>Derived empirically from 38 active SDD hubs. Filtering to 28 dense urban hubs (Thane, Chinchpokli, Vikhroli archetype — excluding regional DCs like Darbhanga or Kanpur), the p75 hub-to-served-pincode haversine distance was 10 km. This is the radius adopted for NFC coverage simulation.</td>
+          </tr>
+          <tr>
+            <td>Data period</td>
+            <td>July 2026 · 31 days</td>
+            <td>Most recent complete month at time of analysis. All per-day metrics divide by 31.</td>
+          </tr>
+          <tr>
+            <td>Opportunity universe</td>
+            <td>Non-SDD pincodes<br>with ≥1 view or order</td>
+            <td>Restricts analysis to pincodes with demonstrated organic demand. Excludes pincodes that are already SDD/NDD served — these are not NFC candidates.</td>
+          </tr>
+          <tr>
+            <td>Qualifying districts</td>
+            <td>513 districts</td>
+            <td>Districts containing at least one opportunity pincode. Districts with no non-SDD demand signal are excluded.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 3. Methodology ─────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section-eyebrow">Methodology</div>
+    <h2 class="section-title">How the analysis was constructed</h2>
+    <ol class="steps">
+
+      <li class="step">
+        <div class="step-num">1</div>
+        <div class="step-label">Define the opportunity universe</div>
+        <p>All pincodes in India with organic demand on Truemeds in July 2026 — at least one view or order — were identified. From this set, pincodes already served by SDD/NDD infrastructure were removed. The remaining pincodes form the NFC opportunity universe: approximately 15,000 pincodes across 513 districts, representing demand currently fulfilled through slower standard delivery channels.</p>
+      </li>
+
+      <li class="step">
+        <div class="step-num">2</div>
+        <div class="step-label">Derive the delivery radius empirically</div>
+        <p>Rather than assuming a coverage radius, R was reverse-engineered from the existing SDD hub network. For each of 38 active SDD hubs, the haversine distance from the hub's geographic centroid to every pincode it serves was computed. The analysis was then restricted to 28 dense urban hubs — the Thane, Chinchpokli, and Vikhroli archetype — which represent the NFC-relevant reference class. Regional DC-style hubs (overnight journeys, large catchment areas) were excluded as a different operating model. The p75 coverage distance across this cohort was 10 km, adopted as R.</p>
+      </li>
+
+      <li class="step">
+        <div class="step-num">3</div>
+        <div class="step-label">Score and rank districts on a composite metric</div>
+        <p>Each of the 513 qualifying districts was scored by aggregating its opportunity pincodes across three dimensions:</p>
+        <p><strong>Views score (50%):</strong> Percentile rank of total NFC-opportunity pincode views within the district. Districts with higher aggregate demand intent rank higher.</p>
+        <p><strong>Conversion score (25%, inverted):</strong> Inverse percentile of average conversion rate. Districts where users browse but do not convert likely experience fulfilment friction — these are treated as higher opportunity, not lower.</p>
+        <p><strong>TAT score (25%):</strong> Percentile rank of average delivery TAT. Higher TAT districts have more to gain from local infrastructure and are ranked accordingly.</p>
+        <p>Scores were computed as percentile ranks and combined as a weighted average to produce a single composite score per district.</p>
+      </li>
+
+      <li class="step">
+        <div class="step-num">4</div>
+        <div class="step-label">Identify the optimal NFC placement per district</div>
+        <p>For each of the 513 districts, every pincode in the district was evaluated as a candidate NFC location. For each candidate, the total views of all NFC-opportunity pincodes within 10 km (haversine) were summed. The pincode that maximises this total is the recommended NFC placement — it captures the most unserved demand within one hub's reach.</p>
+        <p>This is the single amber marker shown on the map per district. Each marker's tooltip reports the number of pincodes and views within its 10 km radius, and the coverage percentage relative to total district opportunity.</p>
+      </li>
+
+      <li class="step">
+        <div class="step-num">5</div>
+        <div class="step-label">Tier districts by leverage</div>
+        <p>Districts were grouped into five leverage tiers based on their composite rank, making the 513-district list actionable for prioritisation:</p>
+        <ul class="tier-list">
+          <li><span class="tier-tag">#1 – 30</span> Very High — Visakhapatnam to Allahabad</li>
+          <li><span class="tier-tag">#31 – 60</span> High — Coimbatore to Koch Bihar</li>
+          <li><span class="tier-tag">#61 – 100</span> Medium-High</li>
+          <li><span class="tier-tag">#101 – 200</span> Medium</li>
+          <li><span class="tier-tag">#201 – 513</span> Remaining</li>
+        </ul>
+        <p style="margin-top:0.65rem">Each tier has an independent toggle on the map, allowing analysis at any level of the funnel without visual noise from lower-priority districts.</p>
+      </li>
+
+    </ol>
+  </section>
+
+  <!-- ── 4. Recommendations ─────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section-eyebrow">Recommendations</div>
+    <h2 class="section-title">Where to go from here</h2>
+    <div class="pending-box">
+      <span class="pending-label">In progress</span>
+      <span class="pending-text">Recommendations will be added in the next version of this document following a review of the district-level findings.</span>
+    </div>
+  </section>
+
+</div>
