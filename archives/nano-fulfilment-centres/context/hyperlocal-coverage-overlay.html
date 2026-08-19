@@ -132,6 +132,14 @@
         <div class="toggle-pill on" id="pill-mfc"></div>
       </div>
 
+      <div class="layer-toggle" id="tog-dc">
+        <div class="lt-left">
+          <div class="lt-swatch" style="background:#7c3aed;border-radius:50%"></div>
+          Distribution Centres
+        </div>
+        <div class="toggle-pill on" id="pill-dc"></div>
+      </div>
+
       <div class="layer-toggle" id="tog-traffic">
         <div class="lt-left">
           <div class="lt-swatch" style="background:#bd0026;border-radius:2px"></div>
@@ -440,6 +448,24 @@ const WAREHOUSES = [
   {city:"Ranchi",          pin:"834010",lat:23.30922,lon:85.35414,type:"MFC"},
   {city:"Varanasi",        pin:"221010",lat:25.29454,lon:82.99024,type:"MFC"},
 ];
+const DC_HUBS = [
+  {name:"Central-Kolkata",city:"Kolkata",pin:"700107",lat:22.5092,lon:88.4004},
+  {name:"North-Kolkata",city:"Kolkata",pin:"700079",lat:22.6492,lon:88.426},
+  {name:"Kanpur",city:"Kanpur",pin:"208011",lat:26.4126,lon:80.3337},
+  {name:"Lucknow",city:"Lucknow",pin:"226010",lat:26.8508,lon:81.043},
+  {name:"E-city",city:"Bangalore",pin:"560068",lat:12.9004,lon:77.6325},
+  {name:"HBR Layout",city:"Bangalore",pin:"560024",lat:13.0447,lon:77.6002},
+  {name:"Marathahalli",city:"Bangalore",pin:"560048",lat:12.9905,lon:77.7146},
+  {name:"Nayandahalli",city:"Bangalore",pin:"560072",lat:12.9632,lon:77.5141},
+  {name:"Darbhanga",city:"Darbhanga",pin:"846007",lat:26.208,lon:85.9444},
+  {name:"Central/West Delhi",city:"Delhi",pin:"110015",lat:28.6587,lon:77.1426},
+  {name:"East/GZB",city:"Delhi",pin:"201005",lat:28.6903,lon:77.3485},
+  {name:"Faridabad",city:"Faridabad",pin:"122006",lat:28.4874,lon:76.9867},
+  {name:"Gurgaon",city:"Gurgaon",pin:"122001",lat:28.4561,lon:77.0107},
+  {name:"Noida",city:"Noida",pin:"201304",lat:28.5413,lon:77.3821},
+  {name:"North Delhi",city:"Delhi",pin:"110034",lat:28.6914,lon:77.12},
+  {name:"South Delhi",city:"Delhi",pin:"110017",lat:28.5321,lon:77.2103},
+];
 
 // ── FC and MFC layers ──────────────────────────────────────────
 const fcLayer  = L.layerGroup().addTo(map);
@@ -451,6 +477,20 @@ WAREHOUSES.forEach(w => {
   marker.addTo(w.type === 'FC' ? fcLayer : mfcLayer);
 });
 
+// ── DC Hub layer ───────────────────────────────────────────────
+const dcLayer = L.layerGroup().addTo(map);
+DC_HUBS.forEach(d => {
+  const marker = L.marker([d.lat, d.lon], {
+    icon: L.divIcon({
+      className: '',
+      html: `<div style="background:#7c3aed;border:2.5px solid #fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:7px;font-weight:800;box-shadow:0 2px 10px rgba(0,0,0,.4);letter-spacing:.02em">DC</div>`,
+      iconSize: [22, 22], iconAnchor: [11, 11]
+    }),
+    zIndexOffset: 300
+  });
+  marker.bindPopup(`<b style="font-size:13px">${d.name}</b><br><span style="color:#6b7280;font-size:12px">DC · Pincode ${d.pin}</span>`);
+  marker.addTo(dcLayer);
+});
 // ── Legend ─────────────────────────────────────────────────────
 const legend = L.control({ position: 'bottomright' });
 legend.onAdd = () => {
@@ -458,7 +498,8 @@ legend.onAdd = () => {
   d.innerHTML = `<strong>Layer Legend</strong>
     <div class="leg-row"><div class="leg-swatch" style="background:#3b82f6;opacity:.5;border:1px solid #3b82f6"></div>SDD / NDD served pincode</div>
     <div class="leg-row"><div class="leg-dot" style="background:#dc2626;font-size:7px;width:18px;height:18px">FC</div>Fulfilment Centre</div>
-    <div class="leg-row"><div class="leg-dot" style="background:#0891b2;font-size:6px;width:16px;height:16px">MFC</div>Micro Fulfilment Centre</div>`;
+    <div class="leg-row"><div class="leg-dot" style="background:#0891b2;font-size:6px;width:16px;height:16px">MFC</div>Micro Fulfilment Centre</div>
+    <div class="leg-row"><div class="leg-dot" style="background:#7c3aed;font-size:6px;width:16px;height:16px">DC</div>Distribution Centre</div>`;
   return d;
 };
 legend.addTo(map);
@@ -505,7 +546,7 @@ function renderCityTable(metric) {
 renderCityTable(T.metric);
 
 // ── Layer toggle logic ─────────────────────────────────────────
-const state = { sdd: true, fc: true, mfc: true , traffic: true };
+const state = { sdd: true, fc: true, mfc: true, dc: true, traffic: true };
 
 function toggle(key, layer) {
   state[key] = !state[key];
@@ -514,6 +555,7 @@ function toggle(key, layer) {
 }
 
 document.getElementById('tog-sdd').addEventListener('click', () => toggle('sdd', sddLayer));
+document.getElementById('tog-dc').addEventListener('click',  () => toggle('dc',  dcLayer));
 document.getElementById('tog-fc').addEventListener('click',  () => toggle('fc',  fcLayer));
 document.getElementById('tog-mfc').addEventListener('click', () => toggle('mfc', mfcLayer));
 document.getElementById('tog-traffic').addEventListener('click', () => {

@@ -97,7 +97,7 @@
     <div class="stats">
       <div class="stat"><div class="num" id="statPins">1,381</div><div class="lbl">Pincodes mapped</div></div>
       <div class="stat"><div class="num">38</div><div class="lbl">Cities covered</div></div>
-      <div class="stat"><div class="num">2</div><div class="lbl">Hub types (FC + MFC)</div></div>
+      <div class="stat"><div class="num">3</div><div class="lbl">Hub types (FC+MFC+DC)</div></div>
     </div>
   </header>
 
@@ -112,6 +112,13 @@
       <h2>NFC Traffic</h2>
       <div class="seg" style="justify-content:flex-start;margin-bottom:8px">
         <button id="togTraffic" class="active" style="background:#f97316;color:#fff;border:1px solid #c2410c">NFC Traffic</button>
+      </div>
+
+      <h2>Hubs</h2>
+      <div class="seg" style="justify-content:flex-start;margin-bottom:8px;gap:4px;flex-wrap:wrap">
+        <button id="togFc"  class="active" style="background:#dc2626;color:#fff;border:1px solid #9b1c1c;font-size:10px;padding:3px 8px">FC</button>
+        <button id="togMfc" class="active" style="background:#0891b2;color:#fff;border:1px solid #0e7490;font-size:10px;padding:3px 8px">MFC</button>
+        <button id="togDc"  class="active" style="background:#7c3aed;color:#fff;border:1px solid #5b21b6;font-size:10px;padding:3px 8px">DC</button>
       </div>
 
       <h2>Metric</h2>
@@ -203,6 +210,67 @@ const geoLayer = L.geoJSON(PINCODE_GEO, {
     });
   }
 }).addTo(map);
+
+const WAREHOUSES = [
+  {city:"Mumbai",          pin:"400079",lat:19.09246,lon:72.93162,type:"FC"},
+  {city:"Delhi",           pin:"110020",lat:28.5378, lon:77.27942,type:"FC"},
+  {city:"Kolkata (Howrah)",pin:"711302",lat:22.58204,lon:88.17241,type:"FC"},
+  {city:"Bengaluru",       pin:"560074",lat:12.88094,lon:77.42243,type:"FC"},
+  {city:"Lucknow",         pin:"226020",lat:26.89259,lon:80.91113,type:"FC"},
+  {city:"Ahmedabad",       pin:"382210",lat:22.96393,lon:72.4745, type:"MFC"},
+  {city:"Bhubaneswar",     pin:"751010",lat:20.28416,lon:85.87078,type:"MFC"},
+  {city:"Chandigarh",      pin:"160002",lat:30.69882,lon:76.78957,type:"MFC"},
+  {city:"Chennai",         pin:"600089",lat:13.03024,lon:80.18584,type:"MFC"},
+  {city:"Guwahati",        pin:"781035",lat:26.1089, lon:91.69108,type:"MFC"},
+  {city:"Hyderabad",       pin:"500037",lat:17.4918, lon:78.43136,type:"MFC"},
+  {city:"Indore",          pin:"452010",lat:22.75813,lon:75.88118,type:"MFC"},
+  {city:"Jaipur",          pin:"302006",lat:26.90373,lon:75.78241,type:"MFC"},
+  {city:"Nagpur",          pin:"440023",lat:21.10989,lon:78.87357,type:"MFC"},
+  {city:"Patna",           pin:"800026",lat:25.59054,lon:85.17457,type:"MFC"},
+  {city:"Pune",            pin:"412207",lat:18.56176,lon:74.11943,type:"MFC"},
+  {city:"Ranchi",          pin:"834010",lat:23.30922,lon:85.35414,type:"MFC"},
+  {city:"Varanasi",        pin:"221010",lat:25.29454,lon:82.99024,type:"MFC"},
+];
+const DC_HUBS = [
+  {name:"Central-Kolkata",city:"Kolkata",pin:"700107",lat:22.5092,lon:88.4004},
+  {name:"North-Kolkata",city:"Kolkata",pin:"700079",lat:22.6492,lon:88.426},
+  {name:"Kanpur",city:"Kanpur",pin:"208011",lat:26.4126,lon:80.3337},
+  {name:"Lucknow",city:"Lucknow",pin:"226010",lat:26.8508,lon:81.043},
+  {name:"E-city",city:"Bangalore",pin:"560068",lat:12.9004,lon:77.6325},
+  {name:"HBR Layout",city:"Bangalore",pin:"560024",lat:13.0447,lon:77.6002},
+  {name:"Marathahalli",city:"Bangalore",pin:"560048",lat:12.9905,lon:77.7146},
+  {name:"Nayandahalli",city:"Bangalore",pin:"560072",lat:12.9632,lon:77.5141},
+  {name:"Darbhanga",city:"Darbhanga",pin:"846007",lat:26.208,lon:85.9444},
+  {name:"Central/West Delhi",city:"Delhi",pin:"110015",lat:28.6587,lon:77.1426},
+  {name:"East/GZB",city:"Delhi",pin:"201005",lat:28.6903,lon:77.3485},
+  {name:"Faridabad",city:"Faridabad",pin:"122006",lat:28.4874,lon:76.9867},
+  {name:"Gurgaon",city:"Gurgaon",pin:"122001",lat:28.4561,lon:77.0107},
+  {name:"Noida",city:"Noida",pin:"201304",lat:28.5413,lon:77.3821},
+  {name:"North Delhi",city:"Delhi",pin:"110034",lat:28.6914,lon:77.12},
+  {name:"South Delhi",city:"Delhi",pin:"110017",lat:28.5321,lon:77.2103},
+];
+// ── Hub & DC layers ────────────────────────────────────────────
+function makeIcon(type) {
+  const cfg = type==='FC' ? {size:32,bg:'#dc2626',fs:9} : type==='MFC' ? {size:26,bg:'#0891b2',fs:8} : {size:22,bg:'#7c3aed',fs:7};
+  return L.divIcon({
+    className: '',
+    html: `<div style="background:${cfg.bg};border:2.5px solid #fff;border-radius:50%;width:${cfg.size}px;height:${cfg.size}px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:${cfg.fs}px;font-weight:800;box-shadow:0 2px 10px rgba(0,0,0,.4);letter-spacing:.02em">${type}</div>`,
+    iconSize: [cfg.size, cfg.size], iconAnchor: [cfg.size/2, cfg.size/2]
+  });
+}
+const fcLayer  = L.layerGroup().addTo(map);
+const mfcLayer = L.layerGroup().addTo(map);
+const dcLayer  = L.layerGroup().addTo(map);
+WAREHOUSES.forEach(w => {
+  const marker = L.marker([w.lat, w.lon], { icon: makeIcon(w.type), zIndexOffset: w.type==='FC' ? 1000 : 500 });
+  marker.bindPopup(`<b style="font-size:13px">${w.city}</b><br><span style="color:#6b7280;font-size:12px">${w.type} · Pincode ${w.pin}</span>`);
+  marker.addTo(w.type === 'FC' ? fcLayer : mfcLayer);
+});
+DC_HUBS.forEach(d => {
+  const marker = L.marker([d.lat, d.lon], { icon: makeIcon('DC'), zIndexOffset: 300 });
+  marker.bindPopup(`<b style="font-size:13px">${d.name}</b><br><span style="color:#6b7280;font-size:12px">DC · Pincode ${d.pin}</span>`);
+  marker.addTo(dcLayer);
+});
 
 // ── NFC Opportunity Traffic layer ─────────────────────────────
 // Buckets: Orders (YlOrRd), Views (Blues), Conv% (RdYlGn)
@@ -403,7 +471,10 @@ const legend = L.control({ position: 'bottomright' });
 legend.onAdd = () => {
   const d = L.DomUtil.create('div', 'legend');
   d.innerHTML = `<strong>Hyperlocal Coverage</strong>
-    <span class="sw" style="background:#3b82f6;opacity:.4"></span> SDD / NDD served pincode`;
+    <span class="sw" style="background:#3b82f6;opacity:.4"></span> SDD / NDD served pincode
+    <div class="leg-row"><div class="leg-dot" style="background:#dc2626;font-size:7px;width:18px;height:18px">FC</div>Fulfilment Centre</div>
+    <div class="leg-row"><div class="leg-dot" style="background:#0891b2;font-size:6px;width:16px;height:16px">MFC</div>Micro FC</div>
+    <div class="leg-row"><div class="leg-dot" style="background:#7c3aed;font-size:6px;width:16px;height:16px">DC</div>Distribution Centre</div>`;
   return d;
 };
 legend.addTo(map);
@@ -442,6 +513,21 @@ document.getElementById('togTraffic').addEventListener('click', () => {
     btn.style.background = '#e5e7eb'; btn.style.color = '#374151'; btn.style.borderColor = '#d1d5db';
   }
 });
+// Hub toggles
+function makeHubToggleBtn(id, layer, activeStyle, inactiveBg) {
+  const btn = document.getElementById(id);
+  if (!btn) return;
+  let on = true;
+  btn.addEventListener('click', () => {
+    on = !on;
+    if (on) { map.addLayer(layer); Object.assign(btn.style, activeStyle); }
+    else { map.removeLayer(layer); btn.style.background = '#e5e7eb'; btn.style.color = '#374151'; btn.style.borderColor = '#d1d5db'; }
+  });
+}
+makeHubToggleBtn('togFc',  fcLayer,  {background:'#dc2626',color:'#fff',borderColor:'#9b1c1c'}, '#e5e7eb');
+makeHubToggleBtn('togMfc', mfcLayer, {background:'#0891b2',color:'#fff',borderColor:'#0e7490'}, '#e5e7eb');
+makeHubToggleBtn('togDc',  dcLayer,  {background:'#7c3aed',color:'#fff',borderColor:'#5b21b6'}, '#e5e7eb');
+
 </script>
 </body>
 </html>
