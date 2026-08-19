@@ -188,6 +188,7 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   subdomains:'abcd', maxZoom:19
 }).addTo(map);
 
+const T = { metric: 'o', mode: 'boundaries', visible: true, searchType: 'pincode' };
 const BUCKETS = {
   o:    { thresholds:[3,7,19,41],    colors:['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026'] },
   v:    { thresholds:[9,28,79,183], colors:['#eff3ff','#c6dbef','#6baed6','#2171b5','#084594'] },
