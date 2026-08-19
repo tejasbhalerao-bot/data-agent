@@ -545,22 +545,30 @@ const districtLayer = L.geoJSON(TRAFFIC_GEO, {
     if (!ds) return;
     lyr.on({
       mouseover: e => {
-        e.target.setStyle({ weight: 1.5, fillOpacity: 0.75 });
         const el = document.getElementById('hoverInfo');
         if (state.traffic) {
+          // Always show pincode stats when traffic layer is on
+          if (state.districts) e.target.setStyle({ weight: 1.5, fillOpacity: 0.75 });
           el.textContent = hoverTxt(f.properties);
-        } else {
+          el.style.display = 'block';
+        } else if (state.districts) {
+          // Show district stats only when district layer is visually on
+          e.target.setStyle({ weight: 1.5, fillOpacity: 0.75 });
           el.innerHTML = `<b>#${ds.rank} ${ds.district}</b> <small>${ds.abbr}</small><br>` +
             `Score <b>${ds.score}</b> &middot; ${ds.views.toLocaleString()} views &middot; ${ds.conv}% conv` +
             (ds.tat ? ` &middot; ${ds.tat}d TAT` : '');
+          el.style.display = 'block';
         }
-        el.style.display = 'block';
       },
       mouseout: e => {
-        districtLayer.resetStyle(e.target);
+        if (state.districts) {
+          districtLayer.resetStyle(e.target);
+        } else {
+          e.target.setStyle({ fillOpacity: 0, opacity: 0, weight: 0 });
+        }
         document.getElementById('hoverInfo').style.display = 'none';
       },
-      click: () => map.setView([ds.lat, ds.lon], 9, { animate: true })
+      click: () => { if (state.districts) map.setView([ds.lat, ds.lon], 9, { animate: true }); }
     });
   }
 }).addTo(map);
@@ -652,7 +660,15 @@ function toggle(key, layer) {
   if (state[key]) map.addLayer(layer); else map.removeLayer(layer);
 }
 
-document.getElementById('tog-districts').addEventListener('click', () => toggle('districts', districtLayer));
+document.getElementById('tog-districts').addEventListener('click', () => {
+  state.districts = !state.districts;
+  document.getElementById('pill-districts').classList.toggle('on', state.districts);
+  if (state.districts) {
+    districtLayer.eachLayer(l => districtLayer.resetStyle(l));
+  } else {
+    districtLayer.eachLayer(l => l.setStyle({ fillOpacity: 0, opacity: 0, weight: 0 }));
+  }
+});
 document.getElementById('tog-sdd').addEventListener('click', () => toggle('sdd', sddLayer));
 document.getElementById('tog-dc').addEventListener('click',  () => toggle('dc',  dcLayer));
 document.getElementById('tog-fc').addEventListener('click',  () => toggle('fc',  fcLayer));
