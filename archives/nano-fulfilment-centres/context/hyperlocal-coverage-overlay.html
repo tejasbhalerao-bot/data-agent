@@ -166,9 +166,9 @@
         </div>
         <div id="tSearchResult" class="search-hint"></div>
       </div>
-      <h2>SDD Coverage — top cities</h2>
+      <h2>NFC Traffic — top cities</h2>
       <table class="top">
-        <thead><tr><th>City</th><th class="n">Pins</th></tr></thead>
+        <thead><tr><th>City</th><th class="n" id="cityMetricHdr">Orders</th></tr></thead>
         <tbody id="cityTable"></tbody>
       </table>
     </div>
@@ -344,6 +344,7 @@ document.querySelectorAll('.t-metric-btn').forEach(btn=>{
     document.querySelectorAll('.t-metric-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     refreshTrafficMetric();
+    renderCityTable(T.metric);
   });
 });
 document.getElementById('tModePolygons')?.addEventListener('click',()=>{
@@ -419,6 +420,27 @@ function makeIcon(type) {
   });
 }
 
+const WAREHOUSES = [
+  {city:"Mumbai",          pin:"400079",lat:19.09246,lon:72.93162,type:"FC"},
+  {city:"Delhi",           pin:"110020",lat:28.5378, lon:77.27942,type:"FC"},
+  {city:"Kolkata (Howrah)",pin:"711302",lat:22.58204,lon:88.17241,type:"FC"},
+  {city:"Bengaluru",       pin:"560074",lat:12.88094,lon:77.42243,type:"FC"},
+  {city:"Lucknow",         pin:"226020",lat:26.89259,lon:80.91113,type:"FC"},
+  {city:"Ahmedabad",       pin:"382210",lat:22.96393,lon:72.4745, type:"MFC"},
+  {city:"Bhubaneswar",     pin:"751010",lat:20.28416,lon:85.87078,type:"MFC"},
+  {city:"Chandigarh",      pin:"160002",lat:30.69882,lon:76.78957,type:"MFC"},
+  {city:"Chennai",         pin:"600089",lat:13.03024,lon:80.18584,type:"MFC"},
+  {city:"Guwahati",        pin:"781035",lat:26.1089, lon:91.69108,type:"MFC"},
+  {city:"Hyderabad",       pin:"500037",lat:17.4918, lon:78.43136,type:"MFC"},
+  {city:"Indore",          pin:"452010",lat:22.75813,lon:75.88118,type:"MFC"},
+  {city:"Jaipur",          pin:"302006",lat:26.90373,lon:75.78241,type:"MFC"},
+  {city:"Nagpur",          pin:"440023",lat:21.10989,lon:78.87357,type:"MFC"},
+  {city:"Patna",           pin:"800026",lat:25.59054,lon:85.17457,type:"MFC"},
+  {city:"Pune",            pin:"412207",lat:18.56176,lon:74.11943,type:"MFC"},
+  {city:"Ranchi",          pin:"834010",lat:23.30922,lon:85.35414,type:"MFC"},
+  {city:"Varanasi",        pin:"221010",lat:25.29454,lon:82.99024,type:"MFC"},
+];
+
 // ── FC and MFC layers ──────────────────────────────────────────
 const fcLayer  = L.layerGroup().addTo(map);
 const mfcLayer = L.layerGroup().addTo(map);
@@ -441,14 +463,46 @@ legend.onAdd = () => {
 };
 legend.addTo(map);
 
-// ── City table ─────────────────────────────────────────────────
-const tbody = document.getElementById('cityTable');
-CITIES.forEach(c => {
-  const tr = document.createElement('tr');
-  tr.innerHTML = `<td>${c.city}</td><td class="n">${c.count}</td>`;
-  tr.addEventListener('click', () => map.setView([c.lat, c.lon], 11));
-  tbody.appendChild(tr);
+// ── City table (metric-driven) ───────────────────────────────────────────────
+const _cityAgg = {};
+TRAFFIC_GEO.features.forEach(f => {
+  const p = f.properties;
+  const name = (p.d && p.d !== 'Unknown') ? p.d : (p.s || 'Unknown');
+  if (!_cityAgg[name]) _cityAgg[name] = { name, o:0, v:0, atSum:0, atN:0, mtSum:0, latSum:0, lonSum:0, n:0 };
+  const c = _cityAgg[name];
+  c.o += (p.o||0); c.v += (p.v||0);
+  if (p.at != null) { c.atSum += p.at; c.atN++; c.mtSum += (p.mt||0); }
+  c.latSum += (p.cy||0); c.lonSum += (p.cx||0); c.n++;
 });
+
+function renderCityTable(metric) {
+  const LABELS = { o:'Orders', v:'Views', conv:'Conv %', at:'Avg TAT', mt:'Med TAT' };
+  const hdr = document.getElementById('cityMetricHdr');
+  if (hdr) hdr.textContent = LABELS[metric] || 'Orders';
+  const isTat = metric === 'at' || metric === 'mt';
+  const rows = Object.values(_cityAgg)
+    .filter(c => isTat ? c.atN > 0 : c.o > 0)
+    .map(c => {
+      let num, val;
+      if      (metric === 'o')    { num = c.o;            val = c.o.toLocaleString(); }
+      else if (metric === 'v')    { num = c.v;            val = c.v.toLocaleString(); }
+      else if (metric === 'conv') { num = c.v > 0 ? c.o/c.v*100 : 0; val = c.v > 0 ? num.toFixed(1)+'%' : '\u2014'; }
+      else if (metric === 'at')   { num = c.atSum/c.atN; val = num.toFixed(1)+'d'; }
+      else if (metric === 'mt')   { num = c.mtSum/c.atN; val = num.toFixed(1)+'d'; }
+      return { name: c.name, num, val, lat: c.latSum/c.n, lon: c.lonSum/c.n };
+    })
+    .sort((a, b) => b.num - a.num)
+    .slice(0, 20);
+  const el = document.getElementById('cityTable');
+  el.innerHTML = '';
+  rows.forEach(c => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${c.name}</td><td class="n">${c.val}</td>`;
+    tr.addEventListener('click', () => map.setView([c.lat, c.lon], 11));
+    el.appendChild(tr);
+  });
+}
+renderCityTable(T.metric);
 
 // ── Layer toggle logic ─────────────────────────────────────────
 const state = { sdd: true, fc: true, mfc: true , traffic: true };
