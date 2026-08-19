@@ -1,0 +1,369 @@
+<meta charset="UTF-8">
+<title>NFC Map — How to Use</title>
+<style>
+  :root {
+    --bg:      #ECEAE5;
+    --surface: #F5F4F0;
+    --ink:     #171512;
+    --muted:   #6E6A63;
+    --accent:  #C03D08;
+    --border:  #D5D2CB;
+    --chip-bg: #E4E2DC;
+    --tag-bg:  #DDD9D1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:      #131210;
+      --surface: #1B1916;
+      --ink:     #EDE9E4;
+      --muted:   #8A857D;
+      --accent:  #E05020;
+      --border:  #2B2824;
+      --chip-bg: #242018;
+      --tag-bg:  #2A2620;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:      #131210;
+    --surface: #1B1916;
+    --ink:     #EDE9E4;
+    --muted:   #8A857D;
+    --accent:  #E05020;
+    --border:  #2B2824;
+    --chip-bg: #242018;
+    --tag-bg:  #2A2620;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, 'Palatino Linotype', serif;
+    line-height: 1.7;
+    padding: 3rem 1.5rem 6rem;
+  }
+  .doc { max-width: 700px; margin: 0 auto; }
+
+  /* ── Header ── */
+  .doc-header {
+    padding-bottom: 1.75rem;
+    border-bottom: 2px solid var(--accent);
+    margin-bottom: 3rem;
+  }
+  .doc-meta {
+    font-family: 'Courier New', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+  }
+  .doc-title {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, system-ui, sans-serif;
+    font-size: clamp(1.75rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--ink);
+    text-wrap: balance;
+    margin-bottom: 0.6rem;
+  }
+  .doc-subtitle { font-size: 0.95rem; color: var(--muted); }
+
+  /* ── Sections ── */
+  .section { margin-bottom: 3rem; }
+  .section-eyebrow {
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+  .section-title {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, system-ui, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section p { font-size: 0.95rem; margin-bottom: 0.75rem; max-width: 62ch; }
+  .section p:last-child { margin-bottom: 0; }
+
+  /* ── Control cards ── */
+  .controls { display: flex; flex-direction: column; gap: 0.6rem; }
+  .ctrl {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 0.85rem 1.1rem;
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0.5rem 1.25rem;
+    align-items: start;
+  }
+  .ctrl-name {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--ink);
+    padding-top: 0.05rem;
+  }
+  .ctrl-loc {
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+  .ctrl-desc { font-size: 0.875rem; color: var(--ink); line-height: 1.6; }
+  .ctrl-desc strong { font-family: 'Gill Sans', 'Gill Sans MT', Calibri, system-ui, sans-serif; font-size: 0.82rem; }
+
+  /* ── Chips (metric/layer names inline) ── */
+  .chip {
+    display: inline-block;
+    background: var(--chip-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.7rem;
+    padding: 0.1em 0.45em;
+    color: var(--ink);
+    white-space: nowrap;
+    vertical-align: baseline;
+  }
+
+  /* ── Workflow steps ── */
+  .workflows { display: flex; flex-direction: column; gap: 1.5rem; }
+  .workflow {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 1.1rem 1.25rem;
+  }
+  .workflow-title {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .wf-num {
+    width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 0.62rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .wf-steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .wf-steps li {
+    font-size: 0.875rem;
+    color: var(--ink);
+    padding-left: 1.1rem;
+    position: relative;
+    line-height: 1.6;
+  }
+  .wf-steps li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.75rem;
+    top: 0.15rem;
+  }
+
+  /* ── Tips ── */
+  .tips {
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .tip { font-size: 0.875rem; color: var(--ink); line-height: 1.6; }
+  .tip-label {
+    font-family: 'Courier New', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: bold;
+  }
+
+  @media (max-width: 520px) {
+    .ctrl { grid-template-columns: 1fr; }
+    .ctrl-loc { margin-top: 0; }
+  }
+</style>
+
+<div class="doc">
+
+  <header class="doc-header">
+    <div class="doc-meta">Truemeds · Network Strategy · August 2026</div>
+    <h1 class="doc-title">How to Use the NFC Candidates Map</h1>
+    <p class="doc-subtitle">A quick-reference guide for navigating and interpreting the interactive map.</p>
+  </header>
+
+  <!-- ── What you're looking at ─────────────────────────────────────── -->
+  <section class="section">
+    <div class="section-eyebrow">Overview</div>
+    <h2 class="section-title">What the map shows</h2>
+    <p>The map visualises every pincode in India that currently has demand on Truemeds but is <em>not</em> served by same-day or next-day delivery. These are the pincodes where opening a Nano Fulfilment Centre would unlock hyperlocal serviceability.</p>
+    <p>Each pincode is coloured by the metric you select — orders, views, conversion rate, or average TAT. The amber markers show the single optimal NFC placement per district: the pincode that maximises covered demand within a 10 km radius.</p>
+  </section>
+
+  <!-- ── Controls reference ─────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section-eyebrow">Controls</div>
+    <h2 class="section-title">What each control does</h2>
+    <div class="controls">
+
+      <div class="ctrl">
+        <div>
+          <div class="ctrl-name">Layers</div>
+          <div class="ctrl-loc">Top of left panel</div>
+        </div>
+        <div class="ctrl-desc">
+          Toggle infrastructure and data layers on or off. <strong>SDD Pincodes</strong> shows the current same-day network. <strong>Fulfilment Centres, Micro FCs, Distribution Centres</strong> show existing warehouse locations. <strong>Today's Non-SDD Pincodes</strong> is the NFC opportunity layer — the coloured polygons or bubbles.
+        </div>
+      </div>
+
+      <div class="ctrl">
+        <div>
+          <div class="ctrl-name">Metric</div>
+          <div class="ctrl-loc">Middle of left panel</div>
+        </div>
+        <div class="ctrl-desc">
+          Choose what the colour represents. <span class="chip">Orders</span> and <span class="chip">Views</span> show absolute July 2026 volume. <span class="chip">Ord/Day</span> and <span class="chip">Views/Day</span> are the same figures divided by 31 days. <span class="chip">Conv %</span> is orders ÷ views. <span class="chip">Avg TAT</span> and <span class="chip">Med TAT</span> show delivery time — red means slow, green means fast.
+        </div>
+      </div>
+
+      <div class="ctrl">
+        <div>
+          <div class="ctrl-name">Bucket filters</div>
+          <div class="ctrl-loc">Below the metric selector</div>
+        </div>
+        <div class="ctrl-desc">
+          Click any legend row to filter the map to only that tier. Click multiple rows to select more than one — <strong>within a metric, selections are OR</strong>. Switch to a different metric and click there to add a second filter — <strong>across metrics, selections are AND</strong>. For example: (3 days OR 4 days Avg TAT) AND (184+ views). A "Clear all filters" link appears whenever any filter is active.
+        </div>
+      </div>
+
+      <div class="ctrl">
+        <div>
+          <div class="ctrl-name">Display</div>
+          <div class="ctrl-loc">Below the bucket filters</div>
+        </div>
+        <div class="ctrl-desc">
+          Switch between <strong>Polygons</strong> (filled pincode boundaries — better for geographic coverage) and <strong>Bubbles</strong> (circles scaled by metric value — better for comparing magnitude across pincodes).
+        </div>
+      </div>
+
+      <div class="ctrl">
+        <div>
+          <div class="ctrl-name">NFC Tier toggles</div>
+          <div class="ctrl-loc">NFC Candidates section, left panel</div>
+        </div>
+        <div class="ctrl-desc">
+          Show or hide NFC placement markers by leverage tier. <strong>Very High (#1–30)</strong> is on by default. Each amber dot marks the optimal placement pincode for one district. Hover over a dot for district rank, views and pincodes covered, and coverage percentage.
+        </div>
+      </div>
+
+      <div class="ctrl">
+        <div>
+          <div class="ctrl-name">Search</div>
+          <div class="ctrl-loc">Bottom of left panel</div>
+        </div>
+        <div class="ctrl-desc">
+          Jump the map to any location by <span class="chip">Pincode</span>, <span class="chip">City</span>, or <span class="chip">State</span>. Select the search type first, then type and press Go. The map will zoom to the matching area and highlight it.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Workflows ─────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section-eyebrow">Common tasks</div>
+    <h2 class="section-title">Three things you'll want to do</h2>
+    <div class="workflows">
+
+      <div class="workflow">
+        <div class="workflow-title">
+          <div class="wf-num">1</div>
+          Find pincodes with slow TAT and high views
+        </div>
+        <ul class="wf-steps">
+          <li>Select <span class="chip">Avg TAT</span> from the metric selector — the map recolours red (slow) to green (fast).</li>
+          <li>In the legend, click the <span class="chip">4 days</span> and <span class="chip">5+ days</span> rows — the map now shows only slow-TAT pincodes.</li>
+          <li>Switch metric to <span class="chip">Views</span> — your TAT filter stays active.</li>
+          <li>Click <span class="chip">184+</span> in the legend — the map now shows only pincodes that are both slow and high-volume. These are the highest-urgency NFC locations.</li>
+        </ul>
+      </div>
+
+      <div class="workflow">
+        <div class="workflow-title">
+          <div class="wf-num">2</div>
+          Explore a specific NFC placement
+        </div>
+        <ul class="wf-steps">
+          <li>In the NFC Candidates section, toggle on the tier containing the district you want (e.g. <span class="chip">Very High #1–30</span>).</li>
+          <li>Zoom into the district on the map — use scroll or pinch to zoom, click-drag to pan.</li>
+          <li>Hover over the amber marker to see: district rank, NFC pincode, how many pincodes and views fall within 10 km, and coverage as a % of district total.</li>
+          <li>Click the marker to pin the tooltip in place.</li>
+        </ul>
+      </div>
+
+      <div class="workflow">
+        <div class="workflow-title">
+          <div class="wf-num">3</div>
+          Look up a specific city or state
+        </div>
+        <ul class="wf-steps">
+          <li>In the Search section, select <span class="chip">City</span> or <span class="chip">State</span>.</li>
+          <li>Type the name and press Go — the map zooms to that area automatically.</li>
+          <li>Switch to <span class="chip">Pincode</span> search to jump to a specific pincode and see its metrics in a popup.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Tips ──────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section-eyebrow">Things to know</div>
+    <h2 class="section-title">Quick tips</h2>
+    <div class="tips">
+      <div>
+        <div class="tip-label">Filters persist across metric switches</div>
+        <p class="tip">When you switch metric, any bucket filter you set on a previous metric stays active. The cross-metric indicator in the legend shows you what's still applied. Use "Clear all filters" to reset.</p>
+      </div>
+      <div>
+        <div class="tip-label">Low-volume pincodes hide at country zoom</div>
+        <p class="tip">Pincodes with fewer than 19 orders are hidden when zoomed out to the full-country view to reduce clutter. Zoom in to a region to see all pincodes regardless of volume.</p>
+      </div>
+      <div>
+        <div class="tip-label">The map works offline — mostly</div>
+        <p class="tip">All data is embedded in the file. If you lose internet, the pincode data, filters, and NFC markers all still work. Only the basemap tiles (the underlying street map) require a connection.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
