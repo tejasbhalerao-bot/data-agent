@@ -105,6 +105,22 @@
 .dist-legend { display:flex; align-items:center; gap:2px; margin:6px 0 4px; font-size:9px; color:var(--muted); }
 .dist-legend .swatch { display:inline-block; width:18px; height:6px; border-radius:2px; }
 .dist-legend .lbl { font-size:9px; color:var(--muted); margin:0 4px; }
+
+/* ── Metric bucket filters ──────────────────────────────────────────── */
+.fil-row {
+  display:flex; align-items:center; gap:5px; font-size:11px;
+  margin:1px 0; cursor:pointer; padding:3px 5px; border-radius:4px;
+  transition:background .12s;
+}
+.fil-row:hover { background:rgba(99,102,241,.08); }
+.fil-row.fil-sel { font-weight:600; }
+.fil-row.fil-dim { opacity:0.32; }
+.fil-check { width:12px; text-align:center; font-size:10px; color:#6366f1; flex-shrink:0; font-weight:700; }
+.fil-swatch { width:14px; height:11px; border-radius:2px; border:1px solid rgba(0,0,0,.15); flex-shrink:0; }
+.fil-other { font-size:10px; color:#6366f1; margin-top:6px; padding:3px 5px;
+  background:rgba(99,102,241,.07); border-radius:4px; line-height:1.5; }
+.fil-clear { font-size:10px; color:#f59e0b; cursor:pointer; margin-top:5px;
+  display:inline-block; padding:2px 0; text-decoration:underline; }
 </style>
 </head>
 <body>
@@ -289,6 +305,47 @@ const BUCKET_LABELS = {
   at:   ['≤1 day','2 days','3 days','4 days','5+ days'],
   mt:   ['≤1 day','2 days','3 days','4 days','5+ days']
 };
+// ── Active bucket filters: OR within metric, AND across metrics ────────
+const ACTIVE_FILTERS = { o: new Set(), v: new Set(), conv: new Set(), at: new Set(), mt: new Set() };
+
+function getBucket(p, m) {
+  if ((m==='at'||m==='mt') && p[m]==null) return -1;
+  const v = metricVal(p, m), t = BUCKETS[m].thresholds;
+  for (let i=0; i<t.length; i++) if (v<=t[i]) return i;
+  return 4;
+}
+
+function passesFil(p) {
+  for (const m of Object.keys(ACTIVE_FILTERS)) {
+    const f = ACTIVE_FILTERS[m];
+    if (f.size === 0) continue;
+    if (!f.has(getBucket(p, m))) return false;
+  }
+  return true;
+}
+
+function anyFilterActive() {
+  return Object.values(ACTIVE_FILTERS).some(f => f.size > 0);
+}
+
+function clearAllFilters() {
+  Object.keys(ACTIVE_FILTERS).forEach(k => ACTIVE_FILTERS[k].clear());
+  applyFilters();
+}
+
+function applyFilters() {
+  tBoundaryLayer.eachLayer(l => l.setStyle(tBoundaryStyle(l.feature)));
+  if (T.mode === 'bubbles') {
+    const m = T.metric, maxV = m==='o'?MAX_O:m==='v'?MAX_V:100;
+    tBubbleLayer.eachLayer(l => {
+      const p = l._tProps, ok = passesFil(p);
+      l.setRadius(ok ? 2+Math.sqrt(metricVal(p,m)/(maxV||1))*20 : 0);
+      l.setStyle({fillColor: bucketColor(p,m), fillOpacity: ok ? 0.75 : 0});
+    });
+  }
+  updateTLegend();
+}
+
 function metricVal(p, m) { if(m==='conv') return p.v>0?p.o/p.v*100:0; if(m==='at'||m==='mt') return p[m]!=null?p[m]:-1; return p[m]||0; }
 function bucketColor(p, m) {
   if((m==='at'||m==='mt')&&p[m]==null) return '#cbd5e1';
@@ -298,7 +355,7 @@ function bucketColor(p, m) {
 }
 function tBoundaryStyle(feature) {
   const p=feature.properties, col=bucketColor(p,T.metric);
-  const hide=map.getZoom()<=7&&(p.o||0)<19;
+  const hide=(map.getZoom()<=7&&(p.o||0)<19)||!passesFil(p);
   return {color:'#64748b',weight:0.3,fillColor:col,fillOpacity:hide?0:0.72,opacity:hide?0:0.4};
 }
 function hoverTxt(p) {
@@ -349,19 +406,62 @@ function refreshTrafficMetric() {
   const m=T.metric, maxV=m==='o'?MAX_O:m==='v'?MAX_V:100;
   tBoundaryLayer.eachLayer(l=>l.setStyle(tBoundaryStyle(l.feature)));
   tBubbleLayer.eachLayer(l=>{
-    const p=l._tProps;
-    l.setRadius(2+Math.sqrt(metricVal(p,m)/(maxV||1))*20);
-    l.setStyle({fillColor:bucketColor(p,m)});
+    const p=l._tProps, ok=passesFil(p);
+    l.setRadius(ok?2+Math.sqrt(metricVal(p,m)/(maxV||1))*20:0);
+    l.setStyle({fillColor:bucketColor(p,m),fillOpacity:ok?0.75:0});
   });
   updateTLegend();
 }
 function updateTLegend() {
-  const el=document.getElementById('tLegendBuckets'); if(!el) return;
-  const c=BUCKETS[T.metric].colors, lb=BUCKET_LABELS[T.metric];
-  el.innerHTML=c.map((col,i)=>
-    `<div style="display:flex;align-items:center;gap:5px;font-size:11px;margin:2px 0">`+
-    `<span style="display:inline-block;width:14px;height:12px;border-radius:2px;background:${col};border:1px solid rgba(0,0,0,.15);flex-shrink:0"></span>${lb[i]}</div>`
-  ).join('');
+  const el = document.getElementById('tLegendBuckets');
+  if (!el) return;
+  const m = T.metric;
+  const c = BUCKETS[m].colors, lb = BUCKET_LABELS[m];
+  const af = ACTIVE_FILTERS[m];
+  const anyThisMetric = af.size > 0;
+
+  // Bucket rows
+  let html = c.map((col, i) => {
+    const sel = af.has(i);
+    // dim = this metric has selections but this bucket isn't one of them
+    const dim = anyThisMetric && !sel;
+    return `<div class="fil-row${sel?' fil-sel':''}${dim?' fil-dim':''}" data-m="${m}" data-b="${i}">` +
+      `<span class="fil-check">${sel ? '✓' : ''}</span>` +
+      `<span class="fil-swatch" style="background:${col}"></span>` +
+      `${lb[i]}</div>`;
+  }).join('');
+
+  // Cross-metric filter indicators
+  const LABELS = {o:'Orders',v:'Views',conv:'Conv %',at:'Avg TAT',mt:'Med TAT'};
+  const others = Object.entries(ACTIVE_FILTERS)
+    .filter(([k, v]) => k !== m && v.size > 0)
+    .map(([k, v]) => {
+      const names = [...v].sort().map(i => BUCKET_LABELS[k][i]).join(', ');
+      return `<b>${LABELS[k]}:</b> ${names}`;
+    });
+  if (others.length) {
+    html += `<div class="fil-other">Also filtering:<br>${others.join('<br>')}</div>`;
+  }
+
+  // Clear all button
+  if (anyFilterActive()) {
+    html += `<div class="fil-clear" id="filClear">✕ Clear all filters</div>`;
+  }
+
+  el.innerHTML = html;
+
+  // Bind bucket click handlers
+  el.querySelectorAll('.fil-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const metric = row.dataset.m, bucket = parseInt(row.dataset.b);
+      const f = ACTIVE_FILTERS[metric];
+      if (f.has(bucket)) f.delete(bucket); else f.add(bucket);
+      applyFilters();
+    });
+  });
+
+  const clearBtn = document.getElementById('filClear');
+  if (clearBtn) clearBtn.addEventListener('click', clearAllFilters);
 }
 map.on('zoomend',()=>{
   if(T.mode==='boundaries'&&map.hasLayer(tBoundaryLayer))
