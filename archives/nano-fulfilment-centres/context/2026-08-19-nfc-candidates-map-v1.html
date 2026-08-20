@@ -90,23 +90,23 @@
   .search-row button { padding:6px 12px; background:var(--ink); color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; }
   .search-hint { font-size:11px; color:var(--muted); margin-top:4px; min-height:14px; }
 
-/* ── District list ─────────────────────────────────────────────────── */
+/* ── District list table ────────────────────────────────────────────── */
 .dist-section { margin-top:14px; padding-top:12px; border-top:1px solid var(--border); }
-.dist-row { display:flex; align-items:center; gap:5px; padding:5px 2px; border-bottom:1px solid var(--border); cursor:pointer; border-radius:3px; }
-  .dist-impact { font-size:10px; font-weight:700; color:#16a34a; white-space:nowrap; padding:2px 6px; border-radius:20px; background:#dcfce7; flex-shrink:0; font-variant-numeric:tabular-nums; }
-.dist-row:hover { background:rgba(0,0,0,.04); }
-.dist-rank { font-size:9px; color:var(--muted); width:22px; flex-shrink:0; padding-top:2px; text-align:right; }
-.dist-info { flex:1; min-width:0; }
-.dist-name { font-size:11px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:1.3; }
-.dist-abbr { font-size:9px; color:var(--muted); font-weight:400; }
-.dist-bar-wrap { height:3px; background:var(--border); border-radius:2px; margin:2px 0; overflow:hidden; }
-.dist-bar-fill { height:100%; border-radius:2px; }
-.dist-meta { font-size:9px; color:var(--muted); }
-.dist-score { font-size:11.5px; font-weight:700; flex-shrink:0; padding-top:1px; min-width:28px; text-align:right; }
 .badge { font-size:10px; color:var(--muted); font-weight:400; background:var(--border); padding:1px 5px; border-radius:9px; margin-left:4px; }
-.dist-legend { display:flex; align-items:center; gap:2px; margin:6px 0 4px; font-size:9px; color:var(--muted); }
-.dist-legend .swatch { display:inline-block; width:18px; height:6px; border-radius:2px; }
-.dist-legend .lbl { font-size:9px; color:var(--muted); margin:0 4px; }
+.dist-table { width:100%; border-collapse:collapse; font-size:11px; }
+.dist-table thead th {
+  font-size:9px; text-transform:uppercase; letter-spacing:.07em; color:var(--muted);
+  padding:5px 6px 7px; border-bottom:2px solid var(--border); font-weight:700;
+  text-align:right; white-space:nowrap; }
+.dist-table thead th.th-name { text-align:left; }
+.dist-table tbody tr { border-bottom:1px solid var(--border); cursor:pointer; }
+.dist-table tbody tr:hover { background:rgba(99,102,241,.06); }
+.td-rank { font-size:9px; color:var(--muted); text-align:right; padding:7px 6px 7px 2px; width:26px; white-space:nowrap; }
+.td-name { padding:7px 6px; }
+.dn { font-size:11px; font-weight:600; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:130px; }
+.da { font-size:9px; color:var(--muted); font-weight:400; }
+.td-num { text-align:right; padding:7px 6px; font-variant-numeric:tabular-nums; color:var(--muted); font-size:10px; white-space:nowrap; }
+.td-impact { text-align:right; padding:7px 4px 7px 6px; font-variant-numeric:tabular-nums; font-size:10px; font-weight:700; color:#16a34a; white-space:nowrap; }
 
 /* ── Metric bucket filters ──────────────────────────────────────────── */
 .fil-row {
@@ -380,15 +380,16 @@
 
 <div class="dash-card">
             <div class="dash-card-title">NFC Candidates — All 513 Districts</div>
-              <div class="dist-legend" style="margin-bottom:8px">
-                <span class="swatch" style="background:#bbf7d0"></span>
-                <span class="swatch" style="background:#4ade80"></span>
-                <span class="swatch" style="background:#16a34a"></span>
-                <span class="swatch" style="background:#166534"></span>
-                <span class="swatch" style="background:#052e16"></span>
-                <span class="lbl">Low score → High score</span>
-              </div>
-              <div id="districtList"></div>
+              <table class="dist-table">
+                <thead><tr>
+                  <th class="th-rank">#</th>
+                  <th class="th-name">District</th>
+                  <th>Views</th>
+                  <th>TAT</th>
+                  <th>+Orders/mo</th>
+                </tr></thead>
+                <tbody id="districtList"></tbody>
+              </table>
             </div>
 
           </div>
@@ -2096,20 +2097,15 @@ function calcImpact(cvw, mapConvPct, tat) {
   const maxS = top[0].score;
   const span = maxS - minS || 1;
   top.forEach(ds => {
-    const pct = Math.round((ds.score - minS) / span * 100);
-    const c = distScore2Color(ds.score);
-    const div = document.createElement('div');
+    const div = document.createElement('tr');
     div.className = 'dist-row';
+    const _imp = calcImpact(_nfcCvw[ds.district] || ds.views, ds.conv, ds.tat);
     div.innerHTML =
-      `<div class="dist-rank">#${ds.rank}</div>` +
-      `<div class="dist-info">` +
-        `<div class="dist-name">${ds.district} <span class="dist-abbr">${ds.abbr}</span></div>` +
-        `<div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:${pct}%;background:${c}"></div></div>` +
-        `<div class="dist-meta">${ds.views.toLocaleString()} views &middot; ${ds.conv}% conv` +
-        (ds.tat ? ` &middot; ${ds.tat}d` : '') + `</div>` +
-      `</div>` +
-      `<div class="dist-score" style="color:${c}">${ds.score}</div>` +
-      (() => { const imp = calcImpact(_nfcCvw[ds.district] || ds.views, ds.conv, ds.tat); return imp != null && imp > 0 ? `<div class="dist-impact">+${imp.toLocaleString()}/mo</div>` : ''; })();
+      `<td class="td-rank">${ds.rank}</td>` +
+      `<td class="td-name"><span class="dn">${ds.district}</span><span class="da"> ${ds.abbr}</span></td>` +
+      `<td class="td-num">${ds.views.toLocaleString()}</td>` +
+      `<td class="td-num">${ds.tat ? ds.tat + 'd' : '—'}</td>` +
+      `<td class="td-impact">${_imp != null && _imp > 0 ? '+' + _imp.toLocaleString() + '/mo' : '—'}</td>`;
     div.addEventListener('click', () => { switchTab('map'); map.setView([ds.lat, ds.lon], 9, {animate:true}); });
     list.appendChild(div);
   });
@@ -2206,28 +2202,20 @@ function recomputeAll(wv, wc, wt, rKm) {
     list.innerHTML = '';
     const ST_ABBR = {'Andhra Pradesh':'AP','West Bengal':'WB','Telangana':'TG','Maharashtra':'MH','Gujarat':'GJ','Uttar Pradesh':'UP','Tamil Nadu':'TN','Karnataka':'KA','Rajasthan':'RJ','Madhya Pradesh':'MP','Bihar':'BR','Odisha':'OD','Jharkhand':'JH','Punjab':'PB','Haryana':'HR','Kerala':'KL','Jammu & Kashmir':'J&K','Assam':'AS','Chhattisgarh':'CG','Uttarakhand':'UK','Himachal Pradesh':'HP','Delhi':'DL','Goa':'GA','Tripura':'TR','Manipur':'MN','Meghalaya':'ML','Nagaland':'NL','Arunachal Pradesh':'AR'};
     const top = placements;
-    const minS = top[top.length - 1]?.sc || 0, maxS = top[0]?.sc || 100;
-    const span = maxS - minS || 1;
     top.forEach(ds => {
-      const pct = Math.round((ds.sc - minS) / span * 100);
-      const c = distScore2Color(ds.sc);
       const abbr = ST_ABBR[ds.st] || ds.st.slice(0, 2).toUpperCase();
       const k = `${ds.dist}||${ds.st}`;
-      const avgUc = stats[k]?.avgUc;
       const avgTat = stats[k]?.avgTat;
-      const ucStr = avgUc != null ? ` · ${avgUc.toFixed(0)}% uc` : '';
-      const tatStr = avgTat ? ` · ${avgTat.toFixed(1)}d` : '';
-      const div = document.createElement('div');
+      const div = document.createElement('tr');
       div.className = 'dist-row';
+      const _mc = ds.cvw > 0 ? (ds.cao / ds.cvw * 100) : 0;
+      const _imp = calcImpact(ds.cvw, _mc, avgTat);
       div.innerHTML =
-        `<div class="dist-rank">#${ds.r}</div>` +
-        `<div class="dist-info">` +
-          `<div class="dist-name">${ds.dist} <span class="dist-abbr">${abbr}</span></div>` +
-          `<div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:${pct}%;background:${c}"></div></div>` +
-          `<div class="dist-meta">${ds.dvw.toLocaleString()} views${ucStr}${tatStr}</div>` +
-        `</div>` +
-        `<div class="dist-score" style="color:${c}">${ds.sc}</div>` +
-        (() => { const mc = ds.cvw > 0 ? (ds.cao / ds.cvw * 100) : 0; const imp = calcImpact(ds.cvw, mc, avgTat); return imp != null && imp > 0 ? `<div class="dist-impact">+${imp.toLocaleString()}/mo</div>` : ''; })();
+        `<td class="td-rank">${ds.r}</td>` +
+        `<td class="td-name"><span class="dn">${ds.dist}</span><span class="da"> ${abbr}</span></td>` +
+        `<td class="td-num">${ds.dvw.toLocaleString()}</td>` +
+        `<td class="td-num">${avgTat ? avgTat.toFixed(1) + 'd' : '—'}</td>` +
+        `<td class="td-impact">${_imp != null && _imp > 0 ? '+' + _imp.toLocaleString() + '/mo' : '—'}</td>`;
       div.addEventListener('click', () => { switchTab('map'); map.setView([ds.cy, ds.cx], 9, { animate: true }); });
       list.appendChild(div);
     });
