@@ -386,6 +386,7 @@
                   <th class="th-name">District</th>
                   <th>Views</th>
                   <th>TAT</th>
+                  <th>Addr. Views</th>
                   <th>+Orders/mo</th>
                 </tr></thead>
                 <tbody id="districtList"></tbody>
@@ -2105,6 +2106,7 @@ function calcImpact(cvw, mapConvPct, tat) {
       `<td class="td-name"><span class="dn">${ds.district}</span><span class="da"> ${ds.abbr}</span></td>` +
       `<td class="td-num">${ds.views.toLocaleString()}</td>` +
       `<td class="td-num">${ds.tat ? ds.tat + 'd' : '—'}</td>` +
+      `<td class="td-num">${(_nfcCvw[ds.district] || 0).toLocaleString()}</td>` +
       `<td class="td-impact">${_imp != null && _imp > 0 ? '+' + _imp.toLocaleString() + '/mo' : '—'}</td>`;
     div.addEventListener('click', () => { switchTab('map'); map.setView([ds.lat, ds.lon], 9, {animate:true}); });
     list.appendChild(div);
@@ -2215,6 +2217,7 @@ function recomputeAll(wv, wc, wt, rKm) {
         `<td class="td-name"><span class="dn">${ds.dist}</span><span class="da"> ${abbr}</span></td>` +
         `<td class="td-num">${ds.dvw.toLocaleString()}</td>` +
         `<td class="td-num">${avgTat ? avgTat.toFixed(1) + 'd' : '—'}</td>` +
+        `<td class="td-num">${(ds.cvw || 0).toLocaleString()}</td>` +
         `<td class="td-impact">${_imp != null && _imp > 0 ? '+' + _imp.toLocaleString() + '/mo' : '—'}</td>`;
       div.addEventListener('click', () => { switchTab('map'); map.setView([ds.cy, ds.cx], 9, { animate: true }); });
       list.appendChild(div);
