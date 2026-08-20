@@ -2082,10 +2082,10 @@ const _nfcCvw = {};
 NFC_PLACEMENTS.forEach(n => { if (!_nfcCvw[n.dist] || n.cvw > _nfcCvw[n.dist]) _nfcCvw[n.dist] = n.cvw; });
 function calcImpact(cvw, mapConvPct, tat) {
   if (!cvw || !mapConvPct || tat == null) return null;
-  const curOrd = cvw * (mapConvPct / 100);
-  const bucket = Math.min(Math.ceil(tat), 5);
-  const cf     = 63.16 / SESS_CONV[bucket];
-  return Math.round(curOrd * (1.59 * cf - 1));
+  const curOrd    = cvw * (mapConvPct / 100);
+  const bucket    = Math.min(Math.ceil(tat), 5);
+  const convDelta = 63.16 - SESS_CONV[bucket];
+  return Math.round(curOrd * 0.59 + cvw * (convDelta / 100));
 }
 
 // ── Populate district list ─────────────────────────────────────────────
