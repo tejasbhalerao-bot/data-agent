@@ -731,8 +731,11 @@ const DC_HUBS = [
 
 
 // ── District candidate layer ─────────────────────────────────────────
+map.createPane('districtPane');
+map.getPane('districtPane').style.zIndex = 401;
 const districtLayer = L.geoJSON(TRAFFIC_GEO, {
-  renderer: L.canvas(),
+  pane: 'districtPane',
+  renderer: L.canvas({ pane: 'districtPane' }),
   filter: f => {
     const d = f.properties.d || '', s = f.properties.s || '';
     return (`${d}|${s}` in DISTRICT_SCORES);
@@ -1910,10 +1913,10 @@ document.getElementById('tog-districts').addEventListener('click', () => {
   document.getElementById('pill-districts').classList.toggle('on', state.districts);
   if (state.districts) {
     districtLayer.eachLayer(l => districtLayer.resetStyle(l));
-    districtLayer.getPane().style.pointerEvents = '';
+    map.getPane('districtPane').style.pointerEvents = '';
   } else {
     districtLayer.eachLayer(l => l.setStyle({ fillOpacity: 0, opacity: 0, weight: 0 }));
-    districtLayer.getPane().style.pointerEvents = 'none';
+    map.getPane('districtPane').style.pointerEvents = 'none';
   }
 });
 
