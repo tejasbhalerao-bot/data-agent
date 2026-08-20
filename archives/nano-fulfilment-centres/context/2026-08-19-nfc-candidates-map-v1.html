@@ -2132,6 +2132,9 @@ function _hav(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.asin(Math.sqrt(a));
 }
 
+// Cache haversine geometry results per radius — skip expensive sweep when only weights change
+let _geoCache = null;
+
 function recomputeAll(wv, wc, wt, rKm) {
   CURRENT_RADIUS_KM = rKm;
   const keys = Object.keys(DISTRICT_INDEX);
@@ -2166,26 +2169,43 @@ function recomputeAll(wv, wc, wt, rKm) {
 
   const ranked = [...keys].sort((a, b) => scores[b] - scores[a]);
 
+  // Geometry: skip haversine sweep when radius hasn't changed (weights-only refresh)
+  if (!_geoCache || _geoCache.rKm !== rKm) {
+    const geo = {};
+    const dlatMax = rKm / 111;
+    keys.forEach(k => {
+      const pins = DISTRICT_INDEX[k].pins;
+      let bestPin = pins[0], bestCvw = -1, bestCpins = 0, bestCao = 0;
+      pins.forEach(cand => {
+        let cvw = 0, cpins = 0, cao = 0;
+        const dlat = dlatMax;
+        const dlon = rKm / (111 * Math.cos(cand.cy * Math.PI / 180));
+        pins.forEach(other => {
+          if (Math.abs(other.cy - cand.cy) > dlat || Math.abs(other.cx - cand.cx) > dlon) return;
+          if (_hav(cand.cy, cand.cx, other.cy, other.cx) <= rKm) {
+            cvw += (other.v || 0); cpins++; cao += (other.o || 0);
+          }
+        });
+        if (cvw > bestCvw) { bestCvw = cvw; bestCao = cao; bestCpins = cpins; bestPin = cand; }
+      });
+      geo[k] = { bestPin, bestCvw, bestCpins, bestCao };
+    });
+    _geoCache = { rKm, data: geo };
+  }
+  const geo = _geoCache.data;
+
   const placements = [];
   ranked.forEach((k, idx) => {
     const d = DISTRICT_INDEX[k];
-    const pins = d.pins;
-    let bestPin = pins[0], bestCvw = -1, bestCpins = 0, bestCao = 0;
-    pins.forEach(cand => {
-      let cvw = 0, cpins = 0;
-      pins.forEach(other => {
-        if (_hav(cand.cy, cand.cx, other.cy, other.cx) <= rKm) { cvw += (other.v || 0); cpins++; cao += (other.o || 0); }
-      });
-      if (cvw > bestCvw) { bestCvw = cvw; bestCao = cao; bestCpins = cpins; bestPin = cand; }
-    });
+    const g = geo[k];
     const dvw = stats[k].totalViews;
     placements.push({
       r: idx + 1, dist: d.dist, st: d.st,
       sc: Math.round(scores[k] * 10) / 10,
-      pin: String(bestPin.p), cx: bestPin.cx, cy: bestPin.cy,
-      dpins: pins.length, dvw,
-      cpins: bestCpins, cvw: bestCvw, cao: bestCao,
-      cpc: dvw > 0 ? Math.round(bestCvw / dvw * 1000) / 10 : 0
+      pin: String(g.bestPin.p), cx: g.bestPin.cx, cy: g.bestPin.cy,
+      dpins: d.pins.length, dvw,
+      cpins: g.bestCpins, cvw: g.bestCvw, cao: g.bestCao,
+      cpc: dvw > 0 ? Math.round(g.bestCvw / dvw * 1000) / 10 : 0
     });
   });
 
