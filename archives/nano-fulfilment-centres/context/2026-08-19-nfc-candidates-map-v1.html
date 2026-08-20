@@ -121,6 +121,23 @@
   background:rgba(99,102,241,.07); border-radius:4px; line-height:1.5; }
 .fil-clear { font-size:10px; color:#f59e0b; cursor:pointer; margin-top:5px;
   display:inline-block; padding:2px 0; text-decoration:underline; }
+
+  /* ── Scoring Levers ───────────────────────────────────────────────── */
+  .levers-section { padding:10px 0 6px; border-top:1px solid var(--border); margin-top:10px; }
+  .levers-header { display:flex; justify-content:space-between; align-items:center;
+    font-size:10px; text-transform:uppercase; letter-spacing:.07em;
+    color:var(--muted); font-weight:600; margin-bottom:8px; }
+  .lever-reset { font-size:10px; color:var(--accent); cursor:pointer;
+    background:none; border:none; padding:0; font-family:inherit; }
+  .lever-reset:hover { text-decoration:underline; }
+  .lever-row { margin-bottom:7px; }
+  .lever-label { display:flex; justify-content:space-between;
+    font-size:11px; color:var(--ink); margin-bottom:3px; }
+  .lever-val { font-family:'Courier New',monospace; color:var(--muted); font-size:10px; }
+  .lever-range { width:100%; height:4px; accent-color:var(--accent);
+    cursor:pointer; display:block; }
+  .lever-divider { border:none; border-top:1px dashed var(--border); margin:10px 0 8px; }
+  .lever-status { font-size:10px; color:var(--muted); margin-top:6px; min-height:14px; font-style:italic; }
 </style>
 </head>
 <body>
@@ -272,6 +289,30 @@
         </div>
 
         <div id="districtList" style="margin-top:4px;max-height:300px;overflow-y:auto;overflow-x:hidden"></div>
+        <div class="levers-section">
+          <div class="levers-header">
+            Scoring Levers
+            <button class="lever-reset" id="leverReset">Reset</button>
+          </div>
+          <div class="lever-row">
+            <div class="lever-label">Views weight <span class="lever-val" id="lvViews">50%</span></div>
+            <input type="range" class="lever-range" id="sldViews" min="0" max="10" step="1" value="2">
+          </div>
+          <div class="lever-row">
+            <div class="lever-label">Conversion weight <span class="lever-val" id="lvConv">25%</span></div>
+            <input type="range" class="lever-range" id="sldConv" min="0" max="10" step="1" value="1">
+          </div>
+          <div class="lever-row">
+            <div class="lever-label">TAT weight <span class="lever-val" id="lvTat">25%</span></div>
+            <input type="range" class="lever-range" id="sldTat" min="0" max="10" step="1" value="1">
+          </div>
+          <hr class="lever-divider">
+          <div class="lever-row">
+            <div class="lever-label">Haversine radius <span class="lever-val" id="lvRadius">10 km</span></div>
+            <input type="range" class="lever-range" id="sldRadius" min="5" max="30" step="1" value="10">
+          </div>
+          <div class="lever-status" id="leverStatus"></div>
+        </div>
       </div>
 
     </div>
@@ -1884,13 +1925,13 @@ function makeNfcMarker(p, color, r, rh) {
     el.innerHTML =
       `<b>#${p.r} ${p.dist}</b> <small>${p.st}</small><br>` +
       `NFC pin <b>${p.pin}</b><br>` +
-      `${p.cpins} pincodes · ${p.cvw.toLocaleString()} views within 10 km<br>` +
+      `${p.cpins} pincodes · ${p.cvw.toLocaleString()} views within ${CURRENT_RADIUS_KM} km<br>` +
       `<b>${p.cpc}%</b> of district views covered`;
     el.style.display = 'block';
     m.setStyle({ radius: rh, fillOpacity: 1 });
     if (hoverRadius) map.removeLayer(hoverRadius);
     hoverRadius = L.circle([p.cy, p.cx], {
-      radius: 10000,
+      radius: CURRENT_RADIUS_KM * 1000,
       color: color,
       weight: 1.5,
       dashArray: '6 4',
@@ -1971,6 +2012,171 @@ document.getElementById('tog-traffic').addEventListener('click', () => {
     list.appendChild(div);
   });
 })();
+
+
+// ── Scoring Levers — client-side recomputation ────────────────────────────
+let CURRENT_RADIUS_KM = 10;
+
+// Build district index from TRAFFIC_GEO once at load
+const DISTRICT_INDEX = {};
+TRAFFIC_GEO.features.forEach(f => {
+  const p = f.properties;
+  const key = `${p.d}||${p.s}`;
+  if (!DISTRICT_INDEX[key]) DISTRICT_INDEX[key] = { dist: p.d, st: p.s, pins: [] };
+  DISTRICT_INDEX[key].pins.push(p);
+});
+
+function _hav(lat1, lon1, lat2, lon2) {
+  const R = 6371, dl = (lat2-lat1)*Math.PI/180, dn = (lon2-lon1)*Math.PI/180;
+  const a = Math.sin(dl/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dn/2)**2;
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+
+function recomputeAll(wv, wc, wt, rKm) {
+  CURRENT_RADIUS_KM = rKm;
+  const keys = Object.keys(DISTRICT_INDEX);
+  const n = keys.length;
+
+  // District-level stats
+  const stats = {};
+  keys.forEach(k => {
+    const pins = DISTRICT_INDEX[k].pins;
+    const totalViews = pins.reduce((s, p) => s + (p.v || 0), 0);
+    const ucPins = pins.filter(p => p.uc != null);
+    const avgUc = ucPins.length ? ucPins.reduce((s, p) => s + p.uc, 0) / ucPins.length : null;
+    const tatPins = pins.filter(p => p.at != null);
+    const avgTat = tatPins.length ? tatPins.reduce((s, p) => s + p.at, 0) / tatPins.length : 0;
+    stats[k] = { totalViews, avgUc, avgTat };
+  });
+
+  // Percentile ranks
+  const vSorted = [...keys].sort((a, b) => stats[a].totalViews - stats[b].totalViews);
+  const ucKeys = keys.filter(k => stats[k].avgUc !== null);
+  const ucSorted = [...ucKeys].sort((a, b) => stats[a].avgUc - stats[b].avgUc);
+  const tSorted  = [...keys].sort((a, b) => stats[a].avgTat - stats[b].avgTat);
+
+  const vR = {}, ucR = {}, tR = {};
+  vSorted.forEach((k, i) => vR[k] = (i + 1) / n * 100);
+  ucSorted.forEach((k, i) => ucR[k] = (i + 1) / ucKeys.length * 100);
+  keys.forEach(k => { if (ucR[k] == null) ucR[k] = 50; }); // neutral for no-data
+  tSorted.forEach((k, i) => tR[k] = (i + 1) / n * 100);
+
+  const totalW = wv + wc + wt || 1;
+  const fv = wv / totalW, fc = wc / totalW, ft = wt / totalW;
+  const scores = {};
+  keys.forEach(k => scores[k] = fv * vR[k] + fc * (100 - ucR[k]) + ft * tR[k]);
+
+  const ranked = [...keys].sort((a, b) => scores[b] - scores[a]);
+
+  // NFC placements (Haversine per district)
+  const placements = [];
+  ranked.forEach((k, idx) => {
+    const d = DISTRICT_INDEX[k];
+    const pins = d.pins;
+    let bestPin = pins[0], bestCvw = -1, bestCpins = 0;
+    pins.forEach(cand => {
+      let cvw = 0, cpins = 0;
+      pins.forEach(other => {
+        if (_hav(cand.cy, cand.cx, other.cy, other.cx) <= rKm) { cvw += (other.v || 0); cpins++; }
+      });
+      if (cvw > bestCvw) { bestCvw = cvw; bestCpins = cpins; bestPin = cand; }
+    });
+    const dvw = stats[k].totalViews;
+    placements.push({
+      r: idx + 1, dist: d.dist, st: d.st,
+      sc: Math.round(scores[k] * 10) / 10,
+      pin: String(bestPin.p), cx: bestPin.cx, cy: bestPin.cy,
+      dpins: pins.length, dvw,
+      cpins: bestCpins, cvw: bestCvw,
+      cpc: dvw > 0 ? Math.round(bestCvw / dvw * 1000) / 10 : 0
+    });
+  });
+
+  // Rebuild NFC marker layers
+  NFC_TIERS.forEach(t => {
+    const wasOn = map.hasLayer(nfcLayers[t.key]);
+    if (wasOn) map.removeLayer(nfcLayers[t.key]);
+    const markers = placements
+      .filter(p => p.r >= t.min && p.r <= t.max)
+      .map(p => makeNfcMarker(p, t.color, t.r, t.rh));
+    nfcLayers[t.key] = L.layerGroup(markers);
+    if (wasOn) nfcLayers[t.key].addTo(map);
+  });
+
+  // Rebuild district list
+  const list = document.getElementById('districtList');
+  if (list) {
+    list.innerHTML = '';
+    const ST_ABBR = {'Andhra Pradesh':'AP','West Bengal':'WB','Telangana':'TG','Maharashtra':'MH','Gujarat':'GJ','Uttar Pradesh':'UP','Tamil Nadu':'TN','Karnataka':'KA','Rajasthan':'RJ','Madhya Pradesh':'MP','Bihar':'BR','Odisha':'OD','Jharkhand':'JH','Punjab':'PB','Haryana':'HR','Kerala':'KL','Jammu & Kashmir':'J&K','Assam':'AS','Chhattisgarh':'CG','Uttarakhand':'UK','Himachal Pradesh':'HP','Delhi':'DL','Himachal Pradesh':'HP','Goa':'GA','Tripura':'TR','Manipur':'MN','Meghalaya':'ML','Nagaland':'NL','Arunachal Pradesh':'AR'};
+    const top = placements.slice(0, 60);
+    const minS = top[top.length - 1]?.sc || 0, maxS = top[0]?.sc || 100;
+    const span = maxS - minS || 1;
+    top.forEach(ds => {
+      const pct = Math.round((ds.sc - minS) / span * 100);
+      const c = distScore2Color(ds.sc);
+      const abbr = ST_ABBR[ds.st] || ds.st.slice(0, 2).toUpperCase();
+      const k = `${ds.dist}||${ds.st}`;
+      const avgUc = stats[k]?.avgUc;
+      const avgTat = stats[k]?.avgTat;
+      const ucStr = avgUc != null ? ` · ${avgUc.toFixed(0)}% uc` : '';
+      const tatStr = avgTat ? ` · ${avgTat.toFixed(1)}d` : '';
+      const div = document.createElement('div');
+      div.className = 'dist-row';
+      div.innerHTML =
+        `<div class="dist-rank">#${ds.r}</div>` +
+        `<div class="dist-info">` +
+          `<div class="dist-name">${ds.dist} <span class="dist-abbr">${abbr}</span></div>` +
+          `<div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:${pct}%;background:${c}"></div></div>` +
+          `<div class="dist-meta">${ds.dvw.toLocaleString()} views${ucStr}${tatStr}</div>` +
+        `</div>` +
+        `<div class="dist-score" style="color:${c}">${ds.sc}</div>`;
+      div.addEventListener('click', () => map.setView([ds.cy, ds.cx], 9, { animate: true }));
+      list.appendChild(div);
+    });
+  }
+}
+
+// Slider update handler
+function updateLeverDisplay() {
+  const wv = +document.getElementById('sldViews').value;
+  const wc = +document.getElementById('sldConv').value;
+  const wt = +document.getElementById('sldTat').value;
+  const rKm = +document.getElementById('sldRadius').value;
+  const total = wv + wc + wt || 1;
+  document.getElementById('lvViews').textContent  = Math.round(wv / total * 100) + '%';
+  document.getElementById('lvConv').textContent   = Math.round(wc / total * 100) + '%';
+  document.getElementById('lvTat').textContent    = Math.round(wt / total * 100) + '%';
+  document.getElementById('lvRadius').textContent = rKm + ' km';
+  return { wv, wc, wt, rKm };
+}
+
+let _leverTimer = null;
+function onLeverChange() {
+  const { wv, wc, wt, rKm } = updateLeverDisplay();
+  clearTimeout(_leverTimer);
+  document.getElementById('leverStatus').textContent = 'Recalculating…';
+  _leverTimer = setTimeout(() => {
+    const t0 = performance.now();
+    recomputeAll(wv, wc, wt, rKm);
+    const ms = Math.round(performance.now() - t0);
+    document.getElementById('leverStatus').textContent = `Updated in ${ms}ms`;
+  }, 250);
+}
+
+['sldViews', 'sldConv', 'sldTat', 'sldRadius'].forEach(id => {
+  document.getElementById(id).addEventListener('input', onLeverChange);
+});
+
+document.getElementById('leverReset').addEventListener('click', () => {
+  document.getElementById('sldViews').value  = 2;
+  document.getElementById('sldConv').value   = 1;
+  document.getElementById('sldTat').value    = 1;
+  document.getElementById('sldRadius').value = 10;
+  onLeverChange();
+});
+
+// Initialise display labels without triggering recomputation
+updateLeverDisplay();
 
 </script>
 </body>
