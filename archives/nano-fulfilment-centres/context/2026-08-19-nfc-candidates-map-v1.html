@@ -124,19 +124,27 @@
 
   /* ── Scoring Levers ───────────────────────────────────────────────── */
   .levers-section { padding:10px 0 6px; border-top:1px solid var(--border); margin-top:10px; }
-  .levers-header { display:flex; justify-content:space-between; align-items:center;
-    font-size:10px; text-transform:uppercase; letter-spacing:.07em;
+  .levers-header { font-size:10px; text-transform:uppercase; letter-spacing:.07em;
     color:var(--muted); font-weight:600; margin-bottom:8px; }
-  .lever-reset { font-size:10px; color:var(--accent); cursor:pointer;
-    background:none; border:none; padding:0; font-family:inherit; }
-  .lever-reset:hover { text-decoration:underline; }
   .lever-row { margin-bottom:7px; }
   .lever-label { display:flex; justify-content:space-between;
     font-size:11px; color:var(--ink); margin-bottom:3px; }
   .lever-val { font-family:'Courier New',monospace; color:var(--muted); font-size:10px; }
   .lever-range { width:100%; height:4px; accent-color:var(--accent);
     cursor:pointer; display:block; }
+  .lever-sum { font-size:11px; margin-top:4px; margin-bottom:2px; }
+  .lever-sum.ok   { color:var(--muted); }
+  .lever-sum.over { color:#ef4444; font-weight:600; }
   .lever-divider { border:none; border-top:1px dashed var(--border); margin:10px 0 8px; }
+  .lever-buttons { display:flex; gap:6px; margin-top:10px; }
+  .lever-btn { flex:1; padding:5px 0; font-size:11px; font-family:inherit;
+    border-radius:4px; cursor:pointer; border:1px solid var(--border);
+    font-weight:500; transition:opacity .15s; }
+  .lever-btn-reset { background:var(--surface); color:var(--ink); }
+  .lever-btn-reset:hover { border-color:var(--muted); }
+  .lever-btn-refresh { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .lever-btn-refresh:hover:not(:disabled) { opacity:.85; }
+  .lever-btn-refresh:disabled { opacity:.35; cursor:not-allowed; }
   .lever-status { font-size:10px; color:var(--muted); margin-top:6px; min-height:14px; font-style:italic; }
 </style>
 </head>
@@ -290,26 +298,28 @@
 
         <div id="districtList" style="margin-top:4px;max-height:300px;overflow-y:auto;overflow-x:hidden"></div>
         <div class="levers-section">
-          <div class="levers-header">
-            Scoring Levers
-            <button class="lever-reset" id="leverReset">Reset</button>
+          <div class="levers-header">Scoring Levers</div>
+          <div class="lever-row">
+            <div class="lever-label">Views <span class="lever-val" id="lvViews">50</span></div>
+            <input type="range" class="lever-range" id="sldViews" min="0" max="100" step="1" value="50">
           </div>
           <div class="lever-row">
-            <div class="lever-label">Views weight <span class="lever-val" id="lvViews">50%</span></div>
-            <input type="range" class="lever-range" id="sldViews" min="0" max="10" step="1" value="2">
+            <div class="lever-label">Conversion <span class="lever-val" id="lvConv">25</span></div>
+            <input type="range" class="lever-range" id="sldConv" min="0" max="100" step="1" value="25">
           </div>
           <div class="lever-row">
-            <div class="lever-label">Conversion weight <span class="lever-val" id="lvConv">25%</span></div>
-            <input type="range" class="lever-range" id="sldConv" min="0" max="10" step="1" value="1">
+            <div class="lever-label">TAT <span class="lever-val" id="lvTat">25</span></div>
+            <input type="range" class="lever-range" id="sldTat" min="0" max="100" step="1" value="25">
           </div>
-          <div class="lever-row">
-            <div class="lever-label">TAT weight <span class="lever-val" id="lvTat">25%</span></div>
-            <input type="range" class="lever-range" id="sldTat" min="0" max="10" step="1" value="1">
-          </div>
+          <div class="lever-sum ok" id="leverSum">Sum: 100 / 100</div>
           <hr class="lever-divider">
           <div class="lever-row">
             <div class="lever-label">Haversine radius <span class="lever-val" id="lvRadius">10 km</span></div>
             <input type="range" class="lever-range" id="sldRadius" min="5" max="30" step="1" value="10">
+          </div>
+          <div class="lever-buttons">
+            <button class="lever-btn lever-btn-reset" id="leverReset">Reset</button>
+            <button class="lever-btn lever-btn-refresh" id="leverRefresh">Refresh</button>
           </div>
           <div class="lever-status" id="leverStatus"></div>
         </div>
@@ -2037,7 +2047,6 @@ function recomputeAll(wv, wc, wt, rKm) {
   const keys = Object.keys(DISTRICT_INDEX);
   const n = keys.length;
 
-  // District-level stats
   const stats = {};
   keys.forEach(k => {
     const pins = DISTRICT_INDEX[k].pins;
@@ -2049,17 +2058,16 @@ function recomputeAll(wv, wc, wt, rKm) {
     stats[k] = { totalViews, avgUc, avgTat };
   });
 
-  // Percentile ranks
-  const vSorted = [...keys].sort((a, b) => stats[a].totalViews - stats[b].totalViews);
-  const ucKeys = keys.filter(k => stats[k].avgUc !== null);
+  const vSorted  = [...keys].sort((a, b) => stats[a].totalViews - stats[b].totalViews);
+  const ucKeys   = keys.filter(k => stats[k].avgUc !== null);
   const ucSorted = [...ucKeys].sort((a, b) => stats[a].avgUc - stats[b].avgUc);
   const tSorted  = [...keys].sort((a, b) => stats[a].avgTat - stats[b].avgTat);
 
   const vR = {}, ucR = {}, tR = {};
-  vSorted.forEach((k, i) => vR[k] = (i + 1) / n * 100);
+  vSorted.forEach((k, i)  => vR[k]  = (i + 1) / n * 100);
   ucSorted.forEach((k, i) => ucR[k] = (i + 1) / ucKeys.length * 100);
-  keys.forEach(k => { if (ucR[k] == null) ucR[k] = 50; }); // neutral for no-data
-  tSorted.forEach((k, i) => tR[k] = (i + 1) / n * 100);
+  keys.forEach(k => { if (ucR[k] == null) ucR[k] = 50; });
+  tSorted.forEach((k, i)  => tR[k]  = (i + 1) / n * 100);
 
   const totalW = wv + wc + wt || 1;
   const fv = wv / totalW, fc = wc / totalW, ft = wt / totalW;
@@ -2068,7 +2076,6 @@ function recomputeAll(wv, wc, wt, rKm) {
 
   const ranked = [...keys].sort((a, b) => scores[b] - scores[a]);
 
-  // NFC placements (Haversine per district)
   const placements = [];
   ranked.forEach((k, idx) => {
     const d = DISTRICT_INDEX[k];
@@ -2092,7 +2099,6 @@ function recomputeAll(wv, wc, wt, rKm) {
     });
   });
 
-  // Rebuild NFC marker layers
   NFC_TIERS.forEach(t => {
     const wasOn = map.hasLayer(nfcLayers[t.key]);
     if (wasOn) map.removeLayer(nfcLayers[t.key]);
@@ -2103,11 +2109,10 @@ function recomputeAll(wv, wc, wt, rKm) {
     if (wasOn) nfcLayers[t.key].addTo(map);
   });
 
-  // Rebuild district list
   const list = document.getElementById('districtList');
   if (list) {
     list.innerHTML = '';
-    const ST_ABBR = {'Andhra Pradesh':'AP','West Bengal':'WB','Telangana':'TG','Maharashtra':'MH','Gujarat':'GJ','Uttar Pradesh':'UP','Tamil Nadu':'TN','Karnataka':'KA','Rajasthan':'RJ','Madhya Pradesh':'MP','Bihar':'BR','Odisha':'OD','Jharkhand':'JH','Punjab':'PB','Haryana':'HR','Kerala':'KL','Jammu & Kashmir':'J&K','Assam':'AS','Chhattisgarh':'CG','Uttarakhand':'UK','Himachal Pradesh':'HP','Delhi':'DL','Himachal Pradesh':'HP','Goa':'GA','Tripura':'TR','Manipur':'MN','Meghalaya':'ML','Nagaland':'NL','Arunachal Pradesh':'AR'};
+    const ST_ABBR = {'Andhra Pradesh':'AP','West Bengal':'WB','Telangana':'TG','Maharashtra':'MH','Gujarat':'GJ','Uttar Pradesh':'UP','Tamil Nadu':'TN','Karnataka':'KA','Rajasthan':'RJ','Madhya Pradesh':'MP','Bihar':'BR','Odisha':'OD','Jharkhand':'JH','Punjab':'PB','Haryana':'HR','Kerala':'KL','Jammu & Kashmir':'J&K','Assam':'AS','Chhattisgarh':'CG','Uttarakhand':'UK','Himachal Pradesh':'HP','Delhi':'DL','Goa':'GA','Tripura':'TR','Manipur':'MN','Meghalaya':'ML','Nagaland':'NL','Arunachal Pradesh':'AR'};
     const top = placements.slice(0, 60);
     const minS = top[top.length - 1]?.sc || 0, maxS = top[0]?.sc || 100;
     const span = maxS - minS || 1;
@@ -2136,46 +2141,59 @@ function recomputeAll(wv, wc, wt, rKm) {
   }
 }
 
-// Slider update handler
+// ── Lever UI controls ──────────────────────────────────────────────────────
 function updateLeverDisplay() {
   const wv = +document.getElementById('sldViews').value;
   const wc = +document.getElementById('sldConv').value;
   const wt = +document.getElementById('sldTat').value;
   const rKm = +document.getElementById('sldRadius').value;
-  const total = wv + wc + wt || 1;
-  document.getElementById('lvViews').textContent  = Math.round(wv / total * 100) + '%';
-  document.getElementById('lvConv').textContent   = Math.round(wc / total * 100) + '%';
-  document.getElementById('lvTat').textContent    = Math.round(wt / total * 100) + '%';
+  const sum = wv + wc + wt;
+  const over = sum > 100;
+
+  document.getElementById('lvViews').textContent  = wv;
+  document.getElementById('lvConv').textContent   = wc;
+  document.getElementById('lvTat').textContent    = wt;
   document.getElementById('lvRadius').textContent = rKm + ' km';
+
+  const sumEl = document.getElementById('leverSum');
+  sumEl.textContent = `Sum: ${sum} / 100${over ? ' — reduce to enable Refresh' : ''}`;
+  sumEl.className = 'lever-sum ' + (over ? 'over' : 'ok');
+
+  const btn = document.getElementById('leverRefresh');
+  btn.disabled = over;
+
   return { wv, wc, wt, rKm };
 }
 
-let _leverTimer = null;
-function onLeverChange() {
-  const { wv, wc, wt, rKm } = updateLeverDisplay();
-  clearTimeout(_leverTimer);
-  document.getElementById('leverStatus').textContent = 'Recalculating…';
-  _leverTimer = setTimeout(() => {
+['sldViews', 'sldConv', 'sldTat', 'sldRadius'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateLeverDisplay);
+});
+
+document.getElementById('leverRefresh').addEventListener('click', () => {
+  const wv = +document.getElementById('sldViews').value;
+  const wc = +document.getElementById('sldConv').value;
+  const wt = +document.getElementById('sldTat').value;
+  const rKm = +document.getElementById('sldRadius').value;
+  const status = document.getElementById('leverStatus');
+  status.textContent = 'Recalculating…';
+  setTimeout(() => {
     const t0 = performance.now();
     recomputeAll(wv, wc, wt, rKm);
     const ms = Math.round(performance.now() - t0);
-    document.getElementById('leverStatus').textContent = `Updated in ${ms}ms`;
-  }, 250);
-}
-
-['sldViews', 'sldConv', 'sldTat', 'sldRadius'].forEach(id => {
-  document.getElementById(id).addEventListener('input', onLeverChange);
+    status.textContent = `Updated in ${ms}ms`;
+  }, 0);
 });
 
 document.getElementById('leverReset').addEventListener('click', () => {
-  document.getElementById('sldViews').value  = 2;
-  document.getElementById('sldConv').value   = 1;
-  document.getElementById('sldTat').value    = 1;
+  document.getElementById('sldViews').value  = 50;
+  document.getElementById('sldConv').value   = 25;
+  document.getElementById('sldTat').value    = 25;
   document.getElementById('sldRadius').value = 10;
-  onLeverChange();
+  updateLeverDisplay();
+  document.getElementById('leverStatus').textContent = '';
 });
 
-// Initialise display labels without triggering recomputation
+// Initialise display without triggering recompute
 updateLeverDisplay();
 
 </script>
