@@ -2146,17 +2146,17 @@ function recomputeAll(wv, wc, wt, rKm) {
   const stats = {};
   keys.forEach(k => {
     const pins = DISTRICT_INDEX[k].pins;
-    const totalViews  = pins.reduce((s, p) => s + (p.v || 0), 0);
-    const totalOrders = pins.reduce((s, p) => s + (p.o || 0), 0);
-    const distConv    = totalViews > 0 ? totalOrders / totalViews * 100 : null;
+    const totalViews = pins.reduce((s, p) => s + (p.v || 0), 0);
+    const ucPins = pins.filter(p => p.uc != null);
+    const avgUc  = ucPins.length ? ucPins.reduce((s, p) => s + p.uc, 0) / ucPins.length : null;
     const tatPins = pins.filter(p => p.at != null);
     const avgTat  = tatPins.length ? tatPins.reduce((s, p) => s + p.at, 0) / tatPins.length : 0;
-    stats[k] = { totalViews, distConv, avgTat };
+    stats[k] = { totalViews, avgUc, avgTat };
   });
 
   const vSorted  = [...keys].sort((a, b) => stats[a].totalViews - stats[b].totalViews);
-  const ucKeys   = keys.filter(k => stats[k].distConv !== null);
-  const ucSorted = [...ucKeys].sort((a, b) => stats[a].distConv - stats[b].distConv);
+  const ucKeys   = keys.filter(k => stats[k].avgUc !== null);
+  const ucSorted = [...ucKeys].sort((a, b) => stats[a].avgUc - stats[b].avgUc);
   const tSorted  = [...keys].sort((a, b) => stats[a].avgTat - stats[b].avgTat);
 
   const vR = {}, ucR = {}, tR = {};
