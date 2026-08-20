@@ -1910,8 +1910,10 @@ document.getElementById('tog-districts').addEventListener('click', () => {
   document.getElementById('pill-districts').classList.toggle('on', state.districts);
   if (state.districts) {
     districtLayer.eachLayer(l => districtLayer.resetStyle(l));
+    districtLayer.getPane().style.pointerEvents = '';
   } else {
     districtLayer.eachLayer(l => l.setStyle({ fillOpacity: 0, opacity: 0, weight: 0 }));
+    districtLayer.getPane().style.pointerEvents = 'none';
   }
 });
 
