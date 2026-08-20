@@ -385,9 +385,8 @@
             </div>
           </div>
 
-          <div class="dash-cols">
-            <div class="dash-card">
-              <div class="dash-card-title">NFC Candidates — Top 60 Districts</div>
+          <div class="dash-card">
+            <div class="dash-card-title">NFC Candidates — All 513 Districts</div>
               <div class="dist-legend" style="margin-bottom:8px">
                 <span class="swatch" style="background:#bbf7d0"></span>
                 <span class="swatch" style="background:#4ade80"></span>
@@ -398,13 +397,7 @@
               </div>
               <div id="districtList"></div>
             </div>
-            <div class="dash-card" style="flex:0 0 260px">
-              <div class="dash-card-title">NFC Traffic — Top Cities</div>
-              <table class="top">
-                <thead><tr><th>City</th><th class="n" id="cityMetricHdr">Orders</th></tr></thead>
-                <tbody id="cityTable"></tbody>
-              </table>
-            </div>
+
           </div>
 
         </div>
@@ -2091,7 +2084,7 @@ document.getElementById('tog-traffic').addEventListener('click', () => {
 (function() {
   const list = document.getElementById('districtList');
   if (!list) return;
-  const top = DISTRICT_SCORES_ARRAY.slice(0, 60);
+  const top = DISTRICT_SCORES_ARRAY;
   const minS = top[top.length-1].score;
   const maxS = top[0].score;
   const span = maxS - minS || 1;
@@ -2204,7 +2197,7 @@ function recomputeAll(wv, wc, wt, rKm) {
   if (list) {
     list.innerHTML = '';
     const ST_ABBR = {'Andhra Pradesh':'AP','West Bengal':'WB','Telangana':'TG','Maharashtra':'MH','Gujarat':'GJ','Uttar Pradesh':'UP','Tamil Nadu':'TN','Karnataka':'KA','Rajasthan':'RJ','Madhya Pradesh':'MP','Bihar':'BR','Odisha':'OD','Jharkhand':'JH','Punjab':'PB','Haryana':'HR','Kerala':'KL','Jammu & Kashmir':'J&K','Assam':'AS','Chhattisgarh':'CG','Uttarakhand':'UK','Himachal Pradesh':'HP','Delhi':'DL','Goa':'GA','Tripura':'TR','Manipur':'MN','Meghalaya':'ML','Nagaland':'NL','Arunachal Pradesh':'AR'};
-    const top = placements.slice(0, 60);
+    const top = placements;
     const minS = top[top.length - 1]?.sc || 0, maxS = top[0]?.sc || 100;
     const span = maxS - minS || 1;
     top.forEach(ds => {
@@ -2311,5 +2304,6 @@ function switchTab(tab) {
 }
 
 </script>
+<div style="display:none" aria-hidden="true"><span id="cityMetricHdr"></span><table><tbody id="cityTable"></tbody></table></div>
 </body>
 </html>
