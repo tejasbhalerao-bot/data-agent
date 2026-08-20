@@ -2053,10 +2053,10 @@ NFC_TIERS.forEach(t => {
     state[t.key] = !state[t.key];
     document.getElementById(`pill-${t.key}`).classList.toggle('on', state[t.key]);
     if (state[t.key]) {
-      map.addLayer(lg);
-      lg.getLayers().forEach(m => m.redraw && m.redraw());
+      map.addLayer(nfcLayers[t.key]);
+      nfcLayers[t.key].getLayers().forEach(m => m.redraw && m.redraw());
     } else {
-      map.removeLayer(lg);
+      map.removeLayer(nfcLayers[t.key]);
     }
   });
 });
