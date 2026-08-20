@@ -2104,7 +2104,7 @@ document.getElementById('tog-traffic').addEventListener('click', () => {
         (ds.tat ? ` &middot; ${ds.tat}d` : '') + `</div>` +
       `</div>` +
       `<div class="dist-score" style="color:${c}">${ds.score}</div>`;
-    div.addEventListener('click', () => map.setView([ds.lat, ds.lon], 9, {animate:true}));
+    div.addEventListener('click', () => { switchTab('map'); map.setView([ds.lat, ds.lon], 9, {animate:true}); });
     list.appendChild(div);
   });
 })();
@@ -2221,7 +2221,7 @@ function recomputeAll(wv, wc, wt, rKm) {
           `<div class="dist-meta">${ds.dvw.toLocaleString()} views${ucStr}${tatStr}</div>` +
         `</div>` +
         `<div class="dist-score" style="color:${c}">${ds.sc}</div>`;
-      div.addEventListener('click', () => map.setView([ds.cy, ds.cx], 9, { animate: true }));
+      div.addEventListener('click', () => { switchTab('map'); map.setView([ds.cy, ds.cx], 9, { animate: true }); });
       list.appendChild(div);
     });
   }
