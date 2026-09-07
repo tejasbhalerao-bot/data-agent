@@ -2804,3 +2804,47 @@ Adding E.2 on top of E.1 is net negative for this segment: 187 Early-egregious p
 | **Uplift** | | | **+2.54pp / 1.54×** |
 
 **Caveat:** RTO file covers June–July; base data is July only. June orders in the RTO file are excluded from the join (no match in base data) — so the 7.22% figure is clean. However, July orders that RTOd after July-end (e.g. late-July shipments bouncing back in August) are missed, making 7.22% a slight undercount.
+
+---
+
+## #62 — Promise-Aware Reallocation: Adherence Uplift Potential
+
+**Request:** Across all July 2026 orders with a delivery attempt, quantify the adherence uplift potential from promise-aware courier reallocation — i.e. selecting a courier at invoice time whose TAT fits within the remaining budget to the customer's original promise date.
+
+**Base population:** 628,846 orders with a delivery attempt (out of 803,997 total)
+
+### Q1 — Late orders
+
+| Metric | Count | % of base |
+|--------|-------|-----------|
+| Late orders (delivery attempt > digitised promise) | 93,876 | 14.93% |
+
+### Q2 — Total Addressable Market (courier-adherent lates)
+
+Orders where the shipping courier hit their own TAT (`actual_tat ≤ shipping_delivery_promise`) but still missed the customer's digitised promise. These are pure allocation failures — the courier performed correctly, but was too slow for the remaining budget at the time of selection.
+
+| Metric | Count | % of Q1 | % of base |
+|--------|-------|----------|-----------|
+| Q2 — courier-adherent lates (TAM) | 39,016 | 41.56% | 6.20% |
+
+### Q2 breakdown — addressability
+
+| Bucket | Orders | % of Q2 | % of base | Notes |
+|--------|--------|----------|-----------|-------|
+| Switched to slower courier | 12,844 | 32.9% | **2.04%** | Definitively addressable — original faster courier already existed in the system |
+| Same courier, pipeline slipped | 24,422 | 62.6% | **3.88%** | Upper-bound addressable — a faster courier may have existed but cannot confirm from CSV alone |
+| Switched to faster/same TAT | 1,750 | 4.5% | 0.28% | Not addressable by reallocation — courier already faster, problem is elsewhere |
+
+### Impact summary
+
+| Scenario | Uplift potential |
+|----------|-----------------|
+| Conservative floor (switched-to-slower only) | **2.04pp** |
+| Full TAM ceiling (all Q2) | **6.20pp** |
+
+**Interpretation:**
+- The 2.04pp floor represents orders where we *know* the system had a faster courier available — it was the one originally selected at digitisation — and switched away from it at shipping. Promise-aware reallocation would have kept or returned to that faster courier.
+- The 6.20pp ceiling assumes all 39,016 courier-adherent lates are rescuable. The 24,422 same-courier pipeline-slip orders sit between floor and ceiling: they need a different courier to have been selected, and whether that courier existed is untested without the Pincode TAT Adherence table.
+- The remaining 54,860 late orders (Q1 − Q2 = 93,876 − 39,016) are courier-performance failures — the courier missed their own TAT. Reallocation alone cannot fix these.
+
+**Script:** `archives/egregiously-miscalibrated-promises/scripts/2026-09-07-aggregate-promise-aware-reallocation-impact-v1.py`
