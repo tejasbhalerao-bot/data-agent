@@ -3,6 +3,7 @@
 | File | Description | Location |
 |------|-------------|----------|
 | `all-orders-july-2026.csv` | All July 2026 orders with promise inputs (at digitization), actuals, and shipping state. ~804K rows, 42 columns. | `raw-data/all-orders-july-2026.csv` (local only, gitignored) · [Google Drive](https://drive.google.com/file/d/1qu_zpxGB8bYo5u6sGCvfz_kQGmiD0E50/view?usp=sharing) |
+| `all-orders-august-2026.xlsx` | Same schema as the July export, for August 2026 orders. 850,115 rows, 42 columns. | `raw-data/all-orders-august-2026.xlsx` (local only, gitignored) |
 
 ---
 

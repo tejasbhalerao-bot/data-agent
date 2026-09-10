@@ -2848,3 +2848,31 @@ Orders where the shipping courier hit their own TAT (`actual_tat ≤ shipping_de
 - The remaining 54,860 late orders (Q1 − Q2 = 93,876 − 39,016) are courier-performance failures — the courier missed their own TAT. Reallocation alone cannot fix these.
 
 **Script:** `archives/egregiously-miscalibrated-promises/scripts/2026-09-07-aggregate-promise-aware-reallocation-impact-v1.py`
+
+---
+
+## #63 — Promise lead time and delivery-date adherence, August 2026 export
+
+**Request:** For a fresh August 2026 orders export (850,115 orders, same 42-column schema as the July dataset), compute the average lead time between order digitisation and the promised delivery date, and the percentage of orders that were picked up and delivered (1st attempt) on exactly the promised date.
+
+**Base population:** 850,115 orders (August 2026), from `raw-data/all-orders-august-2026.xlsx`. `digitised_ts` range: 2026-08-01 00:00:09 → 2026-08-31 23:59:58.
+
+### Q1 — Average promise lead time
+
+`avg(DATE(digitised_delivery_promise) - DATE(digitised_ts))`
+
+| Metric | Value |
+|--------|-------|
+| Orders with both timestamps present | 849,616 |
+| Average lead time | **2.9600 days** |
+
+### Q2 — % of orders picked up and delivered exactly on promise date
+
+`pickup_time IS NOT NULL AND DATE(delivery_attempt_time) = DATE(digitised_delivery_promise)`. Denominator = all orders in the file.
+
+| Metric | Count | % of all orders |
+|--------|-------|------------------|
+| Matching orders | 369,467 | **43.4608%** |
+| All orders (denominator) | 850,115 | — |
+
+**Script:** `archives/egregiously-miscalibrated-promises/scripts/2026-09-10-aggregate-promise-lead-time-and-date-adherence-v1.py`
