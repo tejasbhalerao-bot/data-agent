@@ -2,13 +2,17 @@
 # Create a versioned file in a project folder.
 #
 # Usage:
-#   ./workflows/scripts/new-file.sh <project> <folder> <descriptor> <ext>
+#   scripts/new-file.sh <project> <folder> <descriptor> <ext>
 #
 # Example:
-#   ./workflows/scripts/new-file.sh pba analysis-plans pba-analysis-plan md
-#   → archives/pba/analysis-plans/2026-05-21-pba-analysis-plan-v1.md
+#   scripts/new-file.sh pba insights pba-sdd-adherence md
+#   → archives/pba/insights/2026-10-09-pba-sdd-adherence-v1.md
 #
-# Folders: analysis-plans | queries-dump | scripts | insights | tests | outputs | context
+# Folders: queries-dump | scripts | insights | tests | outputs | context  (analysis-plans exists only in legacy projects)
+#
+# Runs from the repo root regardless of where it is called from.
+
+cd "$(dirname "$0")/.." || exit 1
 
 set -e
 
@@ -19,7 +23,7 @@ EXT="$4"
 
 if [[ -z "$PROJECT" || -z "$FOLDER" || -z "$DESCRIPTOR" || -z "$EXT" ]]; then
   echo "Usage: $0 <project> <folder> <descriptor> <ext>"
-  echo "Example: $0 pba analysis-plans pba-analysis-plan md"
+  echo "Example: $0 pba insights pba-sdd-adherence md"
   exit 1
 fi
 
