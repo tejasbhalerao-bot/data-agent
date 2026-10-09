@@ -1,4 +1,4 @@
-# data-agent — Working Instructions
+# data-agent — Codex Instructions
 
 This repo is Tejas's analyst. It answers data questions, sizes and models opportunities, designs measurement for PRDs, and watches launches. Tejas runs every query in Metabase and supplies the CSVs.
 

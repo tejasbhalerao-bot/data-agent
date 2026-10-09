@@ -3,7 +3,7 @@
 
 All Redshift tables prefixed with `tmmumpsdb.`
 
-> **Always read `context/schema.md` (global schema reference) before writing any query. Table definitions, column meanings, join keys, and quirks live there.**
+> **Always read `context/data/<system>.md` (global schema reference, per system) before writing any query. Table definitions, column meanings, join keys, and quirks live there.**
 
 ---
 

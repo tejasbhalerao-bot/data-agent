@@ -1,48 +1,28 @@
 # data-agent
 
-Truemeds data analysis workflows, scripts, and insights.
+Tejas's analyst, as a repo. It answers data questions, sizes and models opportunities, designs measurement for PRDs, and watches launches. Tejas runs queries in Metabase; the agent writes and checks them, computes every figure from code, and saves a note per request.
 
-## Structure
+## How to use
+Open this folder in Claude Code and paste a request from [WORKFLOW_GUIDE.md](WORKFLOW_GUIDE.md). Every request starts at `workflows/route.md`. A complete request needs at most one batched question, one Metabase run and a non-blocking read.
 
+## Layout
 ```
 data-agent/
-├── workflows/
-│   ├── skills/         # General Claude skills, always invoked at session start
-│   └── prompts/        # Reusable prompt templates for analysis steps
-├── context/            # Global: schema docs, data dictionary, Truemeds domain SOPs
-├── archives/
-│   └── [project]/      # One folder per structured analysis project
-│       ├── context/        # Project-specific schema refs, sample rows, notes
-│       ├── analysis-plans/ # Analysis plan docs
-│       ├── queries-dump/   # SQL queries written for this analysis
-│       ├── raw-data/       # Sample raw data (gitignored for large files)
-│       ├── scripts/        # Data structuring + aggregate scripts
-│       ├── tests/          # Script tests
-│       ├── outputs/        # Script run results (gitignored for large files)
-│       └── insights/       # Final interpreted findings
-├── recurring/          # Scheduled/weekly analyses (KPI monitors, recurring reports)
-├── changelogs/         # Session-by-session amendments to skills
-└── scratch/            # Ad-hoc, anomaly investigations (gitignored)
+├── CLAUDE.md            working rules, file routing, save rule
+├── WORKFLOW_GUIDE.md    one copy-paste request template per job
+├── context/             shared knowledge (see context/README.md)
+│   ├── CLAUDE.md  metrics.md  rules.md  findings.md
+│   ├── data/<system>.md       schema per system
+│   └── queries/INDEX.md       validated SQL index
+├── workflows/           route · loop · jobs · review · update-context
+├── templates/           note.md · methods.md
+├── scripts/             new-file.sh · commit-and-push.sh · validate-csv.py
+├── archives/<project>/  context · queries-dump · scripts · tests · insights · raw-data · outputs
+├── changelogs/          design records
+└── scratch/             throwaway (gitignored)
 ```
 
-## File Naming
+## Flow
+Route (ready-check, job, tier) → Brief (Tier 2) → Build SQL, review, one handoff pack → Tejas runs once → validate CSV → compute with a script → note → review → save and push → Tejas reads and signs off.
 
-All versioned files: `yyyy-mm-dd-<descriptor>.<ext>`
-
-Examples:
-- `2026-05-21-pba-analysis-plan.md`
-- `2026-05-21-structure-raw-shipments.py`
-- `2026-05-21-aggregate-courier-performance.sql`
-
-## Workflow (Structured Analysis)
-
-1. Create `archives/[project]/`
-2. Drop schema ref + sample rows in `archives/[project]/context/`
-3. Build analysis plan → `analysis-plans/`
-4. Write/dump queries → `queries-dump/`
-5. Push sample raw data → `raw-data/`
-6. Write structuring script → `scripts/`
-7. Write aggregates script → `scripts/`
-8. Test both → `tests/`
-9. Run scripts, save outputs → `outputs/`
-10. Interpret findings → `insights/`
+Design record: `changelogs/2026-10-09-analyst-model-redesign-proposal.md`.
