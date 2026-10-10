@@ -1,7 +1,6 @@
 ---
 project: <slug>
 job: analyse | model | design | rollout | measure
-tier: 1 | 2
 status: brief | awaiting-data | analysing | review | saved
 awaiting: []
 defaults_used: []
@@ -19,7 +18,7 @@ as_of: YYYY-MM-DD
 ## So what
 <Recommended decision or next action. For measure/readout: ship / iterate / kill. For model: the range and what would change it.>
 
-## Brief  (Tier 2; delete once answered if unchanged)
+## Brief  (delete once answered if unchanged)
 - **Objective:**
 - **Questions:** Q1 ... (each independently answerable)
 - **Definitions used:** <metric names from metrics.md, variant if any>

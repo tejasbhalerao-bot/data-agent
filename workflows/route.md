@@ -1,6 +1,6 @@
 ---
 name: route
-description: Entry point for all data-agent work. Always runs first. Checks the request is complete, picks the job and tier, loads context, then hands to the loop.
+description: Entry point for all data-agent work. Always runs first. Checks the request is complete, picks the job, loads context, checks saved notes, then hands to the loop.
 ---
 
 # Route
@@ -17,7 +17,7 @@ An explicit `Job:` line wins (analyse, model, design, rollout, measure, update-c
 Check the request against the job's required inputs in `jobs.md`. Classify each gap:
 
 - **Defaultable:** fill from `context/rules.md` section 2 (window, verticals, comparison, exclusions). Do not ask. List every default used on the note's first line.
-- **Blocking:** an undefined metric, a cohort definition that changes the answer, a missing control, missing PRD input, or (for Tier 1 and 2 only) no project. Send **one** message listing all blocking gaps, then continue. Never ask one question at a time.
+- **Blocking:** an undefined metric, a cohort definition that changes the answer, a missing control, missing PRD input, or no project (unless a saved note answers it). Send **one** message listing all blocking gaps, then continue. Never ask one question at a time.
 
 Ask only what context cannot answer: check `metrics.md` and `rules.md` first.
 
@@ -36,13 +36,9 @@ Gaps: <systems with no docs, open rules.md gaps that touch this request>
 If a named system has no documents, offer once: pause and add them, or proceed with flagged assumptions.
 If two documents disagree, the later `updated` date wins; if a metric has conflicting variants in `metrics.md`, ask which to use.
 
-## 5. Tier
-| Tier | Test | Path |
-|---|---|---|
-| 0 Recall | A saved note answers it and the as-of date is acceptable | Answer with source and as-of; offer a refresh |
-| 1 Quick | Every term resolves in `metrics.md`, every table is in `data/`, one main query | Loop without a brief |
-| 2 Full | Anything else | Full loop |
-
-**Project:** Tier 0 needs none (search all projects' notes). Tier 1 and 2 create files, so they need a project folder in `archives/`: if none is named, ask which; if it is new, create it from `archives/_template`. Nothing is saved without one.
+## 5. Saved notes, and whether to write a note
+- **Saved-note check:** if a note in `archives/<project>/insights/` (or another project's, for the same metric) answers the request and its data window ended within the last 7 days, quote it with its window and date, offer a refresh, and stop. A stale or partial match is not enough: carry on.
+- **Note or chat:** write a note only if the request names the decision it feeds, or Tejas asks for one. Otherwise the loop runs without a brief and the answer goes in chat.
+- **Project:** needed for anything that creates files, which is every new query or script; not needed when a saved note answers it. If none is named, ask which; if it is new, create it from `archives/_template`. Nothing is saved without one.
 
 Then follow `workflows/loop.md`. For job-specific intake, method and output, use the card in `workflows/jobs.md`.

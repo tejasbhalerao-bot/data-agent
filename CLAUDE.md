@@ -15,17 +15,16 @@ Do not rely on memory from earlier sessions for schema, metrics, rules or data s
 5. **Each metric has one meaning.** If two sources define a metric differently, or you cannot pin down what a term means, ask Tejas which to use. Never choose silently. Once he decides, record it.
 
 ## Sign-off, save and push
-Requests are sorted into three tiers by the router (`workflows/route.md`):
-- **Tier 0, recall:** the answer is already in a saved note in a project's `insights/` folder, and is recent enough to quote. No new query.
-- **Tier 1, quick:** a simple question: every term and table involved is already documented and one main query answers it.
-- **Tier 2, full:** anything else: new definitions, several steps, or a result that feeds a decision.
+Two rules decide how much work a request needs:
+- **Check saved notes first.** Search `insights/` in the named project, and in other projects for the same metric. If a note answers the request and its data window ended within the last 7 days, quote it with its window and date, offer a refresh, and stop. Otherwise carry on.
+- **Write a note only when a decision depends on the result.** That means the request names the decision it feeds, or Tejas asks for a note. Otherwise answer in chat with the source and the data window; no note.
 
-- **Tier 2 notes:** after the note check passes, save the note and everything created for it locally (`signed_off: false`) and present it. **Nothing is pushed before Tejas signs off.**
-- **Tier 0 and Tier 1:** answer in chat with source and as-of; no note is saved. Queries and scripts made along the way stay local and unpushed unless Tejas says "save", which then follows the sign-off rule below.
+- **Notes:** after the note check passes, save the note and everything created for it locally (`signed_off: false`) and present it. **Nothing is pushed before Tejas signs off.**
+- **Chat answers:** queries and scripts made along the way stay local and unpushed unless Tejas says "save", which then follows the sign-off rule below.
 - **What counts as sign-off:** Tejas replies "ok", "approved", "looks good", "save it", "sign off" or similar to the presented note. Questions, change requests and silence do not count: revise, re-run the note check, and present again.
 - **On sign-off:** set `signed_off: true`, then commit and push everything from the request in one commit straight to `main` with `scripts/commit-and-push.sh "<message>" <paths>`. State the message and paths. That push is pre-authorised for the note, its queries, scripts, tests, and the additive context changes defined in `workflows/update-context.md`.
 - **Context changes:** a change to an existing definition or rule needs Tejas's approval first. A direct request from Tejas to update context is its own approval: push it right away.
-- **A project folder is required for anything that creates files** (Tier 1 and 2; Tier 0 needs none). Nothing is saved unless there is a project folder in `archives/` to hold it: notes, queries, scripts, tests and data all live in one. If the request names no project, ask which; if it is new, create it from `archives/_template` first. Only shared context (schema, metrics, rules) is saved outside a project, and only through `workflows/update-context.md`.
+- **A project folder is required for anything that creates files**, which is every new query or script. It is not needed when a saved note answers the request. Nothing is saved unless there is a project folder in `archives/` to hold it: notes, queries, scripts, tests and data all live in one. If the request names no project, ask which; if it is new, create it from `archives/_template` first. Only shared context (schema, metrics, rules) is saved outside a project, and only through `workflows/update-context.md`.
 - **Never push** `raw-data/`, `outputs/` or `scratch/`.
 
 ## Elements of the repo
@@ -42,12 +41,12 @@ What each element is for and when it is used. Shared files in `context/` change 
 ### Engine
 | Element | Location | Purpose | Trigger |
 |---|---|---|---|
-| Router | `workflows/route.md` | Ready-check, job, tier, context load | Every data request, first |
-| Loop | `workflows/loop.md` | Six phases from brief to save | After routing, Tier 1 and 2 |
+| Router | `workflows/route.md` | Ready-check, job, context load, saved-note check | Every data request, first |
+| Loop | `workflows/loop.md` | Six phases from brief to save | After routing, unless a saved note answered it |
 | Job cards | `workflows/jobs.md` | Inputs, method and note additions per job | Ready-check; Build and Answer phases |
 | Review | `workflows/review.md` | Three checkpoints: SQL, CSV, note | Before handoff, on file drop, before save |
 | Context updates | `workflows/update-context.md` | Add or change schema, metric, rule, validated query | Undefined term, undocumented table, new quirk, sign-off, or Tejas's direct request |
-| Note template | `templates/note.md` | The one note per Tier 2 request | Phase 2 (brief) |
+| Note template | `templates/note.md` | The one note per request that feeds a decision | Phase 2 (brief) |
 | Methods | `templates/methods.md` | Sample size, SRM, significance, ranges | `design`, `rollout`, `measure` jobs |
 
 ### Tools

@@ -8,9 +8,9 @@ description: The shared engine. Six phases from brief to saved note. Every job u
 Phases are fixed. Checks are in `review.md`. Job differences are in `jobs.md`.
 
 ## 1. Route
-Done in `route.md`. Output: job, tier, defaults used, context loaded.
+Done in `route.md`. Output: job, defaults used, context loaded, and whether a note will be written.
 
-## 2. Brief (Tier 2 only)
+## 2. Brief (only when a note will be written)
 Build from the intake: objective, questions (each independently answerable), definitions used (name them from `metrics.md`), tables, expected output columns and grain, the decision this feeds, defaults used. Create the note with `./scripts/new-file.sh <project> insights <project>-<topic> md` using `templates/note.md`, status `brief`.
 **Gate A only if a blocking assumption was made:** show the brief, wait for approval. Otherwise show it as the note header and continue.
 
@@ -32,7 +32,7 @@ Build from the intake: objective, questions (each independently answerable), def
 
 ## 6. Save
 Sign-off, save and push rules are in `CLAUDE.md` ("Sign-off, save and push"). In short:
-1. **Tier 2:** set `status: saved`, `signed_off: false`; save the note, queries, scripts and tests locally; present the note (as an Artifact). Nothing is pushed yet. **Tier 0 and 1:** answer in chat with source and as-of; no note; anything created stays local unless Tejas says "save".
+1. **Note:** set `status: saved`, `signed_off: false`; save the note, queries, scripts and tests locally; present the note (as an Artifact). Nothing is pushed yet. **Chat answer:** answer in chat with source and data window; no note; anything created stays local unless Tejas says "save".
 2. **Context block:** list proposed context changes in one block. Additive items (a new validated query, a new gotcha row) are applied locally with the diff shown. A change to an existing definition or rule waits for approval. Procedure in `update-context.md`.
 3. **On sign-off** ("ok", "approved", "looks good", "save it"; questions or change requests do not count): set `signed_off: true`, commit and push everything from the request in one commit to `main` with `scripts/commit-and-push.sh`. State the message and paths. Never stage `raw-data/` or `outputs/`. If he asks for changes, revise and re-run Check 3 before presenting again.
 

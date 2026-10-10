@@ -24,6 +24,6 @@ data-agent/
 Purpose and trigger of every element: `CLAUDE.md`, "Elements of the repo".
 
 ## Flow
-Route (ready-check, job, tier) → Brief (Tier 2) → Build SQL, review, one handoff pack → Tejas runs once → validate CSV → compute with a script → note → review → Tejas reads and signs off → push to `main`.
+Route (ready-check, job, saved-note check) → Brief (if a note is written) → Build SQL, review, one handoff pack → Tejas runs once → validate CSV → compute with a script → note → review → Tejas reads and signs off → push to `main`.
 
 Design record: `changelogs/2026-10-09-analyst-model-redesign-proposal.md`.
