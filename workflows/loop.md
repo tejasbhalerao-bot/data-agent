@@ -28,19 +28,15 @@ When he approves, create the note with `scripts/new-file.sh <project> insights <
    - Apply the filters listed for each table in `schema.md`, and any rule in `rules.md`.
    - Filter early, avoid join fan-out, use the `tmmumpsdb.` prefix and `snake_case` names.
    - Use the grain and columns Tejas gave in the brief. Do not add or drop columns on your own; if a cut later needs a column that is missing, ask him.
-   - Put a header on each query: purpose, grain, tables, definitions used, filters, expected shape.
    - Rate timeout risk. Low: up to 2 joins and 30 days. Medium: 3 to 4 joins, or 31 to 89 days. High: 5+ joins, or 90+ days. Tell Tejas the rating. For High, propose a split (by date range first) and let him choose; then write a merge script (`scripts/new-file.sh <project> scripts merge-<topic> py`) that joins the chunks and checks the row counts.
-   - Save with `scripts/new-file.sh <project> queries-dump <project>-<topic>-query sql`.
-4. **Probe.** One combined query: row count, distinct key count, and one total that reconciles to a known figure (from a signed-off note or from Tejas; if none exists, skip the reconciliation and say so).
-5. **Check the query** (`review.md`), then write the **handoff pack** as a new section, "Handoff pack", added to the end of the same note (the one holding the approved brief); never a separate file. It contains:
-   - Each query in full, in its own code block, with the path of its saved copy in `queries-dump/` (the saved file is the master; the pack is a copy for Tejas to paste into Metabase).
-   - The probe query.
-   - A table of query, then the exact filename to save its CSV as in `raw-data/`.
-   If a pack is re-presented after an error, append "Handoff pack, round 2" (and so on); earlier rounds stay.
-   Set the note's `status: awaiting-data`, fill `awaiting:`, commit it locally, and tell Tejas in chat that the pack is ready, with the note's path.
+   - **One query, one file.** Write each query as its own `.md` file in `queries-dump/`, made with `scripts/new-file.sh <project> queries-dump <project>-<topic>-query md`. The file has a short header (purpose, grain, tables, definitions used, filters, expected shape, timeout rating), then the SQL in a single ```sql code block. Never put SQL in the note.
+   - **Versions.** A query changed after Tejas has seen it (for example an error fix) is a new version of its file (`-v2`, `-v3`); earlier versions stay.
+4. **Probe.** One combined query, in its own file (`<project>-<topic>-probe-query`): row count, distinct key count, and one total that reconciles to a known figure (from a signed-off note or from Tejas; if none exists, skip the reconciliation and say so).
+5. **Check the query** (`review.md`), then add a **"Queries to run"** section to the same note (the one holding the approved brief). It is a table: query, the path of its **latest** file in `queries-dump/` (with version), and the exact filename to save its CSV as in `raw-data/`. List the probe too. The note only references the query files; it never contains SQL. When a query gets a new version, update its row to the latest.
+   Set the note's `status: awaiting-data`, fill `awaiting:`, commit the note and the query files locally, and tell Tejas in chat that the queries are ready, with the note's path.
 
 ## 4. Run
-1. Tejas runs the pack once, working from the note's "Handoff pack" section. When he next writes, check `raw-data/` for the expected files first; do not ask him to say "done". If he pastes an error, a timeout or an odd result: diagnose, fix, and re-present from phase 3. Record any new quirk beside its table in `schema.md` through `update-context`. If the query was split, run the merge script and check the combined file.
+1. Tejas runs the queries once, opening each file listed in the note's "Queries to run" table. When he next writes, check `raw-data/` for the expected files first; do not ask him to say "done". If he pastes an error, a timeout or an odd result: diagnose, write a new version of the query, update its row in the table, and re-present from phase 3. Record any new quirk beside its table in `schema.md` through `update-context`. If the query was split, run the merge script and check the combined file.
 2. **Check the CSV:** `python3 scripts/validate-csv.py <file> --key <grain columns> --require <needed columns> --date-col <date column> --probe rows=<n> --probe distinct=<n>`, with the values from the brief and the probe.
    - **FAIL from a query fault** (wrong columns, duplicate rows): fix the query, back to phase 3.
    - **FAIL from a wrong export** (cut short, wrong filters in Metabase): tell Tejas plainly what failed and ask him to re-export.

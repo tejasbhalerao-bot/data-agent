@@ -27,8 +27,8 @@ as_of: YYYY-MM-DD
 - **Tables / files:**
 - **Expected output:** <columns, grain>
 
-## Handoff pack
-<Added when the queries are ready. Each query in full with the path of its saved copy in queries-dump/, the probe, and a table of query to the exact CSV filename for raw-data/. Re-presented packs are added below as "Handoff pack, round 2".>
+## Queries to run
+<Added when the queries are ready. A table: query, path of its latest file in queries-dump/ (with version), and the exact CSV filename to save in raw-data/. Include the probe. Never paste SQL here; update a row when a query gets a new version.>
 
 ## Evidence
 <Full tables with counts and percentages. Every figure comes from a script output. Name the script and the output file (local only).>
