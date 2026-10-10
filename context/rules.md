@@ -24,8 +24,6 @@ The single home for standing filters, default scope, vocabulary and data quirks.
 
 ## 2. Default scope (used by the router when a request omits it)
 
-Mirrors rule 3 in the root `CLAUDE.md` (which also lists the exclusions). Change both together.
-
 | Field | Default |
 |-------|---------|
 | Window | Last 30 days, ending yesterday |
