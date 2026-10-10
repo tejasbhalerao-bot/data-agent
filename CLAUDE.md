@@ -17,7 +17,7 @@ Do not rely on memory from earlier sessions for schema, metrics, rules or data s
 ## Sign-off, save and push
 Two rules decide how much work a request needs:
 - **Check saved notes first.** Search `insights/` in the named project, and in other projects for the same metric. If a note answers the request and its data window ended within the last 7 days, quote it with its window and date, offer a refresh, and stop. Otherwise carry on.
-- **Write a note only when a decision depends on the result.** That means the request names the decision it feeds, or Tejas asks for a note. Otherwise answer in chat with the source and the data window; no note.
+- **Write a note only if Tejas asks for one.** Otherwise answer in chat with the source and the data window.
 
 - **Notes:** after the note check passes, save the note and everything created for it locally (`signed_off: false`) and present it. **Nothing is pushed before Tejas signs off.**
 - **Chat answers:** queries and scripts made along the way stay local and unpushed unless Tejas says "save", which then follows the sign-off rule below.
@@ -46,7 +46,7 @@ What each element is for and when it is used. Shared files in `context/` change 
 | Job cards | `workflows/jobs.md` | Inputs, method and note additions per job | Ready-check; Build and Answer phases |
 | Review | `workflows/review.md` | Three checkpoints: SQL, CSV, note | Before handoff, on file drop, before save |
 | Context updates | `workflows/update-context.md` | Add or change schema, metric, rule, validated query | Undefined term, undocumented table, new quirk, sign-off, or Tejas's direct request |
-| Note template | `templates/note.md` | The one note per request that feeds a decision | Phase 2 (brief) |
+| Note template | `templates/note.md` | The note for a request where Tejas asked for one | Phase 2 (brief) |
 | Methods | `templates/methods.md` | Sample size, SRM, significance, ranges | `design`, `rollout`, `measure` jobs |
 
 ### Tools

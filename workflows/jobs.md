@@ -5,7 +5,7 @@ description: The five job cards. Each lists required inputs, method and what the
 
 # Jobs
 
-Common required inputs for every job: **Job, Project, Decision this feeds** (optional; if given, a note is written), Scope (defaultable), Definitions (default: `metrics.md`). The cards add to these.
+Common required inputs for every job: **Job, Project, Decision this feeds** (optional; it shapes the answer, it does not trigger a note), Scope (defaultable), Definitions (default: `metrics.md`). The cards add to these.
 
 ## analyse (look backward: what happened, where, why)
 - **Required:** window and cohort (defaultable), comparison (prior period by default).
