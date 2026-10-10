@@ -1,15 +1,19 @@
 #!/bin/bash
 # Commit and push only the paths you name. Never stages anything else.
-# Usage: scripts/commit-and-push.sh "Commit message" <path> [path...]
+# Usage: scripts/commit-and-push.sh [--local] "Commit message" <path> [path...]
+#   --local  commit only; do not push
 # Example: scripts/commit-and-push.sh "Add note: sdd adherence (v1)" archives/pba-integration/insights/2026-10-09-sdd-adherence-v1.md
 
 cd "$(dirname "$0")/.." || exit 1
+
+PUSH=1
+if [ "$1" = "--local" ]; then PUSH=0; shift; fi
 
 MSG="$1"
 shift
 
 if [ -z "$MSG" ] || [ "$#" -eq 0 ]; then
-  echo "Usage: commit-and-push.sh \"message\" <path> [path...]" >&2
+  echo "Usage: commit-and-push.sh [--local] \"message\" <path> [path...]" >&2
   exit 1
 fi
 
@@ -23,6 +27,10 @@ fi
 echo "Committing: $MSG"
 git commit -m "$MSG" -- "$@" || exit 1
 
-echo "Pushing..."
-git push || exit 1
-echo "Pushed."
+if [ "$PUSH" = "1" ]; then
+  echo "Pushing..."
+  git push || exit 1
+  echo "Pushed."
+else
+  echo "Committed locally; not pushed."
+fi

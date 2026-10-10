@@ -1,6 +1,6 @@
 # data-agent
 
-Tejas's analyst, as a repo. It answers data questions, sizes and models opportunities, designs measurement for PRDs, and watches launches. Tejas runs the queries in Metabase and supplies the CSVs; the agent writes and checks the queries, calculates every number with a script, and writes a note when asked, and always for design and rollout.
+Tejas's analyst, as a repo. It answers data questions, sizes and models opportunities, designs measurement for PRDs, and watches launches. Tejas runs the queries in Metabase and supplies the CSVs; the agent writes and checks the queries, calculates every number with a script, and writes every answer into a note.
 
 ## How to use
 Open this folder in Claude Code and paste a request template from [WORKFLOW_GUIDE.md](WORKFLOW_GUIDE.md). Name the project: anything that creates a query or script is saved in that project's folder under `archives/`, and nothing is saved without one. Start the request with a `Job:` line, one of:
@@ -36,9 +36,10 @@ What each file is for and when it is used: `CLAUDE.md`, "Elements of the repo".
 ## What happens to a request
 1. The agent checks the request is complete and asks, in one message, only what it cannot work out.
 2. If a saved note with the same scope already answers it, and is recent enough (data ended within 7 days for a rolling window; no limit for a fixed past period), the agent quotes that note, offers a refresh, and stops.
-3. Otherwise it writes the queries, checks them, and gives you all of them at once, starting with one line on how it understands the product flow. Correct it if wrong.
-4. You run them in Metabase and save the CSVs in the project's `raw-data/` folder.
-5. The agent checks the CSVs, calculates the numbers with a script, and answers in chat, or in a note if you asked for one (design and rollout always produce a note).
-6. You review the note and say "ok" to sign off. Only then is it saved to GitHub. Chat answers are not saved to GitHub unless you say "save".
+3. Otherwise it shows you a short brief of what it will do, starting with one line on how it understands the product flow. You correct it or approve it. Nothing starts before you approve.
+4. It then writes the queries, checks them, and gives you all of them at once.
+5. You run them in Metabase and save the CSVs in the project's `raw-data/` folder.
+6. The agent checks the CSVs, calculates the numbers with a script, and writes the answer into a note (a `.md` file), with a short summary in chat.
+7. You review the note and say "ok" to sign off. Each stage is saved on your computer automatically; it goes to GitHub only after you sign off.
 
 Design record: `changelogs/2026-10-09-analyst-model-redesign-proposal.md`.

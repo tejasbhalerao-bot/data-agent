@@ -14,7 +14,7 @@ Always first for data requests, never skipped. Use only the local files in `work
 Read from the request: the **project** (a folder in `archives/`; may be none yet), the **systems** it touches (allocation, tracking, serviceability, eta, communications) and the **verticals** (hyperlocal, courier or B2B; forward or reverse). Anything you cannot read is a gap for step 6. Steps 4 and 5 need the systems: if you could not read them, skip to step 6, ask for everything missing in one message, then continue from step 4.
 
 ## 2. Unfinished work
-If the project has notes with `status: awaiting-data`, list them (name, and which `awaiting:` files are not yet in `raw-data/`) and ask which to continue. If all files are there, go to step 4 of `loop.md`; if some are missing, say which and stop. A chat answer has no note; it resumes through the queries and CSVs already in the project (`loop.md`, step 3, "Reuse first").
+If the project has notes with `status: awaiting-data`, list them (name, and which `awaiting:` files are not yet in `raw-data/`) and ask which to continue. If all files are there, go to step 4 of `loop.md`; if some are missing, say which and stop.
 
 ## 3. Job
 - An explicit `Job:` line wins (analyse, model, design, rollout, measure, update-context). Otherwise infer it and say so. If two jobs fit equally, ask once.
@@ -50,10 +50,10 @@ Quote a matching note with its window and date, say if it is not yet signed off,
 Check it against the job's required inputs in `jobs.md`.
 - **Settled by a rule:** `context/rules.md` covers it. Apply it, do not ask, and say so on the first line of the answer.
 - **Missing:** the project, systems or verticals, the time window, the comparison group, an undefined metric, a cohort definition, a control, PRD input, or anything else that would change the answer. Send **one** message listing everything missing: plain English, no jargon, one question per line, 20 words or fewer each. Never ask one question at a time. Ask only what `metrics.md`, `schema.md`, `rules.md` and the product docs cannot answer. If Tejas answers only part, ask again for the rest only.
-- **Project:** needed for anything that creates files, which is every new query or script. If none is named, ask which, listing the folders in `archives/`. If it is new, use a lowercase name with hyphens, run `cp -r archives/_template archives/<name>`, and fill its `context/data-sources.md`. Nothing is saved without a project.
+- **Project:** needed for every request except one answered by quoting a saved note. If none is named, ask which, listing the folders in `archives/`. If it is new, use a lowercase name with hyphens, run `cp -r archives/_template archives/<name>`, and fill its `context/data-sources.md`. Nothing is saved without a project.
 
-## 7. Note or chat
-Write a note only if Tejas asks (`Note: yes`, or plain words like "write this up"), or the job is `design` or `rollout` (their deliverable is a document). Otherwise the loop runs without a brief and the answer goes in chat.
+## 7. The note
+Every request that is not answered by quoting a saved note gets a note: a `.md` file in the project's `insights/` folder. It starts as the approved brief, grows into the answer, and is committed locally at each stage (rules in `CLAUDE.md`). The loop starts with a brief that Tejas approves.
 
 ## 8. Flow reading, then the loop
-Write one line, "My reading of the flow: …": what the customer or operator sees, and which tables record it, from the product docs and `schema.md`. If there are no product docs for the systems, say the reading rests on `schema.md` alone. Then follow `loop.md`, which passes the line to Tejas with the queries. Job-specific method and output are in `jobs.md`.
+Write one line, "My reading of the flow: …": what the customer or operator sees, and which tables record it, from the product docs and `schema.md`. If there are no product docs for the systems, say the reading rests on `schema.md` alone. Then follow `loop.md`, which puts the line at the top of the brief for Tejas to approve. Job-specific method and output are in `jobs.md`.

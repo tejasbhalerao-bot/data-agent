@@ -20,7 +20,7 @@ as_of: YYYY-MM-DD
 ## So what
 <Recommended decision or next action. For measure/readout: ship / iterate / kill. For model: the range and what would change it.>
 
-## Brief  (delete once answered if unchanged)
+## Approved brief
 - **Objective:**
 - **Questions:** Q1 ... (each independently answerable)
 - **Definitions used:** <metric names from metrics.md, variant if any>

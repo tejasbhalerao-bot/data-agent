@@ -2,16 +2,17 @@
 
 Copy a template, fill it in, send it. Anything missing that the agent needs, it asks once.
 
-Quick question? Skip the template. Write one sentence and name the project. The answer comes in chat.
+Quick question? Skip the template. Write one sentence and name the project.
 
-Want a written note? Add `Note: yes`. Design and rollout always give a note.
+Every request gets a note (a `.md` file in the project). The chat reply is a short summary.
 
 ## What happens
 1. The agent checks your request. If a saved note with the same scope already has the answer and is recent enough, it uses it (7 days for a rolling window like "last 30 days"; no limit for a fixed past period like "July 2026").
-2. It sends you all the queries at once, with the file names to save as. The first line says how it understands the product flow. Correct it if it is wrong.
-3. You run them in Metabase. Save the CSVs in the project's `raw-data/` folder.
-4. The agent checks the CSVs, calculates the numbers, and answers.
-5. Notes: you say "ok", then it saves to GitHub. Chat answers: it saves only if you say "save".
+2. It shows you a short brief of what it will do. The first line says how it understands the product flow. Correct it or approve it. Nothing starts before you approve.
+3. It sends you all the queries at once, with the file names to save as.
+4. You run them in Metabase. Save the CSVs in the project's `raw-data/` folder.
+5. The agent checks the CSVs, calculates the numbers, and answers.
+6. Each stage is saved on your computer automatically. You say "ok", then it goes to GitHub.
 
 ## Analyse
 ```
