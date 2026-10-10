@@ -13,7 +13,7 @@ Run at each checkpoint. Fix issues yourself, re-check, and only then move on. An
 - Grain stated and true: join keys are unique on the side that must be unique; no fan-out.
 - Join keys match the documented keys in `context/schema.md` (exact `request_id = reference_number`, not timestamps).
 - Date filter sits in the innermost CTE; no `SELECT *` on large tables; `tmmumpsdb.` prefix; `snake_case` names.
-- Output columns equal the grain and columns Tejas gave in the brief. No aggregation in SQL.
+- Output columns equal the grain and columns Tejas gave in the brief. No aggregation in SQL, except the probe and dashboard queries.
 - Every metric and cut in the brief (M1…) is served by at least one query, and every query serves at least one (no orphan queries). Each cut's column is in the query's output.
 - Each query is its own file with a header; the note's "Queries to run" table points to the latest version of each and contains no SQL.
 - Probe included; timeout risk rated; High is split.

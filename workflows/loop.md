@@ -60,6 +60,6 @@ Sign-off, save and push rules are in `CLAUDE.md` ("Sign-off, save and push"). In
 3. **On sign-off** (as `CLAUDE.md` defines it): set `signed_off: true`, then commit and push everything from the request in one commit to `main` with `scripts/commit-and-push.sh`. State the message and paths. Never stage `raw-data/` or `outputs/`. If he asks for changes, revise and check again before presenting.
 
 ## Rules
-- No aggregations in SQL, except the probe; aggregation belongs in the script.
+- No aggregations in SQL, except the probe and dashboard queries (`jobs.md`, measure); aggregation belongs in the script.
 - Never name versioned files by hand; `new-file.sh` does it.
 - Raw data and outputs are local only: say so whenever a committed doc names them.
