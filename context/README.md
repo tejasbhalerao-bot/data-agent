@@ -26,4 +26,4 @@ updated: YYYY-MM-DD
 4. A system with no documents is surfaced once; do not fill the gap from general knowledge.
 
 ## Staleness
-Flag any loaded file older than 90 days. Notes are time-bound: when quoting one, give its window and as-of date.
+Flag any loaded file older than 90 days. Notes are time-bound: quote one only if its data window ended within the last 7 days, and give its window and as-of date.

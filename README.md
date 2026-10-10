@@ -3,7 +3,7 @@
 Tejas's analyst, as a repo. It answers data questions, sizes and models opportunities, designs measurement for PRDs, and watches launches. Tejas runs the queries in Metabase and supplies the CSVs; the agent writes and checks the queries, calculates every number with a script, and writes a note only when asked.
 
 ## How to use
-Open this folder in Claude Code and paste a request template from [WORKFLOW_GUIDE.md](WORKFLOW_GUIDE.md). Start the request with a `Job:` line, one of:
+Open this folder in Claude Code and paste a request template from [WORKFLOW_GUIDE.md](WORKFLOW_GUIDE.md). Name the project: anything that creates a query or script is saved in that project's folder under `archives/`, and nothing is saved without one. Start the request with a `Job:` line, one of:
 
 | Job | Use it to |
 |---|---|
@@ -35,10 +35,10 @@ What each file is for and when it is used: `CLAUDE.md`, "Elements of the repo".
 
 ## What happens to a request
 1. The agent checks the request is complete and asks, in one message, only what it cannot work out.
-2. If a recent saved note already answers it, the agent quotes that note and stops.
+2. If a saved note already answers it and its data ended within the last 7 days, the agent quotes that note, offers a refresh, and stops.
 3. Otherwise it writes the queries, checks them, and gives you all of them at once.
 4. You run them in Metabase and save the CSVs in the project's `raw-data/` folder.
 5. The agent checks the CSVs, calculates the numbers with a script, and answers in chat, or in a note if you asked for one.
-6. You review the note and say "ok" to sign off. Only then is it saved to GitHub.
+6. You review the note and say "ok" to sign off. Only then is it saved to GitHub. Chat answers are not saved to GitHub unless you say "save".
 
 Design record: `changelogs/2026-10-09-analyst-model-redesign-proposal.md`.

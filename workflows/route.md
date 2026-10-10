@@ -29,7 +29,7 @@ Read `context/CLAUDE.md`, `context/metrics.md`, `context/rules.md`, and `context
 Project: <slug>  Systems: <list>  Verticals: <list>
 Loaded: <paths>
 Reusable: <saved notes / queries / CSVs on disk, or none>
-Gaps: <systems with no docs, open rules.md gaps that touch this request>
+Gaps: <systems with no docs, loaded files older than 90 days, open rules.md gaps that touch this request>
 [/CONTEXT LOADED]
 ```
 
