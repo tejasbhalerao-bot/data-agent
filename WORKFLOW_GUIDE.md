@@ -1,35 +1,39 @@
 # Workflow Guide
 
-Paste a template, fill the fields, send. Fields marked (default) can be left out: the agent fills them in from its standing defaults and lists what it assumed. Anything else missing is asked once, in a single message. The `Job:` line tells the agent which kind of work this is.
+Copy a template, fill it in, send it. Leave out any field marked (default). Anything else missing, the agent asks once.
 
-For a quick question, skip the template: write one sentence and name the project. Answers come back in chat. Add `Note: yes` to any request to get a written note instead; `design` and `rollout` requests always produce a note.
+Quick question? Skip the template. Write one sentence and name the project. The answer comes in chat.
 
-## What happens after you send
-1. The agent checks the request is complete, then loads context. If a saved note in a project's `insights/` answers it and its data ended within the last 7 days, it quotes that note with its date and offers a refresh. A CSV already on disk is reused instead of a new pull.
-2. For a new pull: you get **one pack** (queries, a probe, exact filenames). Run it in Metabase once and save the CSVs into the project's `raw-data/` with those names.
-3. The agent detects the files, checks them, calculates the numbers with a script, and answers in chat, or in a note if you asked for one (design and rollout always produce a note). For a note, you read it and sign off; the push to `main` happens on your sign-off. Chat answers are not pushed unless you say "save".
+Want a written note? Add `Note: yes`. Design and rollout always give a note.
+
+## What happens
+1. The agent checks your request. If a note from the last 7 days already has the answer, it uses that.
+2. It sends you all the queries at once, with the file names to save as.
+3. You run them in Metabase. Save the CSVs in the project's `raw-data/` folder.
+4. The agent checks the CSVs, calculates the numbers, and answers.
+5. Notes: you say "ok", then it saves to GitHub. Chat answers: it saves only if you say "save".
 
 ## Analyse
 ```
 Job: analyse
 Project: <project folder name>
 Question: <what do you want to know>
-Decision it feeds (optional): <what you will do with the answer>
 Window (default): 
 Cohort / vertical (default): 
-Compare against (default: prior period): 
+Compare against (default: previous period): 
 Metrics (default: the agreed definitions): 
+Decision it feeds (optional): 
 ```
-Example: `Job: analyse / Project: egregiously-miscalibrated-promises / Question: why did on-time drop for Pune SDD in September / Decision it feeds: whether to escalate to the courier team / Window: Sept vs Aug`
+Example: `Job: analyse / Project: egregiously-miscalibrated-promises / Question: why did on-time drop for Pune SDD in September / Window: Sept vs Aug`
 
 ## Model
 ```
 Job: model
 Project: <project folder name>
-Lever: <the change, rule or option>
-Assumptions: <each one, with a value if you have it>
-Horizon: 
-Alternatives to compare (optional): 
+Change to test: 
+Assumptions (with values if you have them): 
+Time period: 
+Options to compare (optional): 
 Decision it feeds (optional): 
 ```
 
@@ -37,9 +41,9 @@ Decision it feeds (optional):
 ```
 Job: design
 Project: <project folder name>
-PRD (paste the text or key points): 
-Need: ard | metrics | feasibility | instrumentation | experiment plan   (any combination)
-For an experiment: hypothesis, target metric, eligible universe, planned split
+PRD (paste text or key points): 
+Need: requirements doc | metrics | data check | events to track | experiment plan   (pick any)
+For an experiment: hypothesis, main metric, who is eligible, planned split
 Decision it feeds (optional): 
 ```
 
@@ -47,9 +51,9 @@ Decision it feeds (optional):
 ```
 Job: rollout
 Project: <project folder name>
-PRD / change being rolled out: 
-Rollout plan: <stages, locations, % of traffic or orders, launch parameters, intended duration>
-Success and guardrail metrics: 
+What is being launched: 
+Plan: <stages, locations, % of traffic or orders, settings, how long>
+Success and safety metrics: 
 Decision it feeds (optional): 
 ```
 
@@ -57,30 +61,30 @@ Decision it feeds (optional):
 ```
 Job: measure
 Project: <project folder name>
-Mode: baseline | day1 | day7 | health | readout
-Cuts you want (analyst will propose more): 
-Dashboard spec needed: yes | no
+Stage: before launch | day 1 | day 7 | other day | final result
 Launch date: 
-Control / baseline window: 
-Metrics: <names, or "from the PRD" with the PRD pasted>
-Success and guardrail thresholds (if known): 
+Compare against: <control group, or the period before launch>
+Metrics: <names, or "from the PRD" and paste it>
+Cuts you want (the agent will suggest more): 
+Dashboard spec needed: yes | no
+Target and safety limits (if known): 
 Decision it feeds (optional): 
 ```
 
-## Update context
+## Update shared knowledge
 ```
 Job: update-context
-Add or change: schema | metric | rule | query
-Details: <table name / metric and definition / rule / paste the SQL>
+Change: table | metric | rule | query
+Details: <table name, or metric and its meaning, or the rule, or paste the SQL>
 ```
 
-## When a query fails
-Paste the error, the timeout or the odd result into the chat. The agent diagnoses, fixes and sends a new pack; any new data quirk is added to `context/rules.md` locally and saved to GitHub with your next sign-off.
+## A query failed
+Paste the error or the strange result. The agent fixes the query and sends it again.
 
-## Re-running a saved analysis
-`Job: analyse / Project: <project folder name> / Re-run: <note or script name> / New file: <csv>`. The saved script runs on the new CSV; nothing is rebuilt.
+## Re-run an old analysis
+`Job: analyse / Project: <project folder name> / Re-run: <note or script name> / New file: <csv>`
 
-## Manual operations
+## Manual commands
 ```bash
 scripts/new-file.sh <project> insights <project>-<topic> md
 scripts/commit-and-push.sh "message" <path> [path...]

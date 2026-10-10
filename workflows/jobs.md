@@ -19,7 +19,7 @@ Common required inputs for every job: **Job, Project, Decision this feeds** (opt
 
 ## design (decide how to measure before building)
 - **Output:** always a note.
-- **Required:** the PRD text or its key points, supplied in the request. Mode: **ard** (analytics requirements document), **experiment**, or both. For an experiment: hypothesis and target metric.
+- **Required:** the PRD text or its key points, supplied in the request. Mode: **ard** ("requirements doc": analytics requirements document), **experiment** ("experiment plan"), or both. "Metrics", "data check" and "events to track" are parts of the same note. For an experiment: hypothesis and target metric.
 - **Method:** (1) data feasibility: does each field exist, is it populated and reliable (use schema, probes, the instrumentation caveats in `rules.md`); (2) metric definitions: numerator, denominator, exclusions, anchor, written to `metrics.md` after approval; (3) instrumentation needs for engineering; (4) for an experiment: primary and guardrail metrics, MDE, sample size, duration, holdout, assignment, SRM check, ship / iterate / kill thresholds (`templates/methods.md`).
 - **ard mode:** the note is the ARD. Sections: objective and the decision it supports; metric definitions (names from `metrics.md`, new ones flagged); **instrumentation table** (event or field, properties, trigger, owner system, status Present / Partial / Missing from `schema.md` and `rules.md` G7); **ER diagram** of the entities and tables involved (Mermaid `erDiagram`, built from `schema.md` join keys, unverified keys dashed in a caption); data feasibility and gaps; open questions for engineering.
 - **Note adds:** a paste-ready block for the PRD (metrics, instrumentation, experiment plan), or the ARD sections above.
@@ -31,7 +31,7 @@ Common required inputs for every job: **Job, Project, Decision this feeds** (opt
 - **Note adds:** rollout table (stage, locations, %, expected volume, duration, gate metrics and thresholds, rollback trigger) and readiness checks (instrumentation live, baseline frozen). The PM owns the plan; the analyst sizes and challenges it.
 
 ## measure (watch a launch)
-- **Required:** mode (**baseline**, **day1**, **day7**, **health** (any other day) or **readout** (end of the GTM)), launch date, control or baseline window, metrics (from `metrics.md` or the PRD), cuts the PM wants. The analyst proposes extra cuts and reports which were added.
+- **Required:** mode (**baseline** = "before launch", **day1** = "day 1", **day7** = "day 7", **health** = "other day", or **readout** = "final result", the end of the GTM), launch date, control or baseline window, metrics (from `metrics.md` or the PRD), cuts the PM wants. The analyst proposes extra cuts and reports which were added.
 - **baseline:** define the baseline and comparison windows (match day-of-week, exclude known anomalies), run the correctness checks (row counts reconcile, key unique, no gaps in days), freeze the snapshot, test the queries on historical or shadow data, propose alert thresholds. Save the snapshot CSV name in the note.
 - **day1 / day7 / health:** instrumentation firing, guardrails against thresholds, anomalies, an early directional read with an explicit "too early" caveat.
 - **readout:** impact versus baseline or control with confidence intervals, segment cuts, side effects, power check. End with **ship / iterate / kill** and the reason.
