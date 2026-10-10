@@ -19,7 +19,7 @@ Run at each checkpoint. Fix issues yourself, re-check, and only then move on. An
 ## Check 2: CSV (on file drop)
 `scripts/validate-csv.py` passes: required columns present, key unique, null shares within limits, dates inside the window, row and distinct counts match the probe. A FAIL goes back to phase 3 (query fault) or to Tejas (wrong export).
 
-## Check 3: note (before save)
+## Check 3: the answer, note or chat (before it is presented)
 - Every figure in the note appears in a script output in `outputs/`. No hand-typed numbers.
 - Denominators are stated and are the intended population; percentages add up.
 - Sample size supports the claim; small cells are marked or dropped.

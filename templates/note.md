@@ -1,7 +1,7 @@
 ---
 project: <slug>
 job: analyse | model | design | rollout | measure
-status: brief | awaiting-data | analysing | review | saved
+status: brief | awaiting-data | saved
 awaiting: []
 assumptions: []
 signed_off: false
