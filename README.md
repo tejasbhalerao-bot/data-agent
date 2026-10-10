@@ -21,9 +21,9 @@ data-agent/
 ├── context/              shared knowledge
 │   ├── CLAUDE.md         Truemeds teams, systems and verticals
 │   ├── README.md         how context files are formatted and loaded
-│   ├── schema.md         every database table and its columns, plus tested queries
+│   ├── schema.md         every database table and its columns, known data quirks, and tested queries
 │   ├── metrics.md        the agreed meaning of each metric
-│   └── rules.md          standard filters, defaults and known data quirks
+│   └── rules.md          standard filters, defaults and term meanings
 ├── workflows/            route · loop · jobs · review · update-context
 ├── templates/            note.md · methods.md
 ├── scripts/              new-file.sh · commit-and-push.sh · validate-csv.py

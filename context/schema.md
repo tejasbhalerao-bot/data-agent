@@ -11,7 +11,7 @@ updated: 2026-05-25
 
 One file for every table. Each table carries a `Systems:` flag (allocation, tracking, serviceability, eta, communications, or all); filter on it to load only the relevant tables. Communications has no tables documented yet.
 
-> Redshift tables are prefixed `tmmumpsdb.` in Metabase SQL. Column names are `snake_case` in SQL; the display names below are the Metabase UI names. Quirks and standing exclusions live in `rules.md`, not here. Items marked "Provenance" were added from project docs and not re-verified against live data.
+> Redshift tables are prefixed `tmmumpsdb.` in Metabase SQL. Column names are `snake_case` in SQL; the display names below are the Metabase UI names. Standard filters and defaults are in `rules.md`. Data quirks are listed with the table they affect. Items marked "Provenance" were added from project docs and not re-verified against live data.
 
 ## Key lookups
 
@@ -219,7 +219,7 @@ One file for every table. Each table carries a `Systems:` flag (allocation, trac
 | request_payload | JSON — contains `pickup_pincode` |
 | response_payload | JSON — contains `preference_array` at path `result[0].preference_array` |
 
-**Per courier in `preference_array` (idx 0 = rank 1):**
+**Per courier in `preference_array` (idx 0 = rank 1; up to 6 couriers seen, no fixed limit):**
 
 | Field | Definition |
 |-------|------------|
@@ -421,6 +421,11 @@ One file for every table. Each table carries a `Systems:` flag (allocation, trac
 | Actuals | `actual_doctor_call_time` (first call attempt), `actual_warehouse_processing`, `pickup_time`, `delivery_attempt_time` (first attempt, need not succeed), `actual_delivery_date` |
 | State at shipping (`shipping_*`) | `shipping_pincode`, `shipping_delivery_partner`, `shipping_delivery_promise` (integer **days**), `shipping_warehouse`, `shipping_is_sdd`, `shipping_is_inventory` |
 
+**Quirks of this extract:**
+- `shipping_delivery_promise` is a number of **days**, not a timestamp. Compare it with `DATE(digitised_delivery_promise) - DATE(digitised_dispatch_promise)`, never with `digitised_delivery_promise` directly.
+- Boolean columns use different formats: `digitised_is_sdd` and `digitised_is_inventory` are `true`/`false` text, `shipping_is_sdd` is `1`/`0`, `shipping_is_inventory` is `true`/`false`. Convert before comparing.
+- `digitised_*` SDD, MFC, inventory and category fields are filled only from **2026-05-08**. Use `digitised_ts >= 2026-05-08` for any analysis that splits by them.
+
 Pairs that can diverge between placement and shipping (check both when assessing promise accuracy): pincode, delivery partner, warehouse, `is_sdd`, `is_inventory`, delivery promise.
 
 ---
@@ -561,9 +566,11 @@ Summarised from `archives/courier-allocation-revamp/context/2026-06-08-system-wo
 - **Shadow modes:** 6 parallel runs (2 computation variants x `n_threshold` 10/15/20) log rankings without switching couriers.
 
 
-## Referenced but not yet documented
-`m_city_master`, `m_state_master` (city and state of a pincode, used by the nightly adherence cascade) and `order_wh_mfc_mapping` (source of `shipping_is_inventory` in the early-delivery extract). Run `update-context` before relying on them.
-
+## Open questions and undocumented tables
+- **Undocumented tables:** `m_city_master`, `m_state_master` (city and state of a pincode, used by the nightly adherence cascade) and `order_wh_mfc_mapping` (source of `shipping_is_inventory` in the early-delivery extract). Run `update-context` before relying on them.
+- **PBA status:** `selected_source = 'INTERNAL'` means PBA is still in shadow mode. Confirm whether PBA is now live; if so, update the allocation audit section.
+- **Order status IDs 344 and 39** (placed PBA-eligible order, order created) are not confirmed against `M System Value Master`.
+- **Communications** has no tables documented.
 
 ## Reference queries
 Validated SQL for these tables, grouped by system. The Build phase reuses these before writing fresh SQL. SQL stays in its project's `queries-dump/` until a second project reuses it, then moves into `context/` with a header (purpose, grain, tables, definitions, exclusions, validated-on) and the entry is updated. "Validated" means it produced results used in a signed-off insight.
@@ -582,6 +589,6 @@ Earlier PBA queries (`base-query-1`, `base-query-2`, base-extract v1/v2, allocat
 ### ETA
 | Query | Purpose and grain | Tables | Status | Path |
 |---|---|---|---|---|
-| early-delivery-base-extract v1 | One row per order digitised in May 2026: status milestones pivoted, promises, state at placement, actuals, state at shipping | order_status, m_system_value_master, delivery_date_tracker, order_tat_details, package_details_tracking, order_wh_mfc_mapping | **Unconfirmed** (`rules.md` G2) | `archives/early-delivery-analysis/queries-dump/2026-06-16-early-delivery-base-extract-v1.sql` |
+| early-delivery-base-extract v1 | One row per order digitised in May 2026: status milestones pivoted, promises, state at placement, actuals, state at shipping | order_status, m_system_value_master, delivery_date_tracker, order_tat_details, package_details_tracking, order_wh_mfc_mapping | **Unconfirmed** (three assumptions unconfirmed: the status timestamp column, the status names, and the decode join; also uses `order_wh_mfc_mapping`, which is undocumented) | `archives/early-delivery-analysis/queries-dump/2026-06-16-early-delivery-base-extract-v1.sql` |
 
 The July and August 2026 promise-vs-actual exports (`all-orders-july-2026.csv`, `all-orders-august-2026.xlsx`) were Metabase exports whose SQL is not saved in the repo. Save it here the next time that extract is re-run.

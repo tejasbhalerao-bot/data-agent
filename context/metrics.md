@@ -9,9 +9,9 @@ updated: 2026-10-09
 
 # Metric dictionary
 
-One definition per metric. Where projects defined the same name differently, each variant is listed with its project and the conflict is logged as an open gap in `rules.md` (G1). **Do not pick between variants silently: ask Tejas, then collapse the entry.**
+One definition per metric. Where projects defined the same name differently, each variant is listed with its project and the conflict is marked CONFLICT in the row. **Do not pick between variants silently: ask Tejas, then collapse the entry.**
 
-Conventions: `A` is the promise, `B` the actual. Date comparisons use `DATE()` on both. Timestamp comparisons use the full timestamp. Unless a row says otherwise, "Early / On-Time / Late" means `A > B`, `A = B`, `A < B`. Orders missing either input are excluded (E5).
+Conventions: `A` is the promise, `B` the actual. Date comparisons use `DATE()` on both. Timestamp comparisons use the full timestamp. Unless a row says otherwise, "Early / On-Time / Late" means `A > B`, `A = B`, `A < B`. Orders missing either input (for example no `delivery_attempt_time`) are excluded.
 
 ## 1. Delivery leg
 
@@ -27,8 +27,8 @@ Conventions: `A` is the promise, `B` the actual. Date comparisons use `DATE()` o
 | Metric | Definition | Variants and caveats |
 |--------|------------|----------------------|
 | **Dispatch E/OT/L** | `A = DATE(digitised_dispatch_promise)`, `B = DATE(pickup_time)`. | Consistent across projects. |
-| **Doctor leg** | `A = digitised_dr_promise`. `B` is the project-specific actual below. | **CONFLICT (G1).** EMP "Doctor": `B = dr_confirm_ts`, exact timestamp. EMP "Doctor Ops": `B = actual_doctor_call_time`, exact timestamp (an exact match is vanishingly rare). early-delivery View 1: `B = dr_confirm_ts` with a +/-60 second On-Time band. View 2: `B = actual_doctor_call_time` with the same band. `dr_confirm_ts` and `actual_doctor_call_time` are different events. |
-| **Warehouse leg** | `A` and `B` are project-specific. | **CONFLICT (G1).** EMP: `A = digitised_wh_promise`, `B = awb_sticker_printed_ts`, exact timestamp (AWB print is the proxy for packing complete). early-delivery View 1/2: `A = digitised_dispatch_promise`, `B = invoice_create_ts`, matched to the minute; deliberately benchmarked against the dispatch promise. early-delivery Axis 1 v2: promised window `digitised_wh_promise - digitised_dr_promise` vs actual window `invoice_create_ts - processing_start_ts`, +/-1 minute buffer; excludes `wh_processing_mins = 0`. EMP also compared invoice-based vs AWB-based deviation (requests #45 to #47). |
+| **Doctor leg** | `A = digitised_dr_promise`. `B` is the project-specific actual below. | **CONFLICT.** EMP "Doctor": `B = dr_confirm_ts`, exact timestamp. EMP "Doctor Ops": `B = actual_doctor_call_time`, exact timestamp (an exact match is vanishingly rare). early-delivery View 1: `B = dr_confirm_ts` with a +/-60 second On-Time band. View 2: `B = actual_doctor_call_time` with the same band. `dr_confirm_ts` and `actual_doctor_call_time` are different events. |
+| **Warehouse leg** | `A` and `B` are project-specific. | **CONFLICT.** EMP: `A = digitised_wh_promise`, `B = awb_sticker_printed_ts`, exact timestamp (AWB print is the proxy for packing complete). early-delivery View 1/2: `A = digitised_dispatch_promise`, `B = invoice_create_ts`, matched to the minute; deliberately benchmarked against the dispatch promise. early-delivery Axis 1 v2: promised window `digitised_wh_promise - digitised_dr_promise` vs actual window `invoice_create_ts - processing_start_ts`, +/-1 minute buffer; excludes `wh_processing_mins = 0`. EMP also compared invoice-based vs AWB-based deviation (requests #45 to #47). |
 
 ## 3. Courier performance and allocation
 

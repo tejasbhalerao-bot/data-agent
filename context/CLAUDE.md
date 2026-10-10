@@ -8,7 +8,8 @@
 ## Systems and verticals
 Systems: **Allocation**, **Tracking** (actuals), **Serviceability**, **ETA** (also called Promise), **Communications**. Same five as the PM agent (`~/pm-agent`), so names match across repos.
 Verticals: Hyperlocal Forward, Hyperlocal Reverse, Courier Forward, Courier Reverse, B2B Forward, B2B Reverse.
-3rd-party rails (Clickpost, Locus) have no context file yet. Communications has no schema documented (`rules.md` G6).
+3rd-party rails (Clickpost, Locus) have no context file yet. Communications has no schema documented.
+Not yet done: the instrumentation grounding pass (checking the Mixpanel event list and `instrumentation_details` against the real data). Until it is done, `instrumentation-audit` conclusions are hypotheses.
 
 ## What is here
 Three files: `schema.md`, `metrics.md`, `rules.md`. Results live in project notes, not here. What each holds and when it is used: root `CLAUDE.md`, "Elements of the repo".

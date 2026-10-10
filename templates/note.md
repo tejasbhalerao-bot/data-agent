@@ -29,7 +29,7 @@ as_of: YYYY-MM-DD
 <Full tables with counts and percentages. Every figure comes from a script output. Name the script and the output file (local only).>
 
 ## Definitions and exclusions
-<Exclusions applied (rules.md codes), cohort, window, denominators.>
+<Filters applied (E-codes from rules.md), cohort, window, denominators.>
 
 ## Caveats and confidence
 <Data-quality flags, sample-size limits, unreconciled differences, what is assumed.>

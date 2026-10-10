@@ -22,7 +22,7 @@ Build from the intake: objective, questions (each independently answerable), def
 5. **Check 1** (`review.md`), then give Tejas **one handoff pack**: all queries, the probe, and the exact filename to save each CSV as in `raw-data/`. Set status `awaiting-data` and fill `awaiting:`.
 
 ## 4. Run
-1. Tejas runs the pack once. Detect the files by name in `raw-data/`; do not wait to be told. If he pastes an error, a timeout or an odd result: diagnose, fix, re-present from phase 3. Record any new quirk in `rules.md` through `update-context`.
+1. Tejas runs the pack once. Detect the files by name in `raw-data/`; do not wait to be told. If he pastes an error, a timeout or an odd result: diagnose, fix, re-present from phase 3. Record any new quirk beside its table in `schema.md` through `update-context`.
 2. **Check 2:** `python3 scripts/validate-csv.py <file> --key ... --require ... --date-col ... --probe ...`. FAIL returns to phase 3 or to Tejas with the failing check.
 
 ## 5. Answer

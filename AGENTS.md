@@ -34,9 +34,9 @@ What each element contains and when it is used. Shared files in `context/` chang
 | Element | Location | Purpose | Trigger |
 |---|---|---|---|
 | Context guide | `context/CLAUDE.md`, `context/README.md` | Describes Truemeds' teams, systems and business verticals, and how context files are formatted and loaded. | Read at the start of every data session. |
-| Schema | `context/schema.md` | Lists every database table and its columns, each labelled with the systems it belongs to, plus tested queries to reuse. | Read before writing any query, and whenever a table or column is mentioned. |
+| Schema | `context/schema.md` | Lists every database table and its columns, each labelled with the systems it belongs to, plus known data quirks, open questions and tested queries to reuse. | Read before writing any query, and whenever a table or column is mentioned. |
 | Metrics | `context/metrics.md` | Gives the one agreed meaning of each metric, and flags metrics that different projects define differently. | Read on every request, before using or defining any metric. |
-| Rules | `context/rules.md` | Lists the filters always applied, the default time window and comparison, term meanings, known data quirks and open questions. | Read on every request, to apply the standard filters and fill in missing defaults. |
+| Rules | `context/rules.md` | Lists the standard filters, the default time window and comparison, and what Truemeds terms mean. | Read on every request, to apply the standard filters and fill in missing defaults. |
 
 ### Engine
 | Element | Location | Purpose | Trigger |
