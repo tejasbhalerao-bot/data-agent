@@ -5,7 +5,7 @@ description: The five job cards. Each lists required inputs, method and what the
 
 # Jobs
 
-Every job starts with a brief that Tejas approves (`loop.md`, phase 2); the cards below say what each brief and note must cover. Common required inputs for every job: **Job, Project, Decision this feeds** (optional; it shapes the answer, it does not trigger a note), Scope (window, cohort, comparison), Definitions (default: `metrics.md`). The cards add to these.
+Every job starts with a brief that Tejas approves (`loop.md`, phase 2); the cards below say what each brief and note must cover. The brief lists the metrics and cuts (M1…) that the job will produce; if a job produces no numbers (for example an analytics requirements document), it has no queries or scripts to tie back. Common required inputs for every job: **Job, Project, Decision this feeds** (optional; it shapes the answer, it does not trigger a note), Scope (window, cohort, comparison), Definitions (default: `metrics.md`). The cards add to these.
 
 ## analyse (look backward: what happened, where, why)
 - **Required:** window, cohort, comparison.
