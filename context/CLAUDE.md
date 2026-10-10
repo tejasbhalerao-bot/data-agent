@@ -12,7 +12,12 @@ Verticals: Hyperlocal Forward, Hyperlocal Reverse, Courier Forward, Courier Reve
 Not yet done: the instrumentation grounding pass (checking the Mixpanel event list and `instrumentation_details` against the real data). Until it is done, `instrumentation-audit` conclusions are hypotheses.
 
 ## Product context (read only, outside this repo)
-How each system works for the customer and the operator is kept by Tejas in the PM agent, in `~/pm-agent/context/<system>/` (folders: `allocation`, `tracking`, `serviceability`, `eta`, `communications`). Read the folders for the systems the request touches; read the documents whose titles relate to the request (all of them if unsure). Read only: never copy, edit or add to them. If a folder is missing or empty, say so once and carry on, flagging what you assumed. If a PM-agent document disagrees with `schema.md`, say so and ask Tejas which is right.
+How each system works for the customer and the operator is kept by Tejas in the PM agent, in `~/pm-agent/context/<system>/` (folders: `allocation`, `tracking`, `serviceability`, `eta`, `communications`). Load it the way the PM agent does (its rules are in `~/pm-agent/context/README.md`):
+- For each system the request touches, read **every** document in that system's folder.
+- Keep documents whose `verticals` tag includes a requested vertical or `all`; skip the rest. A document filed in several folders (same `source`) is read once.
+- If two documents disagree, the later `updated` date wins. Undated documents rank below dated ones. Flag any document older than 90 days.
+- If a system's folder has no usable documents, say so once and ask: pause so Tejas can add them to the PM agent, or proceed with flagged assumptions. Do not fill the gap from general knowledge.
+- Read only: never copy, edit or add to these documents. If one disagrees with `schema.md`, say so and ask Tejas which is right.
 
 ## What is here
 Three files: `schema.md`, `metrics.md`, `rules.md`. Results live in project notes, not here. What each holds and when it is used: root `CLAUDE.md`, "Elements of the repo".
