@@ -9,7 +9,7 @@ Run at each checkpoint. Fix issues yourself, re-check, and only then move on. An
 
 ## Check 1: SQL (before handoff)
 - Every metric used matches `metrics.md` (variant named). Conflicting variants: ask first.
-- `rules.md` section 1 exclusions applied (E1 to E4 as relevant); dedupe E3 done before any join.
+- The filters listed for each table in `schema.md` are applied (for example keeping the latest row per order on the allocation audit, done before any join), plus any rule in `rules.md`.
 - Grain stated and true: join keys are unique on the side that must be unique; no fan-out.
 - Join keys match the documented keys in `context/schema.md` (exact `request_id = reference_number`, not timestamps).
 - Date filter sits in the innermost CTE; no `SELECT *` on large tables; `tmmumpsdb.` prefix; `snake_case` names.
@@ -25,5 +25,5 @@ Run at each checkpoint. Fix issues yourself, re-check, and only then move on. An
 - Sample size supports the claim; small cells are marked or dropped.
 - Segment mix and confounders considered (job card list); a Simpson's-paradox check on any headline comparison.
 - Claim strength matches the evidence: "caused" only with a test, otherwise "associated with".
-- Window and as-of date stated; defaults listed; definitions named; caveats include data-quality flags from `schema.md`.
+- Window and as-of date stated; assumptions listed; definitions named; caveats include data-quality flags from `schema.md`.
 - The note answers the decision it was written for in the first two lines.

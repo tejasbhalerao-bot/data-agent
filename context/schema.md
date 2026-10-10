@@ -11,7 +11,7 @@ updated: 2026-05-25
 
 One file for every table. Each table carries a `Systems:` flag (allocation, tracking, serviceability, eta, communications, or all); filter on it to load only the relevant tables. Communications has no tables documented yet.
 
-> Redshift tables are prefixed `tmmumpsdb.` in Metabase SQL. Column names are `snake_case` in SQL; the display names below are the Metabase UI names. Standard filters and defaults are in `rules.md`. Data quirks are listed with the table they affect. Items marked "Provenance" were added from project docs and not re-verified against live data.
+> Redshift tables are prefixed `tmmumpsdb.` in Metabase SQL. Column names are `snake_case` in SQL; the display names below are the Metabase UI names. Data quirks and required filters are listed with the table they affect. Items marked "Provenance" were added from project docs and not re-verified against live data.
 
 ## Key lookups
 
@@ -185,7 +185,7 @@ One file for every table. Each table carries a `Systems:` flag (allocation, trac
 | allocation_type | `SOFT` (order placement) or `HARD` (dispatch) |
 | selected_source | `INTERNAL` in shadow mode — PBA is counterfactual only. **Update when PBA goes live.** |
 | created_at | When the allocation record was created |
-| updated_at | Last update timestamp — used for deduplication |
+| updated_at | Last update timestamp — used for deduplication. An order can have several rows per `allocation_type`; keep the latest by `updated_at` before any join |
 | allocation_metadata | JSON — see sub-fields below |
 
 **`allocation_metadata` sub-fields:**

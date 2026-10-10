@@ -3,14 +3,14 @@ project: <slug>
 job: analyse | model | design | rollout | measure
 status: brief | awaiting-data | analysing | review | saved
 awaiting: []
-defaults_used: []
+assumptions: []
 signed_off: false
 as_of: YYYY-MM-DD
 ---
 
 # <Title: the question, as a question or a claim>
 
-**Defaults used:** <field = value, or "none">
+**Assumptions and rules applied:** <field = value, or "none">
 
 ## Answer
 <One or two sentences with the number and the window. The decision it supports.>
@@ -29,7 +29,7 @@ as_of: YYYY-MM-DD
 <Full tables with counts and percentages. Every figure comes from a script output. Name the script and the output file (local only).>
 
 ## Definitions and exclusions
-<Filters applied (E-codes from rules.md), cohort, window, denominators.>
+<Filters applied, cohort, window, denominators.>
 
 ## Caveats and confidence
 <Data-quality flags, sample-size limits, unreconciled differences, what is assumed.>

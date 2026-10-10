@@ -45,7 +45,7 @@ Conventions: `A` is the promise, `B` the actual. Date comparisons use `DATE()` o
 
 | Cohort | Definition |
 |--------|------------|
-| Segment | `digitised_is_sdd` x `digitised_is_inventory` (four segments; see `rules.md` section 3) |
+| Segment | `digitised_is_sdd` x `digitised_is_inventory` (four segments: SDD Inventory, SDD Non-Inventory, Non-SDD Inventory, Non-SDD Non-Inventory) |
 | Same-courier cohort | PBA-selected courier equals Internal-selected courier |
 | Different-courier cohort | The two differ |
 | Promise direction | PBA_FASTER / SAME / INTERNAL_FASTER, by comparing PBA and Internal promised TAT |

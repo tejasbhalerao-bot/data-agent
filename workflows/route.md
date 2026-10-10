@@ -16,10 +16,10 @@ An explicit `Job:` line wins (analyse, model, design, rollout, measure, update-c
 ## 3. Ready-check
 Check the request against the job's required inputs in `jobs.md`. Classify each gap:
 
-- **Defaultable:** fill from `context/rules.md` section 2 (window, verticals, comparison, exclusions). Do not ask. List every default used on the note's first line.
-- **Blocking:** an undefined metric, a cohort definition that changes the answer, a missing control, missing PRD input, or no project (unless a saved note answers it). Send **one** message listing all blocking gaps, then continue. Never ask one question at a time.
+- **Settled by a rule:** `context/rules.md` has a rule that covers it. Apply it, do not ask, and say so on the first line of the answer.
+- **Blocking:** everything else that is missing and changes the answer: the time window, the comparison group, an undefined metric, a cohort definition, a missing control, missing PRD input, or no project (unless a saved note answers it). Send **one** message listing all blocking gaps, then continue. Never ask one question at a time.
 
-Ask only what context cannot answer: check `metrics.md` and `rules.md` first.
+Ask only what context cannot answer: check `metrics.md`, `schema.md` and `rules.md` first.
 
 ## 4. Load context
 Read `context/CLAUDE.md`, `context/metrics.md`, `context/rules.md`, and `context/schema.md` (the tables whose `Systems:` flag matches the request). Read the project's `context/` folder and `data-sources.md`. Then scan the project's saved notes (`archives/<project>/insights/`; other projects' notes for the same metric), the "Reference queries" section of `schema.md` and the project's `raw-data/` listing for an existing answer. Output:

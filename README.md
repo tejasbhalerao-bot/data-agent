@@ -23,7 +23,7 @@ data-agent/
 │   ├── README.md         how context files are formatted and loaded
 │   ├── schema.md         every database table and its columns, known data quirks, and tested queries
 │   ├── metrics.md        the agreed meaning of each metric
-│   └── rules.md          standard filters, defaults and term meanings
+│   └── rules.md          rules that apply to every analysis (empty for now)
 ├── workflows/            route · loop · jobs · review · update-context
 ├── templates/            note.md · methods.md
 ├── scripts/              new-file.sh · commit-and-push.sh · validate-csv.py

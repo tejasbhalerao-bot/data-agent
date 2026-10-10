@@ -5,7 +5,7 @@ description: Add or change schema, a metric, a rule, or a validated query. Calle
 
 # Update context
 
-One home per fact: schema in `context/schema.md`, definitions in `context/metrics.md`, standard filters, defaults and vocabulary in `context/rules.md`, data quirks beside their table in `context/schema.md`, validated SQL as a "Reference queries" entry in `context/schema.md`. Results live in project notes (`archives/<project>/insights/`), not here. Project-only material stays in `archives/<project>/context/`.
+One home per fact: schema in `context/schema.md`, definitions in `context/metrics.md`, rules that apply to every analysis in `context/rules.md`, data quirks beside their table in `context/schema.md`, validated SQL as a "Reference queries" entry in `context/schema.md`. Results live in project notes (`archives/<project>/insights/`), not here. Project-only material stays in `archives/<project>/context/`.
 
 ## Approval rule
 - **Additive and low-risk** (a new table section, a new gotcha row, a validated query): apply locally and show the diff. It is pushed with the request's commit at sign-off, or right away when Tejas asked for the update directly.

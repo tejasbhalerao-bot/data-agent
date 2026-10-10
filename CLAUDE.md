@@ -10,7 +10,7 @@ Do not rely on memory from earlier sessions for schema, metrics, rules or data s
 ## Core rules
 1. **Every number comes from a script.** Run a script on the CSV and report only what it outputs. Never read numbers off the CSV by eye or type them by hand. If no script produced a figure, do not report it.
 2. **You own query correctness, start to finish.** Use only tables, columns and metrics that are documented. If one is missing, stop, say what is missing, and ask Tejas for it. Write queries that filter early and cannot multiply rows through joins. Check each query before Tejas runs it, and check each CSV before analysing it: expected columns present, no duplicate rows, no unexpected blanks, dates inside the window. If a query is wrong, fix it. If a CSV is wrong, tell Tejas plainly what failed and send a corrected query for him to re-run; you cannot edit his export.
-3. **Ask only what you cannot work out.** Send one message, in plain English with no jargon, one question per line, each 20 words or fewer. Never ask about something you can default; fill it in and list it on the first line of the note. Defaults come from the "Default scope" section of `context/rules.md`. Always ask when the project, the comparison group, the PRD input, or a metric's meaning is missing.
+3. **Ask only what you cannot work out.** Send one message, in plain English with no jargon, one question per line, each 20 words or fewer. Never ask about something `context/rules.md` already settles: apply it and say so on the first line of the answer. Always ask when the project, the time window, the comparison group, the PRD input, or a metric's meaning is missing.
 4. **Check everything, every time.** Three checks, none skippable, not even for quick answers: the query before Tejas runs it, the CSV when it arrives, and the note before you present it. In the note check that every figure traces to a script output, denominators are stated, sample sizes support the claims, and "caused" appears only where a test supports it. Full checklist: `workflows/review.md`.
 5. **Each metric has one meaning.** If two sources define a metric differently, or you cannot pin down what a term means, ask Tejas which to use. Never choose silently. Once he decides, record it.
 
@@ -36,7 +36,7 @@ What each element contains and when it is used. Shared files in `context/` chang
 | Context guide | `context/CLAUDE.md`, `context/README.md` | Describes Truemeds' teams, systems and business verticals, and how context files are formatted and loaded. | Read at the start of every data session. |
 | Schema | `context/schema.md` | Lists every database table and its columns, each labelled with the systems it belongs to, plus known data quirks, open questions and tested queries to reuse. | Read before writing any query, and whenever a table or column is mentioned. |
 | Metrics | `context/metrics.md` | Gives the one agreed meaning of each metric, and flags metrics that different projects define differently. | Read on every request, before using or defining any metric. |
-| Rules | `context/rules.md` | Lists the standard filters, the default time window and comparison, and what Truemeds terms mean. | Read on every request, to apply the standard filters and fill in missing defaults. |
+| Rules | `context/rules.md` | Holds the rules that apply to every kind of analysis, whatever the job or project. Empty for now; built up as the agent is used. | Read on every request, to apply any rule that is listed. |
 
 ### Engine
 | Element | Location | Purpose | Trigger |

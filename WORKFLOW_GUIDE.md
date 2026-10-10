@@ -1,6 +1,6 @@
 # Workflow Guide
 
-Copy a template, fill it in, send it. Leave out any field marked (default). Anything else missing, the agent asks once.
+Copy a template, fill it in, send it. Anything missing that the agent needs, it asks once.
 
 Quick question? Skip the template. Write one sentence and name the project. The answer comes in chat.
 
@@ -18,10 +18,10 @@ Want a written note? Add `Note: yes`. Design and rollout always give a note.
 Job: analyse
 Project: <project folder name>
 Question: <what do you want to know>
-Window (default): 
-Cohort / vertical (default): 
-Compare against (default: previous period): 
-Metrics (default: the agreed definitions): 
+Window: 
+Cohort / vertical: 
+Compare against: 
+Metrics (blank = the agreed definitions): 
 Decision it feeds (optional): 
 ```
 Example: `Job: analyse / Project: egregiously-miscalibrated-promises / Question: why did on-time drop for Pune SDD in September / Window: Sept vs Aug`

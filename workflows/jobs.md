@@ -5,10 +5,10 @@ description: The five job cards. Each lists required inputs, method and what the
 
 # Jobs
 
-Common required inputs for every job: **Job, Project, Decision this feeds** (optional; it shapes the answer, it does not trigger a note), Scope (defaultable), Definitions (default: `metrics.md`). The cards add to these.
+Common required inputs for every job: **Job, Project, Decision this feeds** (optional; it shapes the answer, it does not trigger a note), Scope (window, cohort, comparison), Definitions (default: `metrics.md`). The cards add to these.
 
 ## analyse (look backward: what happened, where, why)
-- **Required:** window and cohort (defaultable), comparison (prior period by default).
+- **Required:** window, cohort, comparison.
 - **Method:** baseline, then segment cuts on the wide pull (courier, warehouse, pincode, vertical, SDD x inventory, day), confounder check (mix shift, seasonality, sample size), reconcile against a known total or second source. Test the counter-hypothesis.
 - **Note adds:** where it concentrates; what it is not; what was ruled out.
 
