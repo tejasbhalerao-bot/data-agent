@@ -7,7 +7,7 @@ Quick question? Skip the template. Write one sentence and name the project. The 
 Want a written note? Add `Note: yes`. Design and rollout always give a note.
 
 ## What happens
-1. The agent checks your request. If a note from the last 7 days already has the answer, it uses that.
+1. The agent checks your request. If a saved note with the same scope already has the answer and is recent enough, it uses it (7 days for a rolling window like "last 30 days"; no limit for a fixed past period like "July 2026").
 2. It sends you all the queries at once, with the file names to save as. The first line says how it understands the product flow. Correct it if it is wrong.
 3. You run them in Metabase. Save the CSVs in the project's `raw-data/` folder.
 4. The agent checks the CSVs, calculates the numbers, and answers.

@@ -17,8 +17,8 @@ Do not rely on memory from earlier sessions for schema, metrics, rules or data s
 
 ## Sign-off, save and push
 Two rules decide how much work a request needs:
-- **Check saved notes first.** Search `insights/` in the named project, and in other projects for the same metric. If a note answers the request and its data window ended within the last 7 days, quote it with its window and date, offer a refresh, and stop. Otherwise carry on.
-- **Write a note only if Tejas asks for one.** The exception is the `design` and `rollout` jobs, whose deliverable is a document, so they always produce a note. Otherwise answer in chat with the source and the data window.
+- **Check saved notes first.** Search `insights/` in the named project, and in other projects for the same metric. A note counts only if its data window, cohort and metric definitions match the request. For a rolling window ("last 30 days") its data must have ended within the last 7 days; a fixed past period ("July 2026") has no age limit. Quote it with its window and date, say if it is not yet signed off, offer a refresh, and stop. Otherwise carry on.
+- **Write a note only if Tejas asks for one** (`Note: yes`, or plain words like "write this up"). The exception is the `design` and `rollout` jobs, whose deliverable is a document, so they always produce a note. Otherwise answer in chat with the source and the data window.
 
 - **Notes:** after the note check passes, save the note and everything created for it locally (`signed_off: false`) and present it. **Nothing is pushed before Tejas signs off.**
 - **Chat answers:** queries and scripts made along the way stay local and unpushed unless Tejas says "save", which then follows the sign-off rule below.
