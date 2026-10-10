@@ -15,6 +15,11 @@ Do not rely on memory from earlier sessions for schema, metrics, rules or data s
 5. **Each metric has one meaning.** If two sources define a metric differently, or you cannot pin down what a term means, ask Tejas which to use. Never choose silently. Once he decides, record it.
 
 ## Sign-off, save and push
+Requests are sorted into three tiers by the router (`workflows/route.md`):
+- **Tier 0, recall:** the answer is already known from saved findings or an earlier note, and is recent enough to quote. No new query.
+- **Tier 1, quick:** a simple question: every term and table involved is already documented and one main query answers it.
+- **Tier 2, full:** anything else: new definitions, several steps, or a result that feeds a decision.
+
 - **Tier 2 notes:** after the note check passes, save the note and everything created for it locally (`signed_off: false`) and present it. **Nothing is pushed before Tejas signs off.**
 - **Tier 0 and Tier 1:** answer in chat with source and as-of; no note is saved. Queries and scripts made along the way stay local and unpushed unless Tejas says "save", which then follows the sign-off rule below.
 - **What counts as sign-off:** Tejas replies "ok", "approved", "looks good", "save it", "sign off" or similar to the presented note. Questions, change requests and silence do not count: revise, re-run the note check, and present again.
