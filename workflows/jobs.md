@@ -1,6 +1,6 @@
 ---
 name: jobs
-description: The five job cards. Each lists required inputs, method and what the note adds. Used by route.md (ready-check) and loop.md.
+description: The five job cards. Each lists required inputs, method and what the note adds. Used by route.md (completeness check) and loop.md.
 ---
 
 # Jobs

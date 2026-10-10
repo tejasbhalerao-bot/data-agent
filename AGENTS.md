@@ -42,7 +42,7 @@ What each element contains and when it is used. Shared files in `context/` chang
 ### Engine
 | Element | Location | Purpose | Trigger |
 |---|---|---|---|
-| Router | `workflows/route.md` | Starts every data request: checks it is complete, picks the job type, loads context, and looks for an existing answer. | First step of every data request. |
+| Router | `workflows/route.md` | Starts every data request: finds the project, picks the job, loads context, looks for an existing answer, checks the request is complete, and states how it reads the product flow. | First step of every data request. |
 | Loop | `workflows/loop.md` | Describes the six steps every request follows, from planning the query to saving the result. | After routing, unless a saved note already answers the request. |
 | Job cards | `workflows/jobs.md` | Says what each job type (analyse, model, design, rollout, measure) needs from Tejas, how it is done, and what the note adds. | When checking a request is complete, and when planning the query and the analysis. |
 | Review | `workflows/review.md` | Defines the checks run on the query before it is run, the CSV when it arrives, and the note before it is shown. | Before Tejas runs a query, when a CSV arrives, and before a note is shown. |
