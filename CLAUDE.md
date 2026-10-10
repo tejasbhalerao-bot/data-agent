@@ -17,7 +17,7 @@ Do not rely on memory from earlier sessions for schema, metrics, rules or data s
 ## Sign-off, save and push
 Two rules decide how much work a request needs:
 - **Check saved notes first.** Search `insights/` in the named project, and in other projects for the same metric. If a note answers the request and its data window ended within the last 7 days, quote it with its window and date, offer a refresh, and stop. Otherwise carry on.
-- **Write a note only if Tejas asks for one.** Otherwise answer in chat with the source and the data window.
+- **Write a note only if Tejas asks for one.** The exception is the `design` and `rollout` jobs, whose deliverable is a document, so they always produce a note. Otherwise answer in chat with the source and the data window.
 
 - **Notes:** after the note check passes, save the note and everything created for it locally (`signed_off: false`) and present it. **Nothing is pushed before Tejas signs off.**
 - **Chat answers:** queries and scripts made along the way stay local and unpushed unless Tejas says "save", which then follows the sign-off rule below.
@@ -46,7 +46,7 @@ What each element contains and when it is used. Shared files in `context/` chang
 | Job cards | `workflows/jobs.md` | Says what each job type (analyse, model, design, rollout, measure) needs from Tejas, how it is done, and what the note adds. | When checking a request is complete, and when planning the query and the analysis. |
 | Review | `workflows/review.md` | Defines the checks run on the query before it is run, the CSV when it arrives, and the note before it is shown. | Before Tejas runs a query, when a CSV arrives, and before a note is shown. |
 | Context updates | `workflows/update-context.md` | Explains how to add or change a table, metric, rule or tested query in the shared context. | When a metric or table is undefined, a data quirk is found, or Tejas asks for a context change. |
-| Note template | `templates/note.md` | The fixed layout for a note: answer first, then evidence, definitions and caveats. | When Tejas asks for a note. |
+| Note template | `templates/note.md` | The fixed layout for a note: answer first, then evidence, definitions and caveats. | When a note is being written. |
 | Methods | `templates/methods.md` | Reference for experiment maths: sample size, sample-ratio checks, significance tests, and how to give ranges. | When designing an experiment, planning a rollout, or reading launch results. |
 
 ### Tools
@@ -61,7 +61,7 @@ New project: `cp -r archives/_template archives/<name>`, then fill `archives/<na
 
 | Element | Location | Purpose | Trigger | Created by |
 |---|---|---|---|---|
-| Note | `insights/` | Holds the note for one request: the answer, sizing, spec or launch readout. | When Tejas asks for a note. | `new-file.sh <project> insights <project>-<topic> md` |
+| Note | `insights/` | Holds the note for one request: the answer, sizing, spec or launch readout. | When a note is being written: Tejas asked for one, or the job is design or rollout. | `new-file.sh <project> insights <project>-<topic> md` |
 | SQL | `queries-dump/` | Holds the SQL queries, and the small check queries, written for a request. | When writing the queries for a request. | `new-file.sh <project> queries-dump <project>-<topic>-query sql` |
 | Scripts | `scripts/` | Holds the Python scripts that calculate every number reported. | When calculating the numbers for an answer. | `new-file.sh <project> scripts aggregate-<topic> py` (or `structure-`) |
 | Tests | `tests/` | Holds tests for scripts whose logic is more than trivial. | When a script's logic is more than trivial. | `new-file.sh <project> tests test-<script> py` |

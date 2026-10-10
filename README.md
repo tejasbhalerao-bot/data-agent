@@ -1,6 +1,6 @@
 # data-agent
 
-Tejas's analyst, as a repo. It answers data questions, sizes and models opportunities, designs measurement for PRDs, and watches launches. Tejas runs the queries in Metabase and supplies the CSVs; the agent writes and checks the queries, calculates every number with a script, and writes a note only when asked.
+Tejas's analyst, as a repo. It answers data questions, sizes and models opportunities, designs measurement for PRDs, and watches launches. Tejas runs the queries in Metabase and supplies the CSVs; the agent writes and checks the queries, calculates every number with a script, and writes a note when asked, and always for design and rollout.
 
 ## How to use
 Open this folder in Claude Code and paste a request template from [WORKFLOW_GUIDE.md](WORKFLOW_GUIDE.md). Name the project: anything that creates a query or script is saved in that project's folder under `archives/`, and nothing is saved without one. Start the request with a `Job:` line, one of:

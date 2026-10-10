@@ -38,7 +38,7 @@ If two documents disagree, the later `updated` date wins; if a metric has confli
 
 ## 5. Saved notes, and whether to write a note
 - **Saved-note check:** if a note in `archives/<project>/insights/` (or another project's, for the same metric) answers the request and its data window ended within the last 7 days, quote it with its window and date, offer a refresh, and stop. A stale or partial match is not enough: carry on.
-- **Note or chat:** write a note only if Tejas asks for one. Otherwise the loop runs without a brief and the answer goes in chat.
+- **Note or chat:** write a note only if Tejas asks for one, or the job is `design` or `rollout` (their deliverable is a document). Otherwise the loop runs without a brief and the answer goes in chat.
 - **Project:** needed for anything that creates files, which is every new query or script; not needed when a saved note answers it. If none is named, ask which; if it is new, create it from `archives/_template`. Nothing is saved without one.
 
 Then follow `workflows/loop.md`. For job-specific intake, method and output, use the card in `workflows/jobs.md`.

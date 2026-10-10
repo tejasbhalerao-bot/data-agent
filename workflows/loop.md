@@ -10,7 +10,7 @@ Phases are fixed. Checks are in `review.md`. Job differences are in `jobs.md`.
 ## 1. Route
 Done in `route.md`. Output: job, defaults used, context loaded, and whether a note will be written.
 
-## 2. Brief (only when Tejas asked for a note)
+## 2. Brief (only when a note will be written)
 Build from the intake: objective, questions (each independently answerable), definitions used (name them from `metrics.md`), tables, expected output columns and grain, the decision this feeds, defaults used. Create the note with `./scripts/new-file.sh <project> insights <project>-<topic> md` using `templates/note.md`, status `brief`.
 **Gate A only if a blocking assumption was made:** show the brief, wait for approval. Otherwise show it as the note header and continue.
 

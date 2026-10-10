@@ -18,12 +18,14 @@ Common required inputs for every job: **Job, Project, Decision this feeds** (opt
 - **Note adds:** assumption table, range, break-even, what would change the conclusion.
 
 ## design (decide how to measure before building)
+- **Output:** always a note.
 - **Required:** the PRD text or its key points, supplied in the request. Mode: **ard** (analytics requirements document), **experiment**, or both. For an experiment: hypothesis and target metric.
 - **Method:** (1) data feasibility: does each field exist, is it populated and reliable (use schema, probes, the instrumentation caveats in `rules.md`); (2) metric definitions: numerator, denominator, exclusions, anchor, written to `metrics.md` after approval; (3) instrumentation needs for engineering; (4) for an experiment: primary and guardrail metrics, MDE, sample size, duration, holdout, assignment, SRM check, ship / iterate / kill thresholds (`templates/methods.md`).
 - **ard mode:** the note is the ARD. Sections: objective and the decision it supports; metric definitions (names from `metrics.md`, new ones flagged); **instrumentation table** (event or field, properties, trigger, owner system, status Present / Partial / Missing from `schema.md` and `rules.md` G7); **ER diagram** of the entities and tables involved (Mermaid `erDiagram`, built from `schema.md` join keys, unverified keys dashed in a caption); data feasibility and gaps; open questions for engineering.
 - **Note adds:** a paste-ready block for the PRD (metrics, instrumentation, experiment plan), or the ARD sections above.
 
 ## rollout (design the GTM)
+- **Output:** always a note.
 - **Required:** the PM's rollout plan as supplied: stages, locations, percentages, launch parameters, intended duration. Anything absent is asked in the one batched message.
 - **Method:** size each stage from data (eligible orders, customers or lanes per location per day); check the stage is large enough to read the success and guardrail metrics (`templates/methods.md`); propose stage gates (go / hold / rollback) with thresholds tied to `metrics.md`; propose the minimum duration per stage; flag overlaps with other live changes and locations with thin data.
 - **Note adds:** rollout table (stage, locations, %, expected volume, duration, gate metrics and thresholds, rollback trigger) and readiness checks (instrumentation live, baseline frozen). The PM owns the plan; the analyst sizes and challenges it.

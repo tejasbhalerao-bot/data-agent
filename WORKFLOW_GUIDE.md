@@ -1,6 +1,8 @@
 # Workflow Guide
 
-Paste a template, fill the fields, send. Fields marked (default) can be left out: the agent fills them from `context/rules.md` and lists what it assumed. Anything else missing is asked once, in a single message. The `Job:` line makes routing exact.
+Paste a template, fill the fields, send. Fields marked (default) can be left out: the agent fills them in from its standing defaults and lists what it assumed. Anything else missing is asked once, in a single message. The `Job:` line tells the agent which kind of work this is.
+
+For a quick question, skip the template: write one sentence and name the project. Answers come back in chat. Add `Note: yes` to any request to get a written note instead; `design` and `rollout` requests always produce a note.
 
 ## What happens after you send
 1. The agent checks the request is complete, then loads context. If a saved note in a project's `insights/` answers it and its data ended within the last 7 days, it quotes that note with its date and offers a refresh. A CSV already on disk is reused instead of a new pull.
@@ -10,51 +12,51 @@ Paste a template, fill the fields, send. Fields marked (default) can be left out
 ## Analyse
 ```
 Job: analyse
-Project: <slug>
+Project: <project folder name>
 Question: <what do you want to know>
-Decision it feeds: <what you will do with the answer>
+Decision it feeds (optional): <what you will do with the answer>
 Window (default): 
 Cohort / vertical (default): 
 Compare against (default: prior period): 
-Metrics (default: metrics.md): 
+Metrics (default: the agreed definitions): 
 ```
 Example: `Job: analyse / Project: egregiously-miscalibrated-promises / Question: why did on-time drop for Pune SDD in September / Decision it feeds: whether to escalate to the courier team / Window: Sept vs Aug`
 
 ## Model
 ```
 Job: model
-Project: <slug>
+Project: <project folder name>
 Lever: <the change, rule or option>
 Assumptions: <each one, with a value if you have it>
 Horizon: 
 Alternatives to compare (optional): 
-Decision it feeds: 
+Decision it feeds (optional): 
 ```
 
 ## Design
 ```
 Job: design
-Project: <slug>
+Project: <project folder name>
 PRD (paste the text or key points): 
 Need: ard | metrics | feasibility | instrumentation | experiment plan   (any combination)
 For an experiment: hypothesis, target metric, eligible universe, planned split
-Decision it feeds: 
+Decision it feeds (optional): 
 ```
 
 ## Rollout
 ```
 Job: rollout
-Project: <slug>
+Project: <project folder name>
 PRD / change being rolled out: 
 Rollout plan: <stages, locations, % of traffic or orders, launch parameters, intended duration>
 Success and guardrail metrics: 
-Decision it feeds: 
+Decision it feeds (optional): 
 ```
 
 ## Measure
 ```
 Job: measure
-Project: <slug>
+Project: <project folder name>
 Mode: baseline | day1 | day7 | health | readout
 Cuts you want (analyst will propose more): 
 Dashboard spec needed: yes | no
@@ -62,6 +64,7 @@ Launch date:
 Control / baseline window: 
 Metrics: <names, or "from the PRD" with the PRD pasted>
 Success and guardrail thresholds (if known): 
+Decision it feeds (optional): 
 ```
 
 ## Update context
@@ -72,10 +75,10 @@ Details: <table name / metric and definition / rule / paste the SQL>
 ```
 
 ## When a query fails
-Paste the error, the timeout or the odd result into the chat. The agent diagnoses, fixes and sends a new pack; any new quirk is added to `context/rules.md` automatically.
+Paste the error, the timeout or the odd result into the chat. The agent diagnoses, fixes and sends a new pack; any new data quirk is added to `context/rules.md` locally and saved to GitHub with your next sign-off.
 
 ## Re-running a saved analysis
-`Job: analyse / Project: <slug> / Re-run: <note or script name> / New file: <csv>`. The saved script runs on the new CSV; nothing is rebuilt.
+`Job: analyse / Project: <project folder name> / Re-run: <note or script name> / New file: <csv>`. The saved script runs on the new CSV; nothing is rebuilt.
 
 ## Manual operations
 ```bash
