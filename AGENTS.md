@@ -33,44 +33,44 @@ What each element contains and when it is used. Shared files in `context/` chang
 ### Shared context
 | Element | Location | Purpose | Trigger |
 |---|---|---|---|
-| Context guide | `context/CLAUDE.md`, `context/README.md` | Describes Truemeds' teams, systems and business verticals, and how context files are formatted and loaded. | Read at session start |
-| Schema | `context/schema.md` | Lists every database table and its columns, each labelled with the systems it belongs to, plus tested queries to reuse. | Router loads the matching tables; Build pre-flight |
-| Metrics | `context/metrics.md` | Gives the one agreed meaning of each metric, and flags metrics that different projects define differently. | Every request; any figure or SQL |
-| Rules | `context/rules.md` | Lists the filters always applied, the default time window and comparison, term meanings, known data quirks and open questions. | Every request; fills defaultable gaps |
+| Context guide | `context/CLAUDE.md`, `context/README.md` | Describes Truemeds' teams, systems and business verticals, and how context files are formatted and loaded. | Read at the start of every data session. |
+| Schema | `context/schema.md` | Lists every database table and its columns, each labelled with the systems it belongs to, plus tested queries to reuse. | Read before writing any query, and whenever a table or column is mentioned. |
+| Metrics | `context/metrics.md` | Gives the one agreed meaning of each metric, and flags metrics that different projects define differently. | Read on every request, before using or defining any metric. |
+| Rules | `context/rules.md` | Lists the filters always applied, the default time window and comparison, term meanings, known data quirks and open questions. | Read on every request, to apply the standard filters and fill in missing defaults. |
 
 ### Engine
 | Element | Location | Purpose | Trigger |
 |---|---|---|---|
-| Router | `workflows/route.md` | Starts every data request: checks it is complete, picks the job type, loads context, and looks for an existing answer. | Every data request, first |
-| Loop | `workflows/loop.md` | Describes the six steps every request follows, from planning the query to saving the result. | After routing, unless a saved note answered it |
-| Job cards | `workflows/jobs.md` | Says what each job type (analyse, model, design, rollout, measure) needs from Tejas, how it is done, and what the note adds. | Ready-check; Build and Answer phases |
-| Review | `workflows/review.md` | Defines the checks run on the query before it is run, the CSV when it arrives, and the note before it is shown. | Before handoff, on file drop, before save |
-| Context updates | `workflows/update-context.md` | Explains how to add or change a table, metric, rule or tested query in the shared context. | Undefined term, undocumented table, new quirk, sign-off, or Tejas's direct request |
-| Note template | `templates/note.md` | The fixed layout for a note: answer first, then evidence, definitions and caveats. | Phase 2 (brief) |
-| Methods | `templates/methods.md` | Reference for experiment maths: sample size, sample-ratio checks, significance tests, and how to give ranges. | `design`, `rollout`, `measure` jobs |
+| Router | `workflows/route.md` | Starts every data request: checks it is complete, picks the job type, loads context, and looks for an existing answer. | First step of every data request. |
+| Loop | `workflows/loop.md` | Describes the six steps every request follows, from planning the query to saving the result. | After routing, unless a saved note already answers the request. |
+| Job cards | `workflows/jobs.md` | Says what each job type (analyse, model, design, rollout, measure) needs from Tejas, how it is done, and what the note adds. | When checking a request is complete, and when planning the query and the analysis. |
+| Review | `workflows/review.md` | Defines the checks run on the query before it is run, the CSV when it arrives, and the note before it is shown. | Before Tejas runs a query, when a CSV arrives, and before a note is shown. |
+| Context updates | `workflows/update-context.md` | Explains how to add or change a table, metric, rule or tested query in the shared context. | When a metric or table is undefined, a data quirk is found, or Tejas asks for a context change. |
+| Note template | `templates/note.md` | The fixed layout for a note: answer first, then evidence, definitions and caveats. | When Tejas asks for a note. |
+| Methods | `templates/methods.md` | Reference for experiment maths: sample size, sample-ratio checks, significance tests, and how to give ranges. | When designing an experiment, planning a rollout, or reading launch results. |
 
 ### Tools
 | Element | Location | Purpose | Trigger |
 |---|---|---|---|
-| File creator | `scripts/new-file.sh` | Creates a new file with the right name, version number and folder. | Whenever a versioned file is created |
-| Commit helper | `scripts/commit-and-push.sh` | Saves and uploads only the files named to GitHub, nothing else. | On sign-off; direct context updates |
-| CSV validator | `scripts/validate-csv.py` | Checks a CSV has the expected columns, no duplicate rows, acceptable blanks, the right dates and matching totals. | When a CSV lands in `raw-data/` |
+| File creator | `scripts/new-file.sh` | Creates a new file with the right name, version number and folder. | Every time a new versioned file is created. |
+| Commit helper | `scripts/commit-and-push.sh` | Saves and uploads only the files named to GitHub, nothing else. | After Tejas signs off, or when he asks for a context update. |
+| CSV validator | `scripts/validate-csv.py` | Checks a CSV has the expected columns, no duplicate rows, acceptable blanks, the right dates and matching totals. | Every time a CSV is added to `raw-data/`. |
 
 ### Per project: `archives/<project>/`
 New project: `cp -r archives/_template archives/<name>`, then fill `archives/<name>/context/data-sources.md`. Never create project subfolders by hand. `analysis-plans/` exists only in legacy projects.
 
 | Element | Location | Purpose | Trigger | Created by |
 |---|---|---|---|---|
-| Note | `insights/` | Holds the note for one request: the answer, sizing, spec or launch readout. | Phases 2 to 6 | `new-file.sh <project> insights <project>-<topic> md` |
-| SQL | `queries-dump/` | Holds the SQL queries, and the small check queries, written for a request. | Phase 3 (Build) | `new-file.sh <project> queries-dump <project>-<topic>-query sql` |
-| Scripts | `scripts/` | Holds the Python scripts that calculate every number reported. | Phase 5 (Answer) | `new-file.sh <project> scripts aggregate-<topic> py` (or `structure-`) |
-| Tests | `tests/` | Holds tests for scripts whose logic is more than trivial. | Phase 5 | `new-file.sh <project> tests test-<script> py` |
-| Project context | `context/` | Holds reference material for this project only, sample data of up to 10 rows, and the list of its data files. | Router reads at load | `new-file.sh <project> context <descriptor> md` |
-| Raw data | `raw-data/` | Holds the complete CSV exports Tejas downloads from Metabase. | After the handoff pack | Tejas drops them |
-| Outputs | `outputs/` | Holds the result files the scripts write. | Phase 5 | Scripts write them |
+| Note | `insights/` | Holds the note for one request: the answer, sizing, spec or launch readout. | When Tejas asks for a note. | `new-file.sh <project> insights <project>-<topic> md` |
+| SQL | `queries-dump/` | Holds the SQL queries, and the small check queries, written for a request. | When writing the queries for a request. | `new-file.sh <project> queries-dump <project>-<topic>-query sql` |
+| Scripts | `scripts/` | Holds the Python scripts that calculate every number reported. | When calculating the numbers for an answer. | `new-file.sh <project> scripts aggregate-<topic> py` (or `structure-`) |
+| Tests | `tests/` | Holds tests for scripts whose logic is more than trivial. | When a script's logic is more than trivial. | `new-file.sh <project> tests test-<script> py` |
+| Project context | `context/` | Holds reference material for this project only, sample data of up to 10 rows, and the list of its data files. | Read when the request concerns this project. | `new-file.sh <project> context <descriptor> md` |
+| Raw data | `raw-data/` | Holds the complete CSV exports Tejas downloads from Metabase. | After Tejas runs the queries and downloads the results. | Tejas drops them |
+| Outputs | `outputs/` | Holds the result files the scripts write. | When a script runs. | Scripts write them |
 
 ### Other
 | Element | Location | Purpose | Trigger |
 |---|---|---|---|
-| Design record | `changelogs/` | Records why the repo is designed as it is, and each change to the workflows. | When the design changes |
-| Scratch | `scratch/` | Holds temporary work that is never uploaded. | Ad hoc |
+| Design record | `changelogs/` | Records why the repo is designed as it is, and each change to the workflows. | When the design or workflows change. |
+| Scratch | `scratch/` | Holds temporary work that is never uploaded. | For throwaway work only. |
