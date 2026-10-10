@@ -8,16 +8,16 @@ These rules govern **data requests**: analyse, model, design, rollout, measure, 
 Do not rely on memory from earlier sessions for schema, metrics, rules or data sources. Do not invoke built-in analysis skills for work this repo handles. Output-format skills (`xlsx`, `pdf`, `docx`, `pptx`, charting) are allowed when Tejas asks for that format; their figures still come from this repo's scripts.
 
 ## Core rules
-1. **Figures come from code.** Never read numbers off a CSV by eye; the note's figures come from a script output.
-2. **Query correctness has one owner:** the Build phase of `workflows/loop.md` (phase 3). Pre-flight against `context/schema.md` and `context/metrics.md`, review before handoff, validate the CSV after. An undocumented table or metric is a hard stop.
-3. **Ask only what context cannot answer.** One batched message of blocking gaps; fill defaultable gaps from `context/rules.md` and list them in the note.
-4. **Review always runs** (`workflows/review.md`); it cannot be skipped.
-5. **Metrics have one definition.** Conflicting variants are asked, not guessed.
+1. **Every number comes from a script.** Run a script on the CSV and report only what it outputs. Never read numbers off the CSV by eye or type them by hand. If no script produced a figure, do not report it.
+2. **You own query correctness, start to finish.** Use only tables, columns and metrics that are documented. If one is missing, stop, say what is missing, and ask Tejas for it. Write queries that filter early and cannot multiply rows through joins. Check each query before Tejas runs it, and check each CSV before analysing it: expected columns present, no duplicate rows, no unexpected blanks, dates inside the window. If a query or CSV is wrong, you fix it.
+3. **Ask only what you cannot work out.** Send one message, in plain English with no jargon, one question per line, each 20 words or fewer. Never ask about something you can default; fill it in and list it on the first line of the note. Defaults: last 30 days ending yesterday; compare with the previous period of the same length; all verticals; ignore incomplete (status 49) and scrapped (status 312) orders and warehouses with ID below 17. Always ask when the project, the comparison group, the PRD input, or a metric's meaning is missing.
+4. **Check everything, every time.** Three checks, none skippable, not even for quick answers: the query before Tejas runs it, the CSV when it arrives, and the note before you present it. In the note check that every figure traces to a script output, denominators are stated, sample sizes support the claims, and "caused" appears only where a test supports it. Full checklist: `workflows/review.md`.
+5. **Each metric has one meaning.** If two sources define a metric differently, or you cannot pin down what a term means, ask Tejas which to use. Never choose silently. Once he decides, record it.
 
 ## Sign-off, save and push
-- **Tier 2 notes:** after Check 3 passes, save the note and everything created for it locally (`signed_off: false`) and present it. **Nothing is pushed before Tejas signs off.**
+- **Tier 2 notes:** after the note check passes, save the note and everything created for it locally (`signed_off: false`) and present it. **Nothing is pushed before Tejas signs off.**
 - **Tier 0 and Tier 1:** answer in chat with source and as-of; no note is saved. Queries and scripts made along the way stay local and unpushed unless Tejas says "save", which then follows the sign-off rule below.
-- **What counts as sign-off:** Tejas replies "ok", "approved", "looks good", "save it", "sign off" or similar to the presented note. Questions, change requests and silence do not count: revise, re-run Check 3, and present again.
+- **What counts as sign-off:** Tejas replies "ok", "approved", "looks good", "save it", "sign off" or similar to the presented note. Questions, change requests and silence do not count: revise, re-run the note check, and present again.
 - **On sign-off:** set `signed_off: true`, add any finding to `context/findings.md`, then commit and push everything from the request in one commit straight to `main` with `scripts/commit-and-push.sh "<message>" <paths>`. State the message and paths. That push is pre-authorised for the note, its queries, scripts, tests, and the additive context changes defined in `workflows/update-context.md`.
 - **Context changes:** a change to an existing definition or rule needs Tejas's approval first. A direct request from Tejas to update context is its own approval: push it right away.
 - **Never push** `raw-data/`, `outputs/` or `scratch/`.
