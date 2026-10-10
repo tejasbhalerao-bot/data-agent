@@ -21,6 +21,8 @@ Project: <project folder name>
 Question: <what do you want to know>
 Window: 
 Cohort / vertical: 
+Each row should be (optional): <for example one order>
+Columns you need (optional): 
 Compare against: 
 Metrics (blank = the agreed definitions): 
 Decision it feeds (optional): 

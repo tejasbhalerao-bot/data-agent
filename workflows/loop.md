@@ -14,7 +14,8 @@ Done in `route.md`. Output: job, rules applied, context loaded, whether a note w
 Before writing any query, design or plan, show Tejas a short brief in plain English and **wait for his approval**. Do no work until he approves. If he corrects it, revise and show it again.
 - The flow reading ("My reading of the flow: …").
 - The objective, and the questions to answer (each answerable on its own).
-- Definitions used (named from `metrics.md`), tables, and the columns and grain the output will have.
+- Definitions used (named from `metrics.md`) and tables.
+- **Grain and output columns: ask Tejas.** Ask what one row should be and which columns he needs. You may suggest, with reasons, but he decides; never choose them alone, and do not write any query until he has answered.
 - What you will produce (queries, a design, a rollout plan, a baseline, a dashboard spec). The result is always a note.
 - Assumptions made, and the decision it feeds if he gave one.
 
@@ -26,9 +27,9 @@ When he approves, create the note with `scripts/new-file.sh <project> insights <
 3. **Write the SQL** (you own its correctness).
    - Apply the filters listed for each table in `schema.md`, and any rule in `rules.md`.
    - Filter early, avoid join fan-out, use the `tmmumpsdb.` prefix and `snake_case` names.
-   - **Pull wide:** one row per order (or the smallest unit the request needs), with every column a later cut might use (courier, warehouse, pincode, date, state flags), so cuts happen in the script.
+   - Use the grain and columns Tejas gave in the brief. Do not add or drop columns on your own; if a cut later needs a column that is missing, ask him.
    - Put a header on each query: purpose, grain, tables, definitions used, filters, expected shape.
-   - Rate timeout risk. Low: up to 2 joins and 30 days. Medium: 3 to 4 joins, or 31 to 89 days. High: 5+ joins, or 90+ days. Split High queries by date range, and write a merge script (`scripts/new-file.sh <project> scripts merge-<topic> py`) that joins the chunks and checks the row counts.
+   - Rate timeout risk. Low: up to 2 joins and 30 days. Medium: 3 to 4 joins, or 31 to 89 days. High: 5+ joins, or 90+ days. Tell Tejas the rating. For High, propose a split (by date range first) and let him choose; then write a merge script (`scripts/new-file.sh <project> scripts merge-<topic> py`) that joins the chunks and checks the row counts.
    - Save with `scripts/new-file.sh <project> queries-dump <project>-<topic>-query sql`.
 4. **Probe.** One combined query: row count, distinct key count, and one total that reconciles to a known figure (from a signed-off note or from Tejas; if none exists, skip the reconciliation and say so).
 5. **Check the query** (`review.md`), then give Tejas **one handoff pack**: all queries, the probe, and the exact filename to save each CSV as in `raw-data/`. Set the note's `status: awaiting-data`, fill `awaiting:`, and commit it locally.
