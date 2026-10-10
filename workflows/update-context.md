@@ -1,14 +1,14 @@
 ---
 name: update-context
-description: Add or change schema, a metric, a rule, a validated query or a finding. Called by the loop (undefined term, undocumented table, new quirk, promotion) or directly by Tejas.
+description: Add or change schema, a metric, a rule, or a validated query. Called by the loop (undefined term, undocumented table, new quirk, promotion) or directly by Tejas.
 ---
 
 # Update context
 
-One home per fact: schema in `context/schema.md`, definitions in `context/metrics.md`, filters, vocabulary and quirks in `context/rules.md`, validated SQL as a "Reference queries" entry in `context/schema.md`, results in `context/findings.md`. Project-only material stays in `archives/<project>/context/`.
+One home per fact: schema in `context/schema.md`, definitions in `context/metrics.md`, filters, vocabulary and quirks in `context/rules.md`, validated SQL as a "Reference queries" entry in `context/schema.md`. Results live in project notes (`archives/<project>/insights/`), not here. Project-only material stays in `archives/<project>/context/`.
 
 ## Approval rule
-- **Additive and low-risk** (a new table section, a new gotcha row, a validated query, a finding with window and as-of): apply locally and show the diff. It is pushed with the request's commit at sign-off, or right away when Tejas asked for the update directly.
+- **Additive and low-risk** (a new table section, a new gotcha row, a validated query): apply locally and show the diff. It is pushed with the request's commit at sign-off, or right away when Tejas asked for the update directly.
 - **Change to an existing definition, rule or schema statement, or a conflict between variants:** show the diff, wait for approval, then apply.
 
 ## New table or column (schema discovery)
@@ -19,9 +19,6 @@ One home per fact: schema in `context/schema.md`, definitions in `context/metric
 
 ## New metric or definition
 Add to `metrics.md`: definition, inputs (named columns), formula, unit, caveats, source. Where it conflicts with an existing variant, keep both and log the conflict in `rules.md` section 6 until Tejas picks one.
-
-## New finding
-Only from a **signed-off** note. Format: ID, topic, window, as-of, definition used, result, source path. Headlines only; full tables stay in the note.
 
 ## New validated query
 Add a row to the "Reference queries" section of `context/schema.md`, under its system. When a second project reuses a query, move the file into `context/` with the standard header (purpose, grain, tables, definitions, exclusions, validated-on) and update the row.

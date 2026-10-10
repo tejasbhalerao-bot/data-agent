@@ -3,7 +3,7 @@
 Paste a template, fill the fields, send. Fields marked (default) can be left out: the agent fills them from `context/rules.md` and lists what it assumed. Anything else missing is asked once, in a single message. The `Job:` line makes routing exact.
 
 ## What happens after you send
-1. Ready-check, then context loads. If the answer is already known (`context/findings.md`, a recent note, a CSV on disk) it answers from that with the as-of date.
+1. Ready-check, then context loads. If the answer is already known (a saved note in a project's `insights/`, or a CSV on disk) it answers from that with the as-of date.
 2. For a new pull: you get **one pack** (queries, a probe, exact filenames). Run it in Metabase once and save the CSVs into the project's `raw-data/` with those names.
 3. The agent detects the files, validates them, computes the figures with a script, writes the note and reviews it. You read it and sign off; the push to `main` happens on your sign-off.
 
@@ -67,7 +67,7 @@ Success and guardrail thresholds (if known):
 ## Update context
 ```
 Job: update-context
-Add or change: schema | metric | rule | query | finding
+Add or change: schema | metric | rule | query
 Details: <table name / metric and definition / rule / paste the SQL>
 ```
 

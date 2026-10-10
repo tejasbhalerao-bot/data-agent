@@ -11,7 +11,7 @@ Verticals: Hyperlocal Forward, Hyperlocal Reverse, Courier Forward, Courier Reve
 3rd-party rails (Clickpost, Locus) have no context file yet. Communications has no schema documented (`rules.md` G6).
 
 ## What is here
-Four kinds of file: `schema.md`, `metrics.md`, `rules.md`, `findings.md`. What each holds and when it is used: root `CLAUDE.md`, "Elements of the repo".
+Three files: `schema.md`, `metrics.md`, `rules.md`. Results live in project notes, not here. What each holds and when it is used: root `CLAUDE.md`, "Elements of the repo".
 
 Conventions and loading rules: `context/README.md`.
 

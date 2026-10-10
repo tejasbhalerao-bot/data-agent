@@ -32,7 +32,7 @@ Chi-square test of observed arm counts against the planned split. `p < 0.001` me
 State the confounders: mix shift, seasonality, concurrent launches. Prefer same-lane or same-cohort matching (as in the PBA same-courier cohort). Say "associated with", not "caused".
 
 ## Ranges and sizing
-Give low / base / high, naming the assumption that moves each. Separate a **floor** (provably addressable, observed in the data) from a **ceiling** (all of the addressable pool). Example: reallocation uplift 2.04pp floor, 6.20pp ceiling (F5 in `findings.md`).
+Give low / base / high, naming the assumption that moves each. Separate a **floor** (provably addressable, observed in the data) from a **ceiling** (all of the addressable pool). Example: reallocation uplift 2.04pp floor, 6.20pp ceiling (note #62 in `archives/egregiously-miscalibrated-promises/insights/`).
 
 ## Sanity checks before any figure is published
 Row count reconciles to the extract; the population equals the intended denominator; percentages of a partition add to 100; a headline comparison is re-cut by the largest segment (Simpson's paradox).

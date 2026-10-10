@@ -13,7 +13,7 @@ data-agent/
 ├── context/             shared knowledge (see context/README.md)
 │   ├── CLAUDE.md  README.md
 │   ├── schema.md          every table, flagged by system; reference queries
-│   └── metrics.md  rules.md  findings.md
+│   └── metrics.md  rules.md
 ├── workflows/           route · loop · jobs · review · update-context
 ├── templates/           note.md · methods.md
 ├── scripts/             new-file.sh · commit-and-push.sh · validate-csv.py

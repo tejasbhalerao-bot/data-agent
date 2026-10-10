@@ -22,8 +22,8 @@ updated: YYYY-MM-DD
 ## Loading
 1. Identify systems and verticals in the request.
 2. Read `schema.md` (Key lookups, plus the tables whose `Systems:` flag includes a requested system or `all`), and `metrics.md` and `rules.md` always.
-3. Scan `findings.md` and the "Reference queries" section of `schema.md` for reuse before building anything.
+3. Scan project notes (`archives/*/insights/`) and the "Reference queries" section of `schema.md` for reuse before building anything.
 4. A system with no documents is surfaced once; do not fill the gap from general knowledge.
 
 ## Staleness
-Flag any loaded file older than 90 days. Findings are time-bound: quote their window and as-of date.
+Flag any loaded file older than 90 days. Notes are time-bound: when quoting one, give its window and as-of date.

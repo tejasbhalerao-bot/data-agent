@@ -16,15 +16,16 @@ Do not rely on memory from earlier sessions for schema, metrics, rules or data s
 
 ## Sign-off, save and push
 Requests are sorted into three tiers by the router (`workflows/route.md`):
-- **Tier 0, recall:** the answer is already known from saved findings or an earlier note, and is recent enough to quote. No new query.
+- **Tier 0, recall:** the answer is already in a saved note in a project's `insights/` folder, and is recent enough to quote. No new query.
 - **Tier 1, quick:** a simple question: every term and table involved is already documented and one main query answers it.
 - **Tier 2, full:** anything else: new definitions, several steps, or a result that feeds a decision.
 
 - **Tier 2 notes:** after the note check passes, save the note and everything created for it locally (`signed_off: false`) and present it. **Nothing is pushed before Tejas signs off.**
 - **Tier 0 and Tier 1:** answer in chat with source and as-of; no note is saved. Queries and scripts made along the way stay local and unpushed unless Tejas says "save", which then follows the sign-off rule below.
 - **What counts as sign-off:** Tejas replies "ok", "approved", "looks good", "save it", "sign off" or similar to the presented note. Questions, change requests and silence do not count: revise, re-run the note check, and present again.
-- **On sign-off:** set `signed_off: true`, add any finding to `context/findings.md`, then commit and push everything from the request in one commit straight to `main` with `scripts/commit-and-push.sh "<message>" <paths>`. State the message and paths. That push is pre-authorised for the note, its queries, scripts, tests, and the additive context changes defined in `workflows/update-context.md`.
+- **On sign-off:** set `signed_off: true`, then commit and push everything from the request in one commit straight to `main` with `scripts/commit-and-push.sh "<message>" <paths>`. State the message and paths. That push is pre-authorised for the note, its queries, scripts, tests, and the additive context changes defined in `workflows/update-context.md`.
 - **Context changes:** a change to an existing definition or rule needs Tejas's approval first. A direct request from Tejas to update context is its own approval: push it right away.
+- **A project folder is required for anything that creates files** (Tier 1 and 2; Tier 0 needs none). Nothing is saved unless there is a project folder in `archives/` to hold it: notes, queries, scripts, tests and data all live in one. If the request names no project, ask which; if it is new, create it from `archives/_template` first. Only shared context (schema, metrics, rules) is saved outside a project, and only through `workflows/update-context.md`.
 - **Never push** `raw-data/`, `outputs/` or `scratch/`.
 
 ## Elements of the repo
@@ -37,7 +38,6 @@ What each element is for and when it is used. Shared files in `context/` change 
 | Schema | `context/schema.md` | Every table, flagged by system; validated reference queries | Router loads the matching tables; Build pre-flight |
 | Metrics | `context/metrics.md` | One definition per metric; conflicts flagged | Every request; any figure or SQL |
 | Rules | `context/rules.md` | Standing exclusions, default scope, vocabulary, gotchas, open gaps | Every request; fills defaultable gaps |
-| Findings | `context/findings.md` | Signed-off results with window and as-of date | Router scans for a Tier 0 answer |
 
 ### Engine
 | Element | Location | Purpose | Trigger |
@@ -46,7 +46,7 @@ What each element is for and when it is used. Shared files in `context/` change 
 | Loop | `workflows/loop.md` | Six phases from brief to save | After routing, Tier 1 and 2 |
 | Job cards | `workflows/jobs.md` | Inputs, method and note additions per job | Ready-check; Build and Answer phases |
 | Review | `workflows/review.md` | Three checkpoints: SQL, CSV, note | Before handoff, on file drop, before save |
-| Context updates | `workflows/update-context.md` | Add or change schema, metric, rule, query, finding | Undefined term, undocumented table, new quirk, sign-off, or Tejas's direct request |
+| Context updates | `workflows/update-context.md` | Add or change schema, metric, rule, validated query | Undefined term, undocumented table, new quirk, sign-off, or Tejas's direct request |
 | Note template | `templates/note.md` | The one note per Tier 2 request | Phase 2 (brief) |
 | Methods | `templates/methods.md` | Sample size, SRM, significance, ranges | `design`, `rollout`, `measure` jobs |
 
