@@ -5,31 +5,57 @@ This repo is Tejas's analyst. It answers data questions, sizes and models opport
 ## Session start (CRITICAL)
 Read `context/CLAUDE.md` with the Read tool before any work, then follow `workflows/route.md`. Every request goes through the router. Do not rely on memory from earlier sessions for schema, metrics, rules or data sources, and do not invoke built-in analysis skills for work this repo handles (output-format skills such as `xlsx`, `pdf`, `docx`, `pptx` and charting are allowed when Tejas asks for that format; their figures still come from this repo's scripts).
 
-## Where things live
-```
-context/            shared knowledge: CLAUDE.md, schema.md, metrics.md, rules.md, findings.md
-workflows/          route.md, loop.md, jobs.md, review.md, update-context.md
-templates/          note.md, methods.md
-scripts/            new-file.sh, commit-and-push.sh, validate-csv.py
-archives/<project>/ context/ queries-dump/ scripts/ tests/ insights/ raw-data/ outputs/ (analysis-plans/ only in legacy projects)
-changelogs/         design records and workflow changes
-scratch/            throwaway work, never committed
-```
+## Elements of the repo
+Every element, where it sits, what it is for, when it is used, who creates it, and whether it is pushed. "Created by" is the file-routing rule: no exceptions. Versioned files are `yyyy-mm-dd-<descriptor>-v<n>.<ext>`, always made with `scripts/new-file.sh <project> <folder> <descriptor> <ext>`.
 
-## File routing (no exceptions)
-| Creating | Destination | Tool |
-|---|---|---|
-| A note (answer, sizing, spec, readout) | `archives/<project>/insights/` | `scripts/new-file.sh <project> insights <project>-<topic> md` |
-| SQL | `archives/<project>/queries-dump/` | `new-file.sh <project> queries-dump <project>-<topic>-query sql` |
-| Python or shell | `archives/<project>/scripts/` | `new-file.sh <project> scripts aggregate-<topic> py` (or `structure-`) |
-| Script test | `archives/<project>/tests/` | `new-file.sh <project> tests test-<script> py` |
-| Project-only reference or sample (up to 10 rows) | `archives/<project>/context/` | `new-file.sh` |
-| Full CSV from Metabase | `archives/<project>/raw-data/` | Tejas drops it; gitignored |
-| CSV a script produces | `archives/<project>/outputs/` | Script writes it; gitignored |
-| Shared schema, definition, rule, query, finding | `context/` | `workflows/update-context.md` |
-| Anything throwaway | `scratch/` | Write directly |
+### Entry and shared context
+| Element | Location | Purpose | Trigger | Created by | Git |
+|---|---|---|---|---|---|
+| Working rules | `CLAUDE.md` (and `AGENTS.md`, a copy) | Rules, element map, save rule | Read at every session start | Tejas | Pushed |
+| Context guide | `context/CLAUDE.md`, `context/README.md` | Org, systems, verticals; file conventions and loading rules | Read first by the router | Tejas | Pushed |
+| Schema | `context/schema.md` | Every table, flagged by system; validated reference queries | Router loads the matching tables; Build phase pre-flight | `update-context.md` | Pushed |
+| Metrics | `context/metrics.md` | One definition per metric; conflicts flagged | Every request; any figure or SQL | `update-context.md` | Pushed |
+| Rules | `context/rules.md` | Standing exclusions, default scope, vocabulary, gotchas, open gaps | Every request; fills defaultable gaps | `update-context.md` | Pushed |
+| Findings | `context/findings.md` | Signed-off results with window and as-of date | Router scans for a Tier 0 answer | `update-context.md`, after sign-off | Pushed |
 
-New project: `cp -r archives/_template archives/<name>`, then fill `archives/<name>/context/data-sources.md`. Never create project subfolders by hand. Versioned files are `yyyy-mm-dd-<descriptor>-v<n>.<ext>`, always through `new-file.sh`. `raw-data/` and `outputs/` are local only: say so whenever a committed doc names a file in them.
+### Engine
+| Element | Location | Purpose | Trigger | Created by | Git |
+|---|---|---|---|---|---|
+| Router | `workflows/route.md` | Ready-check, job, tier, context load | Every request, first | Tejas | Pushed |
+| Loop | `workflows/loop.md` | Six phases from brief to save | After routing, every tier above 0 | Tejas | Pushed |
+| Job cards | `workflows/jobs.md` | Inputs, method and note additions per job | Ready-check; the Build and Answer phases | Tejas | Pushed |
+| Review | `workflows/review.md` | Three checkpoints: SQL, CSV, note | Before handoff, on file drop, before save | Tejas | Pushed |
+| Context updates | `workflows/update-context.md` | Add or change schema, metric, rule, query, finding | Undefined term, undocumented table, new quirk, sign-off, or Tejas's direct request | Tejas | Pushed |
+| Note template | `templates/note.md` | The one note per request | Phase 2 (brief) | Tejas | Pushed |
+| Methods | `templates/methods.md` | Sample size, SRM, significance, ranges | `design`, `rollout` and `measure` jobs | Tejas | Pushed |
+
+### Tools
+| Element | Location | Purpose | Trigger | Created by | Git |
+|---|---|---|---|---|---|
+| File creator | `scripts/new-file.sh` | Creates a correctly versioned, correctly placed file | Whenever a versioned file is created | Tejas | Pushed |
+| Commit helper | `scripts/commit-and-push.sh` | Commits and pushes only the paths named | On sign-off; direct context updates | Tejas | Pushed |
+| CSV validator | `scripts/validate-csv.py` | Check 2: schema, grain, nulls, dates, probe totals | When a CSV lands in `raw-data/` | Tejas | Pushed |
+
+### Per project: `archives/<project>/`
+New project: `cp -r archives/_template archives/<name>`, then fill `archives/<name>/context/data-sources.md`. Never create project subfolders by hand.
+
+| Element | Location | Purpose | Trigger | Created by | Git |
+|---|---|---|---|---|---|
+| Note | `insights/` | The answer, sizing, spec or readout for one request | Phases 2 to 6 | `new-file.sh <project> insights <project>-<topic> md` | Pushed on sign-off |
+| SQL | `queries-dump/` | Queries and probes for a request | Phase 3 (Build) | `new-file.sh <project> queries-dump <project>-<topic>-query sql` | Pushed on sign-off |
+| Scripts | `scripts/` | Aggregation and structuring code; the source of every figure | Phase 5 (Answer) | `new-file.sh <project> scripts aggregate-<topic> py` (or `structure-`) | Pushed on sign-off |
+| Tests | `tests/` | Tests for non-trivial script logic | Phase 5 | `new-file.sh <project> tests test-<script> py` | Pushed on sign-off |
+| Project context | `context/` | Project-only references, samples (up to 10 rows), `data-sources.md` | Router reads at load; new project setup | `new-file.sh <project> context <descriptor> md` | Pushed |
+| Raw data | `raw-data/` | Full Metabase CSVs | Tejas drops them after the handoff pack | Tejas | Local only |
+| Outputs | `outputs/` | CSVs the scripts produce | Phase 5 | Scripts write them | Local only |
+
+`raw-data/` and `outputs/` are local only: say so whenever a committed doc names a file in them. `analysis-plans/` exists only in legacy projects.
+
+### Other
+| Element | Location | Purpose | Trigger | Created by | Git |
+|---|---|---|---|---|---|
+| Design record | `changelogs/` | Why the repo is shaped this way; workflow changes | When the design changes | Written directly | Pushed |
+| Scratch | `scratch/` | Throwaway work | Ad hoc | Written directly | Never |
 
 ## Core rules
 1. **Figures come from code.** Never read numbers off a CSV by eye; the note's figures come from a script output.
