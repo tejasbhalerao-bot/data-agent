@@ -38,7 +38,7 @@ What each file is for and when it is used: `CLAUDE.md`, "Elements of the repo".
 2. If a saved note already answers it and its data ended within the last 7 days, the agent quotes that note, offers a refresh, and stops.
 3. Otherwise it writes the queries, checks them, and gives you all of them at once.
 4. You run them in Metabase and save the CSVs in the project's `raw-data/` folder.
-5. The agent checks the CSVs, calculates the numbers with a script, and answers in chat, or in a note if you asked for one.
+5. The agent checks the CSVs, calculates the numbers with a script, and answers in chat, or in a note if you asked for one (design and rollout always produce a note).
 6. You review the note and say "ok" to sign off. Only then is it saved to GitHub. Chat answers are not saved to GitHub unless you say "save".
 
 Design record: `changelogs/2026-10-09-analyst-model-redesign-proposal.md`.

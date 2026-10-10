@@ -7,7 +7,7 @@ For a quick question, skip the template: write one sentence and name the project
 ## What happens after you send
 1. The agent checks the request is complete, then loads context. If a saved note in a project's `insights/` answers it and its data ended within the last 7 days, it quotes that note with its date and offers a refresh. A CSV already on disk is reused instead of a new pull.
 2. For a new pull: you get **one pack** (queries, a probe, exact filenames). Run it in Metabase once and save the CSVs into the project's `raw-data/` with those names.
-3. The agent detects the files, checks them, calculates the numbers with a script, and answers in chat, or in a note if you asked for one. For a note, you read it and sign off; the push to `main` happens on your sign-off. Chat answers are not pushed unless you say "save".
+3. The agent detects the files, checks them, calculates the numbers with a script, and answers in chat, or in a note if you asked for one (design and rollout always produce a note). For a note, you read it and sign off; the push to `main` happens on your sign-off. Chat answers are not pushed unless you say "save".
 
 ## Analyse
 ```
