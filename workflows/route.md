@@ -14,7 +14,7 @@ Read from the request: the **project** (a folder in `archives/`; may be none yet
 If the project has a note with `status: awaiting-data`, offer to continue it: check its `awaiting:` files in `raw-data/`, then go to step 4 of `loop.md`. A chat answer has no note; it resumes through the queries and CSVs already in the project (`loop.md`, step 3, "Reuse first").
 
 ## 3. Job
-An explicit `Job:` line wins (analyse, model, design, rollout, measure, update-context). Otherwise infer it and say so. Split a request with several objectives into separate requests.
+An explicit `Job:` line wins (analyse, model, design, rollout, measure, update-context). Otherwise infer it and say so. Split a request with several objectives into separate requests: tell Tejas the split and the order, keep the list of pending requests, work on one at a time, and when each finishes say "done; next is <request>" so he knows where you are.
 
 ## 4. Load context
 - `context/metrics.md` and `context/rules.md`, always.
@@ -34,7 +34,7 @@ Gaps: <systems with no docs, loaded files older than 90 days, open questions in 
 A system with no documents, or two documents that disagree: follow `context/CLAUDE.md`. A metric with conflicting definitions in `metrics.md`: ask which to use.
 
 ## 5. Saved notes
-Search `insights/` in the project, or in every project if none is named, and other projects' notes for the same metric. If a note answers the request, and the data window stated in the note ended within the last 7 days, quote it with its window and date, offer a refresh, and **stop**. A note with no stated data window does not count.
+Search `insights/` in the project, or in every project if none is named, and other projects' notes for the same metric. A new project has no notes yet, so only other projects' notes are searched; if none answer, carry on. If a note answers the request, and the data window stated in the note ended within the last 7 days, quote it with its window and date, offer a refresh, and **stop**. A note with no stated data window does not count.
 
 ## 6. Is the request complete?
 Check it against the job's required inputs in `jobs.md`.
