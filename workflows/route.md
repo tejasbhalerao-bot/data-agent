@@ -5,7 +5,7 @@ description: Entry point for all data-agent work. Always runs first. Checks the 
 
 # Route
 
-Always first, never skipped. Use only the local files in `workflows/`. Do not invoke built-in analysis skills (`data:*`, or `anthropic-skills:*` for analysis, PRD or research) for work this repo handles: they lack the metric dictionary, the rules and the review. Output-format skills (`xlsx`, `pdf`, `docx`, `pptx`, `dataviz`, `data:create-viz`, `data:build-dashboard`) are allowed when Tejas asks for that format; the figures in them still come from this repo's scripts.
+Always first for data requests, never skipped. Use only the local files in `workflows/`; the skills policy is in the root `CLAUDE.md`.
 
 ## 1. Resume check
 Any note in the project's `insights/` with `status: awaiting-data`? Offer to continue it (go to loop phase 4). Check `awaiting:` against `raw-data/`.

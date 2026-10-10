@@ -8,7 +8,7 @@ Open this folder in Claude Code and paste a request from [WORKFLOW_GUIDE.md](WOR
 ## Layout
 ```
 data-agent/
-├── CLAUDE.md            working rules, file routing, save rule
+├── CLAUDE.md            working rules, element map, sign-off rule
 ├── WORKFLOW_GUIDE.md    one copy-paste request template per job
 ├── context/             shared knowledge (see context/README.md)
 │   ├── CLAUDE.md  README.md
@@ -21,6 +21,7 @@ data-agent/
 ├── changelogs/          design records
 └── scratch/             throwaway (gitignored)
 ```
+Purpose and trigger of every element: `CLAUDE.md`, "Elements of the repo".
 
 ## Flow
 Route (ready-check, job, tier) → Brief (Tier 2) → Build SQL, review, one handoff pack → Tejas runs once → validate CSV → compute with a script → note → review → Tejas reads and signs off → push to `main`.
