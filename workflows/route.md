@@ -5,7 +5,7 @@ description: Entry point for all data-agent work. Always runs first. Checks the 
 
 # Route
 
-Always first, never skipped. Use only the local files in `workflows/`. Do not invoke built-in `data:*` or `anthropic-skills:*` skills for work this repo handles: they lack the metric dictionary, the rules and the review.
+Always first, never skipped. Use only the local files in `workflows/`. Do not invoke built-in analysis skills (`data:*`, or `anthropic-skills:*` for analysis, PRD or research) for work this repo handles: they lack the metric dictionary, the rules and the review. Output-format skills (`xlsx`, `pdf`, `docx`, `pptx`, `dataviz`, `data:create-viz`) are allowed when Tejas asks for that format; the figures in them still come from this repo's scripts.
 
 ## 1. Resume check
 Any note in the project's `insights/` with `status: awaiting-data`? Offer to continue it (go to loop phase 4). Check `awaiting:` against `raw-data/`.
@@ -22,7 +22,7 @@ Check the request against the job's required inputs in `jobs.md`. Classify each 
 Ask only what context cannot answer: check `metrics.md` and `rules.md` first.
 
 ## 4. Load context
-Read `context/CLAUDE.md`, `context/metrics.md`, `context/rules.md`, and the `context/data/*.md` files whose `systems:` tag matches the request. Read the project's `context/` folder and `data-sources.md`. Then scan `context/findings.md`, `context/queries/INDEX.md` and the project's `raw-data/` listing for an existing answer. Output:
+Read `context/CLAUDE.md`, `context/metrics.md`, `context/rules.md`, and `context/schema.md` (the tables whose `Systems:` flag matches the request). Read the project's `context/` folder and `data-sources.md`. Then scan `context/findings.md`, the "Reference queries" section of `schema.md` and the project's `raw-data/` listing for an existing answer. Output:
 
 ```
 [CONTEXT LOADED]

@@ -11,7 +11,7 @@ Run at each checkpoint. Fix issues yourself, re-check, and only then move on. An
 - Every metric used matches `metrics.md` (variant named). Conflicting variants: ask first.
 - `rules.md` section 1 exclusions applied (E1 to E6 as relevant); dedupe E3 done before any join.
 - Grain stated and true: join keys are unique on the side that must be unique; no fan-out.
-- Join keys match the documented keys in `context/data/` (exact `request_id = reference_number`, not timestamps).
+- Join keys match the documented keys in `context/schema.md` (exact `request_id = reference_number`, not timestamps).
 - Date filter sits in the innermost CTE; no `SELECT *` on large tables; `tmmumpsdb.` prefix; `snake_case` names.
 - Output columns equal the brief's expected columns. No aggregation in SQL.
 - Probe included; timeout risk rated; High is split.

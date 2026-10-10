@@ -292,3 +292,12 @@ Deviations from the design:
 - **Legacy notes were not given front matter.** Existing `insights/` docs keep their format; the router resumes only notes created from `templates/note.md`.
 - **Not mined:** EMP design docs (fallback ladder, option scoring, freeze, sample floor) and the 42 KB early-delivery session recap stay in their projects as project context.
 - **Conflicts surfaced, not resolved:** doctor and warehouse leg definitions differ across projects (`rules.md` G1); the PBA shadow-vs-live status is unconfirmed (G4).
+
+## 10. Review decisions on CLAUDE.md (Tejas, 2026-10-09)
+
+7. **Push timing:** nothing is pushed before sign-off. Note and context changes are saved locally after Check 3 and pushed on sign-off. This supersedes decision 6's save-then-read (section 4.4 phase 6, 4.9 and the v3 touchpoint table).
+8. **Push target:** straight to `main`.
+9. **Built-in skills:** analysis skills stay banned; output-format skills (xlsx, pdf, docx, pptx, charting) are allowed on request.
+10. **Notes folder:** stays `insights/`.
+11. **`context/queries/` removed (Tejas, 2026-10-10):** the index only pointed at project SQL. Validated queries are now a "Reference queries" section at the bottom of the owning `context/data/<system>.md`. Context has four file types: `data/`, `metrics.md`, `rules.md`, `findings.md`.
+12. **Schema merged into one file (Tejas, 2026-10-10):** `context/data/<system>.md` is replaced by `context/schema.md`; each table carries a `Systems:` flag. Reference queries sit at the bottom, grouped by system.

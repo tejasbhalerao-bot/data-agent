@@ -5,7 +5,7 @@ Paste a template, fill the fields, send. Fields marked (default) can be left out
 ## What happens after you send
 1. Ready-check, then context loads. If the answer is already known (`context/findings.md`, a recent note, a CSV on disk) it answers from that with the as-of date.
 2. For a new pull: you get **one pack** (queries, a probe, exact filenames). Run it in Metabase once and save the CSVs into the project's `raw-data/` with those names.
-3. The agent detects the files, validates them, computes the figures with a script, writes the note, reviews it, saves and pushes. You read it when you can.
+3. The agent detects the files, validates them, computes the figures with a script, writes the note and reviews it. You read it and sign off; the push to `main` happens on your sign-off.
 
 ## Analyse
 ```
