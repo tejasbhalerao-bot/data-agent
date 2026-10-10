@@ -39,7 +39,7 @@ What each file is for and when it is used: `CLAUDE.md`, "Elements of the repo".
 3. Otherwise it shows you a short brief of what it will do, starting with one line on how it understands the product flow. You correct it or approve it. Nothing starts before you approve.
 4. It then writes the queries, each as its own file in the project's `queries-dump/` folder, checks them, and lists them in the same note under "Queries to run".
 5. You run them in Metabase and save the CSVs in the project's `raw-data/` folder.
-6. The agent checks the CSVs, calculates the numbers with a script, and writes the answer into a note (a `.md` file), with a short summary in chat.
+6. The agent checks the CSVs, calculates the numbers with scripts (each its own file, listed in the note under "Scripts and outputs"), and writes the answer into a note (a `.md` file), with a short summary in chat.
 7. You review the note and say "ok" to sign off. Each stage is saved on your computer automatically; it goes to GitHub only after you sign off.
 
 Design record: `changelogs/2026-10-09-analyst-model-redesign-proposal.md`.

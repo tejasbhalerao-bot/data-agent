@@ -32,7 +32,7 @@ When he approves, create the note with `scripts/new-file.sh <project> insights <
    - **One query, one file.** Write each query as its own `.md` file in `queries-dump/`, made with `scripts/new-file.sh <project> queries-dump <project>-<topic>-query md`. The file has a short header (purpose, grain, tables, definitions used, filters, expected shape, timeout rating), then the SQL in a single ```sql code block. Never put SQL in the note.
    - **Versions.** A query changed after Tejas has seen it (for example an error fix) is a new version of its file (`-v2`, `-v3`); earlier versions stay.
 4. **Probe.** One combined query, in its own file (`<project>-<topic>-probe-query`): row count, distinct key count, and one total that reconciles to a known figure (from a signed-off note or from Tejas; if none exists, skip the reconciliation and say so).
-5. **Check the query** (`review.md`), then add a **"Queries to run"** section to the same note (the one holding the approved brief). It is a table: query, the path of its **latest** file in `queries-dump/` (with version), and the exact filename to save its CSV as in `raw-data/`. List the probe too. The note only references the query files; it never contains SQL. When a query gets a new version, update its row to the latest.
+5. **Check the query** (`review.md`), then add a **"Queries to run"** section to the same note (the one holding the approved brief). It is a table with the columns ID (Q1, Q2…; the probe is Q0), Purpose, Latest file (full path from the repo root, with version), and Save the CSV as (full path in `raw-data/`). The note only references the query files; it never contains SQL. When a query gets a new version, update its row to the latest.
    Set the note's `status: awaiting-data`, fill `awaiting:`, commit the note and the query files locally, and tell Tejas in chat that the queries are ready, with the note's path.
 
 ## 4. Run
@@ -42,7 +42,12 @@ When he approves, create the note with `scripts/new-file.sh <project> insights <
    - **FAIL from a wrong export** (cut short, wrong filters in Metabase): tell Tejas plainly what failed and ask him to re-export.
 
 ## 5. Answer
-1. **All figures come from code.** If a saved script covers the cuts needed (a re-run), run it on the new CSV. Otherwise write one (`scripts/new-file.sh <project> scripts aggregate-<topic> py`) that reads the CSV, applies the cuts and writes to `outputs/`. Never read numbers off a CSV by eye. Add a test for any script that classifies, does date arithmetic or joins.
+1. **All figures come from code.** Never read numbers off a CSV by eye.
+   - **Re-run:** if the project's earlier note has a script covering the cuts needed, take its latest file and "Run with" command from that note's "Scripts and outputs" table and run it on the new CSV.
+   - **Otherwise write one script per calculation** with `scripts/new-file.sh <project> scripts aggregate-<topic> py`. Start the file with a comment block: purpose, the CSV it reads, the files it writes to `outputs/`, and the exact command to run it. It reads the CSV, applies the cuts and writes to `outputs/`.
+   - **Versions.** A script changed after its output has been used is a new version (`-v2`, `-v3`), never an edit in place; earlier versions stay.
+   - **Tests.** Add one (`scripts/new-file.sh <project> tests test-<script> py`) for any script that classifies, does date arithmetic or joins.
+   - **Run it** and add a **"Scripts and outputs"** section to the note: a table with the columns ID (S1, S2…), Purpose, Latest file (full path), Reads (the Q-ID and its CSV), Writes (full path in `outputs/`), Test (full path, or "none needed"), and Run with (the exact command). The note only references the files; it never contains code. Commit the scripts, tests and note locally.
 2. **Open with the flow reading** from the approved brief. If Tejas corrected it, record the correction beside the relevant table or system in `schema.md` through `update-context`.
 3. **Write the answer into the note** (`templates/note.md`): answer first, decision implication, evidence tables with full numbers, definitions used, assumptions made, caveats, next check. The reply in chat is a short summary (flow reading, the key numbers, the data window) that points to the note file.
 4. **Check the answer** (`review.md`).

@@ -19,7 +19,7 @@ If the project has notes with `status: awaiting-data`, list them (name, and whic
 ## 3. Job
 - An explicit `Job:` line wins (analyse, model, design, rollout, measure, update-context). Otherwise infer it and say so. If two jobs fit equally, ask once.
 - **update-context:** stop here and follow `update-context.md`.
-- **Re-run:** if the request has a `Re-run:` field, check the new CSV (`loop.md`, phase 4, step 2), then run the named saved script on it (`loop.md`, phase 5), and skip steps 5 and 6 below.
+- **Re-run:** if the request has a `Re-run:` field, check the new CSV (`loop.md`, phase 4, step 2), then run the named saved script on it, using the latest file and "Run with" command from the earlier note's "Scripts and outputs" table (`loop.md`, phase 5), and skip steps 5 and 6 below.
 - **Several objectives:** split into separate requests. Tell Tejas the split and the order (dependencies first), keep the list of pending requests, work on one at a time, and when each finishes say "done; next is <request>".
 
 ## 4. Load context

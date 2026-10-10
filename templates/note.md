@@ -28,10 +28,22 @@ as_of: YYYY-MM-DD
 - **Expected output:** <columns, grain>
 
 ## Queries to run
-<Added when the queries are ready. A table: query, path of its latest file in queries-dump/ (with version), and the exact CSV filename to save in raw-data/. Include the probe. Never paste SQL here; update a row when a query gets a new version.>
+<Added when the queries are ready. Never paste SQL here: each query is its own file. Update a row when a query gets a new version, so it always points to the latest.>
+
+| ID | Purpose | Latest file | Save the CSV as |
+|----|---------|-------------|-----------------|
+| Q1 | <what it pulls, in a few words> | `archives/<project>/queries-dump/<file>-v<n>.md` | `archives/<project>/raw-data/<name>.csv` |
+| Q0 | Probe: row count, distinct keys, a reconciling total | `archives/<project>/queries-dump/<file>-v<n>.md` | `archives/<project>/raw-data/<name>.csv` |
+
+## Scripts and outputs
+<Added when the numbers are calculated. Never paste code here: each script is its own file. Update a row when a script gets a new version. Outputs are local only.>
+
+| ID | Purpose | Latest file | Reads | Writes | Test | Run with |
+|----|---------|-------------|-------|--------|------|----------|
+| S1 | <what it calculates, in a few words> | `archives/<project>/scripts/<file>-v<n>.py` | Q1's CSV | `archives/<project>/outputs/<name>.csv` | `archives/<project>/tests/<file>-v<n>.py`, or "none needed" | `python3 archives/<project>/scripts/<file>-v<n>.py` |
 
 ## Evidence
-<Full tables with counts and percentages. Every figure comes from a script output. Name the script and the output file (local only).>
+<Full tables with counts and percentages. Every figure comes from a script output. Cite each table by script ID and output file, for example "S1, outputs/<name>.csv" (local only).>
 
 ## Definitions and exclusions
 <Filters applied, cohort, window, denominators.>

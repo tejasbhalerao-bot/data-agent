@@ -21,7 +21,8 @@ Run at each checkpoint. Fix issues yourself, re-check, and only then move on. An
 `scripts/validate-csv.py` passes: required columns present, key unique, null shares within limits, dates inside the window, row and distinct counts match the probe. A FAIL goes back to phase 3 (query fault) or to Tejas (wrong export).
 
 ## Check 3: the note (before it is presented)
-- Every figure in the note appears in a script output in `outputs/`. No hand-typed numbers.
+- Every figure in the note appears in a script output in `outputs/`, and is cited by script ID (S1…). No hand-typed numbers.
+- The "Scripts and outputs" table points to the latest version of each script, test and output, gives the exact command to run it, and the note contains no code.
 - Denominators are stated and are the intended population; percentages add up.
 - Sample size supports the claim; small cells are marked or dropped.
 - Segment mix and confounders considered (job card list); a Simpson's-paradox check on any headline comparison.
