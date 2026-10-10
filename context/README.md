@@ -23,7 +23,8 @@ updated: YYYY-MM-DD
 1. Identify systems and verticals in the request.
 2. Read `schema.md` (Key lookups, plus the tables whose `Systems:` flag includes a requested system or `all`), and `metrics.md` and `rules.md` always.
 3. Scan project notes (`archives/*/insights/`) and the "Reference queries" section of `schema.md` for reuse before building anything.
-4. A system with no documents is surfaced once; do not fill the gap from general knowledge.
+4. Also read the matching system folders of `~/pm-agent/context/` (product flows; read only, see `context/CLAUDE.md`).
+5. A system with no documents is surfaced once; do not fill the gap from general knowledge.
 
 ## Staleness
 Flag any loaded file older than 90 days. Notes are time-bound: quote one only if its data window ended within the last 7 days, and give its window and as-of date.

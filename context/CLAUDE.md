@@ -11,6 +11,9 @@ Verticals: Hyperlocal Forward, Hyperlocal Reverse, Courier Forward, Courier Reve
 3rd-party rails (Clickpost, Locus) have no context file yet. Communications has no schema documented.
 Not yet done: the instrumentation grounding pass (checking the Mixpanel event list and `instrumentation_details` against the real data). Until it is done, `instrumentation-audit` conclusions are hypotheses.
 
+## Product context (read only, outside this repo)
+How each system works for the customer and the operator is kept by Tejas in the PM agent, in `~/pm-agent/context/<system>/` (folders: `allocation`, `tracking`, `serviceability`, `eta`, `communications`). Read the folders for the systems the request touches; read the documents whose titles relate to the request (all of them if unsure). Read only: never copy, edit or add to them. If a folder is missing or empty, say so once and carry on, flagging what you assumed. If a PM-agent document disagrees with `schema.md`, say so and ask Tejas which is right.
+
 ## What is here
 Three files: `schema.md`, `metrics.md`, `rules.md`. Results live in project notes, not here. What each holds and when it is used: root `CLAUDE.md`, "Elements of the repo".
 

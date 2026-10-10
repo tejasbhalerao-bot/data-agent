@@ -36,7 +36,7 @@ What each file is for and when it is used: `CLAUDE.md`, "Elements of the repo".
 ## What happens to a request
 1. The agent checks the request is complete and asks, in one message, only what it cannot work out.
 2. If a saved note already answers it and its data ended within the last 7 days, the agent quotes that note, offers a refresh, and stops.
-3. Otherwise it writes the queries, checks them, and gives you all of them at once.
+3. Otherwise it writes the queries, checks them, and gives you all of them at once, starting with one line on how it understands the product flow. Correct it if wrong.
 4. You run them in Metabase and save the CSVs in the project's `raw-data/` folder.
 5. The agent checks the CSVs, calculates the numbers with a script, and answers in chat, or in a note if you asked for one (design and rollout always produce a note).
 6. You review the note and say "ok" to sign off. Only then is it saved to GitHub. Chat answers are not saved to GitHub unless you say "save".

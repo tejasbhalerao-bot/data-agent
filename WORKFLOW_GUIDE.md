@@ -8,7 +8,7 @@ Want a written note? Add `Note: yes`. Design and rollout always give a note.
 
 ## What happens
 1. The agent checks your request. If a note from the last 7 days already has the answer, it uses that.
-2. It sends you all the queries at once, with the file names to save as.
+2. It sends you all the queries at once, with the file names to save as. The first line says how it understands the product flow. Correct it if it is wrong.
 3. You run them in Metabase. Save the CSVs in the project's `raw-data/` folder.
 4. The agent checks the CSVs, calculates the numbers, and answers.
 5. Notes: you say "ok", then it saves to GitHub. Chat answers: it saves only if you say "save".

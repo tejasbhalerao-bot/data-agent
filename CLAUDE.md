@@ -13,6 +13,7 @@ Do not rely on memory from earlier sessions for schema, metrics, rules or data s
 3. **Ask only what you cannot work out.** Send one message, in plain English with no jargon, one question per line, each 20 words or fewer. Never ask about something `context/rules.md` already settles: apply it and say so on the first line of the answer. Always ask when the project, the time window, the comparison group, the PRD input, or a metric's meaning is missing.
 4. **Check everything, every time.** Three checks, none skippable, not even for quick answers: the query before Tejas runs it, the CSV when it arrives, and the note before you present it. In the note check that every figure traces to a script output, denominators are stated, sample sizes support the claims, and "caused" appears only where a test supports it. Full checklist: `workflows/review.md`.
 5. **Each metric has one meaning.** If two sources define a metric differently, or you cannot pin down what a term means, ask Tejas which to use. Never choose silently. Once he decides, record it.
+6. **Say how you read the product.** Start every analysis with one line, "My reading of the flow: …", in plain words: what the customer or operator sees, and which data records it. Draw on the PM agent's system documents (`~/pm-agent/context/`, read only) and `context/schema.md`. Give the line to Tejas before he runs any query. If he corrects it, record the correction in `context/schema.md`.
 
 ## Sign-off, save and push
 Two rules decide how much work a request needs:
@@ -33,7 +34,7 @@ What each element contains and when it is used. Shared files in `context/` chang
 ### Shared context
 | Element | Location | Purpose | Trigger |
 |---|---|---|---|
-| Context guide | `context/CLAUDE.md`, `context/README.md` | Describes Truemeds' teams, systems and business verticals, and how context files are formatted and loaded. | Read at the start of every data session. |
+| Context guide | `context/CLAUDE.md`, `context/README.md` | Describes Truemeds' teams, systems and business verticals, where the PM agent's product-flow documents are, and how context files are formatted and loaded. | Read at the start of every data session. |
 | Schema | `context/schema.md` | Lists every database table and its columns, each labelled with the systems it belongs to, plus known data quirks, open questions and tested queries to reuse. | Read before writing any query, and whenever a table or column is mentioned. |
 | Metrics | `context/metrics.md` | Gives the one agreed meaning of each metric, and flags metrics that different projects define differently. | Read on every request, before using or defining any metric. |
 | Rules | `context/rules.md` | Holds the rules that apply to every kind of analysis, whatever the job or project. Empty for now; built up as the agent is used. | Read on every request, to apply any rule that is listed. |

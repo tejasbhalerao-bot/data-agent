@@ -22,12 +22,13 @@ Check the request against the job's required inputs in `jobs.md`. Classify each 
 Ask only what context cannot answer: check `metrics.md`, `schema.md` and `rules.md` first.
 
 ## 4. Load context
-Read `context/CLAUDE.md`, `context/metrics.md`, `context/rules.md`, and `context/schema.md` (the tables whose `Systems:` flag matches the request). Read the project's `context/` folder and `data-sources.md`. Then scan the project's saved notes (`archives/<project>/insights/`; other projects' notes for the same metric), the "Reference queries" section of `schema.md` and the project's `raw-data/` listing for an existing answer. Output:
+Read `context/CLAUDE.md`, `context/metrics.md`, `context/rules.md`, and `context/schema.md` (the tables whose `Systems:` flag matches the request). Read the project's `context/` folder and `data-sources.md`. Read the matching system folders of `~/pm-agent/context/` (product flows, read only; see `context/CLAUDE.md`). Then scan the project's saved notes (`archives/<project>/insights/`; other projects' notes for the same metric), the "Reference queries" section of `schema.md` and the project's `raw-data/` listing for an existing answer. Output:
 
 ```
 [CONTEXT LOADED]
 Project: <slug>  Systems: <list>  Verticals: <list>
 Loaded: <paths>
+Product docs: <pm-agent paths, or none>
 Reusable: <saved notes / queries / CSVs on disk, or none>
 Gaps: <systems with no docs, loaded files older than 90 days, open questions in `schema.md` or `metrics.md` that touch this request>
 [/CONTEXT LOADED]

@@ -8,7 +8,7 @@ description: The shared engine. Six phases from brief to saved note. Every job u
 Phases are fixed. Checks are in `review.md`. Job differences are in `jobs.md`.
 
 ## 1. Route
-Done in `route.md`. Output: job, rules applied, context loaded, and whether a note will be written.
+Done in `route.md`. Output: job, rules applied, context loaded, whether a note will be written, and a one-line **flow reading**: "My reading of the flow: …", in plain words, saying what the customer or operator sees and which tables record it. Base it on the product docs and `schema.md`.
 
 ## 2. Brief (only when a note will be written)
 Build from the intake: objective, questions (each independently answerable), definitions used (name them from `metrics.md`), tables, expected output columns and grain, the decision this feeds, assumptions made. Create the note with `./scripts/new-file.sh <project> insights <project>-<topic> md` using `templates/note.md`, status `brief`.
@@ -19,7 +19,7 @@ Build from the intake: objective, questions (each independently answerable), def
 2. **Pre-flight (hard stop).** Every table, column and metric used must exist in `context/schema.md` and `context/metrics.md`. If not, stop and run `update-context`.
 3. **Write SQL (owner: this step).** Apply the filters listed for each table in `schema.md`, and any rule in `rules.md`. Filter early, avoid join fan-out, `tmmumpsdb.` prefix, `snake_case`. **Pull wide:** lowest useful grain with every segment column (courier, warehouse, pincode, date, state flags) so cuts happen offline in Python. Header on each query: purpose, grain, tables, definitions used, exclusions, expected shape. Timeout risk: Low (up to 2 joins, up to 30 days), Medium, High (5+ joins or 90+ days). Split High by date range, then write a merge script that checks row counts. Save with `new-file.sh <project> queries-dump <project>-<topic>-query sql`.
 4. **Probe.** One combined probe query: row count, distinct key count, and one total that reconciles to a known figure.
-5. **Check 1** (`review.md`), then give Tejas **one handoff pack**: all queries, the probe, and the exact filename to save each CSV as in `raw-data/`. Set status `awaiting-data` and fill `awaiting:`.
+5. **Check 1** (`review.md`), then give Tejas **one handoff pack** that opens with the flow reading, so he can correct it before running anything: all queries, the probe, and the exact filename to save each CSV as in `raw-data/`. Set status `awaiting-data` and fill `awaiting:`.
 
 ## 4. Run
 1. Tejas runs the pack once. Detect the files by name in `raw-data/`; do not wait to be told. If he pastes an error, a timeout or an odd result: diagnose, fix, re-present from phase 3. Record any new quirk beside its table in `schema.md` through `update-context`.
@@ -27,7 +27,7 @@ Build from the intake: objective, questions (each independently answerable), def
 
 ## 5. Answer
 1. **All figures come from code.** Write a script (`new-file.sh <project> scripts aggregate-<topic> py`) that reads the CSV, applies cuts and writes to `outputs/`. Never read numbers off a CSV by eye. Add a test when logic is non-trivial.
-2. Write the note from `templates/note.md`: answer first, decision implication, evidence tables with full numbers, definitions used, assumptions made, caveats, next check.
+2. Open the answer, or the note, with the flow reading. If Tejas corrected it, record the correction beside the relevant table or system in `schema.md` through `update-context`. Write the note from `templates/note.md`: answer first, decision implication, evidence tables with full numbers, definitions used, assumptions made, caveats, next check.
 3. **Check 3** (`review.md`).
 
 ## 6. Save

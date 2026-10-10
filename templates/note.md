@@ -10,6 +10,8 @@ as_of: YYYY-MM-DD
 
 # <Title: the question, as a question or a claim>
 
+**My reading of the flow:** <one line: what the customer or operator sees, and which tables record it>
+
 **Assumptions and rules applied:** <field = value, or "none">
 
 ## Answer
