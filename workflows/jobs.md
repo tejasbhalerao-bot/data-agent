@@ -1,6 +1,6 @@
 ---
 name: jobs
-description: The four job cards. Each lists required inputs, method and what the note adds. Used by route.md (ready-check) and loop.md.
+description: The five job cards. Each lists required inputs, method and what the note adds. Used by route.md (ready-check) and loop.md.
 ---
 
 # Jobs
@@ -18,15 +18,22 @@ Common required inputs for every job: **Job, Project, Decision this feeds** (Tie
 - **Note adds:** assumption table, range, break-even, what would change the conclusion.
 
 ## design (decide how to measure before building)
-- **Required:** the PRD text or its key points, supplied in the request. For an experiment: hypothesis and target metric.
+- **Required:** the PRD text or its key points, supplied in the request. Mode: **ard** (analytics requirements document), **experiment**, or both. For an experiment: hypothesis and target metric.
 - **Method:** (1) data feasibility: does each field exist, is it populated and reliable (use schema, probes, the instrumentation caveats in `rules.md`); (2) metric definitions: numerator, denominator, exclusions, anchor, written to `metrics.md` after approval; (3) instrumentation needs for engineering; (4) for an experiment: primary and guardrail metrics, MDE, sample size, duration, holdout, assignment, SRM check, ship / iterate / kill thresholds (`templates/methods.md`).
-- **Note adds:** a paste-ready block for the PRD (metrics, instrumentation, experiment plan).
+- **ard mode:** the note is the ARD. Sections: objective and the decision it supports; metric definitions (names from `metrics.md`, new ones flagged); **instrumentation table** (event or field, properties, trigger, owner system, status Present / Partial / Missing from `schema.md` and `rules.md` G7); **ER diagram** of the entities and tables involved (Mermaid `erDiagram`, built from `schema.md` join keys, unverified keys dashed in a caption); data feasibility and gaps; open questions for engineering.
+- **Note adds:** a paste-ready block for the PRD (metrics, instrumentation, experiment plan), or the ARD sections above.
+
+## rollout (design the GTM)
+- **Required:** the PM's rollout plan as supplied: stages, locations, percentages, launch parameters, intended duration. Anything absent is asked in the one batched message.
+- **Method:** size each stage from data (eligible orders, customers or lanes per location per day); check the stage is large enough to read the success and guardrail metrics (`templates/methods.md`); propose stage gates (go / hold / rollback) with thresholds tied to `metrics.md`; propose the minimum duration per stage; flag overlaps with other live changes and locations with thin data.
+- **Note adds:** rollout table (stage, locations, %, expected volume, duration, gate metrics and thresholds, rollback trigger) and readiness checks (instrumentation live, baseline frozen). The PM owns the plan; the analyst sizes and challenges it.
 
 ## measure (watch a launch)
-- **Required:** mode (**baseline**, **health** or **readout**), launch date, control or baseline window, metrics (from `metrics.md` or the PRD).
-- **baseline:** freeze the pre-launch snapshot, test the queries on historical or shadow data, propose alert thresholds. Save the snapshot CSV name in the note.
-- **health (D1 / D3 / D7):** instrumentation firing, guardrails against thresholds, anomalies, an early directional read with an explicit "too early" caveat.
+- **Required:** mode (**baseline**, **day1**, **day7**, **health** (any other day) or **readout** (end of the GTM)), launch date, control or baseline window, metrics (from `metrics.md` or the PRD), cuts the PM wants. The analyst proposes extra cuts and reports which were added.
+- **baseline:** define the baseline and comparison windows (match day-of-week, exclude known anomalies), run the correctness checks (row counts reconcile, key unique, no gaps in days), freeze the snapshot, test the queries on historical or shadow data, propose alert thresholds. Save the snapshot CSV name in the note.
+- **day1 / day7 / health:** instrumentation firing, guardrails against thresholds, anomalies, an early directional read with an explicit "too early" caveat.
 - **readout:** impact versus baseline or control with confidence intervals, segment cuts, side effects, power check. End with **ship / iterate / kill** and the reason.
+- **Dashboard (any mode, on request):** a dashboard spec in the note: cards, the saved query behind each, filters and cuts, refresh cadence and alert thresholds. Tejas builds it in Metabase from the spec; alternatively a static HTML dashboard from the CSVs via the `data:build-dashboard` output skill.
 - **Recurring packs:** re-run the saved query and script on a new CSV; do not rebuild.
 
 ## update-context

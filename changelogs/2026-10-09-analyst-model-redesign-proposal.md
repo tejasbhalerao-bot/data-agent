@@ -301,3 +301,4 @@ Deviations from the design:
 10. **Notes folder:** stays `insights/`.
 11. **`context/queries/` removed (Tejas, 2026-10-10):** the index only pointed at project SQL. Validated queries are now a "Reference queries" section at the bottom of the owning `context/data/<system>.md`. Context has four file types: `data/`, `metrics.md`, `rules.md`, `findings.md`.
 12. **Schema merged into one file (Tejas, 2026-10-10):** `context/data/<system>.md` is replaced by `context/schema.md`; each table carries a `Systems:` flag. Reference queries sit at the bottom, grouped by system.
+13. **Jobs added (Tejas, 2026-10-10):** `rollout` (GTM design: staged sizing, gates, duration); `design` gains an ARD mode (instrumentation table, Mermaid ER diagram); `measure` gains day1 / day7 modes, explicit baseline correctness checks and a dashboard spec. Five jobs now.

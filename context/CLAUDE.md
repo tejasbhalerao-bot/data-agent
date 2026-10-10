@@ -24,4 +24,4 @@ Conventions and loading rules: `context/README.md`.
 Redshift (schema `tmmumpsdb`, queried through Metabase, 10-minute timeout), Mixpanel (events), and Google Sheets/Docs for experiment results and PRDs. `schema.md` and each project's `data-sources.md` name their source.
 
 ## Entry point
-All work starts at `workflows/route.md`. Do not invoke built-in analysis skills (`data:*`, or `anthropic-skills:*` for analysis, PRD or research) for work this repo handles: they lack the metric dictionary, the rules and the review. Output-format skills (`xlsx`, `pdf`, `docx`, `pptx`, `dataviz`, `data:create-viz`) are allowed when Tejas asks for that format; the figures in them still come from this repo's scripts.
+All work starts at `workflows/route.md`. Do not invoke built-in analysis skills (`data:*`, or `anthropic-skills:*` for analysis, PRD or research) for work this repo handles: they lack the metric dictionary, the rules and the review. Output-format skills (`xlsx`, `pdf`, `docx`, `pptx`, `dataviz`, `data:create-viz`, `data:build-dashboard`) are allowed when Tejas asks for that format; the figures in them still come from this repo's scripts.

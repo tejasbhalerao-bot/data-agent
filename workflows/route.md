@@ -5,13 +5,13 @@ description: Entry point for all data-agent work. Always runs first. Checks the 
 
 # Route
 
-Always first, never skipped. Use only the local files in `workflows/`. Do not invoke built-in analysis skills (`data:*`, or `anthropic-skills:*` for analysis, PRD or research) for work this repo handles: they lack the metric dictionary, the rules and the review. Output-format skills (`xlsx`, `pdf`, `docx`, `pptx`, `dataviz`, `data:create-viz`) are allowed when Tejas asks for that format; the figures in them still come from this repo's scripts.
+Always first, never skipped. Use only the local files in `workflows/`. Do not invoke built-in analysis skills (`data:*`, or `anthropic-skills:*` for analysis, PRD or research) for work this repo handles: they lack the metric dictionary, the rules and the review. Output-format skills (`xlsx`, `pdf`, `docx`, `pptx`, `dataviz`, `data:create-viz`, `data:build-dashboard`) are allowed when Tejas asks for that format; the figures in them still come from this repo's scripts.
 
 ## 1. Resume check
 Any note in the project's `insights/` with `status: awaiting-data`? Offer to continue it (go to loop phase 4). Check `awaiting:` against `raw-data/`.
 
 ## 2. Job
-An explicit `Job:` line wins (analyse, model, design, measure, update-context). Otherwise infer from the request and say so. Split bundled requests into separate notes, one objective each.
+An explicit `Job:` line wins (analyse, model, design, rollout, measure, update-context). Otherwise infer from the request and say so. Split bundled requests into separate notes, one objective each.
 
 ## 3. Ready-check
 Check the request against the job's required inputs in `jobs.md`. Classify each gap:

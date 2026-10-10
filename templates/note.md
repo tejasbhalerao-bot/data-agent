@@ -1,6 +1,6 @@
 ---
 project: <slug>
-job: analyse | model | design | measure
+job: analyse | model | design | rollout | measure
 tier: 1 | 2
 status: brief | awaiting-data | analysing | review | saved
 awaiting: []

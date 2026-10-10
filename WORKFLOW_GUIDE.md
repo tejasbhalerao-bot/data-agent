@@ -36,8 +36,18 @@ Decision it feeds:
 Job: design
 Project: <slug>
 PRD (paste the text or key points): 
-Need: metrics | feasibility | instrumentation | experiment plan   (any combination)
+Need: ard | metrics | feasibility | instrumentation | experiment plan   (any combination)
 For an experiment: hypothesis, target metric, eligible universe, planned split
+Decision it feeds: 
+```
+
+## Rollout
+```
+Job: rollout
+Project: <slug>
+PRD / change being rolled out: 
+Rollout plan: <stages, locations, % of traffic or orders, launch parameters, intended duration>
+Success and guardrail metrics: 
 Decision it feeds: 
 ```
 
@@ -45,7 +55,9 @@ Decision it feeds:
 ```
 Job: measure
 Project: <slug>
-Mode: baseline | health | readout
+Mode: baseline | day1 | day7 | health | readout
+Cuts you want (analyst will propose more): 
+Dashboard spec needed: yes | no
 Launch date: 
 Control / baseline window: 
 Metrics: <names, or "from the PRD" with the PRD pasted>
