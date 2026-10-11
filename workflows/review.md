@@ -17,7 +17,7 @@ Three checks run at fixed points. None can be skipped, not even for a quick answ
 
 | # | What Claude checks | Pass when |
 |---|--------------------|-----------|
-| 1 | Metrics | Each metric matches `metrics.md`, variant named. If variants conflict, ask Tejas first |
+| 1 | Metrics | Each metric matches `metrics.md`, or the approved brief's "Metric definitions" if it is new. If variants conflict, ask Tejas first |
 | 2 | Filters | The filters listed for each table in `schema.md` are applied, plus any rule in `rules.md`. Example: keep only the latest row per order on the allocation audit, before any join |
 | 3 | Rows | One row is what the brief says. Joins do not multiply rows: the join keys are unique on the side that must be unique |
 | 4 | Join keys | They match the keys in `schema.md`, as exact matches and never by timestamp |

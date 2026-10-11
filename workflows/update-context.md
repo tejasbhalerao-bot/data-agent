@@ -39,7 +39,7 @@ description: How to add or change a table, a metric, a rule or a tested query in
 **New metric**
 | # | Step | What Claude does | Rule |
 |---|------|------------------|------|
-| 1 | Write | Adds to `metrics.md`: definition, named input columns, formula, unit, caveats, source | |
+| 1 | Write | Adds to `metrics.md` using its entry layout. Triggered when Tejas approves a brief that defines a new metric, or asks for one | The definition is the one Tejas approved |
 | 2 | Conflict | If a variant already exists, keeps both and marks the row CONFLICT | Stays CONFLICT until Tejas picks one |
 
 **New rule:** adds it to `rules.md` only if it holds for every kind of analysis. A rule about one table goes beside the table in `schema.md`.

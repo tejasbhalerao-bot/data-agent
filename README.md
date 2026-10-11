@@ -22,7 +22,7 @@ data-agent/
 │   ├── CLAUDE.md         Truemeds teams, systems and verticals
 │   ├── README.md         how context files are formatted and loaded
 │   ├── schema.md         every database table and its columns, known data quirks, and tested queries
-│   ├── metrics.md        the agreed meaning of each metric
+│   ├── metrics.md        the agreed meaning of each metric (empty for now)
 │   └── rules.md          rules that apply to every analysis (empty for now)
 ├── workflows/            route · loop · jobs · review · update-context
 ├── templates/            note · brief · analyse · model · ard · experiment · gtm · measure · query · script · methods

@@ -49,8 +49,8 @@ Quote a matching note with its window and date, say if it is not yet signed off,
 ## 6. Is the request complete?
 Check it against the job's Inputs in `jobs.md`.
 - **Settled by a rule:** `context/rules.md` covers it. Apply it, do not ask, and say so on the first line of the answer.
-- **Propose, don't ask:** the time window, the cohort, the comparison group and a control group. Leave these for the brief (`loop.md`, phase 2): propose each with a reason, and Tejas decides.
-- **Ask:** the project, systems or verticals, an undefined metric, PRD input, or anything else that would change the answer and that you cannot reasonably propose. Send **one** message listing everything missing: plain English, no jargon, one question per line, 20 words or fewer each. Never ask one question at a time. Ask only what `metrics.md`, `schema.md`, `rules.md` and the product docs cannot answer. If Tejas answers only part, ask again for the rest only.
+- **Propose, don't ask:** the time window, the cohort, the comparison group, a control group, and the definition of a metric not yet in `metrics.md`. Leave these for the brief (`loop.md`, phase 2): propose each with a reason, and Tejas decides.
+- **Ask:** the project, systems or verticals, PRD input, or anything else that would change the answer and that you cannot reasonably propose. Send **one** message listing everything missing: plain English, no jargon, one question per line, 20 words or fewer each. Never ask one question at a time. Ask only what `metrics.md`, `schema.md`, `rules.md` and the product docs cannot answer. If Tejas answers only part, ask again for the rest only.
 - **Project:** needed for every request except one answered by quoting a saved note. If none is named, ask which, listing the folders in `archives/`. If it is new, use a lowercase name with hyphens, run `cp -r archives/_template archives/<name>`, and fill its `context/data-sources.md`. Nothing is saved without a project.
 
 ## 7. The note
