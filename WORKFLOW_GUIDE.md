@@ -1,6 +1,6 @@
 # Workflow Guide
 
-Copy a template, fill it in, send it. Anything missing that the agent needs, it asks once.
+Copy a template, fill it in, send it. Anything missing that the agent needs, it asks once. Leave the window, cohort and comparison blank if you like: the agent proposes them in the brief and you decide.
 
 Quick question? Skip the template. Write one sentence and name the project.
 

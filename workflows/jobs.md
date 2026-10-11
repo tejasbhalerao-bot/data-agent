@@ -7,11 +7,11 @@ description: The five job cards. Each lists required inputs, what the brief must
 
 Every job starts with a brief that Tejas approves (`loop.md`, phase 2) and ends in a note. The brief lists the metrics and cuts (M1…) the job will produce; a job that produces no numbers (an analytics requirements document, say) has no queries or scripts to tie back. Never choose values Tejas should choose (windows, assumptions, thresholds, grain, columns): ask, or propose and let him decide.
 
-Required for every job: **Job, Project, Scope** (window, cohort, comparison) and **Definitions** (from `metrics.md` unless he names another). **Decision this feeds** is optional; it shapes the answer. Each card adds to these.
+Required for every job: **Job** and **Project**. **Scope** (window, cohort, comparison) is worked out together: Tejas gives what he has, Claude proposes the rest in the brief with a reason, and Tejas decides. **Definitions** (from `metrics.md` unless he names another). **Decision this feeds** is optional; it shapes the answer. Each card adds to these.
 
 ## analyse (look backward: what happened, where, why)
-- **Required:** window, cohort, comparison.
-- **Brief covers:** the metrics and cuts (suggest cuts such as courier, warehouse, pincode, vertical, SDD x inventory, day; Tejas chooses), the baseline and comparison, and the checks below.
+- **Required:** nothing beyond the common inputs; the scope is agreed in the brief.
+- **Brief covers:** the scope, the metrics and cuts (suggest cuts such as courier, warehouse, pincode, vertical, SDD x inventory, day; Tejas chooses), the baseline and comparison, and the checks below.
 - **Method:** baseline, then the cuts Tejas chose. Check what else could explain the result (a change in the mix of segments, seasonality, too few orders). Reconcile against a known total or a second source. Test the opposite explanation.
 - **Note adds:** where it concentrates; what it is not; what was ruled out.
 
@@ -35,7 +35,7 @@ Required for every job: **Job, Project, Scope** (window, cohort, comparison) and
 - **Note adds:** rollout table (stage, locations, %, expected volume, duration, gate metrics and thresholds, rollback trigger) and readiness checks (instrumentation live, baseline frozen). The PM owns the plan; the analyst sizes and challenges it.
 
 ## measure (watch a launch)
-- **Required:** the stage (**baseline** = "before launch", **day1** = "day 1", **day7** = "day 7", **health** = "other day", **readout** = "final result", the end of the GTM), launch date, control or comparison period, metrics (from `metrics.md`, the PRD, or the project's design note), cuts the PM wants. Suggest extra cuts and say which were added.
+- **Required:** the stage (**baseline** = "before launch", **day1** = "day 1", **day7** = "day 7", **health** = "other day", **readout** = "final result", the end of the GTM), launch date, metrics (from `metrics.md`, the PRD, or the project's design note), cuts the PM wants. The control or comparison period is proposed in the brief, not required upfront. Suggest extra cuts and say which were added.
 - **Earlier notes this job uses:** for every stage after baseline, the project's baseline note (its metrics, windows and snapshot CSV). If none exists, say so and offer a baseline built from historical data, labelled as such. Success and safety limits come from the project's rollout note if there is one; otherwise ask.
 - **Brief covers:** the stage, the windows (**proposed by you, decided by Tejas**: match day of week, leave out known odd days), the metrics and cuts (M-IDs), the limits, and which earlier notes are used.
 - **baseline:** run the data checks (row counts reconcile, key unique, no missing days), freeze the snapshot (list its CSV in the "Queries to run" table and never overwrite it), test the queries on historical or shadow data, propose alert limits.

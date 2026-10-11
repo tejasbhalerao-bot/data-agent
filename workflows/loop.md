@@ -14,6 +14,7 @@ Done in `route.md`. Output: job, rules applied, context loaded, whether a note w
 Before writing any query, design or plan, show Tejas a short brief in plain English and **wait for his approval**. Do no work until he approves. If he corrects it, revise and show it again.
 - The flow reading ("My reading of the flow: …").
 - The objective, and the questions to answer.
+- **Scope: time window, cohort, comparison.** Use what Tejas gave. Where he gave nothing, propose a value with a one-line reason (for example "last 30 days ending yesterday, so the figures are current"); he decides. Do not ask these as separate questions beforehand.
 - **Metrics and cuts, numbered M1, M2…** Each line is one metric (named from `metrics.md`, variant stated) and the cut it is shown by (for example "on-time % by courier", or "none, overall"). This list is the scope: every query and script must serve at least one of them, and nothing outside it is built. Adding one later means revising the brief.
 - Tables used.
 - **Grain and output columns: ask Tejas.** Ask what one row should be and which columns he needs. You may suggest, with reasons, but he decides; never choose them alone, and do not write any query until he has answered.

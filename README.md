@@ -36,7 +36,7 @@ What each file is for and when it is used: `CLAUDE.md`, "Elements of the repo".
 ## What happens to a request
 1. The agent checks the request is complete and asks, in one message, only what it cannot work out.
 2. If a saved note with the same scope already answers it, and is recent enough (data ended within 7 days for a rolling window; no limit for a fixed past period), the agent quotes that note, offers a refresh, and stops.
-3. Otherwise it shows you a short brief of what it will do, starting with one line on how it understands the product flow. You correct it or approve it. Nothing starts before you approve.
+3. Otherwise it shows you a short brief of what it will do, starting with one line on how it understands the product flow. It proposes the time window, cohort and comparison if you did not give them. You correct it or approve it. Nothing starts before you approve.
 4. It then writes the queries, each as its own file in the project's `queries-dump/` folder, checks them, and lists them in the same note under "Queries to run".
 5. You run them in Metabase and save the CSVs in the project's `raw-data/` folder.
 6. The agent checks the CSVs, calculates the numbers with scripts (each its own file, listed in the note under "Scripts and outputs"), and writes the answer into a note (a `.md` file), with a short summary in chat.

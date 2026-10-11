@@ -23,6 +23,7 @@ as_of: YYYY-MM-DD
 ## Approved brief
 - **Objective:**
 - **Questions:** <each answerable on its own>
+- **Scope:** <time window, cohort, comparison: as agreed>
 - **Metrics and cuts:**
   - M1: <metric from metrics.md, variant if any> by <cut, or "overall">
   - M2: …
