@@ -9,7 +9,7 @@ updated: 2026-10-09
 
 # Methods
 
-Use these when a job card calls for them. State every parameter chosen in the note.
+Use these when a job in `workflows/jobs.md` calls for them. State every parameter chosen in the note.
 
 ## Sample size for a proportion (two-sided A/B)
 `n per arm = 2 * (z_a + z_b)^2 * p(1-p) / delta^2` with `p` the baseline rate, `delta` the absolute minimum detectable effect (MDE). Defaults: alpha 0.05 (`z_a = 1.96`), power 0.80 (`z_b = 0.84`). Report n per arm, total, and expected duration at the observed daily eligible volume. For a continuous metric use `n = 2 * (z_a + z_b)^2 * sigma^2 / delta^2`.

@@ -5,23 +5,26 @@ description: The shared engine. Six phases from an approved brief to a saved ans
 
 # Loop
 
-Phases are fixed. Checks are in `review.md`. Job differences are in `jobs.md`. Rework limit: after two failed rounds on the same problem, stop and tell Tejas what you think is wrong.
+Phases are fixed. Checks are in `review.md`. Job differences are in `jobs.md`. The build follows the approved brief. If building shows the brief must change (a missing column, a step that needs another pull, a different method), stop, revise the brief, and get approval again; never change it silently. Rework limit: after two failed rounds on the same problem, stop and tell Tejas what you think is wrong.
 
 ## 1. Route
 Done in `route.md`. Output: job, rules applied, context loaded, whether a note will be written, and the **flow reading** ("My reading of the flow: …").
 
 ## 2. Brief (always; nothing starts without approval)
-Before writing any query, design or plan, fill `templates/brief.md` in plain English, show it to Tejas, and **wait for his approval**. Do no work until he approves. If he corrects it, revise and show it again. In filling it:
+First do the **pre-flight (hard stop)**: every table, column and metric the brief will use must exist in `context/schema.md` and `context/metrics.md`. If not, stop and run `update-context`. If the data cannot answer the request, tell Tejas what cannot be answered and what would be needed. Only then, before writing any query, design or plan, fill `templates/brief.md` in plain English, show it to Tejas, and **wait for his approval**. Do no work until he approves. If he corrects it, revise and show it again. In filling it:
 - **Scope:** use what Tejas gave. Where he gave nothing, propose a value with a one-line reason (for example "last 30 days ending yesterday, so the figures are current"); he decides. Do not ask these as separate questions beforehand.
 - **Metrics and cuts (M1, M2…):** one line per metric (named from `metrics.md`, variant stated) and the cut it is shown by. This list is the fence: every query and script must serve at least one line, and nothing outside it is built. Adding one later means revising the brief.
 - **Grain and output columns: ask Tejas.** You may suggest, with reasons, but he decides; never choose them alone, and do not write any query until he has answered.
+- **How it will be calculated:** fill the section from the job's "How it is calculated" list in `jobs.md`, for this request, in plain words. State where each step's data comes from.
 - **Job-specific part:** fill the "Job-specific" section from the job's Inputs in `jobs.md`.
 
 When he approves, create the note with `scripts/new-file.sh <project> insights <project>-<topic> md` from `templates/note.md`, paste the approved brief under "Approved brief", set `status: brief`, and commit it locally (`scripts/commit-and-push.sh --local "<message>" <path>`). A re-run skips the approval, because the saved analysis is the spec, but still gets a note.
 
 ## 3. Build
-1. **Reuse first.** A CSV in `raw-data/` that covers the window, cohort and columns needed, or a validated query in the "Reference queries" section of `context/schema.md`. If a CSV covers it, go to phase 4, step 2.
-2. **Pre-flight (hard stop).** Every table, column and metric used must exist in `context/schema.md` and `context/metrics.md`. If not, stop and run `update-context`. If the data cannot answer the request, tell Tejas what cannot be answered and what would be needed.
+If the approved brief's "Data from" column needs no query or CSV (for example a requirements document written from the PRD and the docs), skip phases 3 and 4 and go to phase 5, step 3.
+
+1. **Reuse first.** Start from the approved brief's "Data from" column. A CSV in `raw-data/` that covers the window, cohort and columns needed, or a validated query in the "Reference queries" section of `context/schema.md`. If a CSV covers it, go to phase 4, step 2.
+2. **Pre-flight check again.** It was done before the brief. If writing the SQL shows a table, column or metric that is not documented, stop, run `update-context`, and revise the brief if it changes.
 3. **Write the SQL** (you own its correctness).
    - Apply the filters listed for each table in `schema.md`, and any rule in `rules.md`.
    - Filter early, avoid join fan-out, use the `tmmumpsdb.` prefix and `snake_case` names.
@@ -54,7 +57,7 @@ When he approves, create the note with `scripts/new-file.sh <project> insights <
 Sign-off, save and push rules are in `CLAUDE.md` ("Sign-off, save and push"). In short:
 1. Set `status: saved`, `signed_off: false`, and `as_of`; commit the note, queries, scripts and tests locally with `--local` (and again after every revision Tejas asks for; a revision after the answer was presented is saved as the next version). Point Tejas to the note file. Nothing is pushed yet.
 2. **Context changes:** list them in one block. Small additions (a new validated query, a new quirk beside its table) are applied locally with the diff shown. A change to an existing definition or rule waits for approval. Procedure in `update-context.md`.
-3. **On sign-off** (as `CLAUDE.md` defines it): set `signed_off: true`, then commit and push everything from the request in one commit to `main` with `scripts/commit-and-push.sh`. State the message and paths. Never stage `raw-data/` or `outputs/`. If he asks for changes, revise and check again before presenting.
+3. **On sign-off** (as `CLAUDE.md` defines it; a change asked for after sign-off is a new version that needs its own sign-off): set `signed_off: true`, then commit and push everything from the request in one commit to `main` with `scripts/commit-and-push.sh`. State the message and paths. Never stage `raw-data/` or `outputs/`. If he asks for changes, revise and check again before presenting.
 
 ## Rules
 - No aggregations in SQL, except the probe and dashboard queries (`jobs.md`, measure); aggregation belongs in the script.

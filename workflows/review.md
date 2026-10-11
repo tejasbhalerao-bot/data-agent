@@ -13,6 +13,7 @@ Run at each checkpoint. Fix issues yourself, re-check, and only then move on. An
 - Grain stated and true: join keys are unique on the side that must be unique; no fan-out.
 - Join keys match the documented keys in `context/schema.md` (exact `request_id = reference_number`, not timestamps).
 - Date filter sits in the innermost CTE; no `SELECT *` on large tables; `tmmumpsdb.` prefix; `snake_case` names.
+- The queries match the approved brief's "Data from" column: nothing extra is pulled, nothing planned is missing.
 - Output columns equal the grain and columns Tejas gave in the brief. No aggregation in SQL, except the probe and dashboard queries.
 - Every metric and cut in the brief (M1…) is served by at least one query, and every query serves at least one (no orphan queries). Each cut's column is in the query's output.
 - Each query is its own file following `templates/query.md`, with a header; the note's "Queries to run" table points to the latest version of each and contains no SQL.
@@ -23,12 +24,13 @@ Run at each checkpoint. Fix issues yourself, re-check, and only then move on. An
 
 ## Check 3: the note (before it is presented)
 - Every figure in the note appears in a script output in `outputs/`, and is cited by metric ID and script ID (M1, via S1). No hand-typed numbers.
+- The calculation followed the approved "How it will be calculated" steps. Any change was approved in a revised brief.
 - The answer follows the job's template (`jobs.md` names it): every section is filled or marked "not applicable".
 - Every metric and cut in the brief has a figure in the Evidence, and every script serves at least one of them. Nothing is reported that is not in the brief's list.
 - The "Scripts and outputs" table points to the latest version of each script, test and output, gives the exact command to run it, and the note contains no code.
 - Denominators are stated and are the intended population; percentages add up.
 - Sample size supports the claim; small cells are marked or dropped.
-- Segment mix and confounders considered (job card list); a Simpson's-paradox check on any headline comparison.
+- Segment mix and other possible explanations considered (the job's "How it is calculated" list in `jobs.md`); a Simpson's-paradox check on any headline comparison.
 - Claim strength matches the evidence: "caused" only with a test, otherwise "associated with".
 - Window and as-of date stated; assumptions listed; definitions named; caveats include data-quality flags from `schema.md`.
 - The note answers the decision it was written for in the first two lines.

@@ -5,7 +5,9 @@ description: The five jobs as workflows. For each: inputs, steps with their rule
 
 # Jobs
 
-How to read this: each job lists what goes in (**Inputs**), what Claude does (**Steps**), and what comes out (**Outputs**). Every job runs inside the loop (`loop.md`): brief, then queries, then scripts, then a note.
+How to read this: each job lists what goes in (**Inputs**), how the result is calculated (**How it is calculated**), and what comes out (**Outputs**). Every job runs inside the loop (`loop.md`): brief, then queries, then scripts, then a note.
+
+The lists under **How it is calculated** are what the brief's "How it will be calculated" section must cover, in plain words and for this request. For each step it also states where the data comes from: an existing CSV, a saved query, a new query, or the script alone. Tejas approves it before anything is built.
 
 ## Rules for every job
 - Never choose a value that is Tejas's to choose (windows, assumptions, thresholds, grain, columns). Ask, or propose with a reason and let him decide.
@@ -32,12 +34,12 @@ How to read this: each job lists what goes in (**Inputs**), what Claude does (**
 | Scope | Time window, cohort, comparison | Settled in the brief |
 | Cuts | How to split the result (courier, warehouse, pincode, vertical, SDD x inventory, day) | Settled in the brief: Claude suggests; Tejas chooses |
 
-**Steps**
-1. Calculate the baseline.
-2. Split it by the cuts Tejas chose.
-3. Check what else could explain the result: a change in the mix of segments, seasonality, too few orders.
-4. Check the totals against a known total or a second source.
-5. Test the opposite explanation.
+**How it is calculated**
+1. **Baseline:** what is counted, and for which population.
+2. **Cuts:** the column and values behind each cut.
+3. **Other explanations:** which of these are checked, and how each is tested: a change in the mix of segments, seasonality, too few orders.
+4. **Reconciliation:** the known total or second source the totals are compared with, and what counts as a match.
+5. **Opposite explanation:** what it is, and how it is tested.
 
 **Outputs**
 | Output | What it is |
@@ -57,12 +59,14 @@ How to read this: each job lists what goes in (**Inputs**), what Claude does (**
 | Alternatives | Options to compare (optional) | Tejas, in the request |
 | Scope | Time window, cohort | Settled in the brief |
 
-**Steps**
-1. Replay or simulate the change on historical data.
-2. Run the low, base and high cases. Never show one number alone.
-3. Find the one or two assumptions that move the answer most.
-4. Name a floor (what the data proves is addressable) and a ceiling (everything addressable if all assumptions hold).
-5. Find the break-even value, where the decision flips.
+**How it is calculated**
+1. **Who or what the lever touches:** how those orders, customers or lanes are picked from the data.
+2. **Mechanism:** what happens to each one when the lever applies (the rule).
+3. **Formula:** how the effect is calculated from the assumptions.
+4. **Cases:** how the low, base and high cases are run. Never show one number alone.
+5. **What moves the answer:** which one or two assumptions are varied, and how.
+6. **Floor and ceiling:** how each is defined. The floor is what the data proves is addressable; the ceiling is everything addressable if all assumptions hold.
+7. **Break-even:** the value where the decision flips.
 
 **Outputs**
 | Output | What it is |
@@ -82,11 +86,11 @@ How to read this: each job lists what goes in (**Inputs**), what Claude does (**
 | Experiment settings | Smallest change worth detecting; confidence and power (95% and 80% unless he says otherwise); longest duration; planned split | Settled in the brief: Tejas gives them |
 | Scope | The PRD, and the systems, events and tables it touches | Settled in the brief |
 
-**Steps**
-1. **Data check:** does each field exist, is it filled, is it reliable? Use `schema.md`, its open questions, the instrumentation note in `context/CLAUDE.md`, the PM agent's product docs, and probes.
-2. **Define the metrics:** numerator, denominator, exclusions, anchor. New definitions go into `metrics.md` only after Tejas approves.
+**How it is calculated**
+1. **Data check:** which fields, and how each is checked for existing, filled and reliable. Use `schema.md`, its open questions, the instrumentation note in `context/CLAUDE.md`, the PM agent's product docs, and probes.
+2. **Define the metrics:** the numerator, denominator, exclusions and anchor of each. New definitions go into `metrics.md` only after Tejas approves.
 3. **List the events engineering must add.**
-4. **Experiment only:** set the main metric and the safety metrics (ones that must not get worse), sample size, duration, holdout (a group left unchanged), assignment, a check that group sizes match the plan (SRM), and the ship / iterate / kill thresholds. `templates/methods.md` gives the formulas; the settings are Tejas's.
+4. **Experiment only:** state the formula and inputs for sample size and duration, and set the main metric and the safety metrics (ones that must not get worse), sample size, duration, holdout (a group left unchanged), assignment, a check that group sizes match the plan (SRM), and the ship / iterate / kill thresholds. `templates/methods.md` gives the formulas; the settings are Tejas's.
 
 **Outputs**
 | Output | What it is |
@@ -107,12 +111,13 @@ If only metrics are needed, they go in the brief's "Metric definitions" section.
 | Success and safety metrics | What must improve, and what must not get worse | Tejas, in the request; confirmed in the brief |
 | Thresholds | The limit for each metric, and for each stage gate | Settled in the brief: Claude proposes; Tejas decides |
 
-**Steps**
-1. Size each stage from data: eligible orders, customers or lanes per location per day. Use the product docs for what is eligible.
-2. Check each stage is large enough to read the success and safety metrics (`templates/methods.md`).
-3. Propose the stage gates: go, hold, roll back.
-4. Propose the minimum duration per stage.
-5. Flag overlaps with other live changes, and locations with thin data.
+**How it is calculated**
+1. **Eligible:** how eligible orders, customers or lanes are defined, using the product docs.
+2. **Sizing:** how volume per location per day, and per stage, is calculated.
+3. **Readable:** how each stage is checked to be large enough to read the success and safety metrics (`templates/methods.md`).
+4. **Gates:** the basis for the go, hold and roll-back proposals.
+5. **Duration:** the rule for the minimum duration per stage.
+6. **Risks:** how overlaps with other live changes, and locations with thin data, are found.
 
 **Outputs**
 | Output | What it is |
@@ -136,7 +141,7 @@ The PM owns the plan. The analyst sizes and challenges it.
 | Limits | Success and safety limits | The project's rollout note if there is one; otherwise settled in the brief, given by Tejas |
 | Earlier notes | For every stage after "before launch": the project's baseline note (metrics, windows, snapshot CSV) | Found by Claude; if none, say so and offer a baseline from historical data, labelled as such |
 
-**Steps, by stage**
+**How it is calculated, by stage**
 - **Before launch (baseline):**
   1. Run the data checks: row counts reconcile, key unique, no missing days.
   2. Freeze the snapshot: list its CSV in the "Queries to run" table and never overwrite it.
@@ -148,7 +153,7 @@ The PM owns the plan. The analyst sizes and challenges it.
   3. Note anything odd.
   4. Give an early read, marked "too early to call".
 - **Final result (readout):**
-  1. Compare the launch with the baseline or control, with 95% intervals.
+  1. State the comparison method (against a control, or before and after), how the 95% interval is calculated, and how outliers are handled. Then compare the launch with the baseline or control.
   2. Show the cuts, and the side effects on the safety metrics.
   3. Check there was enough data.
   4. End with **ship, iterate or kill**, and the reason.

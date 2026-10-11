@@ -33,6 +33,12 @@ Every query and script must serve at least one line. Nothing outside this list i
 - One row is: <Tejas's answer. You may suggest, with reasons; he decides.>
 - Columns: <Tejas's answer.>
 
+## How it will be calculated
+Plain steps, in order. Name each decision that changes the answer, so Tejas can correct it before anything is built. `workflows/jobs.md` lists what each job's steps must cover.
+| Step | What it calculates | Rule or formula | Serves | Data from |
+|------|--------------------|-----------------|--------|-----------|
+| 1 | | | M1 | existing CSV, saved query, new query, or the script alone |
+
 ## Job-specific
 - model: assumption table. One row per assumption, with a low, base and high value that Tejas gives.
 - design: the mode (requirements doc, experiment plan, or both); for an experiment, the settings Tejas gives.

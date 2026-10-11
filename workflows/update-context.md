@@ -13,7 +13,7 @@ One home per fact: schema in `context/schema.md`, definitions in `context/metric
 
 ## New table or column (schema discovery)
 1. Read `context/schema.md` first; confirm the table is really missing.
-2. Ask Tejas to run in Metabase: columns (`SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = 'tmmumpsdb' AND table_name = '<t>' ORDER BY ordinal_position`) and 10 sample rows (`SELECT * FROM tmmumpsdb.<t> LIMIT 10`), in one pack.
+2. Ask Tejas to run in Metabase: columns (`SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = 'tmmumpsdb' AND table_name = '<t>' ORDER BY ordinal_position`) and 10 sample rows (`SELECT * FROM tmmumpsdb.<t> LIMIT 10`), in one message.
 3. Draft the section: purpose, written by, grain, key date column, column table, join keys (mark unverified keys), quirks. Never infer a column's meaning from its name alone; use the sample rows and flag unexpected nulls.
 4. Add it under Tables in `context/schema.md` with its `Systems:` flag; set `updated:`. Record any quirk beside its table.
 
