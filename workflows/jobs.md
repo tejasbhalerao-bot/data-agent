@@ -7,7 +7,7 @@ description: The five job cards. Each lists required inputs, what the brief must
 
 Every job starts with a brief that Tejas approves (`loop.md`, phase 2) and ends in a note. The brief lists the metrics and cuts (M1…) the job will produce; a job that produces no numbers (an analytics requirements document, say) has no queries or scripts to tie back. Never choose values Tejas should choose (windows, assumptions, thresholds, grain, columns): ask, or propose and let him decide.
 
-Required for every job: **Job** and **Project**. **Scope** (window, cohort, comparison) is worked out together: Tejas gives what he has, Claude proposes the rest in the brief with a reason, and Tejas decides. **Definitions** (from `metrics.md` unless he names another). **Decision this feeds** is optional; it shapes the answer. Each card adds to these.
+Required for every job: **Job** and **Project**. **Scope** is worked out together. What it covers depends on the job: for analyse, model and measure, the time window, cohort and comparison; for design, the PRD and the systems, events and tables it touches; for rollout, the stages, locations and launch settings. Tejas gives what he has, Claude proposes the rest in the brief with a reason, and Tejas decides. **Definitions** (from `metrics.md` unless he names another). **Decision this feeds** is optional; it shapes the answer. Each card adds to these.
 
 ## analyse (look backward: what happened, where, why)
 - **Required:** nothing beyond the common inputs; the scope is agreed in the brief.
