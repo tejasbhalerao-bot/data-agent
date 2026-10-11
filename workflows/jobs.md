@@ -1,48 +1,166 @@
 ---
 name: jobs
-description: The five job cards. Each lists required inputs, what the brief must cover, the method and what the note adds. Used by route.md (completeness check) and loop.md.
+description: The five jobs as workflows. For each: inputs, steps with their rules, and outputs. Used by route.md (is the request complete?) and loop.md.
 ---
 
 # Jobs
 
-Every job starts with a brief (`templates/brief.md`) that Tejas approves (`loop.md`, phase 2) and ends in a note whose answer follows the job's template (named on each card). The brief lists the metrics and cuts (M1…) the job will produce; a job that produces no numbers (an analytics requirements document, say) has no queries or scripts to tie back. Never choose values Tejas should choose (windows, assumptions, thresholds, grain, columns): ask, or propose and let him decide.
+How to read this: each job lists what goes in (**Inputs**), what Claude does (**Steps**), and what comes out (**Outputs**). Every job runs inside the loop (`loop.md`): brief, then queries, then scripts, then a note.
 
-Required for every job: **Job** and **Project**. **Scope** is worked out together. What it covers depends on the job: for analyse, model and measure, the time window, cohort and comparison; for design, the PRD and the systems, events and tables it touches; for rollout, the stages, locations and launch settings. Tejas gives what he has, Claude proposes the rest in the brief with a reason, and Tejas decides. **Definitions** (from `metrics.md` unless he names another). **Decision this feeds** is optional; it shapes the answer. Each card adds to these.
+## Rules for every job
+- Never choose a value that is Tejas's to choose (windows, assumptions, thresholds, grain, columns). Ask, or propose with a reason and let him decide.
+- The brief lists the metrics and cuts (M1…) the job will produce. A job that produces no numbers has no queries or scripts.
+- The answer always goes in a note, laid out by the job's template.
 
-## analyse (look backward: what happened, where, why)
-- **Required:** nothing beyond the common inputs; the scope is agreed in the brief.
-- **Brief covers:** the scope, the metrics and cuts (suggest cuts such as courier, warehouse, pincode, vertical, SDD x inventory, day; Tejas chooses), the baseline and comparison, and the checks below.
-- **Method:** baseline, then the cuts Tejas chose. Check what else could explain the result (a change in the mix of segments, seasonality, too few orders). Reconcile against a known total or a second source. Test the opposite explanation.
-- **Template:** `templates/analyse.md`.
+## Inputs every job needs
+| Input | What it is | Who gives it |
+|---|---|---|
+| Job | analyse, model, design, rollout or measure | Tejas, or inferred and stated |
+| Project | The folder in `archives/` the work is saved in | Tejas |
+| Scope | What the work covers (set out per job below) | Tejas gives what he has; Claude proposes the rest with a reason; Tejas decides |
+| Definitions | What each metric means | `metrics.md`, unless Tejas names another |
+| Decision it feeds | What he will do with the answer (optional) | Tejas |
 
-## model (look forward: size it, simulate it, compare options)
-- **Required:** the lever, the assumptions (each named), the horizon, and for a comparison the alternatives.
-- **Brief covers:** the assumption table with a **low, base and high value for each assumption, asked from Tejas** (never picked by you), and the outputs per case as M-IDs.
-- **Method:** replay or simulate the change on historical data. Show low, base and high cases, never one number alone. Show how much the answer moves for the one or two assumptions that matter most. Name a floor (provably addressable) and a ceiling.
-- **Template:** `templates/model.md`.
+---
 
-## design (decide how to measure before building)
-- **Required:** the PRD text or its key points, supplied in the request. Mode: **ard** ("requirements doc": analytics requirements document), **experiment** ("experiment plan"), or both. "Metrics", "data check" and "events to track" are parts of the same note. For an experiment: hypothesis and target metric.
-- **Brief covers:** the mode; the metrics to define; the events and fields to check; for an experiment, the settings Tejas gives (smallest change worth detecting, confidence and power if he wants other than the standard, longest duration allowed, planned split).
-- **Method:** (1) data check: does each field exist, is it filled and reliable (use `schema.md`, probes, its open questions, the instrumentation note in `context/CLAUDE.md`, and the PM agent's product docs); (2) metric definitions: numerator, denominator, exclusions, anchor, written to `metrics.md` after approval; (3) events engineering must add; (4) for an experiment: main metric and safety metrics (ones that must not get worse), sample size, duration, holdout (a group left unchanged), assignment, a check that group sizes match the plan (SRM), and ship / iterate / kill thresholds (`templates/methods.md` gives the formulas; the settings are Tejas's).
-- **Template:** `templates/ard.md` for the requirements doc, `templates/experiment.md` for the experiment plan (both if both). Metric definitions live in the ARD, or in the brief's "Metric definitions" section when only metrics are needed.
+## analyse: what happened, where, and why
 
-## rollout (design the GTM)
-- **Required:** the PM's rollout plan as supplied: stages, locations, percentages, launch parameters, intended duration. Anything absent is asked in the one batched message.
-- **Brief covers:** the plan as supplied, the numbers to size per stage (M-IDs), and the success and safety metrics.
-- **Method:** size each stage from data (eligible orders, customers or lanes per location per day), using the product docs for what is eligible; check the stage is large enough to read the success and safety metrics (`templates/methods.md`); propose stage gates (go / hold / rollback) with thresholds tied to `metrics.md`; propose the minimum duration per stage; flag overlaps with other live changes and locations with thin data. Tejas decides the thresholds.
-- **Template:** `templates/gtm.md`. The success and safety metrics and their thresholds live there. The PM owns the plan; the analyst sizes and challenges it.
+**Inputs**
+| Input | What it is | Who gives it |
+|---|---|---|
+| Scope | Time window, cohort, comparison | Agreed in the brief |
+| Cuts | How to split the result (courier, warehouse, pincode, vertical, SDD x inventory, day) | Claude suggests; Tejas chooses |
+| Grain and columns | What one row is, and which columns | Tejas |
 
-## measure (watch a launch)
-- **Required:** the stage (**baseline** = "before launch", **day1** = "day 1", **day7** = "day 7", **health** = "other day", **readout** = "final result", the end of the GTM), launch date, metrics (from `metrics.md`, the PRD, or the project's design note), cuts the PM wants. The control or comparison period is proposed in the brief, not required upfront. Suggest extra cuts and say which were added.
-- **Earlier notes this job uses:** for every stage after baseline, the project's baseline note (its metrics, windows and snapshot CSV). If none exists, say so and offer a baseline built from historical data, labelled as such. Success and safety limits come from the project's rollout note if there is one; otherwise ask.
-- **Brief covers:** the stage, the windows (**proposed by you, decided by Tejas**: match day of week, leave out known odd days), the metrics and cuts (M-IDs), the limits, and which earlier notes are used.
-- **baseline:** run the data checks (row counts reconcile, key unique, no missing days), freeze the snapshot (list its CSV in the "Queries to run" table and never overwrite it), test the queries on historical or shadow data, propose alert limits.
-- **day1 / day7 / health:** are events firing, safety metrics against limits, anything odd, and an early read marked "too early to call".
-- **readout:** impact versus baseline or control with confidence intervals, cuts, side effects, and whether the sample was large enough. End with **ship / iterate / kill** and the reason.
-- **Dashboard (any stage, on request):** the "Dashboard spec" section of the template. Dashboard queries may aggregate, because Metabase computes the card; each is still its own query file, referenced by Q-ID, and any number quoted in a note still comes from a script. Tejas builds it in Metabase from the spec; alternatively a static HTML dashboard from the CSVs via the `data:build-dashboard` output skill.
-- **Template:** `templates/measure.md`.
-- **Recurring packs:** use the `Re-run:` field (`route.md`, step 3) to run the earlier note's saved script on a new CSV; do not rebuild.
+**Steps**
+1. Calculate the baseline.
+2. Split it by the cuts Tejas chose.
+3. Check what else could explain the result: a change in the mix of segments, seasonality, too few orders.
+4. Check the totals against a known total or a second source.
+5. Test the opposite explanation.
+
+**Outputs**
+| Output | What it is |
+|---|---|
+| Note (`templates/analyse.md`) | Headline; where it concentrates; what it is not; so what; evidence |
+
+---
+
+## model: size it, simulate it, compare options
+
+**Inputs**
+| Input | What it is | Who gives it |
+|---|---|---|
+| Lever | The change, rule or option being sized | Tejas |
+| Assumptions | Each named, with a low, base and high value | Tejas (never picked by Claude) |
+| Horizon | How far ahead | Tejas |
+| Alternatives | Options to compare (optional) | Tejas |
+| Scope | Time window, cohort | Agreed in the brief |
+
+**Steps**
+1. Replay or simulate the change on historical data.
+2. Run the low, base and high cases. Never show one number alone.
+3. Find the one or two assumptions that move the answer most.
+4. Name a floor (what the data proves is addressable) and a ceiling (everything addressable if all assumptions hold).
+5. Find the break-even value, where the decision flips.
+
+**Outputs**
+| Output | What it is |
+|---|---|
+| Note (`templates/model.md`) | Headline range; assumption table; results by case; floor and ceiling; what moves the answer; break-even; evidence |
+
+---
+
+## design: decide how to measure before building
+
+**Inputs**
+| Input | What it is | Who gives it |
+|---|---|---|
+| PRD | The text, or its key points | Tejas, in the request |
+| Mode | Requirements doc, experiment plan, or both | Tejas |
+| Hypothesis and main metric | Only for an experiment | Tejas |
+| Experiment settings | Smallest change worth detecting; confidence and power (95% and 80% unless he says otherwise); longest duration; planned split | Tejas |
+| Scope | The PRD, and the systems, events and tables it touches | Agreed in the brief |
+
+**Steps**
+1. **Data check:** does each field exist, is it filled, is it reliable? Use `schema.md`, its open questions, the instrumentation note in `context/CLAUDE.md`, the PM agent's product docs, and probes.
+2. **Define the metrics:** numerator, denominator, exclusions, anchor. New definitions go into `metrics.md` only after Tejas approves.
+3. **List the events engineering must add.**
+4. **Experiment only:** set the main metric and the safety metrics (ones that must not get worse), sample size, duration, holdout (a group left unchanged), assignment, a check that group sizes match the plan (SRM), and the ship / iterate / kill thresholds. `templates/methods.md` gives the formulas; the settings are Tejas's.
+
+**Outputs**
+| Output | What it is |
+|---|---|
+| Requirements doc (`templates/ard.md`) | Metric definitions; events and fields with status; ER diagram; data gaps; questions for engineering; a block to paste into the PRD |
+| Experiment plan (`templates/experiment.md`) | Hypothesis; metrics; who is in it; size and duration; checks; thresholds; a block to paste into the PRD |
+
+If only metrics are needed, they go in the brief's "Metric definitions" section.
+
+---
+
+## rollout: design the go-to-market (GTM) plan
+
+**Inputs**
+| Input | What it is | Who gives it |
+|---|---|---|
+| Rollout plan | Stages, locations, % of traffic or orders, launch settings, intended duration | The PM; anything missing is asked in the one batched message |
+| Success and safety metrics | What must improve, and what must not get worse | Tejas |
+| Thresholds | The limit for each metric, and for each stage gate | Tejas decides; Claude proposes |
+
+**Steps**
+1. Size each stage from data: eligible orders, customers or lanes per location per day. Use the product docs for what is eligible.
+2. Check each stage is large enough to read the success and safety metrics (`templates/methods.md`).
+3. Propose the stage gates: go, hold, roll back.
+4. Propose the minimum duration per stage.
+5. Flag overlaps with other live changes, and locations with thin data.
+
+**Outputs**
+| Output | What it is |
+|---|---|
+| Note (`templates/gtm.md`) | Plan as supplied; sizing; success and safety metrics with thresholds; stage gates; risks; readiness checks; decisions for the PM |
+
+The PM owns the plan. The analyst sizes and challenges it.
+
+---
+
+## measure: watch a launch
+
+**Inputs**
+| Input | What it is | Who gives it |
+|---|---|---|
+| Stage | Before launch, day 1, day 7, other day, or final result (internally: baseline, day1, day7, health, readout) | Tejas |
+| Launch date | When the change went live | Tejas |
+| Metrics | From `metrics.md`, the PRD, or the project's design note | Tejas |
+| Cuts | Splits the PM wants; Claude suggests more and says which were added | Tejas and Claude |
+| Windows | Baseline and comparison windows (match day of week; leave out known odd days) | Claude proposes; Tejas decides |
+| Limits | Success and safety limits | The project's rollout note if there is one; otherwise ask |
+| Earlier notes | For every stage after "before launch": the project's baseline note (metrics, windows, snapshot CSV) | Found by Claude; if none, say so and offer a baseline from historical data, labelled as such |
+
+**Steps, by stage**
+- **Before launch (baseline):**
+  1. Run the data checks: row counts reconcile, key unique, no missing days.
+  2. Freeze the snapshot: list its CSV in the "Queries to run" table and never overwrite it.
+  3. Test the queries on historical or shadow data.
+  4. Propose alert limits.
+- **Day 1, day 7, other day:**
+  1. Check the events are firing.
+  2. Compare the safety metrics with their limits.
+  3. Note anything odd.
+  4. Give an early read, marked "too early to call".
+- **Final result (readout):**
+  1. Compare the launch with the baseline or control, with 95% intervals.
+  2. Show the cuts, and the side effects on the safety metrics.
+  3. Check there was enough data.
+  4. End with **ship, iterate or kill**, and the reason.
+- **Dashboard (any stage, only if asked):** write the dashboard spec. Dashboard queries may aggregate, because Metabase computes the card. Each is still its own query file, referenced by Q-ID, and any number quoted in a note still comes from a script. Tejas builds it in Metabase from the spec; or a static HTML dashboard can be made from the CSVs with the `data:build-dashboard` skill.
+- **Recurring report:** use the `Re-run:` field (`route.md`, step 3) to run the earlier note's saved script on a new CSV. Do not rebuild.
+
+**Outputs**
+| Output | What it is |
+|---|---|
+| Note (`templates/measure.md`) | The section for the stage: baseline, check, or final result; plus the dashboard spec if asked |
+
+---
 
 ## update-context
 Not a loop job. Follow `workflows/update-context.md`.
