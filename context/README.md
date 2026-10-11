@@ -28,7 +28,7 @@ updated: YYYY-MM-DD
 | 2 | Read `schema.md` | The Key lookups, plus the tables whose `Systems:` flag matches a requested system or says `all` |
 | 3 | Read `metrics.md` and `rules.md` | Always |
 | 4 | Read the PM agent's product documents | `~/pm-agent/context/<system>/`, loaded the way the PM agent does (see `context/CLAUDE.md`). Read only |
-| 5 | Look for an existing answer | Search project notes (`archives/*/insights/`) and the "Reference queries" section of `schema.md` before building anything |
+| 5 | Look for an existing answer | Search project notes (`archives/*/insights/`) and the project's `queries-dump/` before building anything |
 | 6 | A system has no documents | Say so once. Do not fill the gap from general knowledge |
 
 ## Out-of-date material

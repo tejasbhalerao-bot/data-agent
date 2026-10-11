@@ -23,7 +23,7 @@ When he approves, create the note with `scripts/new-file.sh <project> insights <
 ## 3. Build
 If the approved brief's "Data from" column needs no query or CSV (for example a requirements document written from the PRD and the docs), skip phases 3 and 4 and go to phase 5, step 3.
 
-1. **Reuse first.** Start from the approved brief's "Data from" column. A CSV in `raw-data/` that covers the window, cohort and columns needed, or a validated query in the "Reference queries" section of `context/schema.md`. If a CSV covers it, go to phase 4, step 2.
+1. **Reuse first.** Start from the approved brief's "Data from" column. A CSV in `raw-data/` that covers the window, cohort and columns needed, or a query file in the project's `queries-dump/` that already pulls it. If a CSV covers it, go to phase 4, step 2.
 2. **Documentation check again.** It was done before the brief. If writing the SQL shows a table or column that is not documented, stop, run `update-context`, and revise the brief if it changes.
 3. **Write the SQL** (you own its correctness).
    - Apply the filters listed for each table in `schema.md`, and any rule in `rules.md`.
@@ -56,7 +56,7 @@ If the approved brief's "Data from" column needs no query or CSV (for example a 
 ## 6. Save
 Sign-off, save and push rules are in `CLAUDE.md` ("Sign-off, save and push"). In short:
 1. Set `status: saved`, `signed_off: false`, and `as_of`; commit the note, queries, scripts and tests locally with `--local` (and again after every revision Tejas asks for; a revision after the answer was presented is saved as the next version). Point Tejas to the note file. Nothing is pushed yet.
-2. **Context changes:** list them in one block. Small additions (a new validated query, a new quirk beside its table) are applied locally with the diff shown. A change to an existing definition or rule waits for approval. Procedure in `update-context.md`.
+2. **Context changes:** list them in one block. Small additions (a new table section, a new quirk beside its table) are applied locally with the diff shown. A change to an existing definition or rule waits for approval. Procedure in `update-context.md`.
 3. **On sign-off** (as `CLAUDE.md` defines it; a change asked for after sign-off is a new version that needs its own sign-off): set `signed_off: true`, then commit and push everything from the request in one commit to `main` with `scripts/commit-and-push.sh`. State the message and paths. Never stage `raw-data/` or `outputs/`. If he asks for changes, revise and check again before presenting.
 
 ## Rules

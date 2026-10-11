@@ -34,7 +34,7 @@ What each element contains and when it is used. Shared files in `context/` chang
 | Element | Location | Purpose | Trigger |
 |---|---|---|---|
 | Context guide | `context/CLAUDE.md`, `context/README.md` | Describes Truemeds' teams, systems and business verticals, where the PM agent's product-flow documents are, and how context files are formatted and loaded. | Read at the start of every data session. |
-| Schema | `context/schema.md` | Lists every database table and its columns, each labelled with the systems it belongs to, plus known data quirks, open questions and tested queries to reuse. | Read before writing any query, and whenever a table or column is mentioned. |
+| Schema | `context/schema.md` | Lists every database table and its columns, each labelled with the systems it belongs to, plus known data quirks and open questions. | Read before writing any query, and whenever a table or column is mentioned. |
 | Metrics | `context/metrics.md` | Gives the one agreed meaning of each metric, and flags metrics that different projects define differently. Empty for now; filled project by project. | Read on every request, before using or defining any metric. |
 | Rules | `context/rules.md` | Holds the rules that apply to every kind of analysis, whatever the job or project. Empty for now; built up as the agent is used. | Read on every request, to apply any rule that is listed. |
 
@@ -45,7 +45,7 @@ What each element contains and when it is used. Shared files in `context/` chang
 | Loop | `workflows/loop.md` | Describes the six steps every request follows, from planning the query to saving the result. | After routing, unless a saved note already answers the request. |
 | Jobs | `workflows/jobs.md` | Sets out each job type (analyse, model, design, rollout, measure) as a workflow: the inputs it needs, the transformation logic (steps and rules), and the outputs. | When checking a request is complete, and when planning the query and the analysis. |
 | Review | `workflows/review.md` | Defines the checks run on the query before it is run, the CSV when it arrives, and the note before it is shown. | Before Tejas runs a query, when a CSV arrives, and before a note is shown. |
-| Context updates | `workflows/update-context.md` | Explains how to add or change a table, metric, rule or tested query in the shared context. | When a metric or table is undefined, a data quirk is found, or Tejas asks for a context change. |
+| Context updates | `workflows/update-context.md` | Explains how to add or change a table, metric or rule in the shared context. | When a metric or table is undefined, a data quirk is found, or Tejas asks for a context change. |
 | Note frame | `templates/note.md` | The fixed layout of every note: the answer, the approved brief, the queries and scripts tables, definitions, caveats and next check. | Every request that is not answered from a saved note. |
 | Brief template | `templates/brief.md` | The short plan shown to Tejas for approval before any work starts, then pasted into the note. | Before any query, design or plan. |
 | Answer templates | `templates/analyse.md`, `model.md`, `ard.md`, `experiment.md`, `gtm.md`, `measure.md` | One layout per job (design has two, the requirements doc and the experiment plan) for the answer section of the note. | When writing the answer. |

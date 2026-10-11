@@ -406,30 +406,6 @@ One file for every table. Each table carries a `Systems:` flag (allocation, trac
 
 ---
 
-#### Derived extract: order promise vs actuals (wide, one row per order)
-**Systems:** eta, tracking
-**Purpose:** The base extract used by `early-delivery-analysis`, `egregiously-miscalibrated-promises` and `promise-opportunities`. Exported from Metabase as CSV.
-**Provenance:** Column meanings from `archives/egregiously-miscalibrated-promises/context/data-sources.md` and `archives/promise-opportunities/context/2026-07-10-early-deliveries-data-dictionary-v1.md`. Source SQL: `archives/early-delivery-analysis/queries-dump/2026-06-16-early-delivery-base-extract-v1.sql` (see `rules.md` open gaps).
-
-| Group | Columns |
-|-------|---------|
-| Lifecycle timestamps | `order_id`, `digitised_ts` (= order placed), `dr_confirm_ts`, `invoice_create_ts`, `processing_start_ts` (warehouse became eligible to start; not that processing started), `awb_sticker_printed_ts` (alias `awb_print_ts`) |
-| Promises at placement (`digitised_*`) | `digitised_dr_promise`, `digitised_wh_promise`, `digitised_dispatch_promise`, `digitised_delivery_promise` (timestamps); `digitised_doctor_tat`, `digitised_wh_process_mins` (within working hours only), `digitised_dispatch_tat`, `digitised_delivery_tat_mins` (minutes) |
-| State at placement | `digitised_is_sdd`, `digitised_is_inventory`, `digitised_is_mfc`, `digitised_wh_id`, `digitised_order_category` (AUTO_CONFIRM, DOCTOR_CALL_REQUIRED, HA_CALL_REQUIRED, DOCTOR_AND_HA_CALL_REQUIRED), `digitised_delivery_pincode`, `digitised_delivery_partner` |
-| Working hours | `doctor_work_start/end`, `warehouse_work_start/end` (`digitised_wh_work_start/end` in the older export), `wh_processing_type` |
-| Payment | `initial_payment_type`, `final_payment_code`, `final_payment_type`, `payment_pending_ts`, `payment_completed_ts` |
-| Actuals | `actual_doctor_call_time` (first call attempt), `actual_warehouse_processing`, `pickup_time`, `delivery_attempt_time` (first attempt, need not succeed), `actual_delivery_date` |
-| State at shipping (`shipping_*`) | `shipping_pincode`, `shipping_delivery_partner`, `shipping_delivery_promise` (integer **days**), `shipping_warehouse`, `shipping_is_sdd`, `shipping_is_inventory` |
-
-**Quirks of this extract:**
-- `shipping_delivery_promise` is a number of **days**, not a timestamp. Compare it with `DATE(digitised_delivery_promise) - DATE(digitised_dispatch_promise)`, never with `digitised_delivery_promise` directly.
-- Boolean columns use different formats: `digitised_is_sdd` and `digitised_is_inventory` are `true`/`false` text, `shipping_is_sdd` is `1`/`0`, `shipping_is_inventory` is `true`/`false`. Convert before comparing.
-- `digitised_*` SDD, MFC, inventory and category fields are filled only from **2026-05-08**. Use `digitised_ts >= 2026-05-08` for any analysis that splits by them.
-
-Pairs that can diverge between placement and shipping (check both when assessing promise accuracy): pincode, delivery partner, warehouse, `is_sdd`, `is_inventory`, delivery promise.
-
----
-
 #### Order TAT Details
 **Systems:** tracking
 **Purpose:** Pickup time + delivery attempt timestamps per order. Source of truth for courier selected at invoice generation, warehouse shipping, promise TAT of the courier selected. 
@@ -571,24 +547,3 @@ Summarised from `archives/courier-allocation-revamp/context/2026-06-08-system-wo
 - **PBA status:** `selected_source = 'INTERNAL'` means PBA is still in shadow mode. Confirm whether PBA is now live; if so, update the allocation audit section.
 - **Order status IDs 344 and 39** (placed PBA-eligible order, order created) are not confirmed against `M System Value Master`.
 - **Communications** has no tables documented.
-
-## Reference queries
-Validated SQL for these tables, grouped by system. The Build phase reuses these before writing fresh SQL. SQL stays in its project's `queries-dump/` until a second project reuses it, then moves into `context/` with a header (purpose, grain, tables, definitions, exclusions, validated-on) and the entry is updated. "Validated" means it produced results used in a signed-off insight.
-
-### Allocation
-| Query | Purpose and grain | Tables | Status | Path |
-|---|---|---|---|---|
-| pba-adherence-base-extract v3 | One row per order, HARD allocation: internal vs PBA partner, TATs, pickup and delivery attempt, warehouse, allocation time. Use v3 going forward | allocation audit, order_tat_details, m_system_value_master | Validated (PBA story 2026-06-25) | `archives/pba-integration/queries-dump/2026-05-25-pba-adherence-base-extract-v3.sql` |
-| pba-allocation-with-pref-array v2 | One row per order, HARD allocation, preference array pivoted wide (dp1 to dp6: name, EDD, pricing, AVERAGE_TAT, total score, partner id) | allocation audit, rails api audit, logistics_delivery_partner, m_system_value_master | Validated | `archives/pba-integration/queries-dump/2026-05-25-pba-allocation-with-pref-array-v2.sql` |
-| pba-allocation-output v1 | One row per order, SOFT and HARD side by side with actual and promised delivery dates | allocation audit, order_tat_details, delivery_date_tracker, m_system_value_master | Validated | `archives/pba-integration/queries-dump/2026-05-25-pba-allocation-output-v1.sql` |
-| pba-diff-courier-internal-rank v2 | One row per order, different-courier cohort: Internal courier's rank and EDD in the PBA array | allocation audit, rails api audit, logistics_delivery_partner, order_tat_details, m_system_value_master | Validated | `archives/pba-integration/queries-dump/2026-05-25-pba-diff-courier-internal-rank-v2.sql` |
-| pba-lane-extract v1 | One row per order: warehouse_id and drop pincode, joined in Python | allocation audit | Validated | `archives/pba-integration/queries-dump/2026-05-25-pba-lane-extract-v1.sql` |
-
-Earlier PBA queries (`base-query-1`, `base-query-2`, base-extract v1/v2, allocation-with-pref-array v1, diff-courier v1) are superseded and stay in the project for history.
-
-### ETA
-| Query | Purpose and grain | Tables | Status | Path |
-|---|---|---|---|---|
-| early-delivery-base-extract v1 | One row per order digitised in May 2026: status milestones pivoted, promises, state at placement, actuals, state at shipping | order_status, m_system_value_master, delivery_date_tracker, order_tat_details, package_details_tracking, order_wh_mfc_mapping | **Unconfirmed** (three assumptions unconfirmed: the status timestamp column, the status names, and the decode join; also uses `order_wh_mfc_mapping`, which is undocumented) | `archives/early-delivery-analysis/queries-dump/2026-06-16-early-delivery-base-extract-v1.sql` |
-
-The July and August 2026 promise-vs-actual exports (`all-orders-july-2026.csv`, `all-orders-august-2026.xlsx`) were Metabase exports whose SQL is not saved in the repo. Save it here the next time that extract is re-run.
