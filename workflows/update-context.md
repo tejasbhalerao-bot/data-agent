@@ -1,27 +1,54 @@
 ---
 name: update-context
-description: Add or change schema, a metric, a rule, or a validated query. Called by the loop (undefined term, undocumented table, new quirk, promotion) or directly by Tejas.
+description: How to add or change a table, a metric, a rule or a tested query in the shared context. Called by the loop or directly by Tejas.
 ---
 
 # Update context
 
-One home per fact: schema in `context/schema.md`, definitions in `context/metrics.md`, rules that apply to every analysis in `context/rules.md`, data quirks beside their table in `context/schema.md`, validated SQL as a "Reference queries" entry in `context/schema.md`. Results live in project notes (`archives/<project>/insights/`), not here. Project-only material stays in `archives/<project>/context/`.
+## Inputs
+| Input | What it is | Who gives it |
+|---|---|---|
+| Kind of change | A table or column, a metric, a rule, or a tested query | Found by Claude in the loop (an undefined term, an undocumented table, a new data quirk), or asked for by Tejas |
+| Details | The table name, or the metric and its meaning, or the rule, or the query | Tejas, or the sample rows he runs when Claude asks |
 
-## Approval rule
-- **Additive and low-risk** (a new table section, a new gotcha row, a validated query): apply locally and show the diff. It is pushed with the request's commit at sign-off, or right away when Tejas asked for the update directly.
-- **Change to an existing definition, rule or schema statement, or a conflict between variants:** show the diff, wait for approval, then apply.
+## Where each fact lives
+| Fact | File |
+|---|---|
+| Tables, columns, data quirks, tested queries | `context/schema.md` (a quirk goes beside its table; a tested query goes under "Reference queries") |
+| What a metric means | `context/metrics.md` |
+| A rule for every analysis | `context/rules.md` |
+| Results | Project notes in `archives/<project>/insights/`, never here |
+| Project-only material | `archives/<project>/context/` |
 
-## New table or column (schema discovery)
-1. Read `context/schema.md` first; confirm the table is really missing.
-2. Ask Tejas to run in Metabase: columns (`SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = 'tmmumpsdb' AND table_name = '<t>' ORDER BY ordinal_position`) and 10 sample rows (`SELECT * FROM tmmumpsdb.<t> LIMIT 10`), in one message.
-3. Draft the section: purpose, written by, grain, key date column, column table, join keys (mark unverified keys), quirks. Never infer a column's meaning from its name alone; use the sample rows and flag unexpected nulls.
-4. Add it under Tables in `context/schema.md` with its `Systems:` flag; set `updated:`. Record any quirk beside its table.
+## Approval
+| Change | What Claude does |
+|--------|------------------|
+| A small addition (a new table section, a new quirk, a tested query) | Applies it locally and shows the difference. It is pushed with the request's commit at sign-off, or straight away if Tejas asked for the change |
+| A change to something already written, or a conflict between two definitions | Shows the difference, waits for Tejas's approval, then applies it |
 
-## New metric or definition
-Add to `metrics.md`: definition, inputs (named columns), formula, unit, caveats, source. Where it conflicts with an existing variant, keep both and mark the row CONFLICT in `metrics.md` until Tejas picks one.
+## Transformation logic
 
-## New validated query
-Add a row to the "Reference queries" section of `context/schema.md`, under its system. When a second project reuses a query, move the file into `context/` with the standard header (purpose, grain, tables, definitions, exclusions, validated-on) and update the row.
+**New table or column**
+| # | Step | What Claude does | Rule |
+|---|------|------------------|------|
+| 1 | Confirm | Reads `schema.md` | Continues only if the table is really missing |
+| 2 | Ask | Asks Tejas, in one message, to run two queries in Metabase: the columns (`SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = 'tmmumpsdb' AND table_name = '<t>' ORDER BY ordinal_position`) and 10 sample rows (`SELECT * FROM tmmumpsdb.<t> LIMIT 10`) | |
+| 3 | Draft | Writes the section: purpose, who writes it, grain, key date column, columns, join keys, quirks | Never infers a column's meaning from its name alone; uses the sample rows and flags unexpected blanks. Marks unverified join keys |
+| 4 | Add | Adds it under Tables in `schema.md` with its `Systems:` flag | Sets `updated:` |
 
-## Always
-Show what changed. Push with `scripts/commit-and-push.sh` at the point set out above, and say what was pushed. Set `updated:` in the front matter of every file touched.
+**New metric**
+| # | Step | What Claude does | Rule |
+|---|------|------------------|------|
+| 1 | Write | Adds to `metrics.md`: definition, named input columns, formula, unit, caveats, source | |
+| 2 | Conflict | If a variant already exists, keeps both and marks the row CONFLICT | Stays CONFLICT until Tejas picks one |
+
+**New rule:** adds it to `rules.md` only if it holds for every kind of analysis. A rule about one table goes beside the table in `schema.md`.
+
+**New tested query:** adds a row under "Reference queries" in `schema.md`, under its system. When a second project reuses it, moves the file into `context/` with the standard header (purpose, grain, tables, definitions, filters, tested-on) and updates the row.
+
+## Outputs
+| Output | What it is |
+|---|---|
+| Updated file | The changed file, with `updated:` set in its front matter |
+| Difference shown | Tejas sees what changed |
+| Push | With `scripts/commit-and-push.sh`, at the point set out under Approval; say what was pushed |

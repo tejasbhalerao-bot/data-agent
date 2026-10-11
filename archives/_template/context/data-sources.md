@@ -4,7 +4,7 @@
 
 | File | Description | Window | Grain | Produced by | Location |
 |------|-------------|--------|-------|-------------|----------|
-| example.csv | What it holds | 2026-07-01 to 2026-07-31 | one row per order | `queries-dump/<file>.sql` or Metabase export | `raw-data/example.csv` (local only) |
+| example.csv | What it holds | 2026-07-01 to 2026-07-31 | one row per order | `queries-dump/<file>.md` or Metabase export | `raw-data/example.csv` (local only) |
 
 ## Documents and external sources
 

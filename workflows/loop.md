@@ -11,7 +11,7 @@ Phases are fixed. Checks are in `review.md`. Job differences are in `jobs.md`. T
 Done in `route.md`. Output: job, rules applied, context loaded, whether a note will be written, and the **flow reading** ("My reading of the flow: …").
 
 ## 2. Brief (always; nothing starts without approval)
-First do the **pre-flight (hard stop)**: every table, column and metric the brief will use must exist in `context/schema.md` and `context/metrics.md`. If not, stop and run `update-context`. If the data cannot answer the request, tell Tejas what cannot be answered and what would be needed. Only then, before writing any query, design or plan, fill `templates/brief.md` in plain English, show it to Tejas, and **wait for his approval**. Do no work until he approves. If he corrects it, revise and show it again. In filling it:
+First do the **documentation check (the work stops if it fails)**: every table, column and metric the brief will use must exist in `context/schema.md` and `context/metrics.md`. If not, stop and run `update-context`. If the data cannot answer the request, tell Tejas what cannot be answered and what would be needed. Only then, before writing any query, design or plan, fill `templates/brief.md` in plain English, show it to Tejas, and **wait for his approval**. Do no work until he approves. If he corrects it, revise and show it again. In filling it:
 - **Scope:** use what Tejas gave. Where he gave nothing, propose a value with a one-line reason (for example "last 30 days ending yesterday, so the figures are current"); he decides. Do not ask these as separate questions beforehand.
 - **Metrics and cuts (M1, M2…):** one line per metric (named from `metrics.md`, variant stated) and the cut it is shown by. This list is the fence: every query and script must serve at least one line, and nothing outside it is built. Adding one later means revising the brief.
 - **Grain and output columns: ask Tejas.** You may suggest, with reasons, but he decides; never choose them alone, and do not write any query until he has answered.
@@ -24,10 +24,10 @@ When he approves, create the note with `scripts/new-file.sh <project> insights <
 If the approved brief's "Data from" column needs no query or CSV (for example a requirements document written from the PRD and the docs), skip phases 3 and 4 and go to phase 5, step 3.
 
 1. **Reuse first.** Start from the approved brief's "Data from" column. A CSV in `raw-data/` that covers the window, cohort and columns needed, or a validated query in the "Reference queries" section of `context/schema.md`. If a CSV covers it, go to phase 4, step 2.
-2. **Pre-flight check again.** It was done before the brief. If writing the SQL shows a table, column or metric that is not documented, stop, run `update-context`, and revise the brief if it changes.
+2. **Documentation check again.** It was done before the brief. If writing the SQL shows a table, column or metric that is not documented, stop, run `update-context`, and revise the brief if it changes.
 3. **Write the SQL** (you own its correctness).
    - Apply the filters listed for each table in `schema.md`, and any rule in `rules.md`.
-   - Filter early, avoid join fan-out, use the `tmmumpsdb.` prefix and `snake_case` names.
+   - Filter early, avoid joins that multiply rows, use the `tmmumpsdb.` prefix and `snake_case` names.
    - Use the grain and columns Tejas gave in the brief. Do not add or drop columns on your own; if a cut later needs a column that is missing, ask him.
    - Rate timeout risk. Low: up to 2 joins and 30 days. Medium: 3 to 4 joins, or 31 to 89 days. High: 5+ joins, or 90+ days. Tell Tejas the rating. For High, propose a split (by date range first) and let him choose; then write a merge script (`scripts/new-file.sh <project> scripts merge-<topic> py`) that joins the chunks and checks the row counts.
    - **One query, one file.** Write each query as its own `.md` file in `queries-dump/`, made with `scripts/new-file.sh <project> queries-dump <project>-<topic>-query md`. The file follows `templates/query.md`: a short header (purpose, **serves: M-IDs**, grain, tables, definitions used, filters, expected shape, timeout rating), then the SQL in a single ```sql code block. Never put SQL in the note.

@@ -1,36 +1,62 @@
 ---
 name: review
-description: One reviewer, three checkpoints. Always runs, cannot be skipped. Fix and re-check until no blocking issue.
+description: The three checks, each with what is checked, the pass condition and what to do on failure. They always run and cannot be skipped.
 ---
 
 # Review
 
-Run at each checkpoint. Fix issues yourself, re-check, and only then move on. Anything unresolved is flagged at the top of the note.
+Three checks run at fixed points. None can be skipped, not even for a quick answer. On a failure, fix it yourself and check again before moving on. Anything still unresolved is flagged at the top of the note.
 
-## Check 1: SQL (before handoff)
-- Every metric used matches `metrics.md` (variant named). Conflicting variants: ask first.
-- The filters listed for each table in `schema.md` are applied (for example keeping the latest row per order on the allocation audit, done before any join), plus any rule in `rules.md`.
-- Grain stated and true: join keys are unique on the side that must be unique; no fan-out.
-- Join keys match the documented keys in `context/schema.md` (exact `request_id = reference_number`, not timestamps).
-- Date filter sits in the innermost CTE; no `SELECT *` on large tables; `tmmumpsdb.` prefix; `snake_case` names.
-- The queries match the approved brief's "Data from" column: nothing extra is pulled, nothing planned is missing.
-- Output columns equal the grain and columns Tejas gave in the brief. No aggregation in SQL, except the probe and dashboard queries.
-- Every metric and cut in the brief (M1…) is served by at least one query, and every query serves at least one (no orphan queries). Each cut's column is in the query's output.
-- Each query is its own file following `templates/query.md`, with a header; the note's "Queries to run" table points to the latest version of each and contains no SQL.
-- Probe included; timeout risk rated; High is split.
+| Check | When | What is checked |
+|---|---|---|
+| 1. Query | Before Tejas runs it | Each query file and the "Queries to run" table |
+| 2. CSV | When a CSV arrives | Each CSV in `raw-data/` |
+| 3. Note | Before the note is presented | The whole note |
 
-## Check 2: CSV (on file drop)
-`scripts/validate-csv.py` passes: required columns present, key unique, null shares within limits, dates inside the window, row and distinct counts match the probe. A FAIL goes back to phase 3 (query fault) or to Tejas (wrong export).
+## Check 1: the query
 
-## Check 3: the note (before it is presented)
-- Every figure in the note appears in a script output in `outputs/`, and is cited by metric ID and script ID (M1, via S1). No hand-typed numbers.
-- The calculation followed the approved "How it will be calculated" steps. Any change was approved in a revised brief.
-- The answer follows the job's template (`jobs.md` names it): every section is filled or marked "not applicable".
-- Every metric and cut in the brief has a figure in the Evidence, and every script serves at least one of them. Nothing is reported that is not in the brief's list.
-- The "Scripts and outputs" table points to the latest version of each script, test and output, gives the exact command to run it, and the note contains no code.
-- Denominators are stated and are the intended population; percentages add up.
-- Sample size supports the claim; small cells are marked or dropped.
-- Segment mix and other possible explanations considered (the job's "Transformation logic" in `jobs.md`); a Simpson's-paradox check on any headline comparison.
-- Claim strength matches the evidence: "caused" only with a test, otherwise "associated with".
-- Window and as-of date stated; assumptions listed; definitions named; caveats include data-quality flags from `schema.md`.
-- The note answers the decision it was written for in the first two lines.
+| # | What Claude checks | Pass when |
+|---|--------------------|-----------|
+| 1 | Metrics | Each metric matches `metrics.md`, variant named. If variants conflict, ask Tejas first |
+| 2 | Filters | The filters listed for each table in `schema.md` are applied, plus any rule in `rules.md`. Example: keep only the latest row per order on the allocation audit, before any join |
+| 3 | Rows | One row is what the brief says. Joins do not multiply rows: the join keys are unique on the side that must be unique |
+| 4 | Join keys | They match the keys in `schema.md`, as exact matches and never by timestamp |
+| 5 | Style | The date filter is applied as early as possible; no `SELECT *` on large tables; `tmmumpsdb.` prefix; `snake_case` names |
+| 6 | Matches the brief | It pulls only what the brief's "Data from" column plans. The output columns are the grain and columns Tejas gave. No aggregation, except the probe and dashboard queries |
+| 7 | Coverage | Every metric and cut (M1…) is served by at least one query. Every query serves at least one. Each cut's column is in the output |
+| 8 | Files | One file per query, following `templates/query.md`. The note's "Queries to run" table points to the latest version of each and holds no SQL |
+| 9 | Safety | The probe is included, the timeout risk is rated, and a High risk is split |
+
+**On failure:** fix the query and check again. Do not send it to Tejas.
+
+## Check 2: the CSV
+Run `scripts/validate-csv.py`.
+
+| What Claude checks | Pass when |
+|--------------------|-----------|
+| Columns | The required columns are present |
+| Rows | The key is unique; the row and distinct counts match the probe |
+| Blanks | The share of blanks in each column is within its limit |
+| Dates | All dates fall inside the window |
+
+**On failure:**
+- Query fault (wrong columns, duplicate rows): fix the query and go back to `loop.md`, phase 3.
+- Wrong export (cut short, wrong filters in Metabase): tell Tejas plainly what failed and ask him to re-export.
+
+## Check 3: the note
+
+| # | What Claude checks | Pass when |
+|---|--------------------|-----------|
+| 1 | Figures | Every figure appears in a script output in `outputs/`, cited by metric ID and script ID (M1, via S1). Nothing is typed by hand |
+| 2 | Plan followed | The calculation followed the approved "How it will be calculated" steps. Any change was approved in a revised brief |
+| 3 | Template | The answer follows the job's template (named in `jobs.md`). Every section is filled or marked "not applicable" |
+| 4 | Coverage | Every metric and cut in the brief has a figure in the Evidence. Every script serves at least one. Nothing is reported that is not in the brief's list |
+| 5 | Tables | The "Scripts and outputs" table points to the latest script, test and output of each, gives the exact run command, and the note holds no code |
+| 6 | Sums | Denominators are stated and are the intended population. Percentages add up |
+| 7 | Sample size | The sample supports each claim. Small cells are marked or dropped |
+| 8 | Other explanations | The job's other-explanation checks were done (`jobs.md`, "Transformation logic"). Any headline comparison was re-checked within the largest segment, in case the overall result hides the opposite trend |
+| 9 | Claim strength | "Caused" appears only where a test supports it. Otherwise "associated with" |
+| 10 | Context | The window and as-of date are stated, assumptions listed, definitions named, and the caveats include the data-quality flags from `schema.md` |
+| 11 | Answer first | The first two lines answer the question the note was written for |
+
+**On failure:** fix the note and check again before presenting it.

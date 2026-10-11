@@ -186,5 +186,5 @@ Any stage, only if asked
 
 ---
 
-## update-context
-Not a loop job. Follow `workflows/update-context.md`.
+## update-context: change the shared context
+Not a loop job. It follows its own workflow (inputs, steps and approval rules) in `workflows/update-context.md`.

@@ -27,7 +27,7 @@ Goes under "Answer" in the note. Delete the guidance in angle brackets. Settings
 | Expected duration at current volume | | calculated |
 
 ## Checks planned
-<A check that group sizes match the plan (SRM); how interactions with other live changes are handled.>
+<A check that the group sizes match the plan (called SRM); how interactions with other live changes are handled.>
 
 ## Ship, iterate or kill
 <Thresholds for each outcome, written before launch (Tejas).>

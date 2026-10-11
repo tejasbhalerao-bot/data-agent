@@ -1,38 +1,49 @@
 ---
-title: Statistical methods reference
+title: Calculation methods
 type: other
 systems: [all]
 verticals: [all]
 source: standard methods; Truemeds-specific defaults marked
-updated: 2026-10-09
+updated: 2026-10-12
 ---
 
-# Methods
+# Calculation methods
 
-Use these when a job in `workflows/jobs.md` calls for them. State every parameter chosen in the note.
+Reference for the formulas and checks a job in `workflows/jobs.md` calls for. State every setting used in the note. Settings that are Tejas's to give are marked.
 
-## Sample size for a proportion (two-sided A/B)
-`n per arm = 2 * (z_a + z_b)^2 * p(1-p) / delta^2` with `p` the baseline rate, `delta` the absolute minimum detectable effect (MDE). Defaults: alpha 0.05 (`z_a = 1.96`), power 0.80 (`z_b = 0.84`). Report n per arm, total, and expected duration at the observed daily eligible volume. For a continuous metric use `n = 2 * (z_a + z_b)^2 * sigma^2 / delta^2`.
-- Traffic that is not randomised per user (for example per order) needs the cluster-adjusted n: multiply by `1 + (m - 1) * icc`.
-- If the metric is low-volume (for example SDD cells in single or double digits), say it is not analysable rather than test it.
+## Sample size for an experiment
+| Setting | Value | Set by |
+|---------|-------|--------|
+| Baseline rate `p` | Observed from the data | Data |
+| Smallest change worth detecting `delta` (absolute) | | Tejas |
+| Confidence and power | 95% (`z_a = 1.96`) and 80% (`z_b = 0.84`) unless Tejas says otherwise | Tejas |
 
-## Experiment design checklist
-Hypothesis with direction; primary metric; 1 to 3 guardrails with thresholds; MDE; n and duration (full weeks, covering day-of-week effects); universe and exclusions; assignment unit and hash; traffic split with a holdout; ship / iterate / kill rules written before launch.
+- **Proportion metric:** `n per group = 2 * (z_a + z_b)^2 * p(1-p) / delta^2`.
+- **Average metric:** `n per group = 2 * (z_a + z_b)^2 * sigma^2 / delta^2`, where `sigma` is the standard deviation.
+- **Not randomised per user** (for example per order): multiply `n` by `1 + (m - 1) * icc`, where `m` is orders per user and `icc` is how alike one user's orders are.
+- **Report** `n` per group, the total, and the days needed at the current daily eligible volume. Round up to full weeks.
+- **Very small cells** (for example SDD cells with single or double digits): say they cannot be analysed. Do not test them.
 
-## SRM (sample ratio mismatch)
-Chi-square test of observed arm counts against the planned split. `p < 0.001` means the assignment is broken: stop and fix before reading any result.
+## Experiment plan checklist
+Hypothesis with direction; main metric; one to three safety metrics with limits; smallest change worth detecting; sample size and duration; who is eligible and what is excluded; the assignment unit; the split, with a holdout (a group left unchanged); and the ship / iterate / kill rules, written before launch.
+
+## Check that group sizes match the plan (SRM)
+Run a chi-square test of the actual group counts against the planned split. If `p < 0.001`, the assignment is broken: stop and fix it before reading any result.
 
 ## Reading a result
-- Difference with a 95% confidence interval, not only a p-value. Proportions: Wilson or normal approximation with large n; use a two-proportion z-test for two arms.
-- Do not peek and stop early on significance; read at the planned n or use a pre-registered sequential rule.
-- Multiple segments: treat as exploratory unless pre-specified; correct for many comparisons or label as directional.
-- Report the effect on the guardrails even when the primary metric wins.
+- Show the difference with its 95% interval, not only a p-value. For two proportions, use a two-proportion z-test.
+- Do not stop early because a result looks significant. Read it at the planned sample size.
+- Splits by segment are exploratory unless planned in advance. Label them "directional", or correct for the number of comparisons.
+- Report the safety metrics even when the main metric wins.
 
-## Pre/post and shadow comparisons (no randomisation)
-State the confounders: mix shift, seasonality, concurrent launches. Prefer same-lane or same-cohort matching (as in the PBA same-courier cohort). Say "associated with", not "caused".
+## Comparisons without randomisation (before and after, shadow mode)
+Name what else could explain the result: a change in the mix of segments, seasonality, other launches at the same time. Prefer comparing the same lane or cohort (as in the PBA same-courier comparison). Say "associated with", not "caused".
 
-## Ranges and sizing
-Give low / base / high, naming the assumption that moves each. Separate a **floor** (provably addressable, observed in the data) from a **ceiling** (all of the addressable pool). Example: reallocation uplift 2.04pp floor, 6.20pp ceiling (note #62 in `archives/egregiously-miscalibrated-promises/insights/`).
+## Ranges for sizing
+Give low, base and high, and name the assumption that moves each. Separate a **floor** (provably addressable, seen in the data) from a **ceiling** (the whole addressable pool). Example: reallocation uplift of 2.04pp floor and 6.20pp ceiling (note #62 in `archives/egregiously-miscalibrated-promises/insights/`).
 
-## Sanity checks before any figure is published
-Row count reconciles to the extract; the population equals the intended denominator; percentages of a partition add to 100; a headline comparison is re-cut by the largest segment (Simpson's paradox).
+## Checks before any figure is shown
+- The row count matches the extract.
+- The population is the intended denominator.
+- Percentages of a whole add to 100.
+- A headline comparison is re-checked within the largest segment, in case the overall result hides the opposite trend.
