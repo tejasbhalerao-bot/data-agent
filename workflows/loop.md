@@ -11,17 +11,13 @@ Phases are fixed. Checks are in `review.md`. Job differences are in `jobs.md`. R
 Done in `route.md`. Output: job, rules applied, context loaded, whether a note will be written, and the **flow reading** ("My reading of the flow: …").
 
 ## 2. Brief (always; nothing starts without approval)
-Before writing any query, design or plan, show Tejas a short brief in plain English and **wait for his approval**. Do no work until he approves. If he corrects it, revise and show it again.
-- The flow reading ("My reading of the flow: …").
-- The objective, and the questions to answer.
-- **Scope** (what it covers depends on the job, see `jobs.md`: time window, cohort and comparison for analyse, model and measure; the PRD and what it touches for design; stages, locations and launch settings for rollout). Use what Tejas gave. Where he gave nothing, propose a value with a one-line reason (for example "last 30 days ending yesterday, so the figures are current"); he decides. Do not ask these as separate questions beforehand.
-- **Metrics and cuts, numbered M1, M2…** Each line is one metric (named from `metrics.md`, variant stated) and the cut it is shown by (for example "on-time % by courier", or "none, overall"). This list is the scope: every query and script must serve at least one of them, and nothing outside it is built. Adding one later means revising the brief.
-- Tables used.
-- **Grain and output columns: ask Tejas.** Ask what one row should be and which columns he needs. You may suggest, with reasons, but he decides; never choose them alone, and do not write any query until he has answered.
-- What you will produce (queries, a design, a rollout plan, a baseline, a dashboard spec). The result is always a note.
-- Assumptions made, and the decision it feeds if he gave one.
+Before writing any query, design or plan, fill `templates/brief.md` in plain English, show it to Tejas, and **wait for his approval**. Do no work until he approves. If he corrects it, revise and show it again. In filling it:
+- **Scope:** use what Tejas gave. Where he gave nothing, propose a value with a one-line reason (for example "last 30 days ending yesterday, so the figures are current"); he decides. Do not ask these as separate questions beforehand.
+- **Metrics and cuts (M1, M2…):** one line per metric (named from `metrics.md`, variant stated) and the cut it is shown by. This list is the fence: every query and script must serve at least one line, and nothing outside it is built. Adding one later means revising the brief.
+- **Grain and output columns: ask Tejas.** You may suggest, with reasons, but he decides; never choose them alone, and do not write any query until he has answered.
+- **Job-specific part:** fill the "Job-specific" section as `jobs.md` says for the job.
 
-When he approves, create the note with `scripts/new-file.sh <project> insights <project>-<topic> md` from `templates/note.md`, put the approved brief in it, set `status: brief`, and commit it locally (`scripts/commit-and-push.sh --local "<message>" <path>`). A re-run skips the approval, because the saved analysis is the spec, but still gets a note.
+When he approves, create the note with `scripts/new-file.sh <project> insights <project>-<topic> md` from `templates/note.md`, paste the approved brief under "Approved brief", set `status: brief`, and commit it locally (`scripts/commit-and-push.sh --local "<message>" <path>`). A re-run skips the approval, because the saved analysis is the spec, but still gets a note.
 
 ## 3. Build
 1. **Reuse first.** A CSV in `raw-data/` that covers the window, cohort and columns needed, or a validated query in the "Reference queries" section of `context/schema.md`. If a CSV covers it, go to phase 4, step 2.
@@ -31,7 +27,7 @@ When he approves, create the note with `scripts/new-file.sh <project> insights <
    - Filter early, avoid join fan-out, use the `tmmumpsdb.` prefix and `snake_case` names.
    - Use the grain and columns Tejas gave in the brief. Do not add or drop columns on your own; if a cut later needs a column that is missing, ask him.
    - Rate timeout risk. Low: up to 2 joins and 30 days. Medium: 3 to 4 joins, or 31 to 89 days. High: 5+ joins, or 90+ days. Tell Tejas the rating. For High, propose a split (by date range first) and let him choose; then write a merge script (`scripts/new-file.sh <project> scripts merge-<topic> py`) that joins the chunks and checks the row counts.
-   - **One query, one file.** Write each query as its own `.md` file in `queries-dump/`, made with `scripts/new-file.sh <project> queries-dump <project>-<topic>-query md`. The file has a short header (purpose, **serves: M-IDs**, grain, tables, definitions used, filters, expected shape, timeout rating), then the SQL in a single ```sql code block. Never put SQL in the note.
+   - **One query, one file.** Write each query as its own `.md` file in `queries-dump/`, made with `scripts/new-file.sh <project> queries-dump <project>-<topic>-query md`. The file follows `templates/query.md`: a short header (purpose, **serves: M-IDs**, grain, tables, definitions used, filters, expected shape, timeout rating), then the SQL in a single ```sql code block. Never put SQL in the note.
    - **Versions.** A query changed after Tejas has seen it (for example an error fix) is a new version of its file (`-v2`, `-v3`); earlier versions stay.
 4. **Probe.** One combined query, in its own file (`<project>-<topic>-probe-query`): row count, distinct key count, and one total that reconciles to a known figure (from a signed-off note or from Tejas; if none exists, skip the reconciliation and say so).
 5. **Check the query** (`review.md`), then add a **"Queries to run"** section to the same note (the one holding the approved brief). It is a table with the columns ID (Q1, Q2…; the probe is Q0), Purpose, Serves (the M-IDs it supplies data for; the probe serves none), Latest file (full path from the repo root, with version), and Save the CSV as (full path in `raw-data/`). The note only references the query files; it never contains SQL. When a query gets a new version, update its row to the latest.
@@ -46,12 +42,12 @@ When he approves, create the note with `scripts/new-file.sh <project> insights <
 ## 5. Answer
 1. **All figures come from code.** Never read numbers off a CSV by eye.
    - **Re-run:** if the project's earlier note has a script covering the cuts needed, take its latest file and "Run with" command from that note's "Scripts and outputs" table and run it on the new CSV.
-   - **Otherwise write one script per calculation** with `scripts/new-file.sh <project> scripts aggregate-<topic> py`. Start the file with a comment block: purpose, **serves: M-IDs**, the CSV it reads, the files it writes to `outputs/`, and the exact command to run it. It reads the CSV, applies the cuts and writes to `outputs/`.
+   - **Otherwise write one script per calculation** with `scripts/new-file.sh <project> scripts aggregate-<topic> py`. Follow `templates/script.md`. Start the file with a comment block: purpose, **serves: M-IDs**, the CSV it reads, the files it writes to `outputs/`, and the exact command to run it. It reads the CSV, applies the cuts and writes to `outputs/`.
    - **Versions.** A script changed after its output has been used is a new version (`-v2`, `-v3`), never an edit in place; earlier versions stay.
    - **Tests.** Add one (`scripts/new-file.sh <project> tests test-<script> py`) for any script that classifies, does date arithmetic or joins.
    - **Run it** and add a **"Scripts and outputs"** section to the note: a table with the columns ID (S1, S2…), Purpose, Serves (M-IDs), Latest file (full path), Reads (the Q-ID and its CSV), Writes (full path in `outputs/`), Test (full path, or "none needed"), and Run with (the exact command). The note only references the files; it never contains code. Commit the scripts, tests and note locally.
 2. **Open with the flow reading** from the approved brief. If Tejas corrected it, record the correction beside the relevant table or system in `schema.md` through `update-context`.
-3. **Write the answer into the note** (`templates/note.md`): answer first, decision implication, evidence tables with full numbers, definitions used, assumptions made, caveats, next check. The reply in chat is a short summary (flow reading, the key numbers, the data window) that points to the note file.
+3. **Write the answer into the note's "Answer" section** using the job's template: analyse → `templates/analyse.md`; model → `templates/model.md`; design → `templates/ard.md` and/or `templates/experiment.md`; rollout → `templates/gtm.md`; measure → `templates/measure.md` (keep only the section for the stage). Fill every section or mark it "not applicable". Then fill the note's definitions and filters, caveats and next check. The reply in chat is a short summary (flow reading, the key numbers, the data window) that points to the note file.
 4. **Check the answer** (`review.md`).
 
 ## 6. Save

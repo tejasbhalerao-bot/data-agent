@@ -25,7 +25,7 @@ data-agent/
 │   ├── metrics.md        the agreed meaning of each metric
 │   └── rules.md          rules that apply to every analysis (empty for now)
 ├── workflows/            route · loop · jobs · review · update-context
-├── templates/            note.md · methods.md
+├── templates/            note · brief · analyse · model · ard · experiment · gtm · measure · query · script · methods
 ├── scripts/              new-file.sh · commit-and-push.sh · validate-csv.py
 ├── archives/<project>/   context · queries-dump · scripts · tests · insights · raw-data · outputs
 ├── changelogs/           design records
