@@ -15,7 +15,7 @@ First do the **pre-flight (hard stop)**: every table, column and metric the brie
 - **Scope:** use what Tejas gave. Where he gave nothing, propose a value with a one-line reason (for example "last 30 days ending yesterday, so the figures are current"); he decides. Do not ask these as separate questions beforehand.
 - **Metrics and cuts (M1, M2…):** one line per metric (named from `metrics.md`, variant stated) and the cut it is shown by. This list is the fence: every query and script must serve at least one line, and nothing outside it is built. Adding one later means revising the brief.
 - **Grain and output columns: ask Tejas.** You may suggest, with reasons, but he decides; never choose them alone, and do not write any query until he has answered.
-- **How it will be calculated:** fill the section from the job's "How it is calculated" list in `jobs.md`, for this request, in plain words. State where each step's data comes from.
+- **How it will be calculated:** fill the section from the job's "Transformation logic" in `jobs.md`, for this request, in plain words. State where each step's data comes from.
 - **Job-specific part:** fill the "Job-specific" section from the job's Inputs in `jobs.md`.
 
 When he approves, create the note with `scripts/new-file.sh <project> insights <project>-<topic> md` from `templates/note.md`, paste the approved brief under "Approved brief", set `status: brief`, and commit it locally (`scripts/commit-and-push.sh --local "<message>" <path>`). A re-run skips the approval, because the saved analysis is the spec, but still gets a note.

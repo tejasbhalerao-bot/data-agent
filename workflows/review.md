@@ -30,7 +30,7 @@ Run at each checkpoint. Fix issues yourself, re-check, and only then move on. An
 - The "Scripts and outputs" table points to the latest version of each script, test and output, gives the exact command to run it, and the note contains no code.
 - Denominators are stated and are the intended population; percentages add up.
 - Sample size supports the claim; small cells are marked or dropped.
-- Segment mix and other possible explanations considered (the job's "How it is calculated" list in `jobs.md`); a Simpson's-paradox check on any headline comparison.
+- Segment mix and other possible explanations considered (the job's "Transformation logic" in `jobs.md`); a Simpson's-paradox check on any headline comparison.
 - Claim strength matches the evidence: "caused" only with a test, otherwise "associated with".
 - Window and as-of date stated; assumptions listed; definitions named; caveats include data-quality flags from `schema.md`.
 - The note answers the decision it was written for in the first two lines.

@@ -34,7 +34,7 @@ Every query and script must serve at least one line. Nothing outside this list i
 - Columns: <Tejas's answer.>
 
 ## How it will be calculated
-Plain steps, in order. Name each decision that changes the answer, so Tejas can correct it before anything is built. `workflows/jobs.md` lists what each job's steps must cover.
+Plain steps, in order. Name each decision that changes the answer, so Tejas can correct it before anything is built. `workflows/jobs.md` lists each job's steps and rules (its "Transformation logic"); restate each for this request.
 | Step | What it calculates | Rule or formula | Serves | Data from |
 |------|--------------------|-----------------|--------|-----------|
 | 1 | | | M1 | existing CSV, saved query, new query, or the script alone |
