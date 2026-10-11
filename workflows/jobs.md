@@ -13,24 +13,24 @@ How to read this: each job lists what goes in (**Inputs**), what Claude does (**
 - The answer always goes in a note, laid out by the job's template.
 
 ## Inputs every job needs
-| Input | What it is | Who gives it |
+| Input | What it is | Who gives it, and when |
 |---|---|---|
-| Job | analyse, model, design, rollout or measure | Tejas, or inferred and stated |
-| Project | The folder in `archives/` the work is saved in | Tejas |
-| Scope | What the work covers (set out per job below) | Tejas gives what he has; Claude proposes the rest with a reason; Tejas decides |
-| Definitions | What each metric means | `metrics.md`, unless Tejas names another |
-| Decision it feeds | What he will do with the answer (optional) | Tejas |
+| Job | analyse, model, design, rollout or measure | Tejas, in the request; or inferred and stated |
+| Project | The folder in `archives/` the work is saved in | Tejas, in the request; asked if missing |
+| Scope | What the work covers (set out per job below) | Settled in the brief: Tejas gives what he has, Claude proposes the rest with a reason, Tejas decides |
+| Grain and columns | What one row is, and which columns the output has | Settled in the brief: Claude may suggest; Tejas decides |
+| Definitions | What each metric means | `metrics.md`, unless Tejas names another in the request |
+| Decision it feeds | What he will do with the answer (optional) | Tejas, in the request |
 
 ---
 
 ## analyse: what happened, where, and why
 
 **Inputs**
-| Input | What it is | Who gives it |
+| Input | What it is | Who gives it, and when |
 |---|---|---|
-| Scope | Time window, cohort, comparison | Agreed in the brief |
-| Cuts | How to split the result (courier, warehouse, pincode, vertical, SDD x inventory, day) | Claude suggests; Tejas chooses |
-| Grain and columns | What one row is, and which columns | Tejas |
+| Scope | Time window, cohort, comparison | Settled in the brief |
+| Cuts | How to split the result (courier, warehouse, pincode, vertical, SDD x inventory, day) | Settled in the brief: Claude suggests; Tejas chooses |
 
 **Steps**
 1. Calculate the baseline.
@@ -49,13 +49,13 @@ How to read this: each job lists what goes in (**Inputs**), what Claude does (**
 ## model: size it, simulate it, compare options
 
 **Inputs**
-| Input | What it is | Who gives it |
+| Input | What it is | Who gives it, and when |
 |---|---|---|
-| Lever | The change, rule or option being sized | Tejas |
-| Assumptions | Each named, with a low, base and high value | Tejas (never picked by Claude) |
-| Horizon | How far ahead | Tejas |
-| Alternatives | Options to compare (optional) | Tejas |
-| Scope | Time window, cohort | Agreed in the brief |
+| Lever | The change, rule or option being sized | Tejas, in the request |
+| Assumptions | Each named, with a low, base and high value | Named in the request; low, base and high values settled in the brief, given by Tejas (never picked by Claude) |
+| Horizon | How far ahead | Tejas, in the request |
+| Alternatives | Options to compare (optional) | Tejas, in the request |
+| Scope | Time window, cohort | Settled in the brief |
 
 **Steps**
 1. Replay or simulate the change on historical data.
@@ -74,13 +74,13 @@ How to read this: each job lists what goes in (**Inputs**), what Claude does (**
 ## design: decide how to measure before building
 
 **Inputs**
-| Input | What it is | Who gives it |
+| Input | What it is | Who gives it, and when |
 |---|---|---|
 | PRD | The text, or its key points | Tejas, in the request |
-| Mode | Requirements doc, experiment plan, or both | Tejas |
-| Hypothesis and main metric | Only for an experiment | Tejas |
-| Experiment settings | Smallest change worth detecting; confidence and power (95% and 80% unless he says otherwise); longest duration; planned split | Tejas |
-| Scope | The PRD, and the systems, events and tables it touches | Agreed in the brief |
+| Mode | Requirements doc, experiment plan, or both | Tejas, in the request |
+| Hypothesis and main metric | Only for an experiment | Tejas, in the request |
+| Experiment settings | Smallest change worth detecting; confidence and power (95% and 80% unless he says otherwise); longest duration; planned split | Settled in the brief: Tejas gives them |
+| Scope | The PRD, and the systems, events and tables it touches | Settled in the brief |
 
 **Steps**
 1. **Data check:** does each field exist, is it filled, is it reliable? Use `schema.md`, its open questions, the instrumentation note in `context/CLAUDE.md`, the PM agent's product docs, and probes.
@@ -101,11 +101,11 @@ If only metrics are needed, they go in the brief's "Metric definitions" section.
 ## rollout: design the go-to-market (GTM) plan
 
 **Inputs**
-| Input | What it is | Who gives it |
+| Input | What it is | Who gives it, and when |
 |---|---|---|
-| Rollout plan | Stages, locations, % of traffic or orders, launch settings, intended duration | The PM; anything missing is asked in the one batched message |
-| Success and safety metrics | What must improve, and what must not get worse | Tejas |
-| Thresholds | The limit for each metric, and for each stage gate | Tejas decides; Claude proposes |
+| Rollout plan | Stages, locations, % of traffic or orders, launch settings, intended duration | The PM, in the request; anything missing is asked in the one batched message |
+| Success and safety metrics | What must improve, and what must not get worse | Tejas, in the request; confirmed in the brief |
+| Thresholds | The limit for each metric, and for each stage gate | Settled in the brief: Claude proposes; Tejas decides |
 
 **Steps**
 1. Size each stage from data: eligible orders, customers or lanes per location per day. Use the product docs for what is eligible.
@@ -126,14 +126,14 @@ The PM owns the plan. The analyst sizes and challenges it.
 ## measure: watch a launch
 
 **Inputs**
-| Input | What it is | Who gives it |
+| Input | What it is | Who gives it, and when |
 |---|---|---|
-| Stage | Before launch, day 1, day 7, other day, or final result (internally: baseline, day1, day7, health, readout) | Tejas |
-| Launch date | When the change went live | Tejas |
-| Metrics | From `metrics.md`, the PRD, or the project's design note | Tejas |
-| Cuts | Splits the PM wants; Claude suggests more and says which were added | Tejas and Claude |
-| Windows | Baseline and comparison windows (match day of week; leave out known odd days) | Claude proposes; Tejas decides |
-| Limits | Success and safety limits | The project's rollout note if there is one; otherwise ask |
+| Stage | Before launch, day 1, day 7, other day, or final result (internally: baseline, day1, day7, health, readout) | Tejas, in the request |
+| Launch date | When the change went live | Tejas, in the request |
+| Metrics | From `metrics.md`, the PRD, or the project's design note | Tejas, in the request |
+| Cuts | How to split the results | Settled in the brief: the PM's cuts come in the request; Claude suggests more and says which were added |
+| Windows | Baseline and comparison windows (match day of week; leave out known odd days) | Settled in the brief: Claude proposes; Tejas decides |
+| Limits | Success and safety limits | The project's rollout note if there is one; otherwise settled in the brief, given by Tejas |
 | Earlier notes | For every stage after "before launch": the project's baseline note (metrics, windows, snapshot CSV) | Found by Claude; if none, say so and offer a baseline from historical data, labelled as such |
 
 **Steps, by stage**
