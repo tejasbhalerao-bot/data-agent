@@ -1,0 +1,415 @@
+{
+  "pk": "HARD_ALLOCATION_INSTRUMENTATION#CID#17314534#REF#56994165",
+  "sk": "HARD_ALLOCATION_INSTRUMENTATION#REQ#b80bb017af864f4546178e4becaff019#TS#2026-10-13T00:45:34.986+05:30",
+  "customer_id": 17314534,
+  "reference_id": "56994165",
+  "request_id": "b80bb017af864f4546178e4becaff019",
+  "payload": {
+    "request": {
+      "trigger": "SINGLE_ORDER_API/BULK_API/AWB_RETRY/ERP_AUTO_CONFIRM/PARTNER_DRIFT_CHECK",
+      "order_id": 56994165,
+      "source_transaction_id": "<source transaction id>",
+      "warehouse_id": 40,
+      "delivery_pincode": "182204",
+      "payment_mode_requested": "COD/PREPAID",
+      "is_edit_order": false,
+      "headers_sent_to_lms": {
+        "x-user-id": "17314534",
+        "reference_id": "56994165",
+        "reference_status": "READY_TO_DISPATCH/PAYMENT_PENDING/ORDER_CONFIRMED/DOCTOR_CONFIRMED/<order status name in UPPER_SNAKE>"
+      }
+    },
+    "response": {
+      "returned": true,
+      "delivery_partner_id": 185,
+      "delivery_partner_name": "<partner name>",
+      "account_code": "<clickpost account code>",
+      "service_type": "SURFACE/EXPRESS",
+      "supports_cod_conversion": true,
+      "cod_delivery_partner_id": 185
+    },
+    "evaluation": {
+      "facts": {
+        "flow": "COURIER/SDD/NONE",
+        "trigger": "SINGLE_ORDER_API/BULK_API/AWB_RETRY/ERP_AUTO_CONFIRM/PARTNER_DRIFT_CHECK",
+        "is_edit_order": false,
+        "warehouse_id": 40,
+        "pickup_pincode": "<warehouse pincode>",
+        "delivery_pincode": "182204",
+        "payment_mode": "COD/PREPAID",
+        "delivery_type": "FORWARD/REVERSE",
+        "projected_wh_processing_time": "2026-10-13T11:00:00+05:30",
+        "projected_wh_processing_time_source": "ACTUAL_WH_SAME_DAY/ACTUAL_WH_CROSS_DAY_NOW/DERIVED_FROM_ACTUAL_DR_CALL/DERIVED_FROM_PROJECTED_DR_CALL",
+        "products_count": 3,
+        "is_cold_chain": false,
+        "is_express_eligible": false,
+        "express_eligible_reason": "OK/NO_EXPRESS_LANE/LIQUID_OVER_200",
+        "client_id": "third_party_service",
+        "customer_id_source": "ORDER",
+        "warehouse": {
+          "found": true,
+          "warehouse_id": 40,
+          "is_ankw": false,
+          "is_mfc_warehouse": false,
+          "pickup_pincode": "<warehouse pincode>"
+        },
+        "lane_config": {
+          "pincode_master_found": true,
+          "pincode_master_source": "NON_MFC/MFC_ACTIVE/MFC_INACTIVE/NONE",
+          "is_sdd": false,
+          "is_mfc": false,
+          "mfc_active": false,
+          "serviceable_by_air": false
+        },
+        "payment": {
+          "payment_type": "ONLINE/COD/PREPAID",
+          "payment_id": 16,
+          "prepaid_complete": true,
+          "upfront_initiated": false,
+          "payment_status": "SUCCESS/IN_PROGRESS/NOT_APPLICABLE",
+          "forced_to_online_reason": "null/PAYMENT_SUCCESS/ZERO_PAYABLE",
+          "final_amount_inr": 612.4,
+          "payment_mode_sent_to_lms": "PREPAID/COD"
+        },
+        "liquid_weight": 0,
+        "projected_wh_processing_time_resolved_count": 2,
+        "excluded_delivery_partners": [
+          {
+            "delivery_partner_id": 225,
+            "reason": "PREVIOUS_ASSIGNMENT_NOT_SERVICEABLE"
+          }
+        ]
+      },
+      "configurations": {
+        "config_source": "CP/DEFAULT/UNKNOWN",
+        "logistics_enabled": true,
+        "pba_rollout": {
+          "enabled": true,
+          "percent": 0,
+          "bucket_key": "ORDER_ID_MOD_100",
+          "bucket_value": 65,
+          "in_rollout": "TRUE/FALSE/NOT_EVALUATED",
+          "mode": "LIVE_ROLLOUT/SHADOW/SHADOW_NO_CALL/OFF"
+        },
+        "lms_shadow_enabled": true,
+        "pba_pickup_buffer_enabled": false,
+        "pba_drop_buffer_enabled": false,
+        "ddb_tat_adherence": {
+          "enabled": false,
+          "allowlist_state": "DISABLED/EMPTY/ENABLED",
+          "lane_key": "40:182204",
+          "lane_in_allowlist": false
+        },
+        "partner_schedule_from_lms": {
+          "enabled": true,
+          "percent": 100,
+          "bucket_value": 65,
+          "in_rollout": true
+        },
+        "edit_order_rollout": {
+          "enabled": false,
+          "warehouse_ids": [],
+          "applies_to_delivery_partner_ids": [
+            608,
+            697
+          ]
+        },
+        "sdd_only_delivery_partner_ids": [
+          287,
+          608,
+          476,
+          468
+        ],
+        "liquid_weight_express_threshold": 200,
+        "ranking_mode": "SCORE_V2/TAT_ONLY/NONE",
+        "schedule_penalty_in_days": 1.0,
+        "default_adherence_percent": 100,
+        "lms_grpc_timeout_in_ms": 15000,
+        "promise_buffer_grpc_timeout_in_ms": 2000
+      },
+      "customer_restriction_check": {
+        "evaluated": true,
+        "restricted": false,
+        "check_failed": false,
+        "failed_open": false,
+        "levels": [
+          "PINCODE/AOV/CUSTOMER"
+        ]
+      },
+      "results": {
+        "outcome": "ALLOCATED/NO_PARTNER/FAILED",
+        "failed_stage": "null/PRE_LOOKUP/PAYMENT/PINCODE_MASTER/SDD/RESTRICTION/RECOMMENDATION/COURIER_MASTER/PERSIST/STATUS",
+        "error_code": null,
+        "error_message": null,
+        "no_partner_cause": "null/CP_NON_200/NO_SCHEDULE_IDS/LMS_FILTERED_EMPTY/NO_ADHERENCE_NO_FALLBACK/PINCODE_NOT_SERVICEABLE",
+        "selected_candidate_type": "SDD/COURIER_LEGACY_TAT_ADHERENCE/COURIER_DDB_TAT_ADHERENCE/COURIER_CLICKPOST_FALLBACK/COURIER_PBA/NONE",
+        "pba_and_internal_same_partner": true,
+        "delivery_partner_id": 185,
+        "is_express": false,
+        "dispatch_time": "2026-10-13T17:00:00+05:30",
+        "dispatch_source": "TODAY_PICKUP/TODAY_CUTOFF/NEXT_DAY_PICKUP/PROCESSING_TIME_FALLBACK/NONE",
+        "delivery_tat_in_minutes": 4320,
+        "delivery_time": "2026-10-16T17:00:00+05:30",
+        "buffer_applied": false,
+        "applied_buffers": [],
+        "cod_conversion": {
+          "evaluated": false,
+          "allowed": true,
+          "opposite_payment_mode": "COD/PREPAID/null",
+          "opposite_mode_partner_available": null,
+          "customer_restricted": false,
+          "outcome": "CP_EDIT_APPLIED/RESTRICTED_MARK_PENDING/NOT_SUPPORTED_MARK_PENDING/LMS_EDIT_ALLOWED/LMS_NOT_SUPPORTED/NOT_APPLICABLE"
+        },
+        "events_published": [
+          {
+            "event": "ALLOCATION_EVENT (shadow queue)",
+            "emitted": true,
+            "skip_reason": "null/SHADOW_DISABLED/LMS_NOT_CALLED/FLOW_FAILED",
+            "selected_source": "INTERNAL/PBA_API/PBA_CACHE",
+            "decision_reason": "NORMAL/OUTSIDE_ROLLOUT/PBA_NOT_DELIVERABLE/ALL_PARTNERS_EXCLUDED/NOT_CALLED"
+          },
+          {
+            "event": "LEGACY_HARD / LMS_COURIER_PARTNER_ADHERENCE (instrumentation queue)",
+            "emitted": true,
+            "skip_reason": "null/QUEUE_NOT_CONFIGURED/NO_CANDIDATES"
+          }
+        ],
+        "selected_courier_master": {
+          "found": true,
+          "courier_partner_id": "<courier partner id>",
+          "account_code": "<clickpost account code>",
+          "is_express": false,
+          "ankw_account_used": false
+        }
+      },
+      "candidates": [
+        {
+          "candidate_type": "COURIER_PBA",
+          "evaluated": true,
+          "not_evaluated_reason": null,
+          "fetch_error": null,
+          "selected": false,
+          "decision": "NORMAL/OUTSIDE_ROLLOUT/PBA_NOT_DELIVERABLE/ALL_PARTNERS_EXCLUDED/NOT_CALLED",
+          "source": "PBA_CACHE/PBA_API/NONE",
+          "cache": {
+            "allocation_source": "PBA_API/PBA_CACHE"
+          },
+          "evaluated_candidates": [
+            {
+              "delivery_partner_id": 185,
+              "delivery_partner_name": "<partner name>",
+              "service_type": "SURFACE/EXPRESS",
+              "is_express": false,
+              "cost_inr": 65.14,
+              "dispatch_time": "2026-10-13T17:00:00+05:30",
+              "dispatch_source": "TODAY_PICKUP/TODAY_CUTOFF/NEXT_DAY_PICKUP/PROCESSING_TIME_FALLBACK/NONE",
+              "delivery_tat_in_minutes": 4320,
+              "delivery_time": "2026-10-16T17:00:00+05:30",
+              "mapped_in_tps": true,
+              "excluded": false,
+              "dropped_reason": "null/UNMAPPED/EXCLUDED/NO_COURIER_MASTER"
+            }
+          ],
+          "buffer_applied": false,
+          "applied_buffers": [],
+          "buffer_adjusted_candidates": [
+            {
+              "delivery_partner_id": 185,
+              "rank": 1,
+              "selected": true,
+              "is_express": false,
+              "pickup_buffer_in_minutes": 0,
+              "drop_buffer_in_minutes": 0,
+              "pickup_day_rolled": false,
+              "drop_buffer_reset": false,
+              "dispatch_time": "2026-10-13T17:00:00+05:30",
+              "delivery_tat_in_minutes": 4320,
+              "delivery_time": "2026-10-16T17:00:00+05:30"
+            }
+          ],
+          "lms_calls": [
+            {
+              "step": "ALLOCATION_PRIMARY/ALLOCATION_OPPOSITE/ALLOCATION_SHADOW",
+              "request_type": "HARD",
+              "request_id_sent": "b80bb017af864f4546178e4becaff019",
+              "payment_mode_sent": "PREPAID/COD",
+              "status": "OK/NOT_DELIVERABLE/API_ERROR/GRPC_ERROR/CLIENT_ERROR/NO_CALL_DISABLED",
+              "grpc_code": "OK/NOT_FOUND/INTERNAL/UNAVAILABLE/DEADLINE_EXCEEDED/INVALID_ARGUMENT",
+              "deliverable": true,
+              "delivery_partner_count": 4,
+              "latency_ms": 240
+            }
+          ],
+          "selection_rule": "FIRST_MAPPED_PARTNER",
+          "buffer_call": {
+            "attempted": false,
+            "applied": false,
+            "skip_reason": "null/NO_INPUTS/NO_RESPONSE/NOT_APPLIED/INVALID_DATES/EXCEPTION"
+          },
+          "opposite_payment_mode_check": {
+            "attempted": false,
+            "skipped_reason": "NOT_EDIT_ORDER/PARTNER_NOT_ELIGIBLE/CUSTOMER_RESTRICTED/NO_PARTNER",
+            "opposite_payment_mode": "COD/PREPAID/null",
+            "same_partner_available": null
+          }
+        },
+        {
+          "candidate_type": "COURIER_LEGACY_TAT_ADHERENCE",
+          "evaluated": true,
+          "not_evaluated_reason": null,
+          "fetch_error": null,
+          "selected": true,
+          "source": "MYSQL pincode TAT adherence",
+          "evaluated_candidates": [
+            {
+              "delivery_partner_id": 185,
+              "is_express": false,
+              "priority": 1,
+              "adherence_percent": 96.5,
+              "tat_in_minutes": 4320,
+              "schedule_time": "17:00",
+              "dropped_reason": "null/EXCLUDED/EXPRESS_NOT_ALLOWED/NO_COURIER_MASTER/NO_SCHEDULE",
+              "partner_schedule_config": {
+                "found": true,
+                "schedule_source": "LMS_WAREHOUSE_DP/MYSQL_OUT_OF_ROLLOUT/MYSQL_FALLBACK_LMS_EMPTY/MYSQL_FALLBACK_LMS_FAILED",
+                "schedule_time": "17:00"
+              },
+              "dispatch_time": "2026-10-13T17:00:00+05:30",
+              "dispatch_source": "TODAY_PICKUP/TODAY_CUTOFF/NEXT_DAY_PICKUP/PROCESSING_TIME_FALLBACK/NONE",
+              "delivery_tat_in_minutes": 4320,
+              "delivery_time": "2026-10-16T17:00:00+05:30",
+              "final_tat_days": 3.0,
+              "ideal_tat_days": 3.0,
+              "courier_master_found": true
+            }
+          ],
+          "buffer_applied": false,
+          "applied_buffers": [],
+          "buffer_adjusted_candidates": [
+            {
+              "delivery_partner_id": 185,
+              "rank": 1,
+              "selected": true,
+              "is_express": false,
+              "score": 3.11,
+              "schedule_penalty_applied": false,
+              "pickup_buffer_in_minutes": 0,
+              "drop_buffer_in_minutes": 0,
+              "dispatch_time": "2026-10-13T17:00:00+05:30",
+              "delivery_tat_in_minutes": 4320,
+              "delivery_time": "2026-10-16T17:00:00+05:30"
+            }
+          ],
+          "query_variant": "AIR_NON_MFC/AIR_MFC/NONAIR_NON_MFC/NONAIR_MFC",
+          "express_filter": "NOT_APPLIED_AIR/ALLOW_LIST/EMPTY_INPUT/LOOKUP_FAILED_TO_MYSQL/null",
+          "buffer_call": {
+            "attempted": true,
+            "applied": false,
+            "skip_reason": "null/NO_TAT_ROWS/MISSING_INPUT/NO_VALID_PROMISES/NO_LMS_RESPONSE/EXCEPTION"
+          }
+        },
+        {
+          "candidate_type": "COURIER_DDB_TAT_ADHERENCE",
+          "evaluated": false,
+          "not_evaluated_reason": "SWITCH_OFF/LANE_NOT_IN_ALLOWLIST/NOT_COURIER_FLOW",
+          "fetch_error": null,
+          "selected": false,
+          "source": "LMS GetPartnerAdherence",
+          "evaluated_candidates": [],
+          "buffer_applied": false,
+          "applied_buffers": [],
+          "buffer_adjusted_candidates": []
+        },
+        {
+          "candidate_type": "COURIER_CLICKPOST_FALLBACK",
+          "evaluated": true,
+          "not_evaluated_reason": null,
+          "fetch_error": null,
+          "selected": false,
+          "source": "ClickPost recommendation API",
+          "calls": [
+            {
+              "call": "PRIMARY/SURFACE_RETRY/COD_CHECK",
+              "attempted": true,
+              "skipped_reason": null,
+              "order_type_sent": "COD/PREPAID",
+              "air_shipping_sent": false,
+              "http_status": 200,
+              "meta_status": 200,
+              "meta_success": true,
+              "pincode_serviceable": true,
+              "latency_ms": 170,
+              "delivery_partner_id_returned": 185
+            }
+          ],
+          "evaluated_candidates": [
+            {
+              "delivery_partner_id": 185,
+              "clickpost_cp_id": 4,
+              "account_code": "<account code>",
+              "clickpost_priority": 1,
+              "clickpost_total_score": 0.91,
+              "dropped_reason": "null/SDD_ONLY/NO_COURIER_MASTER/EXPRESS_NON_AIR/ACCOUNT_MISMATCH"
+            }
+          ],
+          "buffer_applied": false,
+          "applied_buffers": [],
+          "buffer_adjusted_candidates": []
+        },
+        {
+          "candidate_type": "SDD",
+          "evaluated": false,
+          "not_evaluated_reason": "NOT_SDD_PINCODE/<other>",
+          "fetch_error": null,
+          "selected": false,
+          "source": "SDD_PINCODE_MAPPING/SAME_DAY_DELIVERY_MASTER/COLD_CHAIN_WAREHOUSE_MASTER/NONE",
+          "evaluated_candidates": [],
+          "buffer_applied": false,
+          "applied_buffers": [],
+          "buffer_adjusted_candidates": [],
+          "is_cold_chain": false
+        }
+      ],
+      "legacy_logic": {
+        "order_state_at_entry": {
+          "order_status_id": 317,
+          "package_status_id": 181,
+          "invoice_status_id": 187,
+          "reference_status": "READY_TO_DISPATCH/PAYMENT_PENDING/ORDER_CONFIRMED/DOCTOR_CONFIRMED/<order status name in UPPER_SNAKE>",
+          "payment_id": 16,
+          "payment_mode_id": 16,
+          "delivery_type": "FORWARD/REVERSE",
+          "delivery_partner_id": 185,
+          "package_details_present": true,
+          "cod_conversion_allowed": true
+        },
+        "order_state_at_exit": {
+          "order_status_id": 317,
+          "package_status_id": 181,
+          "invoice_status_id": 187,
+          "reference_status": "READY_TO_DISPATCH/PAYMENT_PENDING/ORDER_CONFIRMED/DOCTOR_CONFIRMED/<order status name in UPPER_SNAKE>",
+          "payment_id": 16,
+          "payment_mode_id": 16,
+          "delivery_type": "FORWARD/REVERSE",
+          "delivery_partner_id": 185,
+          "package_details_present": true,
+          "cod_conversion_allowed": true,
+          "order_status_changed": "NONE/ORDER_CONFIRMED_TO_PAYMENT_PENDING"
+        },
+        "order_status_sent_to_lms": 317,
+        "order_writes": [
+          {
+            "entity": "PACKAGE/ORDER/ORDER_STATUS_ROW/PAYMENT_PENDING",
+            "field": "<field>",
+            "before": null,
+            "after": 185,
+            "cause": "COURIER_SELECTED/CP_EDIT/RESTRICTED/NOT_SUPPORTED/SDD_EDIT/OTHER_STATUS_FLIP"
+          }
+        ]
+      }
+    }
+  },
+  "created_by": "third_party_service",
+  "created_at": "2026-10-13T00:45:34.986+05:30",
+  "instrumentation_type": "HARD_ALLOCATION_INSTRUMENTATION"
+}

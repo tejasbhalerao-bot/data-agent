@@ -1,0 +1,680 @@
+{
+  "pk": "ETA_INSTRUMENTATION#CID#884412#REF#12345",
+  "sk": "ETA_INSTRUMENTATION#REQ#0a20a49e-13b5-410f-ae68-4b357b207033#TS#2026-10-12T12:00:00.231+05:30",
+  "customer_id": 884412,
+  "reference_id": "12345",
+  "request_id": "0a20a49e-13b5-410f-ae68-4b357b207033",
+  "payload": {
+    "request": {
+      "context": {
+        "requestContext": {
+          "requestId": "0a20a49e-13b5-410f-ae68-4b357b207033",
+          "requestTime": "2026-10-12T12:00:00+05:30",
+          "clientId": "customer_service",
+          "actor": {
+            "actorType": "ACTOR_TYPE_UNSPECIFIED/ACTOR_TYPE_DOCTOR/ACTOR_TYPE_HA/ACTOR_TYPE_PHARMACIST/ACTOR_TYPE_PILL_REMINDER_AGENT/ACTOR_TYPE_ASSISTED_COMMERCE/ACTOR_TYPE_CUSTOMER_SUPPORT",
+            "actorId": "<actor id>"
+          },
+          "sessionId": "<session id>"
+        },
+        "customerContext": {
+          "customerId": "884412",
+          "experimentVariantMap": {
+            "JIT_ALLOCATION_EXP_V1": {
+              "variantId": "1",
+              "variantName": "Test"
+            },
+            "SOME_OTHER_EXP_V1": {
+              "variantId": "2",
+              "variantName": "Control"
+            }
+          },
+          "segmentMap": {
+            "<domain>": {
+              "segments": [
+                {
+                  "groupName": "<group name>",
+                  "segmentName": "<segment name>"
+                }
+              ]
+            }
+          }
+        },
+        "deviceContext": {
+          "deviceId": "<device id>",
+          "appVersionCode": "<app version code>",
+          "platform": "PLATFORM_UNSPECIFIED/PLATFORM_ANDROID/PLATFORM_IOS/PLATFORM_WEB"
+        },
+        "screenContext": "SCREEN_CONTEXT_UNSPECIFIED/SCREEN_CONTEXT_PDP/SCREEN_CONTEXT_CART/SCREEN_CONTEXT_ORDER_SUMMARY/SCREEN_CONTEXT_REORDER_SUMMARY/SCREEN_CONTEXT_TRACKER/SCREEN_CONTEXT_SEARCH",
+        "tenancyContext": {
+          "lob": "LOB_UNSPECIFIED/LOB_TM_MEDICINES"
+        },
+        "locationContext": {
+          "pincode": "400060",
+          "coordinates": {
+            "latitude": 19.1364,
+            "longitude": 72.8296
+          }
+        }
+      },
+      "deliveryPincode": "400060",
+      "warehouseId": "20",
+      "userPaymentMode": "USER_PAYMENT_MODE_UNSPECIFIED/USER_PAYMENT_MODE_PREPAID/USER_PAYMENT_MODE_COD",
+      "products": [
+        {
+          "productId": "<product id>",
+          "skuCode": "<sku code>",
+          "productName": "<product name>",
+          "description": "<description>",
+          "quantity": 1,
+          "price": {
+            "currencyCode": "INR",
+            "units": "120",
+            "nanos": 0
+          },
+          "weightInGrams": 500,
+          "volumeInMilliliters": 100,
+          "dimensions": {
+            "lengthInMillimeters": 100,
+            "breadthInMillimeters": 60,
+            "heightInMillimeters": 40
+          },
+          "coldChain": false,
+          "liquid": true,
+          "inventoryAvailable": true
+        }
+      ],
+      "warehouseProcessingTime": "2026-10-12T09:00:00+05:30",
+      "deliveryType": "DELIVERY_TYPE_UNSPECIFIED/DELIVERY_TYPE_FORWARD/DELIVERY_TYPE_REVERSE",
+      "addressType": "ADDRESS_TYPE_UNSPECIFIED/ADDRESS_TYPE_HOME/ADDRESS_TYPE_WORK/ADDRESS_TYPE_OTHER",
+      "headers": {
+        "reference_id": "12345",
+        "sdd_enabled": "true/false",
+        "eta_context": "PRE_OP/POST_OP",
+        "traceparent": "<w3c traceparent>",
+        "warehouse_id": 20
+      }
+    },
+    "response": {
+      "responseStatus": {
+        "success": true,
+        "error": {
+          "errorType": "<error type, only on failure>",
+          "code": 0,
+          "message": "<message, only on failure>",
+          "errorCode": "<app error code, only on failure>"
+        }
+      },
+      "deliveryPartner": {
+        "id": "101",
+        "code": "DELIVERY_PARTNER_CODE_BLUEDART_DELIVERY/<other DELIVERY_PARTNER_CODE_*>",
+        "displayName": "<partner display name>",
+        "serviceability": {
+          "cod": true,
+          "prepaid": true,
+          "pickup": true
+        }
+      },
+      "estimatedWarehouseDispatchTime": "2026-10-12T11:45:00+05:30",
+      "estimatedDeliveryTime": "2026-10-13T13:15:00+05:30",
+      "instrumentationDetails": {
+        "deliveryPincode": "400060",
+        "sddEnabled": false,
+        "deliveryPartnerId": "101",
+        "estimatedDispatchTime": "2026-10-12T11:45:00+05:30",
+        "estimatedDeliveryTime": "2026-10-13T13:15:00+05:30",
+        "deliveryTatInMinutes": 1530,
+        "buffer": {
+          "pickupBufferApplied": true,
+          "dropBufferApplied": true,
+          "pickupBufferInMins": 45,
+          "dropBufferInMins": 30,
+          "bufferAppliedConfigIds": [
+            "cfg-pba-pickup-45",
+            "cfg-pba-drop-30"
+          ]
+        }
+      }
+    },
+    "evaluation": {
+      "facts": {
+        "flow": "COURIER/SDD/NONE",
+        "eta_context": "PRE_OP/POST_OP",
+        "warehouse_id": 20,
+        "pickup_pincode": "400079",
+        "delivery_pincode": "400060",
+        "payment_mode": "COD/PREPAID",
+        "delivery_type": "FORWARD/REVERSE",
+        "address_type": "ADDRESS_TYPE_UNSPECIFIED/ADDRESS_TYPE_HOME/ADDRESS_TYPE_WORK/ADDRESS_TYPE_OTHER",
+        "projected_wh_processing_time": "2026-10-12T09:00:00+05:30",
+        "products_count": 1,
+        "is_cold_chain": false,
+        "has_liquid": true,
+        "liquid_volume_in_ml": 100,
+        "is_express_eligible": false,
+        "express_eligible_reason": "OK/NO_EXPRESS_LANE/LIQUID_OVER_200",
+        "client_id": "customer_service",
+        "customer_id_source": "CONTEXT/HEADER/ABSENT",
+        "request_id_source": "CONTEXT/GENERATED",
+        "reference_id_kind": "ABSENT/POSITIVE_INT/ZERO_OR_NEGATIVE/NON_NUMERIC",
+        "warehouse": {
+          "found": true,
+          "warehouse_id": 20,
+          "warehouse_type": "FC/MFC/WAREHOUSE/<other>",
+          "pincode": "400079"
+        },
+        "lane_config": {
+          "found": true,
+          "pk": "PIN#400060",
+          "sk": "FWD#WH#20",
+          "serviceable": true,
+          "sdd_enabled": false,
+          "express_enabled": false,
+          "cold_chain_enabled": false,
+          "courier_cache_state": "UNWARMED/HAS_CACHE_SERVICEABLE/HAS_CACHE_NOT_SERVICEABLE"
+        },
+        "headers_applied": {
+          "sdd_enabled_header_effect": "NONE/CHANGED_TO_TRUE/CHANGED_TO_FALSE/SAME",
+          "sdd_warehouse_id_header": null
+        }
+      },
+      "configurations": {
+        "config_source": "CP/DEFAULT/UNKNOWN",
+        "pba_rollout": {
+          "enabled": true,
+          "percent": 100,
+          "bucket_key": "REFERENCE_ID/WH_PINCODE_HASH/FULL_ROLLOUT/ZERO_PERCENT/NOT_EVALUATED",
+          "bucket_value": -1,
+          "in_rollout": "TRUE/FALSE/NOT_EVALUATED",
+          "pba_fetch_reason": "ROLLOUT/POSITIVE_REFERENCE_ID/NONE/NOT_EVALUATED"
+        },
+        "pba_to_internal_tat_ratio_threshold": 4.0,
+        "pba_pickup_buffer_enabled": true,
+        "pba_drop_buffer_enabled": true,
+        "pba_cache_refresh_after_hours": 24,
+        "pba_record_enabled": true,
+        "ddb_tat_adherence": {
+          "enabled": false,
+          "allowlist_state": "DISABLED/EMPTY/ENABLED",
+          "lane_key": "20:400060",
+          "lane_in_allowlist": false
+        },
+        "serviceability_check": {
+          "enabled": false,
+          "percent": 0,
+          "path": "ROLLOUT_BUCKET/ANONYMOUS_ALWAYS_IN/DISABLED/ZERO_PERCENT/SKIPPED_POST_OP/NOT_EVALUATED",
+          "applicable": false,
+          "staleness_threshold_in_hours": 12,
+          "refresh_enabled": false
+        },
+        "liquid_volume_express_threshold_in_ml": 200,
+        "default_sdd_tat_in_minutes": 1440,
+        "schedule_penalty_in_minutes": 1440,
+        "default_adherence_percent": 100,
+        "schedule_timezone": "Asia/Kolkata",
+        "audit_enabled_for_warehouse": true
+      },
+      "serviceability_check": {
+        "evaluated": true,
+        "not_evaluated_reason": "SWITCH_OFF/OUT_OF_ROLLOUT/SKIPPED_POST_OP/<other>",
+        "pk": "LANE#20#PIN#400060#PM#COD#TYPE#FWD",
+        "state": "HIT/STALE_HIT/MISS/READ_ERROR/STORE_NIL/SKIPPED_POST_OP/OUT_OF_ROLLOUT/ZERO_SERVICEABLE_FAIL_OPEN/PANIC",
+        "payment_mode_checked": "COD/PREPAID",
+        "rechecked_for_pba_payment_mode": false,
+        "last_refreshed_at": "2026-10-12T06:30:00+05:30",
+        "stale": false,
+        "partners": [
+          {
+            "delivery_partner_id": 101,
+            "serviceable": true
+          },
+          {
+            "delivery_partner_id": 185,
+            "serviceable": true
+          },
+          {
+            "delivery_partner_id": 246,
+            "serviceable": false
+          }
+        ],
+        "refresh_triggered": "NONE/MISS/STALE/ZERO_SERVICEABLE/DEBOUNCED/POOL_FULL_DROPPED/PUBLISH_DISABLED/NOT_WIRED"
+      },
+      "results": {
+        "outcome": "SERVED/NOT_SERVICEABLE/VALIDATION_FAILED/ENRICH_FAILED/CHAIN_FAILED/PANICKED",
+        "failed_stage": null,
+        "error_code": null,
+        "error_message": null,
+        "selected_candidate_type": "SDD/COURIER_LEGACY_TAT_ADHERENCE/COURIER_DDB_TAT_ADHERENCE/COURIER_PBA/NONE",
+        "pba_and_internal_same_partner": true,
+        "delivery_partner_id": 101,
+        "is_express": false,
+        "dispatch_time": "2026-10-12T11:45:00+05:30",
+        "dispatch_source": "TODAY_PICKUP/TODAY_CUTOFF/NEXT_DAY_PICKUP/PROCESSING_TIME_FALLBACK/NONE",
+        "delivery_tat_in_minutes": 1530,
+        "delivery_time": "2026-10-13T13:15:00+05:30",
+        "buffer_applied": true,
+        "applied_buffers": [
+          {
+            "buffer_config_id": "cfg-pba-pickup-45",
+            "buffer_type": "PICKUP/DROP",
+            "buffer_in_minutes": 45
+          },
+          {
+            "buffer_config_id": "cfg-pba-drop-30",
+            "buffer_type": "PICKUP/DROP",
+            "buffer_in_minutes": 30
+          }
+        ]
+      },
+      "candidates": [
+        {
+          "candidate_type": "COURIER_PBA",
+          "evaluated": true,
+          "not_evaluated_reason": null,
+          "fetch_error": null,
+          "selected": true,
+          "decision": "USED/REJECTED_OUTSIDE_ROLLOUT/REJECTED_NO_DATA/REJECTED_TAT_TOO_HIGH/NOT_FETCHED",
+          "decision_detail": "RATIO_BELOW_THRESHOLD/RATIO_*/OBSERVE_ONLY/PBA_ERROR/PBA_NOT_DELIVERABLE/PBA_TAT_INVALID/NO_ROLLOUT_NO_REFERENCE_ID/NO_LEGACY_TO_COMPARE (to confirm from code)",
+          "source": "PBA_CACHE/PBA_API/NONE",
+          "pba_to_internal_tat_ratio": 0.5208333333333334,
+          "internal_tat_used_for_ratio_in_minutes": 2880,
+          "cache": {
+            "pk": "PBA_CACHE#WH#20#PIN#400060#PM#COD#CC#FALSE#EXP#TRUE",
+            "payment_mode_requested": "COD/PREPAID",
+            "payment_mode_used": "COD/PREPAID",
+            "cod_to_prepaid_fallback": false,
+            "rows_found": 1,
+            "not_serviceable_marker_found": false,
+            "not_serviceable_marker_last_cached_at": null,
+            "legacy_cache_read": "NOT_READ/HIT/EMPTY/ERROR",
+            "legacy_rows_found": 0,
+            "refresh_requested": false,
+            "refresh_reason": "MISS/FINAL_SLOT_CHANGED/STALE/null",
+            "refresh_result": "published/debounced/publish_failed/disabled/null"
+          },
+          "evaluated_candidates": [
+            {
+              "delivery_partner_id": 101,
+              "delivery_partner_name": "BlueDart",
+              "service_type": "SURFACE/EXPRESS",
+              "is_express": false,
+              "cost_inr": 50,
+              "eligible": true,
+              "eligibility_reason": "ELIGIBLE/NO_CACHE_ROW/NOT_OFFERED_BY_RAILS/FINAL_SLOT_CHANGED/<catalogue reason>",
+              "catalogue": {
+                "found": true,
+                "active": true,
+                "rails_active": true,
+                "account_code": "bluedart_surface"
+              },
+              "pickup_slot": {
+                "pickup_at": "2026-10-12T11:00:00+05:30",
+                "slot_time": "11:00",
+                "final_slot_time": "16:30",
+                "source": "TODAY_PICKUP/TODAY_CUTOFF/NEXT_DAY_PICKUP/PROCESSING_TIME_FALLBACK/NONE",
+                "schedule_level": "WAREHOUSE/PINCODE",
+                "row_active": true
+              },
+              "cache_row": {
+                "sk": "PBA_CACHE#DP#101#BEFORE",
+                "cache_lookup": "FRESH/STALE/MISSING/LEGACY/LIVE/NOT_READ",
+                "cutoff_window": "BEFORE/AFTER",
+                "serviceable": true,
+                "tat_in_minutes": 1500,
+                "logistics_cost": 50,
+                "final_slot_time": "16:30",
+                "last_cached_at": "2026-10-12T11:57:00+05:30",
+                "cache_age_minutes": 3,
+                "version": 2,
+                "updated_by": "pba-soft-refresh/pba-hard-allocation"
+              },
+              "partner_schedule_config": {
+                "found": true,
+                "pk": "WH#20#TYPE#FWD",
+                "sk": "DP#101",
+                "schedule_level": "WAREHOUSE/PINCODE",
+                "partner_type": "COURIER/SDD/HYPERLOCAL",
+                "active": true,
+                "cutoff_time": "17:00",
+                "pickup_times": [
+                  {
+                    "time": "11:00",
+                    "active": true,
+                    "day_of_week": "<empty = all days>/MON/TUE/WED/THU/FRI/SAT/SUN"
+                  },
+                  {
+                    "time": "16:30",
+                    "active": true,
+                    "day_of_week": ""
+                  }
+                ],
+                "version": 3,
+                "updated_by": "<who last changed the schedule>",
+                "updated_at": "2026-10-07T15:20:00+05:30"
+              },
+              "dispatch_time": "2026-10-12T11:00:00+05:30",
+              "dispatch_source": "TODAY_PICKUP/TODAY_CUTOFF/NEXT_DAY_PICKUP/PROCESSING_TIME_FALLBACK/NONE",
+              "delivery_tat_in_minutes": 1500,
+              "delivery_time": "2026-10-13T12:00:00+05:30"
+            }
+          ],
+          "fetched_buffer_configs": [
+            {
+              "buffer_config_id": "cfg-pba-pickup-45",
+              "buffer_type": "PICKUP/DROP",
+              "buffer_in_minutes": 45,
+              "address_type": "ADDRESS_TYPE_UNSPECIFIED/ADDRESS_TYPE_HOME/ADDRESS_TYPE_WORK/ADDRESS_TYPE_OTHER",
+              "schedule_type": "SCHEDULE_TYPE_ONE_TIME/SCHEDULE_TYPE_RECURRING",
+              "applied": true,
+              "not_applied_reason": null
+            },
+            {
+              "buffer_config_id": "cfg-pba-drop-30",
+              "buffer_type": "PICKUP/DROP",
+              "buffer_in_minutes": 30,
+              "address_type": "ADDRESS_TYPE_UNSPECIFIED/ADDRESS_TYPE_HOME/ADDRESS_TYPE_WORK/ADDRESS_TYPE_OTHER",
+              "schedule_type": "SCHEDULE_TYPE_ONE_TIME/SCHEDULE_TYPE_RECURRING",
+              "applied": true,
+              "not_applied_reason": null
+            },
+            {
+              "buffer_config_id": "cfg-work-address-60",
+              "buffer_type": "PICKUP/DROP",
+              "buffer_in_minutes": 60,
+              "address_type": "ADDRESS_TYPE_WORK",
+              "schedule_type": "SCHEDULE_TYPE_RECURRING",
+              "applied": false,
+              "not_applied_reason": "ADDRESS_TYPE_MISMATCH/SCHEDULE_NOT_ACTIVE/PBA_BUFFER_SWITCH_OFF/<other>"
+            }
+          ],
+          "buffer_applied": true,
+          "applied_buffers": [
+            {
+              "buffer_config_id": "cfg-pba-pickup-45",
+              "buffer_type": "PICKUP/DROP",
+              "buffer_in_minutes": 45
+            },
+            {
+              "buffer_config_id": "cfg-pba-drop-30",
+              "buffer_type": "PICKUP/DROP",
+              "buffer_in_minutes": 30
+            }
+          ],
+          "buffer_adjusted_candidates": [
+            {
+              "delivery_partner_id": 101,
+              "rank": 1,
+              "selected": true,
+              "is_express": false,
+              "pickup_buffer_in_minutes": 45,
+              "drop_buffer_in_minutes": 30,
+              "pickup_day_rolled": false,
+              "drop_buffer_reset": false,
+              "dispatch_time": "2026-10-12T11:45:00+05:30",
+              "delivery_tat_in_minutes": 1530,
+              "delivery_time": "2026-10-13T13:15:00+05:30"
+            }
+          ]
+        },
+        {
+          "candidate_type": "COURIER_LEGACY_TAT_ADHERENCE",
+          "evaluated": true,
+          "not_evaluated_reason": null,
+          "fetch_error": null,
+          "selected": false,
+          "source": "PHARMACIST_SERVICE /eta/courier-partners/adherence",
+          "evaluated_candidates": [
+            {
+              "delivery_partner_id": 101,
+              "is_express": false,
+              "priority": 1,
+              "adherence_percent": 95,
+              "tat_in_minutes": 2880,
+              "first_row_tat_in_minutes": 2880,
+              "zero_tat_backfilled": true,
+              "schedule_time": "17:00",
+              "serviceable": true,
+              "dropped_reason": null,
+              "partner_schedule_config": {
+                "found": true,
+                "pk": "WH#20#TYPE#FWD",
+                "sk": "DP#101",
+                "schedule_level": "WAREHOUSE/PINCODE",
+                "partner_type": "COURIER/SDD/HYPERLOCAL",
+                "active": true,
+                "cutoff_time": "17:00",
+                "pickup_times": [
+                  {
+                    "time": "11:00",
+                    "active": true,
+                    "day_of_week": "<empty = all days>/MON/TUE/WED/THU/FRI/SAT/SUN"
+                  },
+                  {
+                    "time": "16:30",
+                    "active": true,
+                    "day_of_week": ""
+                  }
+                ],
+                "version": 3,
+                "updated_by": "<who last changed the schedule>",
+                "updated_at": "2026-10-07T15:20:00+05:30"
+              },
+              "dispatch_time": "2026-10-12T11:00:00+05:30",
+              "dispatch_source": "TODAY_PICKUP/TODAY_CUTOFF/NEXT_DAY_PICKUP/PROCESSING_TIME_FALLBACK/NONE",
+              "delivery_tat_in_minutes": 2880,
+              "delivery_time": "2026-10-14T11:00:00+05:30"
+            }
+          ],
+          "fetched_buffer_configs": [
+            {
+              "buffer_config_id": "cfg-pba-pickup-45",
+              "buffer_type": "PICKUP/DROP",
+              "buffer_in_minutes": 45,
+              "address_type": "ADDRESS_TYPE_UNSPECIFIED/ADDRESS_TYPE_HOME/ADDRESS_TYPE_WORK/ADDRESS_TYPE_OTHER",
+              "schedule_type": "SCHEDULE_TYPE_ONE_TIME/SCHEDULE_TYPE_RECURRING",
+              "applied": true,
+              "not_applied_reason": null
+            },
+            {
+              "buffer_config_id": "cfg-pba-drop-30",
+              "buffer_type": "PICKUP/DROP",
+              "buffer_in_minutes": 30,
+              "address_type": "ADDRESS_TYPE_UNSPECIFIED/ADDRESS_TYPE_HOME/ADDRESS_TYPE_WORK/ADDRESS_TYPE_OTHER",
+              "schedule_type": "SCHEDULE_TYPE_ONE_TIME/SCHEDULE_TYPE_RECURRING",
+              "applied": true,
+              "not_applied_reason": null
+            },
+            {
+              "buffer_config_id": "cfg-work-address-60",
+              "buffer_type": "PICKUP/DROP",
+              "buffer_in_minutes": 60,
+              "address_type": "ADDRESS_TYPE_WORK",
+              "schedule_type": "SCHEDULE_TYPE_RECURRING",
+              "applied": false,
+              "not_applied_reason": "ADDRESS_TYPE_MISMATCH/SCHEDULE_NOT_ACTIVE/PBA_BUFFER_SWITCH_OFF/<other>"
+            }
+          ],
+          "buffer_applied": true,
+          "applied_buffers": [
+            {
+              "buffer_config_id": "cfg-pba-pickup-45",
+              "buffer_type": "PICKUP/DROP",
+              "buffer_in_minutes": 45
+            },
+            {
+              "buffer_config_id": "cfg-pba-drop-30",
+              "buffer_type": "PICKUP/DROP",
+              "buffer_in_minutes": 30
+            }
+          ],
+          "buffer_adjusted_candidates": [
+            {
+              "delivery_partner_id": 101,
+              "rank": 1,
+              "selected": true,
+              "is_express": false,
+              "score": 3031.5789473684213,
+              "score_base": 3031.5789473684213,
+              "schedule_penalty_applied": false,
+              "pickup_buffer_in_minutes": 45,
+              "drop_buffer_in_minutes": 30,
+              "pickup_day_rolled": false,
+              "drop_buffer_reset": false,
+              "dispatch_time": "2026-10-12T11:45:00+05:30",
+              "delivery_tat_in_minutes": 2910,
+              "delivery_time": "2026-10-14T12:15:00+05:30"
+            }
+          ]
+        },
+        {
+          "candidate_type": "COURIER_DDB_TAT_ADHERENCE",
+          "evaluated": false,
+          "not_evaluated_reason": "SWITCH_OFF/LANE_NOT_IN_ALLOWLIST/NOT_COURIER_FLOW",
+          "fetch_error": null,
+          "selected": false,
+          "source": "logistics_partner_adherence, pk PARTNER_ADHERENCE#WH#<warehouse_id>#PIN#<pincode>",
+          "evaluated_candidates": [
+            {
+              "delivery_partner_id": 701,
+              "is_express": false,
+              "active": true,
+              "priority": 1,
+              "adherence_value": 95,
+              "tat_in_minutes": 2880,
+              "serviceable": true,
+              "dropped_reason": null,
+              "partner_schedule_config": {
+                "found": true,
+                "pk": "WH#20#TYPE#FWD",
+                "sk": "DP#701",
+                "schedule_level": "WAREHOUSE/PINCODE",
+                "partner_type": "COURIER/SDD/HYPERLOCAL",
+                "active": true,
+                "cutoff_time": "17:00",
+                "pickup_times": [
+                  {
+                    "time": "11:00",
+                    "active": true,
+                    "day_of_week": "<empty = all days>/MON/TUE/WED/THU/FRI/SAT/SUN"
+                  },
+                  {
+                    "time": "16:30",
+                    "active": true,
+                    "day_of_week": ""
+                  }
+                ],
+                "version": 3,
+                "updated_by": "<who last changed the schedule>",
+                "updated_at": "2026-10-07T15:20:00+05:30",
+                "schedule_source": "PARTNER_SCHEDULE/WAREHOUSE_DP_CONFIG"
+              },
+              "dispatch_time": "2026-10-12T14:00:00+05:30",
+              "dispatch_source": "TODAY_PICKUP/TODAY_CUTOFF/NEXT_DAY_PICKUP/PROCESSING_TIME_FALLBACK/NONE",
+              "delivery_tat_in_minutes": 2880,
+              "delivery_time": "2026-10-14T14:00:00+05:30"
+            }
+          ],
+          "fetched_buffer_configs": [],
+          "buffer_applied": false,
+          "applied_buffers": [],
+          "buffer_adjusted_candidates": [
+            {
+              "delivery_partner_id": 701,
+              "rank": 1,
+              "selected": true,
+              "is_express": false,
+              "score": 3031.5789473684213,
+              "score_base": 3031.5789473684213,
+              "schedule_penalty_applied": false,
+              "pickup_buffer_in_minutes": 0,
+              "drop_buffer_in_minutes": 0,
+              "pickup_day_rolled": false,
+              "drop_buffer_reset": false,
+              "dispatch_time": "2026-10-12T14:00:00+05:30",
+              "delivery_tat_in_minutes": 2880,
+              "delivery_time": "2026-10-14T14:00:00+05:30"
+            }
+          ]
+        },
+        {
+          "candidate_type": "SDD",
+          "evaluated": false,
+          "not_evaluated_reason": "NOT_SDD_LANE/<other>",
+          "fetch_error": null,
+          "selected": false,
+          "source": "logistics_partner_selection, pk LANE#<warehouse_id>#PIN#<pincode>#PM#<payment_mode>#TYPE#<FWD|REV>",
+          "lookup": {
+            "level": "PINCODE/WAREHOUSE",
+            "warehouse_id": 20,
+            "pincode_queried": "400060",
+            "configs_returned": 2,
+            "cold_chain_filtered_out": 0
+          },
+          "evaluated_candidates": [
+            {
+              "delivery_partner_id": 287,
+              "priority": 1,
+              "active": true,
+              "supports_cold_chain": false,
+              "partner_tat": {
+                "found": true,
+                "active": true,
+                "tat_in_minutes": 240,
+                "tat_source": "PARTNER_TAT_ROW/DEFAULT_SDD_TAT"
+              },
+              "partner_schedule_config": {
+                "found": true,
+                "pk": "WH#20#TYPE#FWD",
+                "sk": "DP#287",
+                "schedule_level": "WAREHOUSE/PINCODE",
+                "partner_type": "SDD/HYPERLOCAL",
+                "active": true,
+                "cutoff_time": "17:00",
+                "pickup_times": [
+                  {
+                    "time": "11:00",
+                    "active": true,
+                    "day_of_week": "<empty = all days>/MON/TUE/WED/THU/FRI/SAT/SUN"
+                  },
+                  {
+                    "time": "16:30",
+                    "active": true,
+                    "day_of_week": ""
+                  }
+                ],
+                "version": 3,
+                "updated_by": "<who last changed the schedule>",
+                "updated_at": "2026-10-07T15:20:00+05:30"
+              },
+              "dispatch_time": "2026-10-12T11:00:00+05:30",
+              "dispatch_source": "TODAY_PICKUP/TODAY_CUTOFF/NEXT_DAY_PICKUP/PROCESSING_TIME_FALLBACK/NONE",
+              "delivery_tat_in_minutes": 240,
+              "delivery_time": "2026-10-12T15:00:00+05:30"
+            }
+          ],
+          "fetched_buffer_configs": [],
+          "buffer_applied": false,
+          "applied_buffers": [],
+          "buffer_adjusted_candidates": [
+            {
+              "delivery_partner_id": 287,
+              "rank": 1,
+              "selected": true,
+              "is_express": false,
+              "pickup_buffer_in_minutes": 0,
+              "drop_buffer_in_minutes": 0,
+              "pickup_day_rolled": false,
+              "drop_buffer_reset": false,
+              "dispatch_time": "2026-10-12T11:00:00+05:30",
+              "delivery_tat_in_minutes": 240,
+              "delivery_time": "2026-10-12T15:00:00+05:30"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "created_by": "customer_service",
+  "created_at": "2026-10-12T12:00:00.231+05:30",
+  "instrumentation_type": "ETA_INSTRUMENTATION"
+}
