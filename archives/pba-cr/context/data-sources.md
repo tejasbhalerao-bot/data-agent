@@ -18,6 +18,7 @@ PBA change request: correct how PBA (Clickpost performance-based allocation) bui
 | `context/2026-10-13-hard-allocation-instrumentation-draft-record-v1.json` | Engineering's proposed `HARD_ALLOCATION_INSTRUMENTATION` record (DRAFT #26), unchanged copy |
 | `context/2026-10-13-instrumentation-field-dictionary-v1.csv` | The artifact's field dictionary: 695 field paths across the 3 record types, with definition, values, null-when, renamed-from and live/proposed status |
 | `context/2026-10-13-instrumentation-scenarios-v1.md` | The artifact's question guide, plus an index of its 141 scenario records |
+| `context/2026-10-14-pba-instrumentation-schema-details-v1.md` | Where to find each PBA value in the instrumentation, soft and hard, worked on order 57051205 (Q1–Q14 with primary and secondary fields, notes, open items). Copied from the Claude Docs "PBA Instrumentation Q&A" tab, rev 92 |
 | `context/2026-10-13-instrumentation-scenario-records-eta-hard-v1.json` | The 21 full ETA and HARD scenario records from the artifact (spec examples, not production data) |
 
 ## Documents and external sources
