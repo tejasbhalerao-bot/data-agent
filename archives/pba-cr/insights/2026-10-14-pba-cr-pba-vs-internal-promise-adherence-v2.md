@@ -20,6 +20,8 @@ Pending. Waiting for engineering's extract against the tables below.
 ## Approved brief
 **Job:** analyse · **Project:** `pba-cr` · **Rules applied:** none
 
+**Schema details:** [PBA instrumentation schema details](../context/2026-10-14-pba-instrumentation-schema-details-v1.md)
+
 **My reading of the flow:**
 - At cart and summary, logistics builds a promise two ways, PBA and internal. It serves one, and the customer sees a dispatch date and a delivery date.
 - At dispatch, hard allocation picks the courier that actually ships.
@@ -107,7 +109,12 @@ M5 (Courier Allocation Mix) is covered by the tables above.
 - **Old vs new construction marker:** dropped, as agreed.
 
 ## Queries to run
-Pending.
+
+| ID | Purpose | Serves | Latest file | Save the CSV as |
+|----|---------|--------|-------------|-----------------|
+| Q1 | Base extract: one row per order with soft (PBA, internal), hard (PBA, internal) and actuals | M1, M2, M3, M4, M5 | `archives/pba-cr/queries-dump/2026-10-15-pba-cr-promise-adherence-base-query-v2.md` | `archives/pba-cr/raw-data/pba-cr-promise-adherence-base.csv` |
+
+Q1 has open items listed in its file. v1 is superseded. No probe query yet.
 
 ## Scripts and outputs
 Pending.
