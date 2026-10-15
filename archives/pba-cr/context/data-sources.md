@@ -7,6 +7,7 @@ PBA change request: correct how PBA (Clickpost performance-based allocation) bui
 | File | Description | Window | Grain | Produced by | Location |
 |------|-------------|--------|-------|-------------|----------|
 | fahad-raw-dump-1.csv | Q1 v2 base extract, run by engineering (Fahad) on a test window. 20,504 orders, 86 columns. Profile: `outputs/fahad-raw-dump-1-profile.txt` (local only) | Orders placed 14 Oct 2026 16:00–20:59 IST, extracted 15 Oct 20:06 IST (before the CR soft go-live; actuals mostly not yet in) | one row per order | `queries-dump/2026-10-15-pba-cr-promise-adherence-base-query-v2.md` with a test window | `raw-data/fahad-raw-dump-1.csv` (local only) |
+| fahad-raw-dump-2.csv | Q1 v2 base extract re-run courier-only (non-SDD), by engineering (Fahad), same test window as dump 1. 12,789 orders, 86 columns. Profile: `outputs/fahad-raw-dump-2-profile.txt` (local only). Supersedes dump 1 for this project's scope | Orders placed 14 Oct 2026 16:00–20:59 IST, extracted 15 Oct 20:17 IST | one row per order | `queries-dump/2026-10-15-pba-cr-promise-adherence-base-query-v2.md` with a test window; SDD orders excluded | `raw-data/fahad-raw-dump-2.csv` (local only) |
 
 ## Project context files (committed)
 
