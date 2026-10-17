@@ -44,6 +44,8 @@ Metrics covered below.
 9. Lane Adjusted Promise Comparison: WH to Delivery Promise Comparison - PBA vs Internal
 10. Lane Adjusted Promise Comparison: Dispatch to Delivery Promise Comparison - PBA vs Internal
 
+**Cumulative % of orders (Tejas, 2026-10-18):** for every metric above, also show the cumulative % of orders by promise days: 0 days, ≤1, ≤2, ≤3, 4+ (4+ = 100%). Example: 0 days 10%, 1 day 25%, 2 days 60%, 3 days 80%, 4+ days 100%.
+
 **What Lane Adjusted Promise Comparison means (Tejas, 2026-10-18):** select only those lanes (warehouse × pincode) from internal-allocated orders that are present in PBA-allocated orders. For example, if PBA orders have WH 20 × Pincode 400079 allocated orders, that lane falls under Lane Adjusted Comparison. If WH 20 × Pincode 400079 has no orders allocated through PBA, it is kept out of Lane Adjusted Promise Comparison.
 
 ## Changes since the first version (2026-10-18)
