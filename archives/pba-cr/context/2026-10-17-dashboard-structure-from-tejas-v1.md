@@ -51,6 +51,13 @@ Dispatch to Delivery Promise
 
 **What Lane Adjusted Promise Comparison means (Tejas, 2026-10-18):** select only those lanes (warehouse × pincode) from internal-allocated orders that are present in PBA-allocated orders. For example, if PBA orders have WH 20 × Pincode 400079 allocated orders, that lane falls under Lane Adjusted Comparison. If WH 20 × Pincode 400079 has no orders allocated through PBA, it is kept out of Lane Adjusted Promise Comparison.
 
+## Section 3: Courier Allocation Mix
+
+Two sub-sections. Each shows, against every courier partner: Internal %, PBA %, Delta (pp). Each sub-section is split in two halves: Soft Allocation and Hard Allocation.
+
+1. PBA Allocated Partner vs Internal Allocated Partner
+2. Lane Adjusted Comparison (same lane definition as Section 2)
+
 ## Changes (2026-10-18)
 - Section 1: "Total Orders" dropped; the Order Funnel starts at Total Non-SDD Orders. The PBA and Internal funnels are shown side by side as metrics 4–6.
 - Section 2: metrics added for internal-allocated orders with the PBA-selected partner, and for the lane-adjusted comparison; cumulative % of orders added to every metric.
