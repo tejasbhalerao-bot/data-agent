@@ -39,6 +39,16 @@ Metrics covered below.
 4. Internal Allocated Orders: Dispatch to Delivery Promise
 5. PBA Allocated Orders: Internal Selected Partner WH to Delivery Promise
 6. PBA Allocated Orders: Internal Selected Partner Dispatch to Delivery Promise
+7. Internal Allocated Orders: PBA Selected Partner WH to Delivery Promise
+8. Internal Allocated Orders: PBA Selected Partner Dispatch to Delivery Promise
+9. Lane Adjusted Promise Comparison: WH to Delivery Promise Comparison - PBA vs Internal
+10. Lane Adjusted Promise Comparison: Dispatch to Delivery Promise Comparison - PBA vs Internal
+
+**What Lane Adjusted Promise Comparison means (Tejas, 2026-10-18):** select only those lanes (warehouse × pincode) from internal-allocated orders that are present in PBA-allocated orders. For example, if PBA orders have WH 20 × Pincode 400079 allocated orders, that lane falls under Lane Adjusted Comparison. If WH 20 × Pincode 400079 has no orders allocated through PBA, it is kept out of Lane Adjusted Promise Comparison.
+
+## Changes since the first version (2026-10-18)
+- Section 1: "Total Orders" dropped; the Order Funnel starts at Total Non-SDD Orders.
+- Section 2: metrics 7–10 and the lane-adjusted definition added.
 
 ## Further sections
 
