@@ -27,7 +27,9 @@ Metrics covered below.
 
 Metrics covered below.
 
-**Soft Promise Comparison** (Averages, p25, p50, p75, p90, and cumulative % of orders)
+Two sub-sections: Sub-section 1: Soft Promise (metrics 1–10) and Sub-section 2: Hard Promise (metrics 11–14). Every metric shows Averages, p25, p50, p75, p90 and the cumulative % of orders.
+
+### Sub-section 1: Soft Promise
 
 WH to Delivery Promise
 1. PBA Allocated Orders: WH to Delivery Promise
@@ -46,6 +48,20 @@ Dispatch to Delivery Promise
 
 9. WH to Delivery Promise Comparison - PBA vs Internal
 10. Dispatch to Delivery Promise Comparison - PBA vs Internal
+
+### Sub-section 2: Hard Promise
+
+The same measures as soft metrics 5, 7, 9 and 10, taken at hard allocation.
+
+Dispatch to Delivery Promise
+
+11. PBA Allocated Orders: Dispatch to Delivery Promise (as 5)
+12. Internal Allocated Orders: Dispatch to Delivery Promise (as 7)
+
+**Lane Adjusted Promise Comparison**
+
+13. WH to Delivery Promise Comparison - PBA vs Internal (as 9)
+14. Dispatch to Delivery Promise Comparison - PBA vs Internal (as 10)
 
 **Cumulative % of orders (Tejas, 2026-10-18):** for every metric above, also show the cumulative % of orders by promise days: 0 days, ≤1, ≤2, ≤3, 4+ (4+ = 100%). Example: 0 days 10%, 1 day 25%, 2 days 60%, 3 days 80%, 4+ days 100%.
 
