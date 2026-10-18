@@ -7,7 +7,7 @@ status: in progress
 
 # PBA CR dashboard field mapping
 
-Which raw-dump fields compute each dashboard number. Numbering follows the wireframe (https://claude.ai/artifact/XX9QtrxQWPMfiofjq2TjX7). No date filter for now: every metric covers all orders in the dump, or in the combined dumps, with each `ORDER_ID` counted once.
+Which raw-dump fields compute each dashboard number. Numbering follows the wireframe (https://claude.ai/artifact/XX9QtrxQWPMfiofjq2TjX7). No date filter for now: every metric covers all orders in the dump, or in the combined dumps, with each `ORDER_ID` counted once. Promise days are IST calendar-date differences (e.g. promised on the 15th for the 17th = 2 days), never hours ÷ 24.
 
 ## Section 1: Funnel
 
@@ -70,3 +70,17 @@ Which raw-dump fields compute each dashboard number. Numbering follows the wiref
 | Numerator | Count of distinct `ORDER_ID` in metric 4's PBA base where `DELIVERY_ATTEMPT_TIME` is not blank | Count of distinct `ORDER_ID` in metric 4's Internal base where `DELIVERY_ATTEMPT_TIME` is not blank |
 | Denominator | Metric 4, PBA | Metric 4, Internal |
 | Calculation | Numerator ÷ Denominator × 100; card also shows the numerator as [n] orders | Numerator ÷ Denominator × 100; card also shows the numerator as [n] orders |
+
+## Section 2: Promise
+
+### Sub-section 1: Soft Promise
+
+### 1. PBA Allocated Orders: WH to Delivery Promise
+
+| Item | Mapping |
+|---|---|
+| Definition | For orders PBA allocated at soft allocation, the promised days from warehouse processing to delivery, using PBA's partner |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `PROMISED_WAREHOUSE_PROCESSING_TIME`, `PBA_PROJECTED_DELIVERY_TIME` |
+| Numerator | Per order: promise days = `DATE(PBA_PROJECTED_DELIVERY_TIME)` − `DATE(PROMISED_WAREHOUSE_PROCESSING_TIME)`. Cumulative columns: count of orders with promise days = 0, ≤1, ≤2, ≤3 |
+| Denominator | Section 1 metric 4, PBA: count of distinct `ORDER_ID` where `SDD_ENABLED = false` and `SOFT_SERVED_CANDIDATE_TYPE = COURIER_PBA` |
+| Calculation | Avg = sum of promise days ÷ Denominator. p25, p50, p75, p90 = percentiles of promise days. Cumulative % at k days = orders with promise days ≤ k ÷ Denominator × 100; 4+ = 100% |
