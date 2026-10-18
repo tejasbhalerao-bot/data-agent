@@ -162,3 +162,13 @@ All metrics below use the promise-days rules at the top: calendar days, nearest-
 | Numerator | Per order: promise days = date(`PBA_PROJECTED_DELIVERY_TIME`) − date(`PBA_PROJECTED_DISPATCH_TIME`). Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 |
 | Denominator | Count of `ORDER_ID` in the PBA base where `PBA_PROJECTED_DISPATCH_TIME` and `PBA_PROJECTED_DELIVERY_TIME` are both not blank |
 | Calculation | Avg, p25, p50, p75, p90 and cumulative % as defined in the rules at the top |
+
+### 6. PBA Allocated Orders: Internal Selected Partner Dispatch to Delivery Promise
+
+| Item | Mapping |
+|---|---|
+| Definition | For the PBA base, the promised days from courier pickup (dispatch) to delivery that internal logic's partner would have given, measured from internal's own dispatch time |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `INTERNAL_PROJECTED_DISPATCH_TIME`, `INTERNAL_PROJECTED_DELIVERY_TIME` |
+| Numerator | Per order: promise days = date(`INTERNAL_PROJECTED_DELIVERY_TIME`) − date(`INTERNAL_PROJECTED_DISPATCH_TIME`). Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 |
+| Denominator | Count of `ORDER_ID` in the PBA base where `INTERNAL_PROJECTED_DISPATCH_TIME` and `INTERNAL_PROJECTED_DELIVERY_TIME` are both not blank |
+| Calculation | Avg, p25, p50, p75, p90 and cumulative % as defined in the rules at the top |
