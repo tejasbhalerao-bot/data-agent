@@ -66,7 +66,7 @@ The hard lane-adjusted WH to Delivery comparison (as 9) was removed on 2026-10-1
 
 **Cumulative % of orders (Tejas, 2026-10-18):** for every metric above, also show the cumulative % of orders by promise days: 0 days, ≤1, ≤2, ≤3, 4+ (4+ = 100%). Example: 0 days 10%, 1 day 25%, 2 days 60%, 3 days 80%, 4+ days 100%.
 
-**What Lane Adjusted Promise Comparison means (Tejas, 2026-10-18):** select only those lanes (warehouse × pincode) from internal-allocated orders that are present in PBA-allocated orders. For example, if PBA orders have WH 20 × Pincode 400079 allocated orders, that lane falls under Lane Adjusted Comparison. If WH 20 × Pincode 400079 has no orders allocated through PBA, it is kept out of Lane Adjusted Promise Comparison.
+**What Lane Adjusted Promise Comparison means (Tejas, 2026-10-18):** select only those lanes (warehouse × pincode) from internal-allocated orders that are present in PBA-allocated orders. For example, if PBA orders have WH 20 × Pincode 400079 allocated orders, that lane falls under Lane Adjusted Comparison. If WH 20 × Pincode 400079 has no orders allocated through PBA, it is kept out of Lane Adjusted Promise Comparison. **Refined 2026-10-18:** the comparison uses the intersection of lanes. A lane counts only if it has at least one PBA-allocated order and at least one internally allocated order; PBA orders on lanes with no internally allocated order are dropped too.
 
 ## Section 3: Courier Allocation Mix
 
