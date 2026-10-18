@@ -75,6 +75,28 @@ Two sub-sections. Each shows, against every courier partner: Internal %, PBA %, 
 1. PBA Allocated Partner vs Internal Allocated Partner
 2. Lane Adjusted Comparison (same lane definition as Section 2)
 
+## Section 4: Adherence
+
+Two sub-sections. Each measures WH to Delivery and Dispatch to Delivery, for all lanes and lane adjusted (same lane definition as Section 2).
+
+### Sub-section 1: Soft Promise Adherence
+1. WH to Delivery
+2. Dispatch to Delivery
+
+### Sub-section 2: Hard Promise Adherence
+3. WH to Delivery: PBA only. Internal can't be measured directly: the internal hard record keeps only the TAT in days, with no dispatch or delivery time (`INTERNAL_HARD_PROJECTED_DISPATCH_TIME` and `INTERNAL_HARD_PROJECTED_DELIVERY_TIME` are empty in fahad-raw-dump-3).
+4. Dispatch to Delivery
+
+**Representation, for every measure:**
+1. Early %, On-Time %, Late %: PBA vs Internal
+2. Breach distribution: share of orders early, on time, 1 day late, 2 days late, 3+ days late, and not yet attempted
+3. Courier-wise: Early %, On-Time %, Late %: PBA vs Internal
+
+**Agreed rules (Tejas, 2026-10-18):**
+- The actual is the first delivery attempt.
+- WH to Delivery actuals run from box verified to first delivery attempt.
+- Orders not yet attempted have their own column in the breach distribution and are left out of Early / On-Time / Late %.
+
 ## Changes (2026-10-18)
 - Section 1: "Total Orders" dropped; the Order Funnel starts at Total Non-SDD Orders. The PBA and Internal funnels are shown side by side as metrics 4–6.
 - Section 2: metrics added for internal-allocated orders with the PBA-selected partner, and for the lane-adjusted comparison; cumulative % of orders added to every metric.
