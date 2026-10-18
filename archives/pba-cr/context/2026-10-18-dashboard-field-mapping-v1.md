@@ -30,3 +30,13 @@ Which raw-dump fields compute each dashboard number. Numbering follows the wiref
 | Numerator | Count of distinct `ORDER_ID` where `SDD_ENABLED = false` and `SOFT_SERVED_CANDIDATE_TYPE = COURIER_PBA` |
 | Denominator | Metric 1: Total Non-SDD Orders |
 | Calculation | Numerator ÷ Denominator × 100 |
+
+### 3. % of non-SDD orders failed to allocate through PBA even though decision was in-rollout
+
+| Item | Mapping |
+|---|---|
+| Definition | Share of non-SDD orders that were in the PBA rollout but did not get PBA's promise |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `PBA_IN_ROLLOUT`, `SOFT_SERVED_CANDIDATE_TYPE` |
+| Numerator | Count of distinct `ORDER_ID` where `SDD_ENABLED = false`, `PBA_IN_ROLLOUT = true` and `SOFT_SERVED_CANDIDATE_TYPE ≠ COURIER_PBA` |
+| Denominator | Metric 1: Total Non-SDD Orders |
+| Calculation | Numerator ÷ Denominator × 100 |
