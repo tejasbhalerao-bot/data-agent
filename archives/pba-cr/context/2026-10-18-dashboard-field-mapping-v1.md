@@ -255,3 +255,33 @@ Hard metrics use the Hard PBA base and Hard Internal base, and the same promise-
 | Numerator | Per order: promise days = date(`PBA_HARD_PROJECTED_DELIVERY_TIME`) − date(`PBA_HARD_PROJECTED_DISPATCH_TIME`). Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 | Per order: promise days = `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` rounded up to the next whole day, as in metric 12. Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 |
 | Denominator | Count of `ORDER_ID` in the Hard PBA base whose lane is in the common lane set (the soft one), where `PBA_HARD_PROJECTED_DISPATCH_TIME` and `PBA_HARD_PROJECTED_DELIVERY_TIME` are both not blank | Count of `ORDER_ID` in the Hard Internal base whose lane is in the common lane set (the soft one), where `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` is not blank |
 | Calculation | Avg, p25, p50, p75, p90 and cumulative % as defined in the rules at the top | Same |
+
+## Section 3: Courier Allocation Mix
+
+Each column is the courier mix of its own base: PBA % is the share of the PBA base by courier partner, Internal % the share of the Internal base. Partners are shown by partner ID as it appears in the dump, read as text (Tejas, 2026-10-18).
+
+For every table in this section:
+- **Delta (pp)** = PBA % − Internal %, shown to 2 decimals (Tejas, 2026-10-18). Positive means PBA uses that partner more. PBA % and Internal % are shown to 1 decimal.
+- **Rows:** every partner ID that appears on either side; a partner with no orders on one side shows 0.0% there. Sorted by PBA % + Internal %, highest first. The "All couriers" row is 100% on each side.
+
+### 1. PBA Allocated Partner vs Internal Allocated Partner
+
+**Soft Allocation**
+
+| Item | PBA % | Internal % |
+|---|---|---|
+| Definition | Share of PBA base orders whose customer promise used each courier partner | Share of Internal base orders whose customer promise used each courier partner |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `SOFT_SERVED_PARTNER` | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `SOFT_SERVED_PARTNER` |
+| Numerator | Per partner: count of `ORDER_ID` in the PBA base with that `SOFT_SERVED_PARTNER` | Per partner: count of `ORDER_ID` in the Internal base with that `SOFT_SERVED_PARTNER` |
+| Denominator | Count of `ORDER_ID` in the PBA base where `SOFT_SERVED_PARTNER` is not blank | Count of `ORDER_ID` in the Internal base where `SOFT_SERVED_PARTNER` is not blank |
+| Calculation | Numerator ÷ Denominator × 100; Delta as above | Same |
+
+**Hard Allocation**
+
+| Item | PBA % | Internal % |
+|---|---|---|
+| Definition | Share of Hard PBA base orders booked with each courier partner | Share of Hard Internal base orders booked with each courier partner |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `HARD_SELECTED_CANDIDATE_TYPE`, `HARD_BOOKED_PARTNER` | `ORDER_ID`, `SDD_ENABLED`, `HARD_SELECTED_CANDIDATE_TYPE`, `HARD_BOOKED_PARTNER` |
+| Numerator | Per partner: count of `ORDER_ID` in the Hard PBA base with that `HARD_BOOKED_PARTNER` | Per partner: count of `ORDER_ID` in the Hard Internal base with that `HARD_BOOKED_PARTNER` |
+| Denominator | Count of `ORDER_ID` in the Hard PBA base where `HARD_BOOKED_PARTNER` is not blank | Count of `ORDER_ID` in the Hard Internal base where `HARD_BOOKED_PARTNER` is not blank |
+| Calculation | Numerator ÷ Denominator × 100; Delta as above | Same |
