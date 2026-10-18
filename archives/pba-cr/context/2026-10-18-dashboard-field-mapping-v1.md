@@ -2,7 +2,7 @@
 title: PBA CR dashboard field mapping
 source: agreed with Tejas, metric by metric, from 2026-10-18
 applies to: every raw dump from the Q1 base query, e.g. fahad-raw-dump-3
-status: in progress (Section 1 done; Section 2 metrics 1–4 agreed)
+status: in progress (Sections 1 and 2 agreed)
 ---
 
 # PBA CR dashboard field mapping
@@ -52,6 +52,7 @@ Which raw-dump fields compute each dashboard number, and exactly how. Numbering 
 - **Lane** = `WH_ID` + `PINCODE`, compared as text (`WH_ID` is 1–2 digits, `PINCODE` 6 digits).
 - **Common lane set** = lanes that have at least one order in the PBA base **and** at least one order in the Internal base.
 - **Lane-adjusted metrics** keep only orders whose lane is in the common lane set, on both the PBA side and the Internal side. PBA orders on lanes with no internally allocated order are dropped, and so are internal orders on lanes with no PBA order (Tejas, 2026-10-18).
+- **Hard lane-adjusted metrics use the same common lane set**, built from the soft PBA base and soft Internal base. Only the orders counted change: Hard PBA base and Hard Internal base orders whose lane is in that set (Tejas, 2026-10-18).
 
 ## Section 1: Funnel
 
@@ -244,3 +245,13 @@ Hard metrics use the Hard PBA base and Hard Internal base, and the same promise-
 | Numerator | Per order: promise days = `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` (commas removed, read as a number) rounded up to the next whole day; a whole number stays as it is (0.83 → 1, 3.0 → 3, 0 → 0). A negative TAT is left out and reported as a data error. Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 |
 | Denominator | Count of `ORDER_ID` in the Hard Internal base where `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` is not blank |
 | Calculation | Avg, p25, p50, p75, p90 and cumulative % as defined in the rules at the top. Not on the same basis as metric 11: these are TAT days rounded up, not calendar-date differences |
+
+### 13. Lane Adjusted: Dispatch to Delivery Promise Comparison - PBA vs Internal (hard)
+
+| Item | PBA | Internal |
+|---|---|---|
+| Definition | For Hard PBA base orders on the common lane set, the promised days from courier pickup (dispatch) to delivery that PBA gave when the courier was booked | For Hard Internal base orders on the common lane set, the promised days from courier pickup (dispatch) to delivery for internal's selected partner, taken from its TAT |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE` (for the common lane set), `HARD_SELECTED_CANDIDATE_TYPE`, `WH_ID`, `PINCODE`, `PBA_HARD_PROJECTED_DISPATCH_TIME`, `PBA_HARD_PROJECTED_DELIVERY_TIME` | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE` (for the common lane set), `HARD_SELECTED_CANDIDATE_TYPE`, `WH_ID`, `PINCODE`, `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` |
+| Numerator | Per order: promise days = date(`PBA_HARD_PROJECTED_DELIVERY_TIME`) − date(`PBA_HARD_PROJECTED_DISPATCH_TIME`). Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 | Per order: promise days = `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` rounded up to the next whole day, as in metric 12. Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 |
+| Denominator | Count of `ORDER_ID` in the Hard PBA base whose lane is in the common lane set (the soft one), where `PBA_HARD_PROJECTED_DISPATCH_TIME` and `PBA_HARD_PROJECTED_DELIVERY_TIME` are both not blank | Count of `ORDER_ID` in the Hard Internal base whose lane is in the common lane set (the soft one), where `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` is not blank |
+| Calculation | Avg, p25, p50, p75, p90 and cumulative % as defined in the rules at the top | Same |
