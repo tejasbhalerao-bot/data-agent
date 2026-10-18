@@ -50,3 +50,13 @@ Which raw-dump fields compute each dashboard number. Numbering follows the wiref
 | Numerator | Count of distinct `ORDER_ID` where `SDD_ENABLED = false` and `SOFT_SERVED_CANDIDATE_TYPE = COURIER_PBA` | Count of distinct `ORDER_ID` where `SDD_ENABLED = false` and `SOFT_SERVED_CANDIDATE_TYPE` in (`COURIER_LEGACY_TAT_ADHERENCE`, `COURIER_DDB_TAT_ADHERENCE`) |
 | Denominator | Same as the numerator | Same as the numerator |
 | Calculation | Count shown as [n]; % = 100% | Count shown as [n]; % = 100% |
+
+### 5. % picked up (PBA vs Internal)
+
+| Item | PBA | Internal |
+|---|---|---|
+| Definition | Share of PBA-allocated orders that a courier has picked up | Share of internally allocated orders that a courier has picked up |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `PICKUP_TIME` | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `PICKUP_TIME` |
+| Numerator | Count of distinct `ORDER_ID` in metric 4's PBA base where `PICKUP_TIME` is not blank | Count of distinct `ORDER_ID` in metric 4's Internal base where `PICKUP_TIME` is not blank |
+| Denominator | Metric 4, PBA | Metric 4, Internal |
+| Calculation | Numerator ÷ Denominator × 100; card also shows the numerator as [n] orders | Numerator ÷ Denominator × 100; card also shows the numerator as [n] orders |
