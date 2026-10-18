@@ -84,3 +84,13 @@ Which raw-dump fields compute each dashboard number. Numbering follows the wiref
 | Numerator | Per order: promise days = `DATE(PBA_PROJECTED_DELIVERY_TIME)` − `DATE(PROMISED_WAREHOUSE_PROCESSING_TIME)`. Cumulative columns: count of orders with promise days = 0, ≤1, ≤2, ≤3 |
 | Denominator | Section 1 metric 4, PBA: count of distinct `ORDER_ID` where `SDD_ENABLED = false` and `SOFT_SERVED_CANDIDATE_TYPE = COURIER_PBA` |
 | Calculation | Avg = sum of promise days ÷ Denominator. p25, p50, p75, p90 = percentiles of promise days. Cumulative % at k days = orders with promise days ≤ k ÷ Denominator × 100; 4+ = 100% |
+
+### 2. PBA Allocated Orders: Internal Selected Partner WH to Delivery Promise
+
+| Item | Mapping |
+|---|---|
+| Definition | For orders PBA allocated at soft allocation, the promised days from warehouse processing to delivery that internal logic's partner would have given |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `PROMISED_WAREHOUSE_PROCESSING_TIME`, `INTERNAL_PROJECTED_DELIVERY_TIME` |
+| Numerator | Per order: promise days = `DATE(INTERNAL_PROJECTED_DELIVERY_TIME)` − `DATE(PROMISED_WAREHOUSE_PROCESSING_TIME)`. Cumulative columns: count of orders with promise days = 0, ≤1, ≤2, ≤3 |
+| Denominator | Count of distinct `ORDER_ID` where `SDD_ENABLED = false`, `SOFT_SERVED_CANDIDATE_TYPE = COURIER_PBA` and `INTERNAL_PROJECTED_DELIVERY_TIME` is not blank |
+| Calculation | Avg = sum of promise days ÷ Denominator. p25, p50, p75, p90 = percentiles of promise days. Cumulative % at k days = orders with promise days ≤ k ÷ Denominator × 100; 4+ = 100% |
