@@ -234,3 +234,13 @@ Hard metrics use the Hard PBA base and Hard Internal base, and the same promise-
 | Numerator | Per order: promise days = date(`PBA_HARD_PROJECTED_DELIVERY_TIME`) − date(`PBA_HARD_PROJECTED_DISPATCH_TIME`). Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 |
 | Denominator | Count of `ORDER_ID` in the Hard PBA base where `PBA_HARD_PROJECTED_DISPATCH_TIME` and `PBA_HARD_PROJECTED_DELIVERY_TIME` are both not blank |
 | Calculation | Avg, p25, p50, p75, p90 and cumulative % as defined in the rules at the top |
+
+### 12. Internal Allocated Orders: Dispatch to Delivery Promise (hard)
+
+| Item | Mapping |
+|---|---|
+| Definition | For the Hard Internal base, the promised days from courier pickup (dispatch) to delivery for internal's selected partner when the courier was booked, taken from its TAT because the internal hard record keeps no dispatch or delivery time (Option B, Tejas, 2026-10-18) |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `HARD_SELECTED_CANDIDATE_TYPE`, `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` |
+| Numerator | Per order: promise days = `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` (commas removed, read as a number) rounded up to the next whole day; a whole number stays as it is (0.83 → 1, 3.0 → 3, 0 → 0). A negative TAT is left out and reported as a data error. Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 |
+| Denominator | Count of `ORDER_ID` in the Hard Internal base where `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` is not blank |
+| Calculation | Avg, p25, p50, p75, p90 and cumulative % as defined in the rules at the top. Not on the same basis as metric 11: these are TAT days rounded up, not calendar-date differences |
