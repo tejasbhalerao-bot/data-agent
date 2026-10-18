@@ -40,3 +40,13 @@ Which raw-dump fields compute each dashboard number. Numbering follows the wiref
 | Numerator | Count of distinct `ORDER_ID` where `SDD_ENABLED = false`, `PBA_IN_ROLLOUT = true` and `SOFT_SERVED_CANDIDATE_TYPE ≠ COURIER_PBA` |
 | Denominator | Metric 1: Total Non-SDD Orders |
 | Calculation | Numerator ÷ Denominator × 100 |
+
+### 4. Orders placed (PBA vs Internal)
+
+| Item | PBA | Internal |
+|---|---|---|
+| Definition | Non-SDD orders whose customer promise was made by PBA at soft allocation; the 100% base of the PBA funnel | Non-SDD orders whose customer promise was made by internal logic at soft allocation; the 100% base of the Internal funnel |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE` | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE` |
+| Numerator | Count of distinct `ORDER_ID` where `SDD_ENABLED = false` and `SOFT_SERVED_CANDIDATE_TYPE = COURIER_PBA` | Count of distinct `ORDER_ID` where `SDD_ENABLED = false` and `SOFT_SERVED_CANDIDATE_TYPE` in (`COURIER_LEGACY_TAT_ADHERENCE`, `COURIER_DDB_TAT_ADHERENCE`) |
+| Denominator | Same as the numerator | Same as the numerator |
+| Calculation | Count shown as [n]; % = 100% | Count shown as [n]; % = 100% |
