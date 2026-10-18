@@ -87,15 +87,14 @@ Two sub-sections. Each measures WH to Delivery and Dispatch to Delivery, for all
 3. WH to Delivery: PBA only. Internal can't be measured directly: the internal hard record keeps only the TAT in days, with no dispatch or delivery time (`INTERNAL_HARD_PROJECTED_DISPATCH_TIME` and `INTERNAL_HARD_PROJECTED_DELIVERY_TIME` are empty in fahad-raw-dump-3).
 4. Dispatch to Delivery
 
-**Representation, for every measure:**
-1. Early %, On-Time %, Late %: PBA vs Internal
-2. Breach distribution: share of orders early, on time, 1 day late, 2 days late, 3+ days late, and not yet attempted
-3. Courier-wise: Early %, On-Time %, Late %: PBA vs Internal
+**Representation, for every measure:** Breach distribution: share of orders early, on time, 1 day late, 2 days late, 3+ days late, and not yet attempted: PBA vs Internal, all lanes and lane adjusted.
+
+Removed 2026-10-18 (Tejas): the Early %, On-Time %, Late % cards (already covered by the breach distribution), and the courier-wise Early / On-Time / Late % view, which moves to the deep-dive dashboard to be built later.
 
 **Agreed rules (Tejas, 2026-10-18):**
 - The actual is the first delivery attempt.
 - WH to Delivery actuals run from box verified to first delivery attempt.
-- Orders not yet attempted have their own column in the breach distribution and are left out of Early / On-Time / Late %.
+- Orders not yet attempted have their own column in the breach distribution; each row sums to 100%.
 
 ## Changes (2026-10-18)
 - Section 1: "Total Orders" dropped; the Order Funnel starts at Total Non-SDD Orders. The PBA and Internal funnels are shown side by side as metrics 4–6.
