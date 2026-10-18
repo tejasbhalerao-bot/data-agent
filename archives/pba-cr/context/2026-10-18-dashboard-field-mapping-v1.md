@@ -2,7 +2,7 @@
 title: PBA CR dashboard field mapping
 source: agreed with Tejas, metric by metric, from 2026-10-18
 applies to: every raw dump from the Q1 base query, e.g. fahad-raw-dump-3
-status: in progress (Sections 1 and 2 agreed)
+status: in progress (Sections 1–3 agreed)
 ---
 
 # PBA CR dashboard field mapping
@@ -285,3 +285,27 @@ For every table in this section:
 | Numerator | Per partner: count of `ORDER_ID` in the Hard PBA base with that `HARD_BOOKED_PARTNER` | Per partner: count of `ORDER_ID` in the Hard Internal base with that `HARD_BOOKED_PARTNER` |
 | Denominator | Count of `ORDER_ID` in the Hard PBA base where `HARD_BOOKED_PARTNER` is not blank | Count of `ORDER_ID` in the Hard Internal base where `HARD_BOOKED_PARTNER` is not blank |
 | Calculation | Numerator ÷ Denominator × 100; Delta as above | Same |
+
+### 2. Lane Adjusted Comparison
+
+Metric 1 restricted to the common lane set (the soft one, for both halves). The "[n] lanes" in the header = number of lanes in the common lane set.
+
+**Soft Allocation**
+
+| Item | PBA % | Internal % |
+|---|---|---|
+| Definition | Share of PBA base orders on the common lane set whose customer promise used each courier partner | Share of Internal base orders on the common lane set whose customer promise used each courier partner |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `WH_ID`, `PINCODE`, `SOFT_SERVED_PARTNER` | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `WH_ID`, `PINCODE`, `SOFT_SERVED_PARTNER` |
+| Numerator | Per partner: count of `ORDER_ID` in the PBA base whose lane is in the common lane set, with that `SOFT_SERVED_PARTNER` | Per partner: count of `ORDER_ID` in the Internal base whose lane is in the common lane set, with that `SOFT_SERVED_PARTNER` |
+| Denominator | Count of `ORDER_ID` in the PBA base whose lane is in the common lane set, where `SOFT_SERVED_PARTNER` is not blank | Count of `ORDER_ID` in the Internal base whose lane is in the common lane set, where `SOFT_SERVED_PARTNER` is not blank |
+| Calculation | Numerator ÷ Denominator × 100; Delta (pp) to 2 decimals, rows as in metric 1 | Same |
+
+**Hard Allocation**
+
+| Item | PBA % | Internal % |
+|---|---|---|
+| Definition | Share of Hard PBA base orders on the common lane set booked with each courier partner | Share of Hard Internal base orders on the common lane set booked with each courier partner |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE` (for the common lane set), `HARD_SELECTED_CANDIDATE_TYPE`, `WH_ID`, `PINCODE`, `HARD_BOOKED_PARTNER` | Same as PBA |
+| Numerator | Per partner: count of `ORDER_ID` in the Hard PBA base whose lane is in the common lane set, with that `HARD_BOOKED_PARTNER` | Per partner: count of `ORDER_ID` in the Hard Internal base whose lane is in the common lane set, with that `HARD_BOOKED_PARTNER` |
+| Denominator | Count of `ORDER_ID` in the Hard PBA base whose lane is in the common lane set, where `HARD_BOOKED_PARTNER` is not blank | Count of `ORDER_ID` in the Hard Internal base whose lane is in the common lane set, where `HARD_BOOKED_PARTNER` is not blank |
+| Calculation | Numerator ÷ Denominator × 100; Delta (pp) to 2 decimals, rows as in metric 1 | Same |
