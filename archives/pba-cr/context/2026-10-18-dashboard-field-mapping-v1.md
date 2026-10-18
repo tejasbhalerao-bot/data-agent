@@ -60,3 +60,13 @@ Which raw-dump fields compute each dashboard number. Numbering follows the wiref
 | Numerator | Count of distinct `ORDER_ID` in metric 4's PBA base where `PICKUP_TIME` is not blank | Count of distinct `ORDER_ID` in metric 4's Internal base where `PICKUP_TIME` is not blank |
 | Denominator | Metric 4, PBA | Metric 4, Internal |
 | Calculation | Numerator ÷ Denominator × 100; card also shows the numerator as [n] orders | Numerator ÷ Denominator × 100; card also shows the numerator as [n] orders |
+
+### 6. % with delivery attempt (PBA vs Internal)
+
+| Item | PBA | Internal |
+|---|---|---|
+| Definition | Share of PBA-allocated orders with at least one delivery attempt | Share of internally allocated orders with at least one delivery attempt |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `DELIVERY_ATTEMPT_TIME` | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `DELIVERY_ATTEMPT_TIME` |
+| Numerator | Count of distinct `ORDER_ID` in metric 4's PBA base where `DELIVERY_ATTEMPT_TIME` is not blank | Count of distinct `ORDER_ID` in metric 4's Internal base where `DELIVERY_ATTEMPT_TIME` is not blank |
+| Denominator | Metric 4, PBA | Metric 4, Internal |
+| Calculation | Numerator ÷ Denominator × 100; card also shows the numerator as [n] orders | Numerator ÷ Denominator × 100; card also shows the numerator as [n] orders |
