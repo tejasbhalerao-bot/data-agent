@@ -2,7 +2,7 @@
 title: PBA CR dashboard field mapping
 source: agreed with Tejas, metric by metric, from 2026-10-18
 applies to: every raw dump from the Q1 base query, e.g. fahad-raw-dump-3
-status: in progress (Sections 1–3 agreed)
+status: complete, all four sections mapped (2026-10-18). Section 4 metrics 2–4 were mapped on the same rules without a separate review, at Tejas's request
 ---
 
 # PBA CR dashboard field mapping
@@ -309,3 +309,60 @@ Metric 1 restricted to the common lane set (the soft one, for both halves). The 
 | Numerator | Per partner: count of `ORDER_ID` in the Hard PBA base whose lane is in the common lane set, with that `HARD_BOOKED_PARTNER` | Per partner: count of `ORDER_ID` in the Hard Internal base whose lane is in the common lane set, with that `HARD_BOOKED_PARTNER` |
 | Denominator | Count of `ORDER_ID` in the Hard PBA base whose lane is in the common lane set, where `HARD_BOOKED_PARTNER` is not blank | Count of `ORDER_ID` in the Hard Internal base whose lane is in the common lane set, where `HARD_BOOKED_PARTNER` is not blank |
 | Calculation | Numerator ÷ Denominator × 100; Delta (pp) to 2 decimals, rows as in metric 1 | Same |
+
+## Section 4: Adherence
+
+Each measure is shown as one breach distribution table: PBA vs Internal, all lanes and lane adjusted (Tejas, 2026-10-18). The Early / On-Time / Late cards were removed and the courier-wise view moves to the deep-dive dashboard.
+
+For every measure in this section:
+- **Actual** = the first delivery attempt (`DELIVERY_ATTEMPT_TIME`).
+- **Promised days** and **actual days** are calendar-date differences, as in the promise-days rules at the top.
+- **Days late** = actual days − promised days. Columns: **Early** < 0; **On time** = 0; **1 d late** = 1; **2 d late** = 2; **3+ d late** ≥ 3.
+- **Not yet attempted** = `DELIVERY_ATTEMPT_TIME` is blank. It is its own column; each row sums to 100%.
+- **Data errors** (left out of the denominator and reported): an attempted order whose actual start timestamp is blank, or whose actual days are negative.
+
+### Sub-section 1: Soft Promise Adherence
+
+### 1. WH to Delivery
+
+| Item | PBA | Internal |
+|---|---|---|
+| Definition | For the PBA base, how the actual days from box verified to first attempt compare with the promised WH-to-delivery days | Same, for the Internal base |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `WH_ID`, `PINCODE`, `PROMISED_WAREHOUSE_PROCESSING_TIME`, `PBA_PROJECTED_DELIVERY_TIME`, `BOX_VERIFIED_TS`, `DELIVERY_ATTEMPT_TIME` | Same, with `INTERNAL_PROJECTED_DELIVERY_TIME` in place of `PBA_PROJECTED_DELIVERY_TIME` |
+| Numerator | Per order: promised days = date(`PBA_PROJECTED_DELIVERY_TIME`) − date(`PROMISED_WAREHOUSE_PROCESSING_TIME`); actual days = date(`DELIVERY_ATTEMPT_TIME`) − date(`BOX_VERIFIED_TS`); days late = actual − promised. Count of orders in each column: Early, On time, 1 d late, 2 d late, 3+ d late, Not yet attempted | Same, with `INTERNAL_PROJECTED_DELIVERY_TIME` |
+| Denominator | PBA base orders where `PROMISED_WAREHOUSE_PROCESSING_TIME` and `PBA_PROJECTED_DELIVERY_TIME` are both not blank, less data errors (attempted orders plus not yet attempted) | Same, with `INTERNAL_PROJECTED_DELIVERY_TIME` |
+| Calculation | Numerator ÷ Denominator × 100, to 1 decimal; each row sums to 100%. Lane adjusted: the same on the common lane set | Same |
+
+### 2. Dispatch to Delivery
+
+| Item | PBA | Internal |
+|---|---|---|
+| Definition | For the PBA base, how the actual days from courier pickup to first attempt compare with the promised dispatch-to-delivery days | Same, for the Internal base |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `WH_ID`, `PINCODE`, `PBA_PROJECTED_DISPATCH_TIME`, `PBA_PROJECTED_DELIVERY_TIME`, `PICKUP_TIME`, `DELIVERY_ATTEMPT_TIME` | Same, with `INTERNAL_PROJECTED_DISPATCH_TIME` and `INTERNAL_PROJECTED_DELIVERY_TIME` in place of the PBA columns |
+| Numerator | Per order: promised days = date(`PBA_PROJECTED_DELIVERY_TIME`) − date(`PBA_PROJECTED_DISPATCH_TIME`) (as Section 2 metric 5); actual days = date(`DELIVERY_ATTEMPT_TIME`) − date(`PICKUP_TIME`); days late = actual − promised. Count of orders in each column: Early, On time, 1 d late, 2 d late, 3+ d late, Not yet attempted | Same, with the internal columns (promise as Section 2 metric 7) |
+| Denominator | PBA base orders where `PBA_PROJECTED_DISPATCH_TIME` and `PBA_PROJECTED_DELIVERY_TIME` are both not blank, less data errors (attempted with blank `PICKUP_TIME`, or negative actual days) | Same, with the internal columns |
+| Calculation | Numerator ÷ Denominator × 100, to 1 decimal; each row sums to 100%. Lane adjusted: the same on the common lane set | Same |
+
+### Sub-section 2: Hard Promise Adherence
+
+Uses the Hard PBA base and Hard Internal base. Lane adjusted uses the common lane set (the soft one), as for every hard lane-adjusted metric.
+
+### 3. WH to Delivery
+
+| Item | PBA | Internal |
+|---|---|---|
+| Definition | For the Hard PBA base, how the actual days from box verified to first attempt compare with the WH-to-delivery days PBA promised when the courier was booked | Not measurable: the internal hard record keeps no dispatch or delivery time, and its TAT runs from dispatch, so there is no WH-to-delivery promise (wireframe callout) |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `HARD_SELECTED_CANDIDATE_TYPE`, `SOFT_SERVED_CANDIDATE_TYPE` (for the common lane set), `WH_ID`, `PINCODE`, `HARD_WH_PROCESSING_TIME`, `PBA_HARD_PROJECTED_DELIVERY_TIME`, `BOX_VERIFIED_TS`, `DELIVERY_ATTEMPT_TIME` | None |
+| Numerator | Per order: promised days = date(`PBA_HARD_PROJECTED_DELIVERY_TIME`) − date(`HARD_WH_PROCESSING_TIME`); actual days = date(`DELIVERY_ATTEMPT_TIME`) − date(`BOX_VERIFIED_TS`); days late = actual − promised. Count of orders in each column: Early, On time, 1 d late, 2 d late, 3+ d late, Not yet attempted | None |
+| Denominator | Hard PBA base orders where `HARD_WH_PROCESSING_TIME` and `PBA_HARD_PROJECTED_DELIVERY_TIME` are both not blank, less data errors (attempted with blank `BOX_VERIFIED_TS`, or negative actual days) | None |
+| Calculation | Numerator ÷ Denominator × 100, to 1 decimal; each row sums to 100%. Lane adjusted: the same on the common lane set | Every cell shows "n/a", all lanes and lane adjusted |
+
+### 4. Dispatch to Delivery
+
+| Item | PBA | Internal |
+|---|---|---|
+| Definition | For the Hard PBA base, how the actual days from courier pickup to first attempt compare with the dispatch-to-delivery days PBA promised when the courier was booked | For the Hard Internal base, how the actual days from courier pickup to first attempt compare with internal's selected partner TAT at booking, rounded up (Option B, as Section 2 metric 12) |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `HARD_SELECTED_CANDIDATE_TYPE`, `SOFT_SERVED_CANDIDATE_TYPE` (for the common lane set), `WH_ID`, `PINCODE`, `PBA_HARD_PROJECTED_DISPATCH_TIME`, `PBA_HARD_PROJECTED_DELIVERY_TIME`, `PICKUP_TIME`, `DELIVERY_ATTEMPT_TIME` | `ORDER_ID`, `SDD_ENABLED`, `HARD_SELECTED_CANDIDATE_TYPE`, `SOFT_SERVED_CANDIDATE_TYPE` (for the common lane set), `WH_ID`, `PINCODE`, `INTERNAL_HARD_PARTNER_TAT_IN_DAYS`, `PICKUP_TIME`, `DELIVERY_ATTEMPT_TIME` |
+| Numerator | Per order: promised days = date(`PBA_HARD_PROJECTED_DELIVERY_TIME`) − date(`PBA_HARD_PROJECTED_DISPATCH_TIME`) (as Section 2 metric 11); actual days = date(`DELIVERY_ATTEMPT_TIME`) − date(`PICKUP_TIME`); days late = actual − promised. Count of orders in each column: Early, On time, 1 d late, 2 d late, 3+ d late, Not yet attempted | Per order: promised days = `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` rounded up to the next whole day (as Section 2 metric 12); actual days and days late as for PBA. Same columns |
+| Denominator | Hard PBA base orders where `PBA_HARD_PROJECTED_DISPATCH_TIME` and `PBA_HARD_PROJECTED_DELIVERY_TIME` are both not blank, less data errors (attempted with blank `PICKUP_TIME`, or negative actual days) | Hard Internal base orders where `INTERNAL_HARD_PARTNER_TAT_IN_DAYS` is not blank, less data errors (same as PBA; a negative TAT is also a data error) |
+| Calculation | Numerator ÷ Denominator × 100, to 1 decimal; each row sums to 100%. Lane adjusted: the same on the common lane set | Same. Not on the same basis as PBA: the promise is TAT days rounded up, not a calendar-date difference |
