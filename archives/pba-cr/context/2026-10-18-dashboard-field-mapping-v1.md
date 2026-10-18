@@ -44,6 +44,9 @@ Which raw-dump fields compute each dashboard number, and exactly how. Numbering 
 - **PBA base:** orders where `SDD_ENABLED = 'false'` and `SOFT_SERVED_CANDIDATE_TYPE = 'COURIER_PBA'`.
 - **Internal base:** orders where `SDD_ENABLED = 'false'` and `SOFT_SERVED_CANDIDATE_TYPE` is `'COURIER_LEGACY_TAT_ADHERENCE'` or `'COURIER_DDB_TAT_ADHERENCE'`.
 - Orders with `SOFT_SERVED_CANDIDATE_TYPE = 'NONE'` or empty are in neither base.
+- **Hard PBA base** (Section 2 Sub-section 2 and other hard metrics): orders where `SDD_ENABLED = 'false'` and `HARD_SELECTED_CANDIDATE_TYPE = 'COURIER_PBA'`, i.e. the courier booking was made by PBA (Tejas, 2026-10-18).
+- **Hard Internal base:** orders where `SDD_ENABLED = 'false'` and `HARD_SELECTED_CANDIDATE_TYPE` is `'COURIER_LEGACY_TAT_ADHERENCE'` or `'COURIER_DDB_TAT_ADHERENCE'`.
+- Orders with `HARD_SELECTED_CANDIDATE_TYPE = 'SDD'`, `'NONE'` or empty are in neither hard base. A filled `PBA_HARD_PROJECTED_*` time does not put an order in the Hard PBA base: PBA is evaluated at hard even when it does not make the booking.
 
 ### Lanes (lane-adjusted metrics)
 - **Lane** = `WH_ID` + `PINCODE`, compared as text (`WH_ID` is 1–2 digits, `PINCODE` 6 digits).
@@ -207,3 +210,27 @@ All metrics below use the promise-days rules at the top: calendar days, nearest-
 | Numerator | Per order: promise days = date(`PBA_PROJECTED_DELIVERY_TIME`) − date(`PROMISED_WAREHOUSE_PROCESSING_TIME`). Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 | Per order: promise days = date(`INTERNAL_PROJECTED_DELIVERY_TIME`) − date(`PROMISED_WAREHOUSE_PROCESSING_TIME`). Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 |
 | Denominator | Count of `ORDER_ID` in the PBA base whose lane is in the common lane set, where `PROMISED_WAREHOUSE_PROCESSING_TIME` and `PBA_PROJECTED_DELIVERY_TIME` are both not blank | Count of `ORDER_ID` in the Internal base whose lane is in the common lane set, where `PROMISED_WAREHOUSE_PROCESSING_TIME` and `INTERNAL_PROJECTED_DELIVERY_TIME` are both not blank |
 | Calculation | Avg, p25, p50, p75, p90 and cumulative % as defined in the rules at the top | Same |
+
+### 10. Lane Adjusted: Dispatch to Delivery Promise Comparison - PBA vs Internal
+
+| Item | PBA | Internal |
+|---|---|---|
+| Definition | For PBA-base orders on the common lane set, the promised days from courier pickup (dispatch) to delivery, using PBA's partner | For Internal-base orders on the common lane set, the promised days from courier pickup (dispatch) to delivery, using internal's own partner |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `WH_ID`, `PINCODE`, `PBA_PROJECTED_DISPATCH_TIME`, `PBA_PROJECTED_DELIVERY_TIME` | `ORDER_ID`, `SDD_ENABLED`, `SOFT_SERVED_CANDIDATE_TYPE`, `WH_ID`, `PINCODE`, `INTERNAL_PROJECTED_DISPATCH_TIME`, `INTERNAL_PROJECTED_DELIVERY_TIME` |
+| Numerator | Per order: promise days = date(`PBA_PROJECTED_DELIVERY_TIME`) − date(`PBA_PROJECTED_DISPATCH_TIME`). Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 | Per order: promise days = date(`INTERNAL_PROJECTED_DELIVERY_TIME`) − date(`INTERNAL_PROJECTED_DISPATCH_TIME`). Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 |
+| Denominator | Count of `ORDER_ID` in the PBA base whose lane is in the common lane set, where `PBA_PROJECTED_DISPATCH_TIME` and `PBA_PROJECTED_DELIVERY_TIME` are both not blank | Count of `ORDER_ID` in the Internal base whose lane is in the common lane set, where `INTERNAL_PROJECTED_DISPATCH_TIME` and `INTERNAL_PROJECTED_DELIVERY_TIME` are both not blank |
+| Calculation | Avg, p25, p50, p75, p90 and cumulative % as defined in the rules at the top | Same |
+
+### Sub-section 2: Hard Promise
+
+Hard metrics use the Hard PBA base and Hard Internal base, and the same promise-days rules as the soft metrics.
+
+### 11. PBA Allocated Orders: Dispatch to Delivery Promise (hard)
+
+| Item | Mapping |
+|---|---|
+| Definition | For the Hard PBA base, the promised days from courier pickup (dispatch) to delivery that PBA gave when the courier was booked |
+| Fields | `ORDER_ID`, `SDD_ENABLED`, `HARD_SELECTED_CANDIDATE_TYPE`, `PBA_HARD_PROJECTED_DISPATCH_TIME`, `PBA_HARD_PROJECTED_DELIVERY_TIME` |
+| Numerator | Per order: promise days = date(`PBA_HARD_PROJECTED_DELIVERY_TIME`) − date(`PBA_HARD_PROJECTED_DISPATCH_TIME`). Cumulative columns: count of orders with promise days ≤ 0, ≤ 1, ≤ 2, ≤ 3 |
+| Denominator | Count of `ORDER_ID` in the Hard PBA base where `PBA_HARD_PROJECTED_DISPATCH_TIME` and `PBA_HARD_PROJECTED_DELIVERY_TIME` are both not blank |
+| Calculation | Avg, p25, p50, p75, p90 and cumulative % as defined in the rules at the top |
