@@ -12,7 +12,7 @@ as_of: 2026-10-20
 
 **My reading of the flow:** A customer places an order and Strategy 1 picks a courier from each courier's TAT and adherence, built from recent deliveries on its warehouse x pincode lane. That sets the promise. At invoice it picks the shipping courier again. The first delivery attempt then shows whether the promise held. The data comes from the shipment files (pickup, attempt, promise), the order-placed files (placed and invoice times), the ops config, `TAT Adherence Master`, the courier cutoffs, and the serviceability and GOI files.
 
-**Assumptions and rules applied:** the rules are in the project context: `context/2026-10-20-process-flow-v4.md` and `context/2026-10-20-simulation-scope-v7.md`.
+**Assumptions and rules applied:** the rules are in the project context: `context/2026-10-20-process-flow-v5.md` and `context/2026-10-20-simulation-scope-v7.md`.
 
 ## Answer
 Pending. The brief below is waiting for Tejas's approval.
@@ -28,28 +28,29 @@ Show the change in adherence, and the change in the customer's promise, when a l
 - **Comparison:** today's rule (x = 1, replayed) against x = 10, 15 and 20.
 
 ### Metrics and cuts
-- M1: Adherence A, courier unchanged. Share of orders early or on time against the shipping courier's projected TAT at the order placed date. By rule. Cuts: courier, warehouse, rung reached.
-- M2: Adherence B, courier changed. Share early or on time among orders where the rule's invoice winner is the shipping courier, against the promise at the order placed date. By rule. Cuts: courier, warehouse.
-- M3: Orders excluded from B. Share of orders whose courier would change. By rule.
-- M4: Customer promise. Average simulated promise at order placed against today's rule, plus the share of orders with a longer, shorter or equal promise. By rule.
-- M5: Courier allocation mix. Share of orders by invoice-stage winner against the courier that actually shipped. By rule.
-- M6: Rung reached. Share of courier evaluations resolved at each rung, the widest-data step, and the ops config. By x. This is the volume view for choosing x.
-- M7: Replay match. Share of orders where today's rule picks the courier that actually shipped. This checks the replay.
+- M1: Adherence. An order is on time when its actual days from pickup to first delivery attempt are within the promise at the order placed date (promise 2 days, actual 2 days: on time). This holds irrespective of the courier chosen at order placed or at invoice. By rule. Cuts: courier, warehouse, rung reached.
+- M2: Adherence, reported only when the courier chosen at invoice is the courier that actually shipped the order. Same comparison as M1. The rule does not depend on the courier chosen at order placed. By rule. Cuts: courier, warehouse.
+- M3: Orders not reported in M2. Share of orders where the invoice-stage courier differs from the shipping courier. By rule.
+- M4: Customer promise. Average promise at order placed against today's rule, plus the share of orders with a longer, shorter or equal promise. By rule.
+- M5: Courier allocation mix at order placed. Share of orders by courier chosen at order placed, shown as the change in percentage points between today and each x. By rule. Cut: courier.
+- M6: Courier allocation mix at invoice. Share of orders by courier chosen at invoice, shown as the change between today and each x, with the courier that actually shipped alongside. By rule. Cut: courier.
+- M7: Rung reached. Share of courier evaluations resolved at each rung, the widest-data step, and the ops config. By x. This is the volume view for choosing x.
+- M8: Replay match. Share of orders where today's rule picks the courier that actually shipped. This checks the replay.
 
 ### Grain and output columns (Tejas to decide)
-- Suggestion for the main file: one row per order x rule, with order ID, warehouse, pincode, shipping courier, placed and invoice times, rule, placed-stage winner and promise, invoice-stage winner, the shipping courier's projected TAT, and the A and B results.
+- Suggestion for the main file: one row per order x rule, with order ID, warehouse, pincode, shipping courier, placed and invoice times, rule, placed-stage winner and promise, invoice-stage winner, the shipping courier's projected TAT, and the M1 and M2 results.
 - A second summary file would have one row per rule x cut.
 
 ### How it will be calculated
-Each step follows the process flow in `context/2026-10-20-process-flow-v4.md`.
+Each step follows the process flow in `context/2026-10-20-process-flow-v5.md`.
 
 | Step | What | Serves | Data from |
 |---|---|---|---|
 | 1 | Pick orders in scope, with placed, invoice and promised-warehouse times | all | existing CSVs, in the script |
-| 2 | For each order, stage and courier: walk the ladder, then calculate lane TAT and adherence at 85% | M1 to M6 | existing CSVs, in the script |
-| 3 | Score each courier with the schedule adjustment, apply the tie-break, and pick winners at placed and invoice | M2 to M5 | script |
-| 4 | Classify each order for A and B against the order placed promise | M1 to M3 | script |
-| 5 | Roll up by rule and cut, and check the replay | all | script |
+| 2 | For each order, stage and courier: walk the ladder, then calculate lane TAT and adherence at 85% | M1 to M7 | existing CSVs, in the script |
+| 3 | Score each courier with the schedule adjustment, apply the tie-break, and pick winners at placed and invoice | M2 to M6 | script |
+| 4 | Classify each order against the order placed promise for M1, and for M2 only when the invoice winner shipped it | M1 to M4 | script |
+| 5 | Roll up by rule and cut, including the mix deltas, and check the replay | all | script |
 
 ### Job-specific
 - **Lever:** minimum sample size x. Cases: x = 10, 15 and 20, given by Tejas. Today's rule (x = 1) is the baseline.
