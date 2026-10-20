@@ -20,4 +20,4 @@
 Filters, cohorts or quirks that apply only to this project. Shared rules go in `context/rules.md`.
 
 - Order data is July to September 2026 only. October is never loaded or simulated (Strategy 2 went live in October). See `context/2026-10-20-simulation-scope-v6.md`.
-- `PROMISE_TAT` carries a spike at 15 days (8,579 orders in July, 4,223 in August, 2,762 in September) and some 0-day values. Meaning not yet confirmed.
+- `PROMISE_TAT` is the customer's logistics promise in days (confirmed by Tejas 2026-10-20). It is the promise the order was given, so an order is on time when `DATE(delivery_attempt_time) - DATE(pickup_time) <= PROMISE_TAT`. It carries a spike at 15 days (8,579 orders in July, 4,223 in August, 2,762 in September) and some 0-day values (9, 624 and 768 orders). The spike is unexplained; 15 is also the upper limit on uploaded ops TAT in the Strategy 1 document, which may be related but is not confirmed.
