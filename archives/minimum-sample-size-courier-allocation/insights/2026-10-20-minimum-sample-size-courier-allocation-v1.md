@@ -15,9 +15,9 @@ as_of: 2026-10-20
 **Assumptions and rules applied:** the rules are in the project context: `context/2026-10-20-process-flow-v5.md` and `context/2026-10-20-simulation-scope-v7.md`.
 
 ## Answer
-Pending. The brief below is waiting for Tejas's approval.
+Pending. The brief is approved; the scripts are next.
 
-## Brief (awaiting approval)
+## Approved brief
 
 ### Objective
 Show the change in adherence, and the change in the customer's promise, when a lane needs at least x orders (x = 10, 15 and 20) before its TAT and adherence count, widening through the ladder when it doesn't.
@@ -37,9 +37,9 @@ Show the change in adherence, and the change in the customer's promise, when a l
 - M7: Rung reached. Share of courier evaluations resolved at each rung, the widest-data step, and the ops config. By x. This is the volume view for choosing x.
 - M8: Replay match. Share of orders where today's rule picks the courier that actually shipped. This checks the replay.
 
-### Grain and output columns (Tejas to decide)
-- Suggestion for the main file: one row per order x rule, with order ID, warehouse, pincode, shipping courier, placed and invoice times, rule, placed-stage winner and promise, invoice-stage winner, the shipping courier's projected TAT, and the M1 and M2 results.
-- A second summary file would have one row per rule x cut.
+### Grain and output columns
+- Main file: one row per order x rule, with order ID, warehouse, pincode, shipping courier, placed and invoice times, rule, placed-stage winner and promise, invoice-stage winner, the shipping courier's projected TAT, and the M1 and M2 results.
+- A second summary file has one row per rule x cut.
 
 ### How it will be calculated
 Each step follows the process flow in `context/2026-10-20-process-flow-v5.md`.
@@ -61,8 +61,8 @@ No new query is needed, because all the data is in hand. The output is a script 
 ### Not yet settled
 None of these blocks approval, but each affects the numbers: warehouse 30's config and cutoffs, the zero adherence values, the 15-day promise spike, the default TAT when a config row is missing, and the cause of the missing order-placed rows.
 
-### To approve
-Reply "ok" to start, or say what to change.
+### Approval
+Approved by Tejas on 2026-10-20 ("the brief seems okay now"), including the suggested grain and columns.
 
 ## Queries to run
 Not applicable: no new query is needed.
