@@ -193,7 +193,7 @@ The 9-order example scripts (steps 1 to 8, in `scripts/`) are the worked example
 - **Lanes without cutoffs get no schedule adjustment**: warehouse 30 for 195, 225 and 286 (not confirmed by Tejas) and warehouse 27.
 - **Open data questions from the brief remain**: the two zero adherence pairs, the 15-day promise spike, the default TAT where a config row is missing (3 days used), and the cause of the missing order-placed rows (excluded).
 - **Percentile method:** linear interpolation (the document does not name one).
-- **Sample size:** every figure is over hundreds of thousands of orders; the thinnest cuts in `sim-v2-summary.csv` still hold more than 500 orders. Confidence is high in the direction of the changes and moderate in their size, because of the replay gap.
+- **Sample size:** every headline figure is over hundreds of thousands of orders. Of the 248 cut cells in `sim-v2-summary.csv` (courier, warehouse and data-used cuts), the smallest holds 485 orders (M1, state over 28 days, x = 15); five cells hold fewer than 1,000, all in the data-used cut, and none holds fewer than 100. Confidence is high in the direction of the changes and moderate in their size, because of the replay gap.
 - **"Caused" is not claimed.** The simulation shows what the rule would have chosen on past orders; it does not measure how customers or couriers respond.
 
 ## Next check
