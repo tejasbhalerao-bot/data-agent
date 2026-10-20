@@ -17,68 +17,82 @@ as_of: 2026-10-20
 ## Answer
 
 ### Headline
-Requiring at least 10, 15 or 20 orders before a lane's TAT and adherence count would have raised on-time adherence by about 1.6 to 1.8 points across all orders (M1) and by about 3.4 to 3.9 points on the orders whose courier does not change (M2), at the cost of a 0.09 to 0.10 day longer average promise (M4). Orders placed 29 Jul to 24 Sep 2026, 940,480 orders. (M1, M2, M4 via S1, `sim-v2-summary.csv`.)
+In today's world (the real data) 81.0% of orders are on time against a real promise averaging 2.40 days. Every order was shipped by the courier allocated at invoice, so M2 equals M1 and M3 is 0. (S5, `outputs/today-real-baseline-v2.csv`, 940,480 orders placed 29 Jul to 24 Sep.)
 
-The courier would change for 56% to 59% of orders (M3), so M2 describes only the 41% to 44% that stay with the same courier. The three values of x give nearly the same result: x = 20 is best on M1 and M2 and costs the most in promise and courier changes.
+The simulation, with a lane needing at least x = 10, 15 or 20 orders, gives M1 of 76.0% to 76.3%, M2 of 85.1% to 85.5% on the orders whose courier does not change, and an average promise of 2.30 days. It cannot be compared level for level with reality, because the simulation sets drop and pickup buffers to zero and real orders carry them. The effect of x on its own is read against the replay of today's rule, which uses the same model: **M1 +1.6 to +1.8 points, M2 +3.4 to +3.9 points, average promise +0.09 to +0.10 days, and 56% to 59% of orders change courier** (S1, `sim-v2-summary.csv`; S5).
 
 ### Assumptions
 | Assumption | Low | Base | High | Source |
 |------------|-----|------|------|--------|
 | Minimum sample size x (orders on a lane before its TAT and adherence count) | 10 | 15 | 20 | Tejas |
 
-Everything else is fixed by the process flow and the scope notes: percentile 85%, no drop or pickup buffer, today's ops config and adherence master. Today's rule (x = 1) is the baseline.
+Everything else is fixed by the process flow and the scope notes: percentile 85%, no drop or pickup buffer, today's ops config and adherence master.
 
 ### Results by case
-Orders placed 29 Jul to 24 Sep (S1, `sim-v2-summary.csv`, "complete dates").
+Orders placed 29 Jul to 24 Sep, the 940,480 orders that have a candidate courier under every rule (S5, `today-real-baseline-v2.csv`). "Today (real)" takes the courier that shipped and the real promise from the data. "Today (replay)" and the x columns are the simulation.
 
-| Metric | Today | x = 10 | x = 15 | x = 20 |
-|---|---|---|---|---|
-| M1 adherence % (940,480 orders) | 74.46 | 76.16 | 76.04 | 76.26 |
-| M1 change vs today (points) | | +1.70 | +1.58 | +1.80 |
-| M2 adherence % (orders reported) | 81.65 (601,469) | 85.08 (414,585) | 85.29 (395,433) | 85.51 (383,706) |
-| M2 change vs today (points) | | +3.42 | +3.64 | +3.86 |
-| M3 orders not reported in M2 % | 36.05 | 55.92 | 57.95 | 59.20 |
-| M4 average promise (days) | 2.204 | 2.295 | 2.295 | 2.307 |
-| M4 change vs today (days) | | +0.091 | +0.091 | +0.103 |
-| M4 share of orders with a longer promise % | 0.00 | 21.65 | 22.32 | 23.42 |
-| M4 share with a shorter promise % | 0.00 | 13.66 | 14.31 | 14.29 |
-| M4 share with an equal promise % | 100.00 | 64.70 | 63.37 | 62.28 |
+| Metric | Today (real) | Today (replay) | x = 10 | x = 15 | x = 20 |
+|---|---|---|---|---|---|
+| M1 adherence % | 81.02 | 74.46 | 76.16 | 76.04 | 76.26 |
+| M2 adherence % (orders reported) | 81.02 | 81.65 | 85.08 | 85.29 | 85.51 |
+| M3 orders not reported in M2 % | 0 | 36.05 | 55.92 | 57.95 | 59.20 |
+| M4 average promise (days) | 2.404 | 2.204 | 2.295 | 2.295 | 2.307 |
+| Promise longer than the real promise % | 0 | 12.65 | 18.00 | 18.42 | 19.30 |
+| Promise shorter than the real promise % | 0 | 25.94 | 24.07 | 24.43 | 24.18 |
+| Promise equal to the real promise % | 100 | 61.40 | 57.93 | 57.14 | 56.52 |
 
-For reference, real adherence (actual days against the real promise) is 81.01% on 941,213 orders (S1).
+Change in the simulation when x replaces x = 1, read against the replay (S1, `sim-v2-summary.csv`):
+
+| Metric | x = 10 | x = 15 | x = 20 |
+|---|---|---|---|
+| M1 change (points) | +1.70 | +1.58 | +1.80 |
+| M2 change (points) | +3.42 | +3.64 | +3.86 |
+| M3 change (points) | +19.87 | +21.91 | +23.15 |
+| M4 change (days) | +0.091 | +0.091 | +0.103 |
 
 ### Floor and ceiling
 Not applicable: this is a replay of a rule change on past orders, not a sizing from assumptions.
 
 ### What moves the answer
-- **Moving from today to any x of 10 or more is the large step; the choice among 10, 15 and 20 is small.** M1 differs by at most 0.22 points between the three, and M2 by 0.44 points. M3 rises 3.3 points and the average promise 0.012 days from x = 10 to x = 20 (S4).
-- **Under today's rule, 70.6% of courier evaluations at order placed fall back to the ops config** because the pincode has no order in the last 7 days (M7). At x = 20 that falls to 5.0%, with 2.2% on the widest pool below x; most evaluations resolve in the micro-cluster (47.9% across windows, 25.7% of them over 7 days) or at the pincode (19.6% across windows) (S4).
-- **Part of the M2 gain comes with a longer promise.** On the same orders where the courier is unchanged under x = 20, adherence is 85.51% under x's promise against 80.34% under today's promise, and the average promise is 2.262 against 2.088 days (table 6).
+- **The baseline.** Against reality the simulated adherence is lower and the promise shorter than today's real figures (M1 76.2% against 81.0%, promise 2.30 against 2.40 days at x = 20). That gap comes from the replay (no buffers), not from x. The replay's own M1 is 74.5% and its promise 2.20 days, which is why the effect of x is read against it. Closing the gap would let the two readings agree.
+- **Moving from today to any x of 10 or more is the large step; the choice among 10, 15 and 20 is small** (spread across x of M1 0.22 points, M2 0.44 points, M3 3.3 points, promise 0.012 days; S4).
+- **Under today's rule 70.6% of courier evaluations at order placed fall back to the ops config** (M7, replay). At x = 20 that falls to 5.0% with 2.2% on the widest pool below x; most evaluations resolve in the micro-cluster (47.9% across windows) or at the pincode (19.6% across windows) (S4).
+- **Part of the M2 gain comes with a longer promise.** On the same orders where the courier is unchanged under x = 20, adherence is 85.51% under x's promise against 80.34% under the replay's promise, with an average promise of 2.262 against 2.088 days (table 6).
 
 ### Break-even and what would change the conclusion
-Not calculated: there is no agreed value for a day of promise against a point of adherence. If a longer promise costs more conversion than the adherence is worth, the gain reverses; Tejas's earlier rollout limits (promise worse by 0.5 days, adherence worse by 3 points) are well outside these results. A better match between the replay and real promises would change the size of the effect.
+Not calculated: there is no agreed value for a day of promise against a point of adherence. A better match between the replay and real promises would change the size of the effect and could change the comparison with reality.
 
 ### So what
-x = 20 gives the largest adherence gain (+1.8 on M1, +3.9 on M2) for about a tenth of a day of promise, and x = 10 and 15 are nearly as good, so the choice among them can rest on operational grounds. The larger consequence is the courier mix: at x = 20, 195 would lose 8.9 points of orders at order placed while 286 gains 4.7 and 247 gains 3.8. That, and the replay gap in Caveats, should be settled before a pilot.
+Relative to the same model at x = 1, any x from 10 to 20 raises adherence by about 1.6 to 1.8 points (M1) for about 0.09 to 0.10 days of promise, and x = 20 is marginally the best. The bigger consequence is the courier mix against reality: at x = 20, 195 would carry 12.5 points fewer orders at invoice than it does today, while 286 gains 6.6 and 247 gains 5.6 (table 2). Close the replay gap, and decide whether that shift is acceptable, before a pilot.
 
 ### Evidence
-All figures are from S1 (`outputs/sim-v2-summary.csv`, "complete dates") unless stated.
+Figures are from S1 (`outputs/sim-v2-summary.csv`, "complete dates") unless stated.
 
-**Table 1. Courier mix at order placed, % of 941,213 orders (M5).**
+**Table 1. Courier mix at order placed, % of 941,213 orders (M5).** Today's real courier at order placed is not in our data (only the shipping courier is), so these are measured against the replay.
 
-| Courier | Today | x = 10 | x = 15 | x = 20 | Change x = 10 | Change x = 15 | Change x = 20 | Actually shipped |
+| Courier | Today (replay) | x = 10 | x = 15 | x = 20 | Change x = 10 | Change x = 15 | Change x = 20 |
+|---|---|---|---|---|---|---|---|
+| 195 | 29.06 | 21.47 | 20.60 | 20.18 | -7.59 | -8.46 | -8.88 |
+| 185 | 18.07 | 19.87 | 19.47 | 19.58 | +1.80 | +1.41 | +1.51 |
+| 225 | 15.03 | 14.65 | 14.65 | 14.62 | -0.38 | -0.38 | -0.41 |
+| 246 | 15.96 | 15.08 | 15.32 | 15.34 | -0.88 | -0.64 | -0.62 |
+| 286 | 8.14 | 12.81 | 13.15 | 12.79 | +4.67 | +5.00 | +4.65 |
+| 247 | 13.65 | 16.04 | 16.72 | 17.41 | +2.38 | +3.07 | +3.76 |
+
+**Table 2. Courier mix at invoice, % of 940,480 orders (M6), against the courier that really shipped (S5, `today-real-baseline-v2.csv`).**
+
+| Courier | Today (real) | Today (replay) | x = 10 | x = 15 | x = 20 | x = 10 minus real | x = 15 minus real | x = 20 minus real |
 |---|---|---|---|---|---|---|---|---|
-| 195 | 29.06 | 21.47 | 20.60 | 20.18 | -7.59 | -8.46 | -8.88 | 33.02 |
-| 185 | 18.07 | 19.87 | 19.47 | 19.58 | +1.80 | +1.41 | +1.51 | 19.22 |
-| 225 | 15.03 | 14.65 | 14.65 | 14.62 | -0.38 | -0.38 | -0.41 | 13.82 |
-| 246 | 15.96 | 15.08 | 15.32 | 15.34 | -0.88 | -0.64 | -0.62 | 16.11 |
-| 286 | 8.14 | 12.81 | 13.15 | 12.79 | +4.67 | +5.00 | +4.65 | 6.45 |
-| 247 | 13.65 | 16.04 | 16.72 | 17.41 | +2.38 | +3.07 | +3.76 | 11.38 |
-
-**Table 2. Courier mix at invoice, change vs today in points (M6).** x = 20: 195 -8.82, 185 +1.67, 225 -0.44, 246 -0.84, 286 +4.91, 247 +3.52. x = 10 and x = 15 are in the summary file.
+| 195 | 33.00 | 29.32 | 21.74 | 20.91 | 20.50 | -11.26 | -12.09 | -12.51 |
+| 185 | 19.23 | 18.15 | 20.08 | 19.70 | 19.81 | +0.84 | +0.47 | +0.58 |
+| 225 | 13.80 | 15.16 | 14.82 | 14.77 | 14.72 | +1.02 | +0.97 | +0.93 |
+| 246 | 16.12 | 15.75 | 14.66 | 14.84 | 14.91 | -1.46 | -1.28 | -1.21 |
+| 286 | 6.45 | 8.16 | 13.05 | 13.42 | 13.08 | +6.60 | +6.97 | +6.63 |
+| 247 | 11.39 | 13.46 | 15.64 | 16.35 | 16.98 | +4.25 | +4.96 | +5.58 |
 
 **Table 3. Where courier evaluations at order placed resolve, % (M7).**
 
-| Data used | Today | x = 10 | x = 15 | x = 20 |
+| Data used | Today (replay) | x = 10 | x = 15 | x = 20 |
 |---|---|---|---|---|
 | Pincode, 7 days | 29.43 | 12.15 | 8.85 | 6.80 |
 | Pincode, 14 to 28 days | 0 | 14.47 | 13.73 | 12.80 |
@@ -90,7 +104,7 @@ All figures are from S1 (`outputs/sim-v2-summary.csv`, "complete dates") unless 
 
 (Grouped rows are the sums of the windows in `sim-v2-summary.csv`, computed by S4, `outputs/note-derived-figures-v1.csv`, via S1.)
 
-**Table 4. M1 and M2 by courier that shipped (%).**
+**Table 4. M1 and M2 by courier that shipped (%).** "Today" here is the replay.
 
 | Courier | M1 today | M1 x = 20 | M2 today | M2 x = 20 |
 |---|---|---|---|---|
@@ -101,13 +115,13 @@ All figures are from S1 (`outputs/sim-v2-summary.csv`, "complete dates") unless 
 | 286 | 74.5 | 78.8 | 80.8 | 85.0 |
 | 247 | 79.7 | 82.8 | 82.8 | 85.9 |
 
-Every courier improves on both metrics. By-warehouse figures are in the summary file.
+Every courier improves on both metrics against the replay. By-warehouse figures are in the summary file.
 
-**Table 5. How closely the replay of today's rule matches reality (S2, `replay-diagnostics-v2.csv`).** Replayed promise equals the real promise: 61.4%. The shipping courier's own projected TAT equals the real promise: 62.8%. The replayed invoice winner is the courier that shipped (M8): 63.9% overall, from 31.9% in warehouse 23 to 74.0% in warehouse 22.
+**Table 5. How closely the replay of today's rule matches reality (S2, `replay-diagnostics-v2.csv`; S6, `replay-mismatch-v1.csv`).** The replayed promise equals the real promise on 61.4% of orders. The replayed invoice winner is the courier that shipped on 63.9% (M8), from 31.9% in warehouse 23 to 74.0% in warehouse 22. Where it is not, the shipper scores higher than the winner in 33.0% of orders (by less than 0.25 on 4.9%, by 0.25 to 1 on 16.0%, by more than 1 on 12.0%), loses a tie on the agreed priority on 2.5%, and is not a candidate on 0.6%. In 70% of the cases where the shipper scores higher (218,481 of 310,229), the replay's winner rests on the ops config because its own lane had no order in the last 7 days.
 
 **Table 6. Like-for-like (S3, `like-for-like-v2.csv`).**
 
-| Rule | Orders | Adherence under x's promise | Adherence under today's promise | Average promise, x | Average promise, today |
+| Rule | Orders | Adherence under x's promise | Adherence under the replay's promise | Average promise, x | Average promise, replay |
 |---|---|---|---|---|---|
 | x = 10, courier unchanged | 414,585 | 85.07 | 80.04 | 2.256 | 2.089 |
 | x = 10, courier would change | 525,895 | 69.12 | 70.06 | 2.326 | 2.294 |
@@ -176,6 +190,8 @@ All outputs are local only (`outputs/`, never pushed).
 | S2 | How closely the replay of today's rule reproduces reality | M8, caveats | `archives/minimum-sample-size-courier-allocation/scripts/2026-10-20-aggregate-replay-diagnostics-v2.py` | `sim-v2-orders.csv` | `outputs/replay-diagnostics-v2.csv` | none needed | `python3 archives/minimum-sample-size-courier-allocation/scripts/2026-10-20-aggregate-replay-diagnostics-v2.py` |
 | S3 | Like-for-like check of M2 on the same orders | M1, M2 | `archives/minimum-sample-size-courier-allocation/scripts/2026-10-20-aggregate-like-for-like-v2.py` | `sim-v2-orders.csv` | `outputs/like-for-like-v2.csv` | none needed | `python3 archives/minimum-sample-size-courier-allocation/scripts/2026-10-20-aggregate-like-for-like-v2.py` |
 | S4 | Sums and spreads the note quotes: M7 grouped by geography, and the spread across x | M1 to M4, M7 | `archives/minimum-sample-size-courier-allocation/scripts/2026-10-20-aggregate-note-derived-figures-v1.py` | `sim-v2-summary.csv` | `outputs/note-derived-figures-v1.csv` | none needed | `python3 archives/minimum-sample-size-courier-allocation/scripts/2026-10-20-aggregate-note-derived-figures-v1.py` |
+| S5 | Today taken from reality next to the replay and the x rules, and the invoice mix against the real mix | M1 to M4, M6 | `archives/minimum-sample-size-courier-allocation/scripts/2026-10-20-aggregate-today-real-baseline-v2.py` | `sim-v2-orders.csv` | `outputs/today-real-baseline-v2.csv` | none needed | `python3 archives/minimum-sample-size-courier-allocation/scripts/2026-10-20-aggregate-today-real-baseline-v2.py` |
+| S6 | Why the replay's invoice winner differs from the courier that shipped | M8 | `archives/minimum-sample-size-courier-allocation/scripts/2026-10-20-aggregate-replay-mismatch-v1.py` | the same inputs as S1 | `outputs/replay-mismatch-v1.csv` | none needed | `python3 archives/minimum-sample-size-courier-allocation/scripts/2026-10-20-aggregate-replay-mismatch-v1.py` |
 
 The 9-order example scripts (steps 1 to 8, in `scripts/`) are the worked example Tejas vetted; S1 reproduces them exactly.
 
@@ -187,8 +203,9 @@ The 9-order example scripts (steps 1 to 8, in `scripts/`) are the worked example
 - **Orders delivered after 30 Sep are not in the shipment files**, so their outcome is unknown. Placed dates up to 24 Sep keep the order-placed rows found in the shipment files above 97% (99.0% on average for 29 Jul to 31 Aug; `sim-v2-matchrate.csv`).
 
 ## Caveats and confidence
-- **The replay of today's rule is close but not exact.** The replayed promise equals the real promise on 61.4% of orders, and the replayed invoice winner is the courier that shipped on 63.9% (M8). Real adherence is 81.0%, against 74.5% for M1 under today's replay (S2, S1). Real orders carry drop and pickup buffers and promise buffers that this simulation sets to zero. Trust the change between rules more than the level of any single figure.
-- **M2 compares different orders under each rule.** M2 covers the 41% to 44% of orders whose courier would not change under x, against 64% under today's rule. The like-for-like check (table 6) shows how much of the M2 gain comes with a longer promise.
+- **The replay of today's rule does not reproduce reality.** Real orders were shipped by the courier allocated at invoice, so today (real) has M3 = 0 and M2 = M1 = 81.0%. The replay picks a different courier on 36.1% of orders (M8 63.9%) and a different promise on 38.6%, because it sets drop and pickup buffers to zero and may differ from the real system in other ways (table 5). That is why "today" is shown both ways and why the change from x is read against the replay.
+- **M2 compares different orders under each rule.** M2 covers the 41% to 44% of orders whose courier would not change under x (all of them under today (real)). The like-for-like check (table 6) shows how much of the M2 gain comes with a longer promise.
+- **Today's courier at order placed is not in the data.** Only the shipping courier is, so the order-placed mix (M5) is measured against the replay.
 - **Late September is incomplete** (see Definitions), which is why the headline stops at 24 Sep. Tejas said orders delivered in October still count, but the October files are not in the project, so those orders cannot be scored.
 - **Lanes without cutoffs get no schedule adjustment**: warehouse 30 for 195, 225 and 286 (not confirmed by Tejas) and warehouse 27.
 - **Open data questions from the brief remain**: the two zero adherence pairs, the 15-day promise spike, the default TAT where a config row is missing (3 days used), and the cause of the missing order-placed rows (excluded).
@@ -198,5 +215,6 @@ The 9-order example scripts (steps 1 to 8, in `scripts/`) are the worked example
 
 ## Next check
 - Get the orders placed 25 to 30 Sep that were delivered in October, then rerun to extend the window to 30 Sep.
-- Explain the replay gap (drop and pickup buffers, promise buffers) before using the levels, for example by adding drop buffers if Tejas can supply them.
+- Close the replay gap before using the levels: test how the real rule differs (drop and pickup buffers, promise buffers, how lanes without recent orders are treated), so that today's replay reproduces the courier and promise that really happened.
+- Get the courier allocated at order placed (soft allocation) per order, so the order-placed mix can be measured against reality.
 - Test whether the courier shifts at x = 20 (195 down 8.9 points, 286 and 247 up 4.7 and 3.8) are acceptable operationally.
