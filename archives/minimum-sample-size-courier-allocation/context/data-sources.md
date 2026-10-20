@@ -4,7 +4,7 @@
 
 | File | Description | Window | Grain | Produced by | Location |
 |------|-------------|--------|-------|-------------|----------|
-| example.csv | What it holds | 2026-07-01 to 2026-07-31 | one row per order | `queries-dump/<file>.md` or Metabase export | `raw-data/example.csv` (local only) |
+| goi-pincode-directory.csv | GOI All India Pincode Directory, Sept 2026: district, division, state per post office | Sept 2026 snapshot | one row per post office (165,627 rows, 19,586 pincodes) | Tejas, from Google Sheets export | `raw-data/goi-pincode-directory.csv` (local only) |
 
 ## Documents and external sources
 
