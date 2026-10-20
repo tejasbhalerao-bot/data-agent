@@ -4,7 +4,7 @@ job: model
 status: saved
 awaiting: []
 assumptions: []
-signed_off: false
+signed_off: true
 as_of: 2026-10-20
 ---
 

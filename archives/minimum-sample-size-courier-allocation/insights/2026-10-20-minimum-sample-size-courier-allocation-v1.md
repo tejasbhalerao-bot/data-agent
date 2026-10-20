@@ -1,12 +1,14 @@
 ---
 project: minimum-sample-size-courier-allocation
 job: model
-status: saved
+status: superseded
 awaiting: []
 assumptions: []
 signed_off: false
 as_of: 2026-10-20
 ---
+
+> Superseded on 2026-10-20 by `2026-10-20-minimum-sample-size-courier-allocation-results-v1.md` and `2026-10-20-minimum-sample-size-courier-allocation-brief-v1.md`, which replace this combined note. Kept for history; its headline and its M1 definition no longer stand.
 
 # What happens to adherence, and to the customer's promise, if a lane needs at least x orders before its TAT and adherence count?
 

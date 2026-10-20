@@ -4,7 +4,7 @@ job: model
 status: saved
 awaiting: []
 assumptions: []
-signed_off: false
+signed_off: true
 as_of: 2026-10-20
 ---
 
@@ -110,4 +110,4 @@ Run command for the simulation: `python3 archives/minimum-sample-size-courier-al
 
 ## 10. Approval
 
-The original brief was approved on 2026-10-20 ("the brief seems okay now"). This version restates it with the simplified metrics you asked for the same day (adherence and promise on matched orders only, today taken from reality). Not yet approved in this form.
+The original brief was approved on 2026-10-20 ("the brief seems okay now"). This version restates it with the simplified metrics (adherence and promise on matched orders only, today taken from reality). Approved and signed off by Tejas on 2026-10-20, together with the results document.
