@@ -24,19 +24,36 @@ Orders placed 29 Jul to 24 Sep 2026: 940,480 orders. Every table below is on the
 
 A matched order is one where the courier the rule allocates at invoice is the courier that really shipped it. "Today" is reality: the real promise against the real delivery, on the same orders.
 
+**Orders that can be compared (M3)**
+
 | | x = 10 | x = 15 | x = 20 |
-|---|---|---|---|
+|---|---:|---:|---:|
 | Matched orders | 414,585 | 395,433 | 383,706 |
-| M3: share of orders matched | 44.1% | 42.1% | 40.8% |
-| **M1: adherence, today** | 83.11% | 83.13% | 83.12% |
-| **M1: adherence, under x** | 85.07% | 85.29% | 85.51% |
-| M1: change | +1.96 pts | +2.17 pts | +2.40 pts |
-| **M2: average promise, today** | 2.186 days | 2.180 days | 2.178 days |
-| **M2: average promise, under x** | 2.256 days | 2.253 days | 2.262 days |
-| M2: change | +0.070 days | +0.073 days | +0.084 days |
-| M2: orders with a longer promise than today | 18.9% | 19.9% | 21.0% |
-| M2: orders with a shorter promise than today | 11.1% | 11.6% | 11.7% |
-| M2: orders with the same promise as today | 70.0% | 68.5% | 67.3% |
+| Share of all orders | 44.1% | 42.1% | 40.8% |
+
+**Adherence, % of matched orders on time (M1)**
+
+| | x = 10 | x = 15 | x = 20 |
+|---|---:|---:|---:|
+| Today | 83.11 | 83.13 | 83.12 |
+| Under x | 85.07 | 85.29 | 85.51 |
+| **Change (points)** | **+1.96** | **+2.17** | **+2.40** |
+
+**Average promise, days (M2)**
+
+| | x = 10 | x = 15 | x = 20 |
+|---|---:|---:|---:|
+| Today | 2.186 | 2.180 | 2.178 |
+| Under x | 2.256 | 2.253 | 2.262 |
+| **Change (days)** | **+0.070** | **+0.073** | **+0.084** |
+
+**Promise under x compared with today's, % of matched orders (M2)**
+
+| | x = 10 | x = 15 | x = 20 |
+|---|---:|---:|---:|
+| Longer | 18.9 | 19.9 | 21.0 |
+| Same | 70.0 | 68.5 | 67.3 |
+| Shorter | 11.1 | 11.6 | 11.7 |
 
 Source: `outputs/results-matched-orders-v1.csv`, "complete dates", group "all" (script S10).
 
