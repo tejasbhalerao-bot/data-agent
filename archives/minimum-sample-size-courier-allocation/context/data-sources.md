@@ -10,7 +10,8 @@
 
 | Source | Description | Location |
 |--------|-------------|----------|
-| PRD / sheet / Mixpanel | What it holds | link |
+| PM agent docs (read only) | The three allocation strategies' PRDs | `~/pm-agent/context/allocation/` |
+| Project context | How allocation works today, as stated by Tejas | `context/2026-10-20-allocation-strategies-today-v1.md` |
 
 ## Project-specific rules
 Filters, cohorts or quirks that apply only to this project. Shared rules go in `context/rules.md`.
