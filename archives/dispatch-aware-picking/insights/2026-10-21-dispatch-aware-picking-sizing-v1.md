@@ -33,18 +33,7 @@ Courier often changes between Order Placed, Doctor Order Confirmed, Processing a
 - Out of scope: delivery time and customer delivery promise. This initiative moves dispatch adherence only.
 
 ### Metrics and cuts
-- M1: % of orders whose courier changed, for each step: Order Placed to Doctor Confirmed, Doctor Confirmed to Processing, Processing to Invoice, Invoice to Post Payment Pending
-  - Cuts: warehouse, SDD x inventory, payment type, payment pending flag
-- M2: % of orders whose dispatch time changed after picking started (Processing to shipping), and by how much (later or earlier)
-  - Cuts: as M1
-- M3: Dispatch adherence against the promised dispatch time: % on time, early, late
-  - Sub-cuts: orders with a courier change after Processing; orders without
-  - Cuts: as M1
-- M4: Hours an order sits in the warehouse between pick complete and actual dispatch
-  - Sub-cuts: as M3
-- M5 (sizing): orders and warehouse hours that dispatch-aware picking could recover
-
-Metric definitions for M1 to M5 are proposed here for approval; they are not added to `metrics.md`.
+To be established later.
 
 ### Grain and output columns
 - One row is: one order.
