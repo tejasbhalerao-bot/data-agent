@@ -37,7 +37,7 @@ To be established later.
 
 ### Grain and output columns
 - One row is: one order.
-- Columns (36, requested from engineering):
+- Columns (42, requested from engineering):
 
 | # | Field |
 |---|-------|
@@ -77,11 +77,16 @@ To be established later.
 | 34 | pickup_buffer |
 | 35 | wh_assigned_ts |
 | 36 | wh_fulfilled_ts |
+| 37 | doctor_confirmed_is_sdd |
+| 38 | doctor_confirmed_is_inventory |
+| 39 | processing_is_sdd |
+| 40 | processing_is_inventory |
+| 41 | payment_pending_is_sdd |
+| 42 | payment_pending_is_inventory |
 
 ### Open points for engineering
 - Is `processing_ts` the moment picking starts, or does picking start separately (fields 22 and 23)?
 - Is `dispatch_time` the courier's pickup cutoff, plus any buffer?
-- Do `is_sdd` and `is_inventory` change between stages? If they do, we need them at Doctor Confirmed and Processing as well.
 - Is the courier and dispatch time recorded at each of the five stages, or only the final one?
 
 ### Sizing assumptions (Tejas to give low, base and high)
@@ -91,7 +96,7 @@ To be established later.
 | Share of the order's idle warehouse hours that picking at the right time would remove | | | |
 
 ### What will be produced
-A note with the headline range, results by case, floor and ceiling, what moves the answer and the evidence. One query request to engineering for the 36 fields, then scripts that calculate every figure.
+A note with the headline range, results by case, floor and ceiling, what moves the answer and the evidence. One query request to engineering for the 42 fields, then scripts that calculate every figure.
 
 ### To approve
 Reply "ok" to start, or say what to change.
@@ -106,7 +111,7 @@ Not yet.
 Pending.
 
 ## Caveats and confidence
-Pending. Feasibility of the 36 fields is unconfirmed with engineering.
+Pending. Feasibility of the 42 fields is unconfirmed with engineering.
 
 ## Next check
 Pending.
