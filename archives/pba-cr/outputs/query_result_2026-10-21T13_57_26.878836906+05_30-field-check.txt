@@ -1,0 +1,125 @@
+File: query_result_2026-10-21T13_57_26.878836906+05_30.csv
+Rows: 63116
+Distinct ORDER_ID: 63116  duplicate rows by ORDER_ID: 0
+ORDER_PLACED_AT range: 2026-10-20 00:00 to 2026-10-20 23:59
+Orders by placement date: 20 Oct 63116
+
+== 0. Record flags and fill counts, all rows ==
+  HAS_SOFT_RECORD: false 63116
+  HAS_HARD_RECORD: false 63116
+  HAS_SHIPMENT_RECORD: false 47520, true 15596
+  IS_FALLBACK_PROMISE: false 61665, true 1430, <blank> 21
+  FLOW: <blank> 63116
+  Columns with no value in any row (63 of 90): FLOW, DELIVERY_TYPE, PAYMENT_MODE, PBA_IN_ROLLOUT, SOFT_PROMISE_AT, SOFT_CALLER, SOFT_SCREEN, PBA_IS_COLD_CHAIN, PBA_IS_EXPRESS_ELIGIBLE, SOFT_SERVED_CANDIDATE_TYPE, SOFT_SERVED_PARTNER, SOFT_SERVED_DISPATCH_TIME, SOFT_SERVED_DELIVERY_TIME, SOFT_MATCHED_FLAG, PBA_EVALUATED, PBA_DECISION, PBA_DECISION_DETAIL, PBA_TO_INTERNAL_TAT_RATIO, PBA_SOFT_SELECTED_TYPE, PBA_SOFT_SELECTED_DELIVERY_PARTNER, PBA_SOFT_SELECTED_PARTNER_TAT_IN_DAYS, PBA_PROJECTED_DISPATCH_TIME, PBA_PROJECTED_DELIVERY_TIME, PBA_PICKUP_BUFFER, PBA_DROP_BUFFER, PBA_IS_EXPRESS, PBA_CACHE_LOOKUP, PBA_CACHE_AGE_MINUTES, PBA_CUTOFF_WINDOW, PBA_SOFT_PREFERENCE_ARRAY, PBA_DELIVERY_FROM_PROCESSING_ENABLED, PBA_PICKUP_BUFFER_ENABLED, PBA_DROP_BUFFER_ENABLED, PBA_CACHE_LAST_CACHED_AT, INTERNAL_CANDIDATE_TYPE, INTERNAL_SOFT_SELECTED_DELIVERY_PARTNER, INTERNAL_SOFT_SELECTED_PARTNER_TAT_IN_DAYS, INTERNAL_PROJECTED_DISPATCH_TIME, INTERNAL_PROJECTED_DELIVERY_TIME, INTERNAL_PICKUP_BUFFER, INTERNAL_DROP_BUFFER, INTERNAL_IS_EXPRESS, INTERNAL_SOFT_PREFERENCE_ARRAY, HARD_REQUEST_ID, HARD_ALLOCATED_AT, HARD_OUTCOME, HARD_SELECTED_CANDIDATE_TYPE, HARD_BOOKED_PARTNER, HARD_BOOKED_TAT_IN_DAYS, HARD_WH_PROCESSING_TIME, PBA_HARD_DECISION, PBA_HARD_SELECTED_DELIVERY_PARTNER, PBA_HARD_PARTNER_TAT_IN_DAYS, PBA_HARD_PROJECTED_DISPATCH_TIME, PBA_HARD_PROJECTED_DELIVERY_TIME, PBA_HARD_PREFERENCE_ARRAY, INTERNAL_HARD_CANDIDATE_TYPE, INTERNAL_HARD_SELECTED_DELIVERY_PARTNER, INTERNAL_HARD_PARTNER_TAT_IN_DAYS, INTERNAL_HARD_PROJECTED_DISPATCH_TIME, INTERNAL_HARD_PROJECTED_DELIVERY_TIME, INTERNAL_HARD_PREFERENCE_ARRAY, AWB_PRINT_TS
+  Rows with a non-numeric ORDER_ID: 21
+    ORDER_ID: filled 21/21, e.g. ['TM17GHFNHH0TV01', 'TM2BQ9CC39NM801', 'TM2VX228T5P3M01']
+    CUSTOMER_ID: filled 21/21, e.g. ['10576526', '13910', '15010325']
+    ORDER_PLACED_AT: filled 21/21, e.g. ['Oct 20, 2026, 10:16 PM', 'Oct 20, 2026, 10:49 PM', 'Oct 20, 2026, 11:25 AM']
+    ETA_DETAILS_VERSION: filled 21/21, e.g. ['1']
+    PROMISE_REQUEST_ID: filled 21/21, e.g. ['100ae98d-8e22-419c-8961-697a9bc6d692', '2c91c8a1-5bcb-422c-90be-d7df9e90cd74', '2d49de39-df83-4203-8358-eb4148964798']
+    HAS_SOFT_RECORD: filled 21/21, e.g. ['false']
+    HAS_HARD_RECORD: filled 21/21, e.g. ['false']
+    HAS_SHIPMENT_RECORD: filled 21/21, e.g. ['false']
+    PROMISED_WAREHOUSE_PROCESSING_TIME: filled 21/21, e.g. ['Oct 20, 2026, 10:00 PM', 'Oct 20, 2026, 10:02 PM', 'Oct 20, 2026, 10:56 PM']
+    PROMISED_DISPATCH_TIME: filled 21/21, e.g. ['Oct 20, 2026, 4:30 PM', 'Oct 20, 2026, 5:45 PM', 'Oct 21, 2026, 10:30 AM']
+    PROMISED_DELIVERY_TIME: filled 21/21, e.g. ['Oct 21, 2026, 10:30 AM', 'Oct 21, 2026, 12:00 PM', 'Oct 22, 2026, 10:30 AM']
+    SOFT_MATCHED: filled 21/21, e.g. ['false']
+
+== 1. Columns present ==
+  [x] ORDER_ID  (every metric)
+  [x] SDD_ENABLED  (S1 M1; every base)
+  [x] SOFT_SERVED_CANDIDATE_TYPE  (S1 M2-M3; PBA and Internal bases)
+  [x] PBA_IN_ROLLOUT  (S1 M3)
+  [x] HARD_SELECTED_CANDIDATE_TYPE  (Hard PBA and Hard Internal bases)
+  [x] WH_ID  (lanes (S2 M9-M10, M13; S3 M2; S4 lane adjusted))
+  [x] PINCODE  (lanes)
+  [x] PROMISED_WAREHOUSE_PROCESSING_TIME  (S2 M1-M4, M9; S4 M1)
+  [x] PBA_PROJECTED_DISPATCH_TIME  (S2 M5, M8, M10; S4 M2)
+  [x] PBA_PROJECTED_DELIVERY_TIME  (S2 M1, M4, M5, M8-M10; S4 M1-M2)
+  [x] INTERNAL_PROJECTED_DISPATCH_TIME  (S2 M6-M7, M10; S4 M2)
+  [x] INTERNAL_PROJECTED_DELIVERY_TIME  (S2 M2-M3, M6-M7, M9-M10; S4 M1-M2)
+  [x] SOFT_SERVED_PARTNER  (S3 M1-M2 soft)
+  [x] HARD_BOOKED_PARTNER  (S3 M1-M2 hard)
+  [x] PBA_HARD_PROJECTED_DISPATCH_TIME  (S2 M11, M13; S4 M4)
+  [x] PBA_HARD_PROJECTED_DELIVERY_TIME  (S2 M11, M13; S4 M3-M4)
+  [x] HARD_WH_PROCESSING_TIME  (S4 M3)
+  [x] INTERNAL_HARD_PARTNER_TAT_IN_DAYS  (S2 M12-M13; S4 M4)
+  [x] BOX_VERIFIED_TS  (S4 M1, M3 (actual start))
+  [x] PICKUP_TIME  (S1 M5; S4 M2, M4 (actual start))
+  [x] DELIVERY_ATTEMPT_TIME  (S1 M6; S4 every measure (actual))
+
+== 2. Bases ==
+  Non-SDD (SDD_ENABLED = 'false'): 37554
+  PBA base: 0   Internal base: 0
+  Hard PBA base: 0   Hard Internal base: 0
+  Common lane set: 0 lanes  (PBA-base lanes 0, Internal-base lanes 0)
+  PBA base on common lanes: 0   Internal base on common lanes: 0
+  Hard PBA base on common lanes: 0   Hard Internal base on common lanes: 0
+
+== 3. Values in the expected format ==
+  [ ] SDD_ENABLED: 21 unexpected, e.g. ['']
+  [x] PBA_IN_ROLLOUT: 0 unexpected
+  [x] SOFT_SERVED_CANDIDATE_TYPE: 0 unexpected
+  [x] HARD_SELECTED_CANDIDATE_TYPE: 0 unexpected
+  [ ] ORDER_ID: 21 unexpected, e.g. ['TM17GHFNHH0TV01', 'TM2BQ9CC39NM801', 'TM2VX228T5P3M01', 'TM7H8BX8WSH4301', 'TMB9TFPDHVKTB01']
+  [x] WH_ID: 0 unexpected
+  [x] PINCODE: 0 unexpected
+  [x] INTERNAL_HARD_PARTNER_TAT_IN_DAYS: 0 unexpected
+  [x] ORDER_PLACED_AT: 0 unexpected
+  [x] PROMISED_WAREHOUSE_PROCESSING_TIME: 0 unexpected
+  [x] PBA_PROJECTED_DISPATCH_TIME: 0 unexpected
+  [x] PBA_PROJECTED_DELIVERY_TIME: 0 unexpected
+  [x] INTERNAL_PROJECTED_DISPATCH_TIME: 0 unexpected
+  [x] INTERNAL_PROJECTED_DELIVERY_TIME: 0 unexpected
+  [x] HARD_WH_PROCESSING_TIME: 0 unexpected
+  [x] PBA_HARD_PROJECTED_DISPATCH_TIME: 0 unexpected
+  [x] PBA_HARD_PROJECTED_DELIVERY_TIME: 0 unexpected
+  [x] BOX_VERIFIED_TS: 0 unexpected
+  [x] PICKUP_TIME: 0 unexpected
+  [x] DELIVERY_ATTEMPT_TIME: 0 unexpected
+  SOFT_SERVED_CANDIDATE_TYPE values: <blank> 63116
+  HARD_SELECTED_CANDIDATE_TYPE values: <blank> 63116
+  PBA_IN_ROLLOUT values: <blank> 63116
+  SDD_ENABLED values: false 37554, true 25541, <blank> 21
+
+== 4. Fill rate in the base each column serves ==
+  ORDER_ID: all rows 63116/63116 (100.0%)
+  SDD_ENABLED: all rows 63095/63116 (100.0%)
+  SOFT_SERVED_CANDIDATE_TYPE: non-SDD 0/37554 (0.0%)
+  PBA_IN_ROLLOUT: non-SDD 0/37554 (0.0%)
+  HARD_SELECTED_CANDIDATE_TYPE: non-SDD 0/37554 (0.0%)
+  WH_ID: PBA base 0/0 (n/a); Internal base 0/0 (n/a)
+  PINCODE: PBA base 0/0 (n/a); Internal base 0/0 (n/a)
+  PROMISED_WAREHOUSE_PROCESSING_TIME: PBA base 0/0 (n/a); Internal base 0/0 (n/a)
+  PBA_PROJECTED_DISPATCH_TIME: PBA base 0/0 (n/a); Internal base 0/0 (n/a)
+  PBA_PROJECTED_DELIVERY_TIME: PBA base 0/0 (n/a); Internal base 0/0 (n/a)
+  INTERNAL_PROJECTED_DISPATCH_TIME: PBA base 0/0 (n/a); Internal base 0/0 (n/a)
+  INTERNAL_PROJECTED_DELIVERY_TIME: PBA base 0/0 (n/a); Internal base 0/0 (n/a)
+  SOFT_SERVED_PARTNER: PBA base 0/0 (n/a); Internal base 0/0 (n/a)
+  HARD_BOOKED_PARTNER: Hard PBA + Hard Internal 0/0 (n/a)
+  PBA_HARD_PROJECTED_DISPATCH_TIME: Hard PBA base 0/0 (n/a)
+  PBA_HARD_PROJECTED_DELIVERY_TIME: Hard PBA base 0/0 (n/a)
+  HARD_WH_PROCESSING_TIME: Hard PBA base 0/0 (n/a)
+  INTERNAL_HARD_PARTNER_TAT_IN_DAYS: Hard Internal base 0/0 (n/a)
+  BOX_VERIFIED_TS: PBA base 0/0 (n/a); Internal base 0/0 (n/a)
+  PICKUP_TIME: PBA base 0/0 (n/a); Internal base 0/0 (n/a)
+  DELIVERY_ATTEMPT_TIME: PBA base 0/0 (n/a); Internal base 0/0 (n/a)
+
+== 5. Data errors the mapping leaves out and reports ==
+  negative days, PBA base: PROMISED_WAREHOUSE_PROCESSING_TIME -> PBA_PROJECTED_DELIVERY_TIME: 0
+  negative days, PBA base: PBA_PROJECTED_DISPATCH_TIME -> PBA_PROJECTED_DELIVERY_TIME: 0
+  negative days, Internal base: PROMISED_WAREHOUSE_PROCESSING_TIME -> INTERNAL_PROJECTED_DELIVERY_TIME: 0
+  negative days, Internal base: INTERNAL_PROJECTED_DISPATCH_TIME -> INTERNAL_PROJECTED_DELIVERY_TIME: 0
+  negative days, Hard PBA base: PBA_HARD_PROJECTED_DISPATCH_TIME -> PBA_HARD_PROJECTED_DELIVERY_TIME: 0
+  negative days, Hard PBA base: HARD_WH_PROCESSING_TIME -> PBA_HARD_PROJECTED_DELIVERY_TIME: 0
+  negative days, all rows: BOX_VERIFIED_TS -> DELIVERY_ATTEMPT_TIME: 0
+  negative days, all rows: PICKUP_TIME -> DELIVERY_ATTEMPT_TIME: 2
+  negative INTERNAL_HARD_PARTNER_TAT_IN_DAYS, Hard Internal base: 0
+  attempted but BOX_VERIFIED_TS blank (any base, counted per base membership): 0
+  attempted but PICKUP_TIME blank (any base, counted per base membership): 0
+
+== 6. Actuals available for Sections 1 and 4 ==
+  PBA base: picked up 0/0 (n/a); delivery attempted 0/0 (n/a)
+  Internal base: picked up 0/0 (n/a); delivery attempted 0/0 (n/a)
+  Hard PBA base: picked up 0/0 (n/a); delivery attempted 0/0 (n/a)
+  Hard Internal base: picked up 0/0 (n/a); delivery attempted 0/0 (n/a)
