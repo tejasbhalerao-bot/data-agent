@@ -37,7 +37,7 @@ To be established later.
 
 ### Grain and output columns
 - One row is: one order.
-- Columns (34, requested from engineering):
+- Columns (36, requested from engineering):
 
 | # | Field |
 |---|-------|
@@ -75,6 +75,8 @@ To be established later.
 | 32 | is_air |
 | 33 | is_cold_chain |
 | 34 | pickup_buffer |
+| 35 | wh_assigned_ts |
+| 36 | wh_fulfilled_ts |
 
 ### Open points for engineering
 - Is `processing_ts` the moment picking starts, or does picking start separately (fields 22 and 23)?
@@ -89,7 +91,7 @@ To be established later.
 | Share of the order's idle warehouse hours that picking at the right time would remove | | | |
 
 ### What will be produced
-A note with the headline range, results by case, floor and ceiling, what moves the answer and the evidence. One query request to engineering for the 34 fields, then scripts that calculate every figure.
+A note with the headline range, results by case, floor and ceiling, what moves the answer and the evidence. One query request to engineering for the 36 fields, then scripts that calculate every figure.
 
 ### To approve
 Reply "ok" to start, or say what to change.
@@ -104,7 +106,7 @@ Not yet.
 Pending.
 
 ## Caveats and confidence
-Pending. Feasibility of the 34 fields is unconfirmed with engineering.
+Pending. Feasibility of the 36 fields is unconfirmed with engineering.
 
 ## Next check
 Pending.
