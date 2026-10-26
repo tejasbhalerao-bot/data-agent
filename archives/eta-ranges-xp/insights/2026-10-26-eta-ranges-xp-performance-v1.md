@@ -4,7 +4,7 @@ job: measure
 status: saved
 awaiting: []
 assumptions: [dashboard reports apply the PRD cohort (ETA > 1 day, app, logged in), conversion window as saved in each report]
-signed_off: false
+signed_off: true
 as_of: 2026-10-26
 ---
 
