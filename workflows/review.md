@@ -9,7 +9,7 @@ Three checks run at fixed points. None can be skipped, not even for a quick answ
 
 | Check | When | What is checked |
 |---|---|---|
-| 1. Query | Before Tejas runs it | Each query file and the "Queries to run" table |
+| 1. Query | Before it is run | Each query file and the "Queries to run" table |
 | 2. CSV | When a CSV arrives | Each CSV in `raw-data/` |
 | 3. Note | Before the note is presented | The whole note |
 

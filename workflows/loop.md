@@ -34,13 +34,13 @@ If the approved brief's "Data from" column needs no query or CSV (for example a 
    - **Versions.** A query changed after Tejas has seen it (for example an error fix) is a new version of its file (`-v2`, `-v3`); earlier versions stay.
 4. **Probe.** One combined query, in its own file (`<project>-<topic>-probe-query`): row count, distinct key count, and one total that reconciles to a known figure (from a signed-off note or from Tejas; if none exists, skip the reconciliation and say so).
 5. **Check the query** (`review.md`), then add a **"Queries to run"** section to the same note (the one holding the approved brief). It is a table with the columns ID (Q1, Q2…; the probe is Q0), Purpose, Serves (the M-IDs it supplies data for; the probe serves none), Latest file (full path from the repo root, with version), and Save the CSV as (full path in `raw-data/`). The note only references the query files; it never contains SQL. When a query gets a new version, update its row to the latest.
-   Set the note's `status: awaiting-data`, fill `awaiting:`, commit the note and the query files locally, and tell Tejas in chat that the queries are ready, with the note's path.
+   Set the note's `status: awaiting-data`, fill `awaiting:`, commit the note and the query files locally, then run them (phase 4).
 
 ## 4. Run
-1. Tejas runs the queries once, opening each file listed in the note's "Queries to run" table. When he next writes, check `raw-data/` for the expected files first; do not ask him to say "done". If he pastes an error, a timeout or an odd result: diagnose, write a new version of the query, update its row in the table, and re-present from phase 3. Record any new quirk beside its table in `schema.md` through `update-context`. If the query was split, run the merge script and check the combined file.
+1. Run each query listed in the note's "Queries to run" table yourself, through the Metabase connection (`mcp__metabase__execute_query`, database from `context/schema.md`; PROD_SILVER_DB is id 1192), and save the rows as a CSV at the path in its "Save the CSV as" column. Run a `COUNT(*)` of the same query too: if the result has fewer rows, Metabase cut it short, so aggregate in SQL or split the window. On an error, a timeout or an odd result: diagnose, write a new version of the query, update its row in the table, and re-present from phase 3. Record any new quirk beside its table in `schema.md` through `update-context`. If the query was split, run the merge script and check the combined file.
 2. **Check the CSV:** `python3 scripts/validate-csv.py <file> --key <grain columns> --require <needed columns> --date-col <date column> --probe rows=<n> --probe distinct=<n>`, with the values from the brief and the probe.
    - **FAIL from a query fault** (wrong columns, duplicate rows): fix the query, back to phase 3.
-   - **FAIL from a wrong export** (cut short, wrong filters in Metabase): tell Tejas plainly what failed and ask him to re-export.
+   - **FAIL from a cut-short result**: split the window or aggregate in SQL, and run it again.
 
 ## 5. Answer
 1. **All figures come from code.** Never read numbers off a CSV by eye.
