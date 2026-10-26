@@ -4,7 +4,7 @@ job: measure
 status: saved
 awaiting: []
 assumptions: [counts taken from Mixpanel dashboard 11538578 (data from 2026-09-19, end date not stated), fulfilment guardrail not checked]
-signed_off: false
+signed_off: true
 as_of: 2026-10-26
 ---
 
