@@ -13,6 +13,7 @@ Which raw-dump fields compute each dashboard number, and exactly how. Numbering 
 
 ### Scope
 - **No date filter for now.** A metric covers every row of the dump, or of the combined dumps.
+- **PBA promise rule (Tejas, 2026-10-26):** PBA always gives a dispatch-to-delivery time; its soft delivery = dispatch + PBA TAT. The dashboard window is chosen so this always holds (after the 19 Oct 7:16 PM IST flip of `PBA_DELIVERY_FROM_PROCESSING_ENABLED`). WH to Delivery metrics stay: they capture the dead time between warehouse processing and dispatch, so a longer gap can raise the customer ETA even when logistics TAT falls.
 - **One row per order.** `ORDER_ID` is unique within a dump.
 - **Combining dumps:** stack the dumps and keep one row per `ORDER_ID`. Where an order is in more than one dump, keep the row from the dump extracted last (the highest dump number, e.g. dump 4 over dump 3).
 
