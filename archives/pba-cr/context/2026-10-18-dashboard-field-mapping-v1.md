@@ -29,6 +29,7 @@ Which raw-dump fields compute each dashboard number, and exactly how. Numbering 
 
 - **"Not blank"** means the value is a non-empty string after trimming spaces.
 - **Any value outside these lists** (a new allocation type, a flag that is not `true`, `false` or empty, a timestamp that does not parse) stops the build and is reported. It is never guessed.
+- **Exception: orders with a blank `SDD_ENABLED`** are left out of every metric and base, and their count is reported with each refresh (Tejas, 2026-10-26). The 20 Oct export had 21, with IDs like `TM17GHFNHH0TV01`.
 
 ### Promise days (Sections 2 and 4)
 - **Promise days** = calendar date of the later timestamp − calendar date of the earlier one, both in IST. Example: 15 Oct 11:30 PM to 17 Oct 8:00 AM = 2 days. Never hours ÷ 24.
