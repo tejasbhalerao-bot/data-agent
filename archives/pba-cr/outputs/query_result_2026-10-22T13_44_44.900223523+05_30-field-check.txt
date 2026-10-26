@@ -1,0 +1,113 @@
+File: query_result_2026-10-22T13_44_44.900223523+05_30.csv
+Rows: 10
+Distinct ORDER_ID: 10  duplicate rows by ORDER_ID: 0
+ORDER_PLACED_AT range: 2026-10-14 16:16 to 2026-10-14 20:55
+Orders by placement date: 14 Oct 10
+
+== 0. Record flags and fill counts, all rows ==
+  HAS_SOFT_RECORD: true 8, false 2
+  HAS_HARD_RECORD: true 10
+  HAS_SHIPMENT_RECORD: true 10
+  IS_FALLBACK_PROMISE: false 10
+  FLOW: COURIER 8, <blank> 2
+  Columns with no value in any row (5 of 90): PBA_TO_INTERNAL_TAT_RATIO, PBA_DELIVERY_FROM_PROCESSING_ENABLED, INTERNAL_HARD_PROJECTED_DISPATCH_TIME, INTERNAL_HARD_PROJECTED_DELIVERY_TIME, AWB_PRINT_TS
+
+== 1. Columns present ==
+  [x] ORDER_ID  (every metric)
+  [x] SDD_ENABLED  (S1 M1; every base)
+  [x] SOFT_SERVED_CANDIDATE_TYPE  (S1 M2-M3; PBA and Internal bases)
+  [x] PBA_IN_ROLLOUT  (S1 M3)
+  [x] HARD_SELECTED_CANDIDATE_TYPE  (Hard PBA and Hard Internal bases)
+  [x] WH_ID  (lanes (S2 M9-M10, M13; S3 M2; S4 lane adjusted))
+  [x] PINCODE  (lanes)
+  [x] PROMISED_WAREHOUSE_PROCESSING_TIME  (S2 M1-M4, M9; S4 M1)
+  [x] PBA_PROJECTED_DISPATCH_TIME  (S2 M5, M8, M10; S4 M2)
+  [x] PBA_PROJECTED_DELIVERY_TIME  (S2 M1, M4, M5, M8-M10; S4 M1-M2)
+  [x] INTERNAL_PROJECTED_DISPATCH_TIME  (S2 M6-M7, M10; S4 M2)
+  [x] INTERNAL_PROJECTED_DELIVERY_TIME  (S2 M2-M3, M6-M7, M9-M10; S4 M1-M2)
+  [x] SOFT_SERVED_PARTNER  (S3 M1-M2 soft)
+  [x] HARD_BOOKED_PARTNER  (S3 M1-M2 hard)
+  [x] PBA_HARD_PROJECTED_DISPATCH_TIME  (S2 M11, M13; S4 M4)
+  [x] PBA_HARD_PROJECTED_DELIVERY_TIME  (S2 M11, M13; S4 M3-M4)
+  [x] HARD_WH_PROCESSING_TIME  (S4 M3)
+  [x] INTERNAL_HARD_PARTNER_TAT_IN_DAYS  (S2 M12-M13; S4 M4)
+  [x] BOX_VERIFIED_TS  (S4 M1, M3 (actual start))
+  [x] PICKUP_TIME  (S1 M5; S4 M2, M4 (actual start))
+  [x] DELIVERY_ATTEMPT_TIME  (S1 M6; S4 every measure (actual))
+
+== 2. Bases ==
+  Non-SDD (SDD_ENABLED = 'false'): 8
+  PBA base: 0   Internal base: 8
+  Hard PBA base: 0   Hard Internal base: 8
+  Common lane set: 0 lanes  (PBA-base lanes 0, Internal-base lanes 8)
+  PBA base on common lanes: 0   Internal base on common lanes: 0
+  Hard PBA base on common lanes: 0   Hard Internal base on common lanes: 0
+
+== 3. Values in the expected format ==
+  [x] SDD_ENABLED: 0 unexpected
+  [x] PBA_IN_ROLLOUT: 0 unexpected
+  [x] SOFT_SERVED_CANDIDATE_TYPE: 0 unexpected
+  [x] HARD_SELECTED_CANDIDATE_TYPE: 0 unexpected
+  [x] ORDER_ID: 0 unexpected
+  [x] WH_ID: 0 unexpected
+  [x] PINCODE: 0 unexpected
+  [x] INTERNAL_HARD_PARTNER_TAT_IN_DAYS: 0 unexpected
+  [x] ORDER_PLACED_AT: 0 unexpected
+  [x] PROMISED_WAREHOUSE_PROCESSING_TIME: 0 unexpected
+  [x] PBA_PROJECTED_DISPATCH_TIME: 0 unexpected
+  [x] PBA_PROJECTED_DELIVERY_TIME: 0 unexpected
+  [x] INTERNAL_PROJECTED_DISPATCH_TIME: 0 unexpected
+  [x] INTERNAL_PROJECTED_DELIVERY_TIME: 0 unexpected
+  [x] HARD_WH_PROCESSING_TIME: 0 unexpected
+  [x] PBA_HARD_PROJECTED_DISPATCH_TIME: 0 unexpected
+  [x] PBA_HARD_PROJECTED_DELIVERY_TIME: 0 unexpected
+  [x] BOX_VERIFIED_TS: 0 unexpected
+  [x] PICKUP_TIME: 0 unexpected
+  [x] DELIVERY_ATTEMPT_TIME: 0 unexpected
+  SOFT_SERVED_CANDIDATE_TYPE values: COURIER_LEGACY_TAT_ADHERENCE 4, COURIER_DDB_TAT_ADHERENCE 4, <blank> 2
+  HARD_SELECTED_CANDIDATE_TYPE values: COURIER_LEGACY_TAT_ADHERENCE 4, COURIER_DDB_TAT_ADHERENCE 4, SDD 2
+  PBA_IN_ROLLOUT values: false 8, <blank> 2
+  SDD_ENABLED values: false 8, true 2
+
+== 4. Fill rate in the base each column serves ==
+  ORDER_ID: all rows 10/10 (100.0%)
+  SDD_ENABLED: all rows 10/10 (100.0%)
+  SOFT_SERVED_CANDIDATE_TYPE: non-SDD 8/8 (100.0%)
+  PBA_IN_ROLLOUT: non-SDD 8/8 (100.0%)
+  HARD_SELECTED_CANDIDATE_TYPE: non-SDD 8/8 (100.0%)
+  WH_ID: PBA base 0/0 (n/a); Internal base 8/8 (100.0%)
+  PINCODE: PBA base 0/0 (n/a); Internal base 8/8 (100.0%)
+  PROMISED_WAREHOUSE_PROCESSING_TIME: PBA base 0/0 (n/a); Internal base 8/8 (100.0%)
+  PBA_PROJECTED_DISPATCH_TIME: PBA base 0/0 (n/a); Internal base 8/8 (100.0%)
+  PBA_PROJECTED_DELIVERY_TIME: PBA base 0/0 (n/a); Internal base 8/8 (100.0%)
+  INTERNAL_PROJECTED_DISPATCH_TIME: PBA base 0/0 (n/a); Internal base 8/8 (100.0%)
+  INTERNAL_PROJECTED_DELIVERY_TIME: PBA base 0/0 (n/a); Internal base 8/8 (100.0%)
+  SOFT_SERVED_PARTNER: PBA base 0/0 (n/a); Internal base 8/8 (100.0%)
+  HARD_BOOKED_PARTNER: Hard PBA + Hard Internal 8/8 (100.0%)
+  PBA_HARD_PROJECTED_DISPATCH_TIME: Hard PBA base 0/0 (n/a)
+  PBA_HARD_PROJECTED_DELIVERY_TIME: Hard PBA base 0/0 (n/a)
+  HARD_WH_PROCESSING_TIME: Hard PBA base 0/0 (n/a)
+  INTERNAL_HARD_PARTNER_TAT_IN_DAYS: Hard Internal base 8/8 (100.0%)
+  BOX_VERIFIED_TS: PBA base 0/0 (n/a); Internal base 8/8 (100.0%)
+  PICKUP_TIME: PBA base 0/0 (n/a); Internal base 8/8 (100.0%)
+  DELIVERY_ATTEMPT_TIME: PBA base 0/0 (n/a); Internal base 8/8 (100.0%)
+
+== 5. Data errors the mapping leaves out and reports ==
+  negative days, PBA base: PROMISED_WAREHOUSE_PROCESSING_TIME -> PBA_PROJECTED_DELIVERY_TIME: 0
+  negative days, PBA base: PBA_PROJECTED_DISPATCH_TIME -> PBA_PROJECTED_DELIVERY_TIME: 0
+  negative days, Internal base: PROMISED_WAREHOUSE_PROCESSING_TIME -> INTERNAL_PROJECTED_DELIVERY_TIME: 0
+  negative days, Internal base: INTERNAL_PROJECTED_DISPATCH_TIME -> INTERNAL_PROJECTED_DELIVERY_TIME: 0
+  negative days, Hard PBA base: PBA_HARD_PROJECTED_DISPATCH_TIME -> PBA_HARD_PROJECTED_DELIVERY_TIME: 0
+  negative days, Hard PBA base: HARD_WH_PROCESSING_TIME -> PBA_HARD_PROJECTED_DELIVERY_TIME: 0
+  negative days, all rows: BOX_VERIFIED_TS -> DELIVERY_ATTEMPT_TIME: 0
+  negative days, all rows: PICKUP_TIME -> DELIVERY_ATTEMPT_TIME: 0
+  negative INTERNAL_HARD_PARTNER_TAT_IN_DAYS, Hard Internal base: 0
+  attempted but BOX_VERIFIED_TS blank (any base, counted per base membership): 0
+  attempted but PICKUP_TIME blank (any base, counted per base membership): 0
+  INTERNAL_HARD_PARTNER_TAT_IN_DAYS: min 1.0, max 4.0, whole numbers 8/8
+
+== 6. Actuals available for Sections 1 and 4 ==
+  PBA base: picked up 0/0 (n/a); delivery attempted 0/0 (n/a)
+  Internal base: picked up 8/8 (100.0%); delivery attempted 8/8 (100.0%)
+  Hard PBA base: picked up 0/0 (n/a); delivery attempted 0/0 (n/a)
+  Hard Internal base: picked up 8/8 (100.0%); delivery attempted 8/8 (100.0%)
