@@ -4,7 +4,7 @@ job: measure
 status: saved
 awaiting: []
 assumptions: [primary metric is Placed to Delivered and Summary to Placed is the guardrail (the PRD is mistaken, per Tejas 2026-10-26), dashboard report filters apply the PRD cohort]
-signed_off: false
+signed_off: true
 as_of: 2026-10-26
 ---
 
