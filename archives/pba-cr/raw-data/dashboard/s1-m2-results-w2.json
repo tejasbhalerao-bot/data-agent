@@ -1,0 +1,174 @@
+{
+ "run_at_utc": "2026-10-30T09:28:03Z",
+ "window": [
+  "2026-10-22 12:00:00 +0530",
+  "2026-10-26 00:00:00 +0530"
+ ],
+ "columns": [
+  "sdd_enabled",
+  "has_soft_record",
+  "pba_in_rollout",
+  "soft_served_candidate_type",
+  "n_rows",
+  "n_orders"
+ ],
+ "full_trimmed": {
+  "base_md5": "d95f13de42df09028347ff567fe72cd4",
+  "total": [
+   252190,
+   252190
+  ],
+  "rows": [
+   [
+    "false",
+    "false",
+    null,
+    null,
+    4287,
+    4287
+   ],
+   [
+    "false",
+    "true",
+    "false",
+    "COURIER_LEGACY_TAT_ADHERENCE",
+    161638,
+    161638
+   ],
+   [
+    "false",
+    "true",
+    "false",
+    "NONE",
+    769,
+    769
+   ],
+   [
+    "false",
+    "true",
+    "true",
+    "COURIER_LEGACY_TAT_ADHERENCE",
+    42,
+    42
+   ],
+   [
+    "false",
+    "true",
+    "true",
+    "COURIER_PBA",
+    8491,
+    8491
+   ],
+   [
+    "true",
+    "false",
+    null,
+    null,
+    75309,
+    75309
+   ],
+   [
+    null,
+    "false",
+    null,
+    null,
+    1654,
+    1654
+   ]
+  ]
+ },
+ "slice_1h_trimmed": {
+  "base_md5": "56c2419c1da40c5e2f1a349d4556d1d8",
+  "rows": [
+   [
+    "false",
+    "false",
+    null,
+    null,
+    68,
+    68
+   ],
+   [
+    "false",
+    "true",
+    "false",
+    "COURIER_LEGACY_TAT_ADHERENCE",
+    2631,
+    2631
+   ],
+   [
+    "false",
+    "true",
+    "false",
+    "NONE",
+    15,
+    15
+   ],
+   [
+    "false",
+    "true",
+    "true",
+    "COURIER_LEGACY_TAT_ADHERENCE",
+    1,
+    1
+   ],
+   [
+    "false",
+    "true",
+    "true",
+    "COURIER_PBA",
+    136,
+    136
+   ],
+   [
+    "true",
+    "false",
+    null,
+    null,
+    1099,
+    1099
+   ],
+   [
+    null,
+    "false",
+    null,
+    null,
+    17,
+    17
+   ]
+  ],
+  "total": [
+   3967,
+   3967
+  ]
+ },
+ "slice_1h_full_base_file": "raw-data/dashboard/s1-m2-slice-fullbase.json",
+ "slice_1m_trimmed_sql": [
+  [
+   "false",
+   "true",
+   "false",
+   "COURIER_LEGACY_TAT_ADHERENCE",
+   47,
+   47
+  ],
+  [
+   "false",
+   "true",
+   "true",
+   "COURIER_PBA",
+   3,
+   3
+  ],
+  [
+   "true",
+   "false",
+   null,
+   null,
+   26,
+   26
+  ]
+ ],
+ "slice_1m_raw_file": "raw-data/dashboard/s1-m2-recount-raw.json",
+ "m1_total_non_sdd": 175227
+}

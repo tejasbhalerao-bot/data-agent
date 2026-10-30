@@ -1,0 +1,19 @@
+Checks: query text
+  [PASS] 1-hour slice ran Tejas's base query verbatim (only window dates changed)
+  [PASS] 1-hour slice trimmed query = saved trimmed text
+  [PASS] full-window trimmed query = saved trimmed text
+  [PASS] trimmed CTEs are copied word for word from the base query (window end date 26 Oct)
+Checks: trimming changes nothing
+  [PASS] 1-hour slice: full base and trimmed base give identical counts
+Checks: independent recount (Python from raw promise versions, 23 Oct 10:00-10:02)
+  [PASS] raw pull not truncated
+  [PASS] SQL = Python on the slice (false 108, true 46, total 154)
+Checks: full-window result
+  [PASS] one row per order in every group
+  [PASS] false + true + blank = all orders
+  [PASS] every blank SDD_ENABLED order has a non-numeric (TM...) ID, and no other order does
+  [PASS] every order placed inside the window
+
+S1 M1  Total Non-SDD Orders = 175,227
+       Window: 2026-10-22 12:00:00 +0530 to 2026-10-26 00:00:00 +0530 (run 2026-10-30T09:27:50Z)
+       Left out (blank SDD_ENABLED): 1,654   SDD orders: 75,309   All orders in window: 252,190
