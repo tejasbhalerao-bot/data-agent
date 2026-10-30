@@ -38,6 +38,7 @@ Which raw-dump fields compute each dashboard number, and exactly how. Numbering 
 
 - **"Not blank"** means the value is a non-empty string after trimming spaces.
 - **Any value outside these lists** (a new allocation type, a flag that is not `true`, `false` or empty, a timestamp that does not parse) stops the build and is reported. It is never guessed.
+- **Placed orders only (Tejas, 2026-10-30):** the promise record is written at add-to-cart, so the base query also returns carts that never became orders. Every metric drops orders whose latest `prod_silver_db.main_db.order_details.orderstatus` (joined on `order_id = ORDER_ID`, latest copy by `ingestion_ts_ist`) is **49 (INCOMPLETE ORDER)** or **312 (SCRAPPED)**. Discarded (174) and cancelled (57) orders are kept. The filter sits outside the base query; orders with no `order_details` row are kept and counted.
 - **Exception: orders with a blank `SDD_ENABLED`** are left out of every metric and base, and their count is reported with each refresh (Tejas, 2026-10-26). The 20 Oct export had 21, with IDs like `TM17GHFNHH0TV01`.
 
 ### Promise days (Sections 2 and 4)
