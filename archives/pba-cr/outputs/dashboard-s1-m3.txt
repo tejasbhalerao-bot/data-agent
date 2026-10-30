@@ -1,0 +1,15 @@
+Checks: numerator, order by order from raw records (all orders in the numerator)
+  [PASS] raw pull part 0 not truncated (1082 rows)
+  [PASS] raw pull part 1 not truncated (834 rows)
+  [PASS] raw pull part 2 not truncated (979 rows)
+  [PASS] raw pulls cover every numerator order (86 = 86)
+  [PASS] every order meets the definition on its raw records: placed in window, SDD false, in rollout, not served by PBA (86/86)
+Checks: result
+  [PASS] denominator = metric 1 (366,852)
+  [PASS] in-rollout orders = served by PBA + failed
+
+S1 M3  % of non-SDD orders failed to allocate through PBA while in rollout = 0.02%  (shown as 0.0%)
+       served by COURIER_LEGACY_TAT_ADHERENCE: 85
+       served by COURIER_DDB_TAT_ADHERENCE: 0
+       served by NONE: 1
+       86 / Total Non-SDD 366,852 (run 2026-10-30T09:05:34Z)
