@@ -1,0 +1,9 @@
+{
+ "run_at_utc": "2026-10-30T08:48:47Z",
+ "window": ["2026-10-22 12:00:00 +0530", "2026-10-30 00:00:00 +0530"],
+ "full_trimmed": {"base_md5": "97d746df569f1f0f774059aea026e51a", "rows": [["false",366852,366852,0],["true",151460,151460,0],[null,3806,3806,3806],["TOTAL",522118,522118,3806]], "min_placed": "2026-10-22 12:00:02.000 +0530", "max_placed": "2026-10-29 23:59:58.000 +0530"},
+ "slice_1h_full_base": {"window": ["2026-10-23 10:00:00 +0530","2026-10-23 11:00:00 +0530"], "base_md5": "262dc0ad4ab8011ec2cc60ca494801b8", "rows": [["false",2851,2851,0],["true",1099,1099,0],[null,17,17,17],["TOTAL",3967,3967,17]]},
+ "slice_1h_trimmed": {"window": ["2026-10-23 10:00:00 +0530","2026-10-23 11:00:00 +0530"], "base_md5": "db89c81a3f2a422530ce7b4080cec138", "rows": [["false",2851,2851,0],["true",1099,1099,0],[null,17,17,17],["TOTAL",3967,3967,17]]},
+ "slice_2m_trimmed_sql": {"window": ["2026-10-23 10:00:00 +0530","2026-10-23 10:02:00 +0530"], "rows": [["false",108,108],["true",46,46],["TOTAL",154,154]]},
+ "slice_2m_raw_versions_file": "/Users/Tejas/.claude/projects/-Users-Tejas-data-agent/4d692d6d-bd47-4186-b3fc-416ebfd52572/tool-results/mcp-metabase-execute_query-1793350174814.txt"
+}
