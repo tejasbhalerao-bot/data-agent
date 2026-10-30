@@ -9,6 +9,15 @@ status: complete, all four sections mapped (2026-10-18). Section 4 metrics 2–4
 
 Which raw-dump fields compute each dashboard number, and exactly how. Numbering follows the wireframe (https://claude.ai/artifact/XX9QtrxQWPMfiofjq2TjX7). Every metric is read with the rules in this first part; a metric never overrides them.
 
+## Sign-off on query v2.1 (Tejas, 2026-10-30)
+
+| Section | Signed off | On hold |
+|---|---|---|
+| 1. Funnel | Metrics 1–6 | None |
+| 2. Promise | Sub-section 1, metrics 1–10. The buffer open point on metrics 4 and 8 is closed. | Sub-section 2 (hard), metrics 11–13 |
+| 3. Courier Allocation Mix | Metrics 1–2 | None |
+| 4. Adherence | Sub-section 1 (soft), metrics 1–2, all lanes and lane adjusted | Sub-section 2 (hard), metrics 3–4 |
+
 ## Rules for every metric
 
 ### Scope
