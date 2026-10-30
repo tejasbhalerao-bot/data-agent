@@ -1,0 +1,31 @@
+Checks: query text
+  [PASS] frozen query ran exactly as saved: trimmed base + placed-order filter
+  [PASS] soft query ran exactly as saved: trimmed base + placed-order filter
+  [PASS] soft: trimmed part is the base query's own text (window end 26 Oct)
+  [PASS] shipment query ran exactly as saved: trimmed base + placed-order filter
+  [PASS] shipment: trimmed part is the base query's own text (window end 26 Oct)
+  [PASS] filter drops only statuses 49 and 312; discarded (174) and cancelled (57) are kept
+Checks: the filter reads the right status
+  [PASS] Snowflake order_details (latest copy) = Redshift order_details for all 30 sample orders
+Checks: kept + dropped add back to the verified unfiltered runs
+  [PASS] metric 1 query: same total orders as the unfiltered run, same blank-SDD orders
+     orders that changed SDD flag between the two runs (live data, 12 minutes apart): non-SDD -2, SDD +2
+  [PASS] metrics 2-4 query: same total orders as the unfiltered run
+     groups that moved between the two runs: {('false', 'false', None, None): -1, ('true', 'false', None, None): 2, ('false', 'true', 'false', 'NONE'): -1}
+  [PASS] filtered runs agree with each other: metric 1 query and metrics 2-4 query give the same SDD split, kept and dropped
+  [PASS] metric 5 query: same total orders as the unfiltered run
+     shipment groups that moved between the two runs (pickups/attempts recorded in the 12 minutes between them): {('false', None, 'false', 'false', 'false'): -1, ('true', None, 'false', 'false', 'false'): -9, ('true', None, 'true', 'true', 'true'): 25, ('false', None, 'true', 'true', 'false'): -1, ('false', 'COURIER_LEGACY_TAT_ADHERENCE', 'true', 'true', 'false'): -285, ('true', None, 'true', 'false', 'true'): 1, ('false', 'NONE', 'true', 'true', 'true'): 4, ('false', 'COURIER_PBA', 'true', 'false', 'false'): 2, ('false', 'COURIER_PBA', 'true', 'true', 'true'): 23, ('false', 'COURIER_LEGACY_TAT_ADHERENCE', 'true', 'false', 'false'): 37, ('true', None, 'true', 'true', 'false'): -19, ('false', None, 'true', 'true', 'true'): 1, ('false', 'NONE', 'false', 'false', 'false'): -1, ('false', 'COURIER_LEGACY_TAT_ADHERENCE', 'false', 'false', 'false'): -52, ('false', 'COURIER_LEGACY_TAT_ADHERENCE', 'true', 'true', 'true'): 300, ('false', 'COURIER_PBA', 'false', 'false', 'false'): -3, ('true', None, 'true', 'false', 'false'): 4, ('false', 'NONE', 'true', 'true', 'false'): -4, ('false', 'COURIER_PBA', 'true', 'true', 'false'): -22}
+  [PASS] filtered runs agree with each other: metric 5 query and metrics 2-4 query give the same orders per base, kept and dropped
+  [PASS] no dropped order (incomplete or scrapped) has a shipment, pickup or attempt
+  [PASS] the only orders with no status row are the blank-SDD_ENABLED orders already left out
+Checks: result
+  [PASS] metric 1 = non-SDD total in the metrics 2-4 query
+  [PASS] PBA base + Internal base + served NONE + no soft record = metric 1
+  [PASS] metric 5 bases = metric 4 bases (separate query run)
+  [PASS] every PBA-served order was in rollout
+
+S1 M1  Total Non-SDD Orders = 71,563   (dropped as incomplete/scrapped: 103,662 non-SDD; blank SDD flag left out: 1,654)
+S1 M2  % allocated through PBA = 4.9%   (3,490 / 71,563)
+S1 M3  % failed through PBA in rollout = 0.04%   (26 / 71,563)
+S1 M4  Orders placed: PBA 3,490   Internal 66,747   (neither: served NONE 353, no soft record 973)
+S1 M5  % picked up: PBA 80.7% (2,815 of 3,490)   Internal 81.5% (54,382 of 66,747)

@@ -1,0 +1,479 @@
+{
+ "run_at_utc": {
+  "frozen": "2026-10-30T09:39:34Z",
+  "soft": "2026-10-30T09:39:51Z",
+  "shipment": "2026-10-30T09:40:30Z"
+ },
+ "window": [
+  "2026-10-22 12:00:00 +0530",
+  "2026-10-26 00:00:00 +0530"
+ ],
+ "filter": "drop orders whose latest order_details.orderstatus is 49 (INCOMPLETE ORDER) or 312 (SCRAPPED); keep all others, incl. 174 discarded and 57 cancelled (Tejas, 2026-10-30)",
+ "md5": {
+  "frozen": "4b184ba4cbef9fb66296f130fcbb0b01",
+  "soft": "1286dc36189dac367244d6cf05aa9a88",
+  "shipment": "58896aec1fd96a5c37cb6d385275910d"
+ },
+ "frozen": [
+  [
+   "dropped",
+   "false",
+   103662
+  ],
+  [
+   "dropped",
+   "true",
+   43420
+  ],
+  [
+   "kept",
+   "false",
+   71563
+  ],
+  [
+   "kept",
+   "true",
+   31891
+  ],
+  [
+   "no_status_row",
+   null,
+   1654
+  ]
+ ],
+ "soft": [
+  [
+   "dropped",
+   "false",
+   "false",
+   null,
+   null,
+   3313
+  ],
+  [
+   "dropped",
+   "false",
+   "true",
+   "false",
+   "COURIER_LEGACY_TAT_ADHERENCE",
+   94917
+  ],
+  [
+   "dropped",
+   "false",
+   "true",
+   "false",
+   "NONE",
+   415
+  ],
+  [
+   "dropped",
+   "false",
+   "true",
+   "true",
+   "COURIER_LEGACY_TAT_ADHERENCE",
+   16
+  ],
+  [
+   "dropped",
+   "false",
+   "true",
+   "true",
+   "COURIER_PBA",
+   5001
+  ],
+  [
+   "dropped",
+   "true",
+   "false",
+   null,
+   null,
+   43420
+  ],
+  [
+   "kept",
+   "false",
+   "false",
+   null,
+   null,
+   973
+  ],
+  [
+   "kept",
+   "false",
+   "true",
+   "false",
+   "COURIER_LEGACY_TAT_ADHERENCE",
+   66721
+  ],
+  [
+   "kept",
+   "false",
+   "true",
+   "false",
+   "NONE",
+   353
+  ],
+  [
+   "kept",
+   "false",
+   "true",
+   "true",
+   "COURIER_LEGACY_TAT_ADHERENCE",
+   26
+  ],
+  [
+   "kept",
+   "false",
+   "true",
+   "true",
+   "COURIER_PBA",
+   3490
+  ],
+  [
+   "kept",
+   "true",
+   "false",
+   null,
+   null,
+   31891
+  ],
+  [
+   "no_status_row",
+   null,
+   "false",
+   null,
+   null,
+   1654
+  ]
+ ],
+ "shipment": [
+  [
+   "dropped",
+   "false",
+   "COURIER_LEGACY_TAT_ADHERENCE",
+   "false",
+   "false",
+   "false",
+   94933
+  ],
+  [
+   "dropped",
+   "false",
+   "COURIER_PBA",
+   "false",
+   "false",
+   "false",
+   5001
+  ],
+  [
+   "dropped",
+   "false",
+   "NONE",
+   "false",
+   "false",
+   "false",
+   415
+  ],
+  [
+   "dropped",
+   "false",
+   null,
+   "false",
+   "false",
+   "false",
+   3313
+  ],
+  [
+   "dropped",
+   "true",
+   null,
+   "false",
+   "false",
+   "false",
+   43420
+  ],
+  [
+   "kept",
+   "false",
+   "COURIER_LEGACY_TAT_ADHERENCE",
+   "false",
+   "false",
+   "false",
+   11873
+  ],
+  [
+   "kept",
+   "false",
+   "COURIER_LEGACY_TAT_ADHERENCE",
+   "true",
+   "false",
+   "false",
+   482
+  ],
+  [
+   "kept",
+   "false",
+   "COURIER_LEGACY_TAT_ADHERENCE",
+   "true",
+   "false",
+   "true",
+   10
+  ],
+  [
+   "kept",
+   "false",
+   "COURIER_LEGACY_TAT_ADHERENCE",
+   "true",
+   "true",
+   "false",
+   4767
+  ],
+  [
+   "kept",
+   "false",
+   "COURIER_LEGACY_TAT_ADHERENCE",
+   "true",
+   "true",
+   "true",
+   49615
+  ],
+  [
+   "kept",
+   "false",
+   "COURIER_PBA",
+   "false",
+   "false",
+   "false",
+   641
+  ],
+  [
+   "kept",
+   "false",
+   "COURIER_PBA",
+   "true",
+   "false",
+   "false",
+   33
+  ],
+  [
+   "kept",
+   "false",
+   "COURIER_PBA",
+   "true",
+   "false",
+   "true",
+   1
+  ],
+  [
+   "kept",
+   "false",
+   "COURIER_PBA",
+   "true",
+   "true",
+   "false",
+   220
+  ],
+  [
+   "kept",
+   "false",
+   "COURIER_PBA",
+   "true",
+   "true",
+   "true",
+   2595
+  ],
+  [
+   "kept",
+   "false",
+   "NONE",
+   "false",
+   "false",
+   "false",
+   65
+  ],
+  [
+   "kept",
+   "false",
+   "NONE",
+   "true",
+   "true",
+   "false",
+   45
+  ],
+  [
+   "kept",
+   "false",
+   "NONE",
+   "true",
+   "true",
+   "true",
+   243
+  ],
+  [
+   "kept",
+   "false",
+   null,
+   "false",
+   "false",
+   "false",
+   870
+  ],
+  [
+   "kept",
+   "false",
+   null,
+   "true",
+   "false",
+   "false",
+   2
+  ],
+  [
+   "kept",
+   "false",
+   null,
+   "true",
+   "false",
+   "true",
+   1
+  ],
+  [
+   "kept",
+   "false",
+   null,
+   "true",
+   "true",
+   "false",
+   2
+  ],
+  [
+   "kept",
+   "false",
+   null,
+   "true",
+   "true",
+   "true",
+   98
+  ],
+  [
+   "kept",
+   "true",
+   null,
+   "false",
+   "false",
+   "false",
+   5613
+  ],
+  [
+   "kept",
+   "true",
+   null,
+   "true",
+   "false",
+   "false",
+   13
+  ],
+  [
+   "kept",
+   "true",
+   null,
+   "true",
+   "false",
+   "true",
+   585
+  ],
+  [
+   "kept",
+   "true",
+   null,
+   "true",
+   "true",
+   "false",
+   288
+  ],
+  [
+   "kept",
+   "true",
+   null,
+   "true",
+   "true",
+   "true",
+   25392
+  ],
+  [
+   "no_status_row",
+   null,
+   null,
+   "false",
+   "false",
+   "false",
+   1654
+  ]
+ ],
+ "status_sample": {
+  "snowflake_od": {
+   "16938420": 312,
+   "35196944": 312,
+   "57612121": 55,
+   "57612354": 312,
+   "57612357": 49,
+   "57612359": 55,
+   "57612360": 49,
+   "57612362": 55,
+   "57612363": 312,
+   "57612365": 312,
+   "57612366": 49,
+   "57612368": 312,
+   "57612369": 57,
+   "57612370": 55,
+   "57612372": 312,
+   "57612373": 49,
+   "57612374": 55,
+   "57612375": 49,
+   "57612377": 49,
+   "57612378": 55,
+   "57612379": 55,
+   "57612380": 312,
+   "57612383": 55,
+   "57612384": 49,
+   "57612385": 142,
+   "57612386": 49,
+   "57612387": 49,
+   "57612388": 57,
+   "57612389": 55,
+   "57612391": 55
+  },
+  "redshift_od": {
+   "16938420": 312,
+   "35196944": 312,
+   "57612121": 55,
+   "57612354": 312,
+   "57612357": 49,
+   "57612359": 55,
+   "57612360": 49,
+   "57612362": 55,
+   "57612363": 312,
+   "57612365": 312,
+   "57612366": 49,
+   "57612368": 312,
+   "57612369": 57,
+   "57612370": 55,
+   "57612372": 312,
+   "57612373": 49,
+   "57612374": 55,
+   "57612375": 49,
+   "57612377": 49,
+   "57612378": 55,
+   "57612379": 55,
+   "57612380": 312,
+   "57612383": 55,
+   "57612384": 49,
+   "57612385": 142,
+   "57612386": 49,
+   "57612387": 49,
+   "57612388": 57,
+   "57612389": 55,
+   "57612391": 55
+  }
+ }
+}
