@@ -1,0 +1,8 @@
+Checks
+  [PASS] PBA base + Internal base + served NONE + no soft record = metric 1 (366,852)
+  [PASS] no other served type exists, so the two bases cannot overlap or miss an order
+  [PASS] PBA base matches the base used for S1 M2
+
+S1 M4  Orders placed: PBA 17,804 (100%)   Internal 338,386 (100%)
+       Internal = legacy 338,386 + DDB 0
+       Non-SDD orders in neither base: served NONE 1,501, no soft record 9,161 (run 2026-10-30T09:05:34Z)
