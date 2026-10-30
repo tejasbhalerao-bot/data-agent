@@ -1,0 +1,23 @@
+{
+ "run_at_utc": "2026-10-30T09:05:34Z",
+ "window": ["2026-10-22 12:00:00 +0530", "2026-10-30 00:00:00 +0530"],
+ "columns": ["sdd_enabled", "has_soft_record", "pba_in_rollout", "soft_served_candidate_type", "n_rows", "n_orders"],
+ "full_trimmed": {"base_md5": "fdf4b758431ca18e5a350a0808a89d8c", "rows": [
+   ["false","false",null,null,9161,9161],
+   ["false","true","false","COURIER_LEGACY_TAT_ADHERENCE",338301,338301],
+   ["false","true","false","NONE",1500,1500],
+   ["false","true","true","COURIER_LEGACY_TAT_ADHERENCE",85,85],
+   ["false","true","true","COURIER_PBA",17804,17804],
+   ["false","true","true","NONE",1,1],
+   ["true","false",null,null,151460,151460],
+   [null,"false",null,null,3806,3806]],
+   "total": [522118,522118]},
+ "slice_1h_trimmed": {"base_md5": "56c2419c1da40c5e2f1a349d4556d1d8", "rows": [
+   ["false","false",null,null,68,68],["false","true","false","COURIER_LEGACY_TAT_ADHERENCE",2631,2631],["false","true","false","NONE",15,15],
+   ["false","true","true","COURIER_LEGACY_TAT_ADHERENCE",1,1],["false","true","true","COURIER_PBA",136,136],["true","false",null,null,1099,1099],[null,"false",null,null,17,17]],
+   "total": [3967,3967]},
+ "slice_1h_full_base_file": "raw-data/dashboard/s1-m2-slice-fullbase.json",
+ "slice_1m_trimmed_sql": [["false","true","false","COURIER_LEGACY_TAT_ADHERENCE",47,47],["false","true","true","COURIER_PBA",3,3],["true","false",null,null,26,26]],
+ "slice_1m_raw_file": "raw-data/dashboard/s1-m2-recount-raw.json",
+ "m1_total_non_sdd": 366852
+}

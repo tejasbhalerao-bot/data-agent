@@ -1,0 +1,608 @@
+{
+  "data": {
+    "rows": [
+      [
+        0,
+        "false",
+        "false",
+        null,
+        null,
+        68,
+        68,
+        "262dc0ad4ab8011ec2cc60ca494801b8"
+      ],
+      [
+        0,
+        "false",
+        "true",
+        "false",
+        "COURIER_LEGACY_TAT_ADHERENCE",
+        2631,
+        2631,
+        "262dc0ad4ab8011ec2cc60ca494801b8"
+      ],
+      [
+        0,
+        "false",
+        "true",
+        "false",
+        "NONE",
+        15,
+        15,
+        "262dc0ad4ab8011ec2cc60ca494801b8"
+      ],
+      [
+        0,
+        "false",
+        "true",
+        "true",
+        "COURIER_LEGACY_TAT_ADHERENCE",
+        1,
+        1,
+        "262dc0ad4ab8011ec2cc60ca494801b8"
+      ],
+      [
+        0,
+        "false",
+        "true",
+        "true",
+        "COURIER_PBA",
+        136,
+        136,
+        "262dc0ad4ab8011ec2cc60ca494801b8"
+      ],
+      [
+        0,
+        "true",
+        "false",
+        null,
+        null,
+        1099,
+        1099,
+        "262dc0ad4ab8011ec2cc60ca494801b8"
+      ],
+      [
+        0,
+        null,
+        "false",
+        null,
+        null,
+        17,
+        17,
+        "262dc0ad4ab8011ec2cc60ca494801b8"
+      ],
+      [
+        1,
+        null,
+        null,
+        null,
+        null,
+        3967,
+        3967,
+        "262dc0ad4ab8011ec2cc60ca494801b8"
+      ]
+    ],
+    "results_timezone": "Asia/Kolkata",
+    "csv-include-bom?": true,
+    "download_perms": "full",
+    "results_metadata": {
+      "columns": [
+        {
+          "database_type": "NUMBER",
+          "semantic_type": null,
+          "lib/deduplicated-name": "IS_TOTAL",
+          "lib/original-name": "IS_TOTAL",
+          "name": "IS_TOTAL",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "IS_TOTAL",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "IS_TOTAL",
+            {
+              "base-type": "type/BigInteger"
+            }
+          ],
+          "effective_type": "type/BigInteger",
+          "lib/desired-column-alias": "IS_TOTAL",
+          "display_name": "IS_TOTAL",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 2,
+              "nil%": 0
+            },
+            "type": {
+              "type/Number": {
+                "skewness": 2.8284271247461903,
+                "min": 0,
+                "q1": 0,
+                "q3": 0,
+                "excess-kurtosis": 8,
+                "zero-fraction": 0.875,
+                "mode-fraction": 0.875,
+                "top-3-fraction": 1,
+                "max": 1,
+                "sd": 0.3535533905932738,
+                "avg": 0.125
+              }
+            }
+          },
+          "base_type": "type/BigInteger"
+        },
+        {
+          "database_type": "VARCHAR",
+          "semantic_type": null,
+          "lib/deduplicated-name": "SDD_ENABLED_VALUE",
+          "lib/original-name": "SDD_ENABLED_VALUE",
+          "name": "SDD_ENABLED_VALUE",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "SDD_ENABLED_VALUE",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "SDD_ENABLED_VALUE",
+            {
+              "base-type": "type/Text"
+            }
+          ],
+          "effective_type": "type/Text",
+          "lib/desired-column-alias": "SDD_ENABLED_VALUE",
+          "display_name": "SDD_ENABLED_VALUE",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 3,
+              "nil%": 0.25
+            },
+            "type": {
+              "type/Text": {
+                "percent-json": 0,
+                "percent-url": 0,
+                "percent-email": 0,
+                "percent-state": 0,
+                "percent-blank": 0.25,
+                "average-length": 3.625,
+                "mode-fraction": 0.625,
+                "top-3-fraction": 1
+              }
+            }
+          },
+          "base_type": "type/Text"
+        },
+        {
+          "database_type": "VARCHAR",
+          "semantic_type": null,
+          "lib/deduplicated-name": "HAS_SOFT_RECORD_VALUE",
+          "lib/original-name": "HAS_SOFT_RECORD_VALUE",
+          "name": "HAS_SOFT_RECORD_VALUE",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "HAS_SOFT_RECORD_VALUE",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "HAS_SOFT_RECORD_VALUE",
+            {
+              "base-type": "type/Text"
+            }
+          ],
+          "effective_type": "type/Text",
+          "lib/desired-column-alias": "HAS_SOFT_RECORD_VALUE",
+          "display_name": "HAS_SOFT_RECORD_VALUE",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 3,
+              "nil%": 0.125
+            },
+            "type": {
+              "type/Text": {
+                "percent-json": 0,
+                "percent-url": 0,
+                "percent-email": 0,
+                "percent-state": 0,
+                "percent-blank": 0.125,
+                "average-length": 3.875,
+                "mode-fraction": 0.5,
+                "top-3-fraction": 1
+              }
+            }
+          },
+          "base_type": "type/Text"
+        },
+        {
+          "database_type": "VARCHAR",
+          "semantic_type": null,
+          "lib/deduplicated-name": "PBA_IN_ROLLOUT_VALUE",
+          "lib/original-name": "PBA_IN_ROLLOUT_VALUE",
+          "name": "PBA_IN_ROLLOUT_VALUE",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "PBA_IN_ROLLOUT_VALUE",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "PBA_IN_ROLLOUT_VALUE",
+            {
+              "base-type": "type/Text"
+            }
+          ],
+          "effective_type": "type/Text",
+          "lib/desired-column-alias": "PBA_IN_ROLLOUT_VALUE",
+          "display_name": "PBA_IN_ROLLOUT_VALUE",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 3,
+              "nil%": 0.5
+            },
+            "type": {
+              "type/Text": {
+                "percent-json": 0,
+                "percent-url": 0,
+                "percent-email": 0,
+                "percent-state": 0,
+                "percent-blank": 0.5,
+                "average-length": 2.25,
+                "mode-fraction": 0.5,
+                "top-3-fraction": 1
+              }
+            }
+          },
+          "base_type": "type/Text"
+        },
+        {
+          "database_type": "VARCHAR",
+          "semantic_type": "type/Category",
+          "lib/deduplicated-name": "SOFT_SERVED_CANDIDATE_TYPE",
+          "lib/original-name": "SOFT_SERVED_CANDIDATE_TYPE",
+          "name": "SOFT_SERVED_CANDIDATE_TYPE",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "SOFT_SERVED_CANDIDATE_TYPE",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "SOFT_SERVED_CANDIDATE_TYPE",
+            {
+              "base-type": "type/Text"
+            }
+          ],
+          "effective_type": "type/Text",
+          "lib/desired-column-alias": "SOFT_SERVED_CANDIDATE_TYPE",
+          "display_name": "SOFT_SERVED_CANDIDATE_TYPE",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 4,
+              "nil%": 0.5
+            },
+            "type": {
+              "type/Text": {
+                "percent-json": 0,
+                "percent-url": 0,
+                "percent-email": 0,
+                "percent-state": 0,
+                "percent-blank": 0.5,
+                "average-length": 8.875,
+                "mode-fraction": 0.5,
+                "top-3-fraction": 0.875
+              }
+            }
+          },
+          "base_type": "type/Text"
+        },
+        {
+          "database_type": "NUMBER",
+          "semantic_type": null,
+          "lib/deduplicated-name": "N_ROWS",
+          "lib/original-name": "N_ROWS",
+          "name": "N_ROWS",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "N_ROWS",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "N_ROWS",
+            {
+              "base-type": "type/BigInteger"
+            }
+          ],
+          "effective_type": "type/BigInteger",
+          "lib/desired-column-alias": "N_ROWS",
+          "display_name": "N_ROWS",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 8,
+              "nil%": 0
+            },
+            "type": {
+              "type/Number": {
+                "skewness": 1.4575353077712716,
+                "min": 1,
+                "q1": 15,
+                "q3": 1099,
+                "excess-kurtosis": 0.9651758219526982,
+                "zero-fraction": 0,
+                "mode-fraction": 0.125,
+                "top-3-fraction": 0.375,
+                "max": 3967,
+                "sd": 1512.9036179290658,
+                "avg": 991.75
+              }
+            }
+          },
+          "base_type": "type/BigInteger"
+        },
+        {
+          "database_type": "NUMBER",
+          "semantic_type": null,
+          "lib/deduplicated-name": "N_ORDERS",
+          "lib/original-name": "N_ORDERS",
+          "name": "N_ORDERS",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "N_ORDERS",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "N_ORDERS",
+            {
+              "base-type": "type/BigInteger"
+            }
+          ],
+          "effective_type": "type/BigInteger",
+          "lib/desired-column-alias": "N_ORDERS",
+          "display_name": "N_ORDERS",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 8,
+              "nil%": 0
+            },
+            "type": {
+              "type/Number": {
+                "skewness": 1.4575353077712716,
+                "min": 1,
+                "q1": 15,
+                "q3": 1099,
+                "excess-kurtosis": 0.9651758219526982,
+                "zero-fraction": 0,
+                "mode-fraction": 0.125,
+                "top-3-fraction": 0.375,
+                "max": 3967,
+                "sd": 1512.9036179290658,
+                "avg": 991.75
+              }
+            }
+          },
+          "base_type": "type/BigInteger"
+        },
+        {
+          "database_type": "VARCHAR",
+          "semantic_type": null,
+          "lib/deduplicated-name": "BASE_MD5",
+          "lib/original-name": "BASE_MD5",
+          "name": "BASE_MD5",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "BASE_MD5",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "BASE_MD5",
+            {
+              "base-type": "type/Text"
+            }
+          ],
+          "effective_type": "type/Text",
+          "lib/desired-column-alias": "BASE_MD5",
+          "display_name": "BASE_MD5",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 1,
+              "nil%": 0
+            },
+            "type": {
+              "type/Text": {
+                "percent-json": 0,
+                "percent-url": 0,
+                "percent-email": 0,
+                "percent-state": 0,
+                "percent-blank": 0,
+                "average-length": 32,
+                "mode-fraction": 1,
+                "top-3-fraction": 1
+              }
+            }
+          },
+          "base_type": "type/Text"
+        }
+      ]
+    },
+    "requested_timezone": "Asia/Kolkata",
+    "format-rows?": true,
+    "cols": [
+      {
+        "database_type": "NUMBER",
+        "lib/deduplicated-name": "IS_TOTAL",
+        "lib/original-name": "IS_TOTAL",
+        "name": "IS_TOTAL",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "IS_TOTAL",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "IS_TOTAL",
+          {
+            "base-type": "type/BigInteger"
+          }
+        ],
+        "effective_type": "type/BigInteger",
+        "lib/desired-column-alias": "IS_TOTAL",
+        "display_name": "IS_TOTAL",
+        "base_type": "type/BigInteger"
+      },
+      {
+        "database_type": "VARCHAR",
+        "lib/deduplicated-name": "SDD_ENABLED_VALUE",
+        "lib/original-name": "SDD_ENABLED_VALUE",
+        "name": "SDD_ENABLED_VALUE",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "SDD_ENABLED_VALUE",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "SDD_ENABLED_VALUE",
+          {
+            "base-type": "type/Text"
+          }
+        ],
+        "effective_type": "type/Text",
+        "lib/desired-column-alias": "SDD_ENABLED_VALUE",
+        "display_name": "SDD_ENABLED_VALUE",
+        "base_type": "type/Text"
+      },
+      {
+        "database_type": "VARCHAR",
+        "lib/deduplicated-name": "HAS_SOFT_RECORD_VALUE",
+        "lib/original-name": "HAS_SOFT_RECORD_VALUE",
+        "name": "HAS_SOFT_RECORD_VALUE",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "HAS_SOFT_RECORD_VALUE",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "HAS_SOFT_RECORD_VALUE",
+          {
+            "base-type": "type/Text"
+          }
+        ],
+        "effective_type": "type/Text",
+        "lib/desired-column-alias": "HAS_SOFT_RECORD_VALUE",
+        "display_name": "HAS_SOFT_RECORD_VALUE",
+        "base_type": "type/Text"
+      },
+      {
+        "database_type": "VARCHAR",
+        "lib/deduplicated-name": "PBA_IN_ROLLOUT_VALUE",
+        "lib/original-name": "PBA_IN_ROLLOUT_VALUE",
+        "name": "PBA_IN_ROLLOUT_VALUE",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "PBA_IN_ROLLOUT_VALUE",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "PBA_IN_ROLLOUT_VALUE",
+          {
+            "base-type": "type/Text"
+          }
+        ],
+        "effective_type": "type/Text",
+        "lib/desired-column-alias": "PBA_IN_ROLLOUT_VALUE",
+        "display_name": "PBA_IN_ROLLOUT_VALUE",
+        "base_type": "type/Text"
+      },
+      {
+        "database_type": "VARCHAR",
+        "lib/deduplicated-name": "SOFT_SERVED_CANDIDATE_TYPE",
+        "lib/original-name": "SOFT_SERVED_CANDIDATE_TYPE",
+        "name": "SOFT_SERVED_CANDIDATE_TYPE",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "SOFT_SERVED_CANDIDATE_TYPE",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "SOFT_SERVED_CANDIDATE_TYPE",
+          {
+            "base-type": "type/Text"
+          }
+        ],
+        "effective_type": "type/Text",
+        "lib/desired-column-alias": "SOFT_SERVED_CANDIDATE_TYPE",
+        "display_name": "SOFT_SERVED_CANDIDATE_TYPE",
+        "base_type": "type/Text"
+      },
+      {
+        "database_type": "NUMBER",
+        "lib/deduplicated-name": "N_ROWS",
+        "lib/original-name": "N_ROWS",
+        "name": "N_ROWS",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "N_ROWS",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "N_ROWS",
+          {
+            "base-type": "type/BigInteger"
+          }
+        ],
+        "effective_type": "type/BigInteger",
+        "lib/desired-column-alias": "N_ROWS",
+        "display_name": "N_ROWS",
+        "base_type": "type/BigInteger"
+      },
+      {
+        "database_type": "NUMBER",
+        "lib/deduplicated-name": "N_ORDERS",
+        "lib/original-name": "N_ORDERS",
+        "name": "N_ORDERS",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "N_ORDERS",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "N_ORDERS",
+          {
+            "base-type": "type/BigInteger"
+          }
+        ],
+        "effective_type": "type/BigInteger",
+        "lib/desired-column-alias": "N_ORDERS",
+        "display_name": "N_ORDERS",
+        "base_type": "type/BigInteger"
+      },
+      {
+        "database_type": "VARCHAR",
+        "lib/deduplicated-name": "BASE_MD5",
+        "lib/original-name": "BASE_MD5",
+        "name": "BASE_MD5",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "BASE_MD5",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "BASE_MD5",
+          {
+            "base-type": "type/Text"
+          }
+        ],
+        "effective_type": "type/Text",
+        "lib/desired-column-alias": "BASE_MD5",
+        "display_name": "BASE_MD5",
+        "base_type": "type/Text"
+      }
+    ],
+    "native_form": {
+      "lib/type": "mbql.stage/native",
+      "query": "WITH base AS (\nWITH params AS (\n    SELECT '2026-10-23 10:00:00 +0530'::TIMESTAMP_TZ AS start_ts,\n           '2026-10-23 11:00:00 +0530'::TIMESTAMP_TZ AS end_ts\n),\n\n\n-- the same window as IST wall-clock, for the NTZ instrumentation tables\nparams_ist AS (\n    SELECT CONVERT_TIMEZONE('Asia/Kolkata', start_ts)::TIMESTAMP_NTZ AS start_ist,\n           CONVERT_TIMEZONE('Asia/Kolkata', end_ts)::TIMESTAMP_NTZ   AS end_ist\n    FROM params\n),\n\n\n-- latest version of each order's promise, with its placement time taken over all versions\nfrozen AS (\n    SELECT v.*\n    FROM (\n        SELECT d.*,\n               MIN(d.created_at) OVER (PARTITION BY d.reference_id) AS order_placed_at\n        FROM prod_silver_db.logistics.serviceability_eta_details d\n        QUALIFY ROW_NUMBER() OVER (PARTITION BY d.reference_id ORDER BY TRY_TO_NUMBER(d.version) DESC) = 1\n    ) v\n    CROSS JOIN params p\n    WHERE v.order_placed_at >= p.start_ts AND v.order_placed_at < p.end_ts\n),\n\n\nshipment AS (\n    SELECT s.*\n    FROM prod_silver_db.logistics.logistics_shipment_details s\n    JOIN frozen f ON f.reference_id = s.reference_id\n    WHERE COALESCE(s.is_deleted, FALSE) = FALSE\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY TRY_TO_NUMBER(s.version) DESC) = 1\n),\n\n\n-- ETA records of the cohort's orders\neta_inst AS (\n    SELECT i.*,\n           TRY_PARSE_JSON(TO_VARCHAR(i.eval_candidates)) AS cands\n    FROM prod_silver_db.logistics.logistics_eta_instrumentation i\n    JOIN frozen f ON f.reference_id = i.reference_id\n    CROSS JOIN params_ist p\n    WHERE i.created_at >= DATEADD(day, -1, p.start_ist)      -- a promise can be computed shortly before the order is placed\n      AND i.created_at <  DATEADD(day, 10, p.end_ist)\n),\n\n\n-- hard-allocation records of the cohort's orders\nhard_inst AS (\n    SELECT i.*,\n           TRY_PARSE_JSON(TO_VARCHAR(i.eval_candidates)) AS cands\n    FROM prod_silver_db.logistics.logistics_hard_allocation_instrumentation i\n    JOIN frozen f ON f.reference_id = i.reference_id\n    CROSS JOIN params_ist p\n    WHERE i.created_at >= DATEADD(day, -1, p.start_ist)\n      AND i.created_at <  DATEADD(day, 10, p.end_ist)        -- hard allocations land after the soft window\n),\n\n\n-- ---------- SOFT: the ETA record of the promise that stands ----------\nsoft AS (\n    SELECT i.*\n    FROM eta_inst i\n    JOIN frozen f ON f.reference_id = i.reference_id AND f.request_id = i.request_id\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY i.reference_id ORDER BY i.created_at DESC) = 1\n),\n\n\nsoft_pba AS (\n    SELECT s.reference_id,\n           MAX(c.value:evaluated::BOOLEAN)                                             AS pba_evaluated,\n           MAX(c.value:decision::STRING)                                               AS pba_decision,\n           MAX(c.value:decision_detail::STRING)                                        AS pba_decision_detail,\n           MAX(c.value:pba_to_internal_tat_ratio::FLOAT)                               AS pba_to_internal_tat_ratio,\n           MAX(c.value:source::STRING)                                                 AS pba_source,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',           e.value:delivery_partner_id,\n               'tat_in_minutes',    e.value:delivery_tat_in_minutes,\n               'dispatch_time',     e.value:dispatch_time,\n               'delivery_time',     e.value:delivery_time,\n               'eligible',          e.value:eligible,\n               'is_express',        e.value:is_express,\n               'cache_lookup',      e.value:cache_row:cache_lookup,\n               'cache_age_minutes', e.value:cache_row:cache_age_minutes,\n               'cutoff_window',     e.value:cache_row:cutoff_window\n           )) WITHIN GROUP (ORDER BY e.index)                                          AS pba_soft_preference_array\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates, OUTER => TRUE) e\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n    GROUP BY s.reference_id\n),\n\n\n-- PBA's soft pick: the top-ranked PBA partner (first eligible in PBA's order), whether or not it was served\nsoft_pba_pick AS (\n    SELECT s.reference_id,\n           e.value:delivery_partner_id::NUMBER                                         AS pba_partner,\n           e.value:delivery_tat_in_minutes::NUMBER                                     AS pba_tat_in_minutes,\n           TRY_TO_TIMESTAMP_TZ(e.value:dispatch_time::STRING)                          AS pba_dispatch_time,\n           TRY_TO_TIMESTAMP_TZ(e.value:delivery_time::STRING)                          AS pba_delivery_time,\n           e.value:is_express::BOOLEAN                                                 AS pba_is_express,\n           e.value:cache_row:cache_lookup::STRING                                      AS pba_cache_lookup,\n           e.value:cache_row:cache_age_minutes::NUMBER                                 AS pba_cache_age_minutes,\n           e.value:cache_row:cutoff_window::STRING                                     AS pba_cutoff_window,\n           TRY_TO_TIMESTAMP_TZ(e.value:cache_row:last_cached_at::STRING)               AS pba_cache_last_cached_at\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates) e\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n      AND e.value:eligible::BOOLEAN\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY e.index) = 1\n),\n\n\n-- PBA buffers and buffered times on the soft side (present only when PBA was served)\nsoft_pba_buffer AS (\n    SELECT s.reference_id,\n           b.value:pickup_buffer_in_minutes::NUMBER                                    AS pba_pickup_buffer,\n           b.value:drop_buffer_in_minutes::NUMBER                                      AS pba_drop_buffer,\n           TRY_TO_TIMESTAMP_TZ(b.value:dispatch_time::STRING)                          AS pba_buffered_dispatch_time,\n           TRY_TO_TIMESTAMP_TZ(b.value:delivery_time::STRING)                          AS pba_buffered_delivery_time\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:buffer_adjusted_candidates) b\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n      AND b.value:rank::NUMBER = 1\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY b.index) = 1\n),\n\n\n-- Internal soft side: the evaluated internal store (pharmacist or DDB TAT adherence), ranked after buffers.\n-- Rank 1 is internal's pick whether or not it was served.\nsoft_internal AS (\n    SELECT s.reference_id,\n           MAX(c.value:candidate_type::STRING)                                                          AS internal_candidate_type,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:delivery_partner_id::NUMBER, NULL))                AS internal_partner,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:delivery_tat_in_minutes::NUMBER, NULL))            AS internal_tat_in_minutes,\n           MAX(IFF(b.value:rank::NUMBER = 1, TRY_TO_TIMESTAMP_TZ(b.value:dispatch_time::STRING), NULL)) AS internal_dispatch_time,\n           MAX(IFF(b.value:rank::NUMBER = 1, TRY_TO_TIMESTAMP_TZ(b.value:delivery_time::STRING), NULL)) AS internal_delivery_time,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:pickup_buffer_in_minutes::NUMBER, NULL))           AS internal_pickup_buffer,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:drop_buffer_in_minutes::NUMBER, NULL))             AS internal_drop_buffer,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:is_express::BOOLEAN, NULL))                        AS internal_is_express,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',        b.value:delivery_partner_id,\n               'rank',           b.value:rank,\n               'tat_in_minutes', b.value:delivery_tat_in_minutes,\n               'dispatch_time',  b.value:dispatch_time,\n               'delivery_time',  b.value:delivery_time,\n               'score',          b.value:score\n           )) WITHIN GROUP (ORDER BY b.value:rank::NUMBER)                                              AS internal_soft_preference_array\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:buffer_adjusted_candidates) b\n    WHERE c.value:candidate_type::STRING IN ('COURIER_LEGACY_TAT_ADHERENCE', 'COURIER_DDB_TAT_ADHERENCE')\n      AND c.value:evaluated::BOOLEAN\n    GROUP BY s.reference_id\n),\n\n\n-- ---------- HARD: last booking per order ----------\nhard AS (\n    SELECT *\n    FROM hard_inst\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY reference_id ORDER BY created_at DESC) = 1\n),\n\n\n-- PBA's hard partners in LMS order (live in rollout, shadow outside it)\nhard_pba_list AS (\n    SELECT h.reference_id,\n           c.value:decision::STRING                                                    AS pba_hard_decision,\n           e.index                                                                     AS idx,\n           e.value:delivery_partner_id::NUMBER                                         AS partner,\n           e.value:delivery_tat_in_minutes::NUMBER                                     AS tat_in_minutes,\n           TRY_TO_TIMESTAMP_TZ(e.value:dispatch_time::STRING)                          AS dispatch_time,\n           TRY_TO_TIMESTAMP_TZ(e.value:delivery_time::STRING)                          AS delivery_time,\n           COALESCE(e.value:excluded::BOOLEAN, FALSE)                                  AS excluded,\n           e.value:service_type::STRING                                                AS service_type\n    FROM hard h,\n         LATERAL FLATTEN(input => h.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates) e\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n),\n\n\n-- PBA's hard pick: the first partner it returned that is not excluded (FIRST_MAPPED_PARTNER)\nhard_pba_pick AS (\n    SELECT *\n    FROM hard_pba_list\n    WHERE NOT excluded\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY reference_id ORDER BY idx) = 1\n),\n\n\nhard_pba_array AS (\n    SELECT reference_id,\n           MAX(pba_hard_decision)                                                      AS pba_hard_decision,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',        partner,\n               'tat_in_minutes', tat_in_minutes,\n               'dispatch_time',  dispatch_time,\n               'delivery_time',  delivery_time,\n               'excluded',       excluded,\n               'service_type',   service_type\n           )) WITHIN GROUP (ORDER BY idx)                                              AS pba_hard_preference_array\n    FROM hard_pba_list\n    GROUP BY reference_id\n),\n\n\n-- Internal hard side: the evaluated internal store's ranked candidates\nhard_internal_list AS (\n    SELECT h.reference_id,\n           c.value:candidate_type::STRING                                              AS candidate_type,\n           b.value:delivery_partner_id::NUMBER                                         AS partner,\n           b.value:rank::NUMBER                                                        AS rnk,\n           b.value:selected::BOOLEAN                                                   AS selected\n    FROM hard h,\n         LATERAL FLATTEN(input => h.cands) c,\n         LATERAL FLATTEN(input => c.value:buffer_adjusted_candidates) b\n    WHERE c.value:candidate_type::STRING IN ('COURIER_LEGACY_TAT_ADHERENCE', 'COURIER_DDB_TAT_ADHERENCE')\n      AND c.value:evaluated::BOOLEAN\n),\n\n\n-- each internal partner's final TAT on the hard path, from the same store's evaluated candidates\nhard_internal_tat AS (\n    SELECT h.reference_id,\n           c.value:candidate_type::STRING                                              AS candidate_type,\n           t.value:delivery_partner_id::NUMBER                                         AS partner,\n           MAX(t.value:final_tat_days::FLOAT)                                          AS final_tat_days\n    FROM hard h,\n         LATERAL FLATTEN(input => h.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates) t\n    WHERE c.value:candidate_type::STRING IN ('COURIER_LEGACY_TAT_ADHERENCE', 'COURIER_DDB_TAT_ADHERENCE')\n      AND c.value:evaluated::BOOLEAN\n    GROUP BY 1, 2, 3\n),\n\n\nhard_internal AS (\n    SELECT l.reference_id,\n           MAX(l.candidate_type)                                                       AS internal_hard_candidate_type,\n           MIN_BY(l.partner, l.rnk)                                                    AS internal_hard_partner,\n           MIN_BY(t.final_tat_days, l.rnk)                                             AS internal_hard_tat_in_days,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',        l.partner,\n               'rank',           l.rnk,\n               'selected',       l.selected,\n               'final_tat_days', t.final_tat_days\n           )) WITHIN GROUP (ORDER BY l.rnk)                                            AS internal_hard_preference_array\n    FROM hard_internal_list l\n    LEFT JOIN hard_internal_tat t\n           ON t.reference_id = l.reference_id AND t.candidate_type = l.candidate_type AND t.partner = l.partner\n    GROUP BY l.reference_id\n)\n\n\nSELECT\n    -- identity and cohort\n    f.reference_id                                              AS order_id,\n    f.customer_id,\n    f.warehouse_id                                              AS wh_id,\n    f.delivery_pincode                                          AS pincode,\n    f.order_placed_at,\n    TRY_TO_NUMBER(f.version)                                    AS eta_details_version,\n    f.request_id                                                AS promise_request_id,\n    f.sdd_enabled,\n    f.payment_method,\n    f.task_processing_type,\n    (s.reference_id IS NOT NULL)                                AS has_soft_record,\n    (h.reference_id IS NOT NULL)                                AS has_hard_record,\n    (sh.reference_id IS NOT NULL)                               AS has_shipment_record,\n    (TRY_TO_NUMBER(f.delivery_partner_id) = 0 OR f.promised_delivery_time IS NULL) AS is_fallback_promise,\n    s.fact_flow                                                 AS flow,\n    s.fact_delivery_type                                        AS delivery_type,\n    s.fact_payment_mode                                         AS payment_mode,\n    s.cfg_pba_rollout_in_rollout = 'TRUE'                       AS pba_in_rollout,\n    s.created_at                                                AS soft_promise_at,\n    s.fact_client_id                                            AS soft_caller,\n    s.req_context_screen_context                                AS soft_screen,\n\n\n    -- the promise the customer holds (latest version)\n    f.promised_warehouse_processing_time,\n    f.promised_dispatch_time,\n    f.promised_delivery_time,\n    f.promised_delivery_partner,\n    TRY_TO_NUMBER(f.delivery_tat_minutes) / 1440.0              AS promised_tat_in_days,\n    s.fact_is_cold_chain                                        AS pba_is_cold_chain,\n    s.fact_is_express_eligible                                  AS pba_is_express_eligible,\n\n\n    -- soft: what was served\n    s.result_selected_candidate_type                            AS soft_served_candidate_type,\n    s.result_delivery_partner_id                                AS soft_served_partner,\n    s.result_dispatch_time                                      AS soft_served_dispatch_time,\n    s.result_delivery_time                                      AS soft_served_delivery_time,\n    (pp.pba_partner IS NOT NULL AND si.internal_partner IS NOT NULL\n        AND pp.pba_partner = si.internal_partner)               AS soft_matched,\n    s.result_pba_and_internal_same_partner                      AS soft_matched_flag,\n\n\n    -- soft: PBA side (M1/M2)\n    sp.pba_evaluated,\n    sp.pba_decision,\n    sp.pba_decision_detail,\n    sp.pba_to_internal_tat_ratio,\n    sp.pba_source                                               AS pba_soft_selected_type,      -- PBA_CACHE / PBA_API / NONE\n    pp.pba_partner                                              AS pba_soft_selected_delivery_partner,\n    pp.pba_tat_in_minutes / 1440.0                              AS pba_soft_selected_partner_tat_in_days,\n    COALESCE(pb.pba_buffered_dispatch_time, pp.pba_dispatch_time) AS pba_projected_dispatch_time,\n    COALESCE(pb.pba_buffered_delivery_time, pp.pba_delivery_time) AS pba_projected_delivery_time,\n    IFF(sp.pba_evaluated, COALESCE(pb.pba_pickup_buffer, 0), NULL) AS pba_pickup_buffer,\n    IFF(sp.pba_evaluated, COALESCE(pb.pba_drop_buffer, 0), NULL)   AS pba_drop_buffer,\n    pp.pba_is_express,\n    pp.pba_cache_lookup,\n    pp.pba_cache_age_minutes,\n    pp.pba_cutoff_window,\n    sp.pba_soft_preference_array,\n    s.payload:evaluation:configurations:pba_delivery_from_processing_enabled::BOOLEAN AS pba_delivery_from_processing_enabled,\n    s.cfg_pba_pickup_buffer_enabled                             AS pba_pickup_buffer_enabled,\n    s.cfg_pba_drop_buffer_enabled                               AS pba_drop_buffer_enabled,\n    pp.pba_cache_last_cached_at,\n\n\n    -- soft: internal side (M1/M2)\n    si.internal_candidate_type,\n    si.internal_partner                                         AS internal_soft_selected_delivery_partner,\n    si.internal_tat_in_minutes / 1440.0                         AS internal_soft_selected_partner_tat_in_days,\n    si.internal_dispatch_time                                   AS internal_projected_dispatch_time,\n    si.internal_delivery_time                                   AS internal_projected_delivery_time,\n    si.internal_pickup_buffer,\n    si.internal_drop_buffer,\n    si.internal_is_express,\n    si.internal_soft_preference_array,\n\n\n    -- hard (M3/M4/M5)\n    h.request_id                                                AS hard_request_id,\n    h.created_at                                                AS hard_allocated_at,\n    h.result_outcome                                            AS hard_outcome,\n    h.result_selected_candidate_type                            AS hard_selected_candidate_type,\n    h.result_delivery_partner_id                                AS hard_booked_partner,\n    h.result_delivery_tat_in_minutes / 1440.0                   AS hard_booked_tat_in_days,\n    h.fact_projected_wh_processing_time                         AS hard_wh_processing_time,\n    hpa.pba_hard_decision,\n    hpp.partner                                                 AS pba_hard_selected_delivery_partner,\n    hpp.tat_in_minutes / 1440.0                                 AS pba_hard_partner_tat_in_days,\n    hpp.dispatch_time                                           AS pba_hard_projected_dispatch_time,\n    hpp.delivery_time                                           AS pba_hard_projected_delivery_time,\n    hpa.pba_hard_preference_array,\n    hi.internal_hard_candidate_type,\n    hi.internal_hard_partner                                    AS internal_hard_selected_delivery_partner,\n    hi.internal_hard_tat_in_days                                AS internal_hard_partner_tat_in_days,\n    NULL::TIMESTAMP_TZ                                          AS internal_hard_projected_dispatch_time,   -- never written at hard\n    NULL::TIMESTAMP_TZ                                          AS internal_hard_projected_delivery_time,   -- never written at hard\n    hi.internal_hard_preference_array,\n\n\n    -- actuals (M3/M4)\n    f.actual_warehouse_processing_time                          AS box_verified_ts,\n    NULL::TIMESTAMP_TZ                                          AS awb_print_ts,                            -- no source in these tables\n    sh.pickup_time,\n    sh.first_delivery_attempt_time                              AS delivery_attempt_time,\n    f.actual_delivery_time                                      AS delivered_time,\n    sh.delivery_partner_id                                      AS shipped_delivery_partner,\n    sh.promised_delivery_in_minutes                             AS shipment_promised_delivery_in_minutes,\n    sh.applied_drop_buffer_in_minutes                           AS shipment_applied_drop_buffer_in_minutes\nFROM frozen f\nLEFT JOIN soft            s   ON s.reference_id   = f.reference_id\nLEFT JOIN soft_pba        sp  ON sp.reference_id  = f.reference_id\nLEFT JOIN soft_pba_pick   pp  ON pp.reference_id  = f.reference_id\nLEFT JOIN soft_pba_buffer pb  ON pb.reference_id  = f.reference_id\nLEFT JOIN soft_internal   si  ON si.reference_id  = f.reference_id\nLEFT JOIN hard            h   ON h.reference_id   = f.reference_id\nLEFT JOIN hard_pba_pick   hpp ON hpp.reference_id = f.reference_id\nLEFT JOIN hard_pba_array  hpa ON hpa.reference_id = f.reference_id\nLEFT JOIN hard_internal   hi  ON hi.reference_id  = f.reference_id\nLEFT JOIN shipment        sh  ON sh.reference_id  = f.reference_id\n)\nSELECT GROUPING(TO_VARCHAR(sdd_enabled))         AS is_total,\n       TO_VARCHAR(sdd_enabled)                   AS sdd_enabled_value,\n       TO_VARCHAR(has_soft_record)               AS has_soft_record_value,\n       TO_VARCHAR(pba_in_rollout)                AS pba_in_rollout_value,\n       soft_served_candidate_type,\n       COUNT(*)                                  AS n_rows,\n       COUNT(DISTINCT order_id)                  AS n_orders,\n       ANY_VALUE(MD5(SUBSTR(CURRENT_STATEMENT(),\n                  CHARINDEX('WITH params AS (', CURRENT_STATEMENT()),\n                  CHARINDEX(CHR(10) || ')' || CHR(10) || 'SELECT', CURRENT_STATEMENT()) - CHARINDEX('WITH params AS (', CURRENT_STATEMENT())))) AS base_md5\nFROM base\nGROUP BY GROUPING SETS ((TO_VARCHAR(sdd_enabled), TO_VARCHAR(has_soft_record), TO_VARCHAR(pba_in_rollout), soft_served_candidate_type), ())\nORDER BY is_total, sdd_enabled_value, has_soft_record_value, pba_in_rollout_value, soft_served_candidate_type"
+    },
+    "is_sandboxed": false,
+    "insights": null
+  },
+  "cached": null,
+  "database_id": 1192,
+  "started_at": "2026-10-30T09:07:12.568948647Z",
+  "json_query": {
+    "lib/type": "mbql/query",
+    "stages": [
+      {
+        "lib/type": "mbql.stage/native",
+        "native": "WITH base AS (\nWITH params AS (\n    SELECT '2026-10-23 10:00:00 +0530'::TIMESTAMP_TZ AS start_ts,\n           '2026-10-23 11:00:00 +0530'::TIMESTAMP_TZ AS end_ts\n),\n\n\n-- the same window as IST wall-clock, for the NTZ instrumentation tables\nparams_ist AS (\n    SELECT CONVERT_TIMEZONE('Asia/Kolkata', start_ts)::TIMESTAMP_NTZ AS start_ist,\n           CONVERT_TIMEZONE('Asia/Kolkata', end_ts)::TIMESTAMP_NTZ   AS end_ist\n    FROM params\n),\n\n\n-- latest version of each order's promise, with its placement time taken over all versions\nfrozen AS (\n    SELECT v.*\n    FROM (\n        SELECT d.*,\n               MIN(d.created_at) OVER (PARTITION BY d.reference_id) AS order_placed_at\n        FROM prod_silver_db.logistics.serviceability_eta_details d\n        QUALIFY ROW_NUMBER() OVER (PARTITION BY d.reference_id ORDER BY TRY_TO_NUMBER(d.version) DESC) = 1\n    ) v\n    CROSS JOIN params p\n    WHERE v.order_placed_at >= p.start_ts AND v.order_placed_at < p.end_ts\n),\n\n\nshipment AS (\n    SELECT s.*\n    FROM prod_silver_db.logistics.logistics_shipment_details s\n    JOIN frozen f ON f.reference_id = s.reference_id\n    WHERE COALESCE(s.is_deleted, FALSE) = FALSE\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY TRY_TO_NUMBER(s.version) DESC) = 1\n),\n\n\n-- ETA records of the cohort's orders\neta_inst AS (\n    SELECT i.*,\n           TRY_PARSE_JSON(TO_VARCHAR(i.eval_candidates)) AS cands\n    FROM prod_silver_db.logistics.logistics_eta_instrumentation i\n    JOIN frozen f ON f.reference_id = i.reference_id\n    CROSS JOIN params_ist p\n    WHERE i.created_at >= DATEADD(day, -1, p.start_ist)      -- a promise can be computed shortly before the order is placed\n      AND i.created_at <  DATEADD(day, 10, p.end_ist)\n),\n\n\n-- hard-allocation records of the cohort's orders\nhard_inst AS (\n    SELECT i.*,\n           TRY_PARSE_JSON(TO_VARCHAR(i.eval_candidates)) AS cands\n    FROM prod_silver_db.logistics.logistics_hard_allocation_instrumentation i\n    JOIN frozen f ON f.reference_id = i.reference_id\n    CROSS JOIN params_ist p\n    WHERE i.created_at >= DATEADD(day, -1, p.start_ist)\n      AND i.created_at <  DATEADD(day, 10, p.end_ist)        -- hard allocations land after the soft window\n),\n\n\n-- ---------- SOFT: the ETA record of the promise that stands ----------\nsoft AS (\n    SELECT i.*\n    FROM eta_inst i\n    JOIN frozen f ON f.reference_id = i.reference_id AND f.request_id = i.request_id\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY i.reference_id ORDER BY i.created_at DESC) = 1\n),\n\n\nsoft_pba AS (\n    SELECT s.reference_id,\n           MAX(c.value:evaluated::BOOLEAN)                                             AS pba_evaluated,\n           MAX(c.value:decision::STRING)                                               AS pba_decision,\n           MAX(c.value:decision_detail::STRING)                                        AS pba_decision_detail,\n           MAX(c.value:pba_to_internal_tat_ratio::FLOAT)                               AS pba_to_internal_tat_ratio,\n           MAX(c.value:source::STRING)                                                 AS pba_source,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',           e.value:delivery_partner_id,\n               'tat_in_minutes',    e.value:delivery_tat_in_minutes,\n               'dispatch_time',     e.value:dispatch_time,\n               'delivery_time',     e.value:delivery_time,\n               'eligible',          e.value:eligible,\n               'is_express',        e.value:is_express,\n               'cache_lookup',      e.value:cache_row:cache_lookup,\n               'cache_age_minutes', e.value:cache_row:cache_age_minutes,\n               'cutoff_window',     e.value:cache_row:cutoff_window\n           )) WITHIN GROUP (ORDER BY e.index)                                          AS pba_soft_preference_array\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates, OUTER => TRUE) e\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n    GROUP BY s.reference_id\n),\n\n\n-- PBA's soft pick: the top-ranked PBA partner (first eligible in PBA's order), whether or not it was served\nsoft_pba_pick AS (\n    SELECT s.reference_id,\n           e.value:delivery_partner_id::NUMBER                                         AS pba_partner,\n           e.value:delivery_tat_in_minutes::NUMBER                                     AS pba_tat_in_minutes,\n           TRY_TO_TIMESTAMP_TZ(e.value:dispatch_time::STRING)                          AS pba_dispatch_time,\n           TRY_TO_TIMESTAMP_TZ(e.value:delivery_time::STRING)                          AS pba_delivery_time,\n           e.value:is_express::BOOLEAN                                                 AS pba_is_express,\n           e.value:cache_row:cache_lookup::STRING                                      AS pba_cache_lookup,\n           e.value:cache_row:cache_age_minutes::NUMBER                                 AS pba_cache_age_minutes,\n           e.value:cache_row:cutoff_window::STRING                                     AS pba_cutoff_window,\n           TRY_TO_TIMESTAMP_TZ(e.value:cache_row:last_cached_at::STRING)               AS pba_cache_last_cached_at\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates) e\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n      AND e.value:eligible::BOOLEAN\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY e.index) = 1\n),\n\n\n-- PBA buffers and buffered times on the soft side (present only when PBA was served)\nsoft_pba_buffer AS (\n    SELECT s.reference_id,\n           b.value:pickup_buffer_in_minutes::NUMBER                                    AS pba_pickup_buffer,\n           b.value:drop_buffer_in_minutes::NUMBER                                      AS pba_drop_buffer,\n           TRY_TO_TIMESTAMP_TZ(b.value:dispatch_time::STRING)                          AS pba_buffered_dispatch_time,\n           TRY_TO_TIMESTAMP_TZ(b.value:delivery_time::STRING)                          AS pba_buffered_delivery_time\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:buffer_adjusted_candidates) b\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n      AND b.value:rank::NUMBER = 1\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY b.index) = 1\n),\n\n\n-- Internal soft side: the evaluated internal store (pharmacist or DDB TAT adherence), ranked after buffers.\n-- Rank 1 is internal's pick whether or not it was served.\nsoft_internal AS (\n    SELECT s.reference_id,\n           MAX(c.value:candidate_type::STRING)                                                          AS internal_candidate_type,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:delivery_partner_id::NUMBER, NULL))                AS internal_partner,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:delivery_tat_in_minutes::NUMBER, NULL))            AS internal_tat_in_minutes,\n           MAX(IFF(b.value:rank::NUMBER = 1, TRY_TO_TIMESTAMP_TZ(b.value:dispatch_time::STRING), NULL)) AS internal_dispatch_time,\n           MAX(IFF(b.value:rank::NUMBER = 1, TRY_TO_TIMESTAMP_TZ(b.value:delivery_time::STRING), NULL)) AS internal_delivery_time,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:pickup_buffer_in_minutes::NUMBER, NULL))           AS internal_pickup_buffer,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:drop_buffer_in_minutes::NUMBER, NULL))             AS internal_drop_buffer,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:is_express::BOOLEAN, NULL))                        AS internal_is_express,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',        b.value:delivery_partner_id,\n               'rank',           b.value:rank,\n               'tat_in_minutes', b.value:delivery_tat_in_minutes,\n               'dispatch_time',  b.value:dispatch_time,\n               'delivery_time',  b.value:delivery_time,\n               'score',          b.value:score\n           )) WITHIN GROUP (ORDER BY b.value:rank::NUMBER)                                              AS internal_soft_preference_array\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:buffer_adjusted_candidates) b\n    WHERE c.value:candidate_type::STRING IN ('COURIER_LEGACY_TAT_ADHERENCE', 'COURIER_DDB_TAT_ADHERENCE')\n      AND c.value:evaluated::BOOLEAN\n    GROUP BY s.reference_id\n),\n\n\n-- ---------- HARD: last booking per order ----------\nhard AS (\n    SELECT *\n    FROM hard_inst\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY reference_id ORDER BY created_at DESC) = 1\n),\n\n\n-- PBA's hard partners in LMS order (live in rollout, shadow outside it)\nhard_pba_list AS (\n    SELECT h.reference_id,\n           c.value:decision::STRING                                                    AS pba_hard_decision,\n           e.index                                                                     AS idx,\n           e.value:delivery_partner_id::NUMBER                                         AS partner,\n           e.value:delivery_tat_in_minutes::NUMBER                                     AS tat_in_minutes,\n           TRY_TO_TIMESTAMP_TZ(e.value:dispatch_time::STRING)                          AS dispatch_time,\n           TRY_TO_TIMESTAMP_TZ(e.value:delivery_time::STRING)                          AS delivery_time,\n           COALESCE(e.value:excluded::BOOLEAN, FALSE)                                  AS excluded,\n           e.value:service_type::STRING                                                AS service_type\n    FROM hard h,\n         LATERAL FLATTEN(input => h.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates) e\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n),\n\n\n-- PBA's hard pick: the first partner it returned that is not excluded (FIRST_MAPPED_PARTNER)\nhard_pba_pick AS (\n    SELECT *\n    FROM hard_pba_list\n    WHERE NOT excluded\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY reference_id ORDER BY idx) = 1\n),\n\n\nhard_pba_array AS (\n    SELECT reference_id,\n           MAX(pba_hard_decision)                                                      AS pba_hard_decision,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',        partner,\n               'tat_in_minutes', tat_in_minutes,\n               'dispatch_time',  dispatch_time,\n               'delivery_time',  delivery_time,\n               'excluded',       excluded,\n               'service_type',   service_type\n           )) WITHIN GROUP (ORDER BY idx)                                              AS pba_hard_preference_array\n    FROM hard_pba_list\n    GROUP BY reference_id\n),\n\n\n-- Internal hard side: the evaluated internal store's ranked candidates\nhard_internal_list AS (\n    SELECT h.reference_id,\n           c.value:candidate_type::STRING                                              AS candidate_type,\n           b.value:delivery_partner_id::NUMBER                                         AS partner,\n           b.value:rank::NUMBER                                                        AS rnk,\n           b.value:selected::BOOLEAN                                                   AS selected\n    FROM hard h,\n         LATERAL FLATTEN(input => h.cands) c,\n         LATERAL FLATTEN(input => c.value:buffer_adjusted_candidates) b\n    WHERE c.value:candidate_type::STRING IN ('COURIER_LEGACY_TAT_ADHERENCE', 'COURIER_DDB_TAT_ADHERENCE')\n      AND c.value:evaluated::BOOLEAN\n),\n\n\n-- each internal partner's final TAT on the hard path, from the same store's evaluated candidates\nhard_internal_tat AS (\n    SELECT h.reference_id,\n           c.value:candidate_type::STRING                                              AS candidate_type,\n           t.value:delivery_partner_id::NUMBER                                         AS partner,\n           MAX(t.value:final_tat_days::FLOAT)                                          AS final_tat_days\n    FROM hard h,\n         LATERAL FLATTEN(input => h.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates) t\n    WHERE c.value:candidate_type::STRING IN ('COURIER_LEGACY_TAT_ADHERENCE', 'COURIER_DDB_TAT_ADHERENCE')\n      AND c.value:evaluated::BOOLEAN\n    GROUP BY 1, 2, 3\n),\n\n\nhard_internal AS (\n    SELECT l.reference_id,\n           MAX(l.candidate_type)                                                       AS internal_hard_candidate_type,\n           MIN_BY(l.partner, l.rnk)                                                    AS internal_hard_partner,\n           MIN_BY(t.final_tat_days, l.rnk)                                             AS internal_hard_tat_in_days,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',        l.partner,\n               'rank',           l.rnk,\n               'selected',       l.selected,\n               'final_tat_days', t.final_tat_days\n           )) WITHIN GROUP (ORDER BY l.rnk)                                            AS internal_hard_preference_array\n    FROM hard_internal_list l\n    LEFT JOIN hard_internal_tat t\n           ON t.reference_id = l.reference_id AND t.candidate_type = l.candidate_type AND t.partner = l.partner\n    GROUP BY l.reference_id\n)\n\n\nSELECT\n    -- identity and cohort\n    f.reference_id                                              AS order_id,\n    f.customer_id,\n    f.warehouse_id                                              AS wh_id,\n    f.delivery_pincode                                          AS pincode,\n    f.order_placed_at,\n    TRY_TO_NUMBER(f.version)                                    AS eta_details_version,\n    f.request_id                                                AS promise_request_id,\n    f.sdd_enabled,\n    f.payment_method,\n    f.task_processing_type,\n    (s.reference_id IS NOT NULL)                                AS has_soft_record,\n    (h.reference_id IS NOT NULL)                                AS has_hard_record,\n    (sh.reference_id IS NOT NULL)                               AS has_shipment_record,\n    (TRY_TO_NUMBER(f.delivery_partner_id) = 0 OR f.promised_delivery_time IS NULL) AS is_fallback_promise,\n    s.fact_flow                                                 AS flow,\n    s.fact_delivery_type                                        AS delivery_type,\n    s.fact_payment_mode                                         AS payment_mode,\n    s.cfg_pba_rollout_in_rollout = 'TRUE'                       AS pba_in_rollout,\n    s.created_at                                                AS soft_promise_at,\n    s.fact_client_id                                            AS soft_caller,\n    s.req_context_screen_context                                AS soft_screen,\n\n\n    -- the promise the customer holds (latest version)\n    f.promised_warehouse_processing_time,\n    f.promised_dispatch_time,\n    f.promised_delivery_time,\n    f.promised_delivery_partner,\n    TRY_TO_NUMBER(f.delivery_tat_minutes) / 1440.0              AS promised_tat_in_days,\n    s.fact_is_cold_chain                                        AS pba_is_cold_chain,\n    s.fact_is_express_eligible                                  AS pba_is_express_eligible,\n\n\n    -- soft: what was served\n    s.result_selected_candidate_type                            AS soft_served_candidate_type,\n    s.result_delivery_partner_id                                AS soft_served_partner,\n    s.result_dispatch_time                                      AS soft_served_dispatch_time,\n    s.result_delivery_time                                      AS soft_served_delivery_time,\n    (pp.pba_partner IS NOT NULL AND si.internal_partner IS NOT NULL\n        AND pp.pba_partner = si.internal_partner)               AS soft_matched,\n    s.result_pba_and_internal_same_partner                      AS soft_matched_flag,\n\n\n    -- soft: PBA side (M1/M2)\n    sp.pba_evaluated,\n    sp.pba_decision,\n    sp.pba_decision_detail,\n    sp.pba_to_internal_tat_ratio,\n    sp.pba_source                                               AS pba_soft_selected_type,      -- PBA_CACHE / PBA_API / NONE\n    pp.pba_partner                                              AS pba_soft_selected_delivery_partner,\n    pp.pba_tat_in_minutes / 1440.0                              AS pba_soft_selected_partner_tat_in_days,\n    COALESCE(pb.pba_buffered_dispatch_time, pp.pba_dispatch_time) AS pba_projected_dispatch_time,\n    COALESCE(pb.pba_buffered_delivery_time, pp.pba_delivery_time) AS pba_projected_delivery_time,\n    IFF(sp.pba_evaluated, COALESCE(pb.pba_pickup_buffer, 0), NULL) AS pba_pickup_buffer,\n    IFF(sp.pba_evaluated, COALESCE(pb.pba_drop_buffer, 0), NULL)   AS pba_drop_buffer,\n    pp.pba_is_express,\n    pp.pba_cache_lookup,\n    pp.pba_cache_age_minutes,\n    pp.pba_cutoff_window,\n    sp.pba_soft_preference_array,\n    s.payload:evaluation:configurations:pba_delivery_from_processing_enabled::BOOLEAN AS pba_delivery_from_processing_enabled,\n    s.cfg_pba_pickup_buffer_enabled                             AS pba_pickup_buffer_enabled,\n    s.cfg_pba_drop_buffer_enabled                               AS pba_drop_buffer_enabled,\n    pp.pba_cache_last_cached_at,\n\n\n    -- soft: internal side (M1/M2)\n    si.internal_candidate_type,\n    si.internal_partner                                         AS internal_soft_selected_delivery_partner,\n    si.internal_tat_in_minutes / 1440.0                         AS internal_soft_selected_partner_tat_in_days,\n    si.internal_dispatch_time                                   AS internal_projected_dispatch_time,\n    si.internal_delivery_time                                   AS internal_projected_delivery_time,\n    si.internal_pickup_buffer,\n    si.internal_drop_buffer,\n    si.internal_is_express,\n    si.internal_soft_preference_array,\n\n\n    -- hard (M3/M4/M5)\n    h.request_id                                                AS hard_request_id,\n    h.created_at                                                AS hard_allocated_at,\n    h.result_outcome                                            AS hard_outcome,\n    h.result_selected_candidate_type                            AS hard_selected_candidate_type,\n    h.result_delivery_partner_id                                AS hard_booked_partner,\n    h.result_delivery_tat_in_minutes / 1440.0                   AS hard_booked_tat_in_days,\n    h.fact_projected_wh_processing_time                         AS hard_wh_processing_time,\n    hpa.pba_hard_decision,\n    hpp.partner                                                 AS pba_hard_selected_delivery_partner,\n    hpp.tat_in_minutes / 1440.0                                 AS pba_hard_partner_tat_in_days,\n    hpp.dispatch_time                                           AS pba_hard_projected_dispatch_time,\n    hpp.delivery_time                                           AS pba_hard_projected_delivery_time,\n    hpa.pba_hard_preference_array,\n    hi.internal_hard_candidate_type,\n    hi.internal_hard_partner                                    AS internal_hard_selected_delivery_partner,\n    hi.internal_hard_tat_in_days                                AS internal_hard_partner_tat_in_days,\n    NULL::TIMESTAMP_TZ                                          AS internal_hard_projected_dispatch_time,   -- never written at hard\n    NULL::TIMESTAMP_TZ                                          AS internal_hard_projected_delivery_time,   -- never written at hard\n    hi.internal_hard_preference_array,\n\n\n    -- actuals (M3/M4)\n    f.actual_warehouse_processing_time                          AS box_verified_ts,\n    NULL::TIMESTAMP_TZ                                          AS awb_print_ts,                            -- no source in these tables\n    sh.pickup_time,\n    sh.first_delivery_attempt_time                              AS delivery_attempt_time,\n    f.actual_delivery_time                                      AS delivered_time,\n    sh.delivery_partner_id                                      AS shipped_delivery_partner,\n    sh.promised_delivery_in_minutes                             AS shipment_promised_delivery_in_minutes,\n    sh.applied_drop_buffer_in_minutes                           AS shipment_applied_drop_buffer_in_minutes\nFROM frozen f\nLEFT JOIN soft            s   ON s.reference_id   = f.reference_id\nLEFT JOIN soft_pba        sp  ON sp.reference_id  = f.reference_id\nLEFT JOIN soft_pba_pick   pp  ON pp.reference_id  = f.reference_id\nLEFT JOIN soft_pba_buffer pb  ON pb.reference_id  = f.reference_id\nLEFT JOIN soft_internal   si  ON si.reference_id  = f.reference_id\nLEFT JOIN hard            h   ON h.reference_id   = f.reference_id\nLEFT JOIN hard_pba_pick   hpp ON hpp.reference_id = f.reference_id\nLEFT JOIN hard_pba_array  hpa ON hpa.reference_id = f.reference_id\nLEFT JOIN hard_internal   hi  ON hi.reference_id  = f.reference_id\nLEFT JOIN shipment        sh  ON sh.reference_id  = f.reference_id\n)\nSELECT GROUPING(TO_VARCHAR(sdd_enabled))         AS is_total,\n       TO_VARCHAR(sdd_enabled)                   AS sdd_enabled_value,\n       TO_VARCHAR(has_soft_record)               AS has_soft_record_value,\n       TO_VARCHAR(pba_in_rollout)                AS pba_in_rollout_value,\n       soft_served_candidate_type,\n       COUNT(*)                                  AS n_rows,\n       COUNT(DISTINCT order_id)                  AS n_orders,\n       ANY_VALUE(MD5(SUBSTR(CURRENT_STATEMENT(),\n                  CHARINDEX('WITH params AS (', CURRENT_STATEMENT()),\n                  CHARINDEX(CHR(10) || ')' || CHR(10) || 'SELECT', CURRENT_STATEMENT()) - CHARINDEX('WITH params AS (', CURRENT_STATEMENT())))) AS base_md5\nFROM base\nGROUP BY GROUPING SETS ((TO_VARCHAR(sdd_enabled), TO_VARCHAR(has_soft_record), TO_VARCHAR(pba_in_rollout), soft_served_candidate_type), ())\nORDER BY is_total, sdd_enabled_value, has_soft_record_value, pba_in_rollout_value, soft_served_candidate_type"
+      }
+    ],
+    "database": 1192,
+    "middleware": {
+      "js-int-to-string?": true,
+      "userland-query?": true,
+      "add-default-userland-constraints?": true
+    }
+  },
+  "average_execution_time": null,
+  "status": "completed",
+  "context": "ad-hoc",
+  "tenant_id": null,
+  "row_count": 8,
+  "running_time": 50282
+}

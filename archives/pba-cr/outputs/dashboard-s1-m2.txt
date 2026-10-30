@@ -1,0 +1,19 @@
+Checks: query text
+  [PASS] 1-hour slice ran Tejas's base query verbatim (only window dates changed)
+  [PASS] trimmed queries ran exactly as saved
+  [PASS] trimmed query = the base query's own text up to the end of the soft step, unchanged
+Checks: trimming changes nothing
+  [PASS] 1-hour slice: full base and trimmed base give identical groups and counts
+Checks: independent recount (Python from raw promise versions + raw soft records, 23 Oct 10:00-10:01)
+  [PASS] raw pull not truncated
+  [PASS] SQL = Python on every group ({'COURIER_LEGACY_TAT_ADHERENCE': 47, 'COURIER_PBA': 3, 'no soft record': 26})
+Checks: full-window result
+  [PASS] one row per order
+  [PASS] groups add up to all orders in the window
+  [PASS] non-SDD total = metric 1 (366,852)
+  [PASS] served type only takes allowed values
+  [PASS] served type is blank exactly when there is no soft record
+  [PASS] every PBA-served order was in rollout
+
+S1 M2  % of non-SDD orders allocated through PBA = 4.9%
+       PBA base 17,804 / Total Non-SDD 366,852 (run 2026-10-30T09:05:34Z)
