@@ -2,6 +2,7 @@
 # Serves: Dashboard S1 M1 (field mapping 2026-10-18, signed off 2026-10-30)
 # Reads: archives/pba-cr/raw-data/dashboard/s1-m1-results.json (Metabase results, run 2026-10-30), the base query and trimmed-base files in queries-dump/
 # Writes: archives/pba-cr/outputs/dashboard-s1-m1.txt
+# Paths updated 2026-10-30 when query files were renamed by dashboard section and metric; no logic change.
 # Run with: python3 archives/pba-cr/scripts/2026-10-30-aggregate-dashboard-s1-m1-total-non-sdd-v1.py
 
 import hashlib, json, os
@@ -19,8 +20,8 @@ R = json.load(open(f"{ROOT}/raw-data/dashboard/s1-m1-results.json"))
 base = open(f"{ROOT}/queries-dump/2026-10-30-pba-cr-dashboard-base-query-v1.sql").read()
 s = base.index("WITH params AS ("); body = base[s:base.index("\n;\n", s)]
 slice_body = body.replace("'2026-10-22 12:00:00 +0530'", "'2026-10-23 10:00:00 +0530'").replace("'2026-10-30 00:00:00 +0530'", "'2026-10-23 11:00:00 +0530'")
-trim_full = open(f"{ROOT}/queries-dump/dashboard/base-trim-frozen-full.sql").read()
-trim_slice = open(f"{ROOT}/queries-dump/dashboard/base-trim-frozen-slice.sql").read()
+trim_full = open(f"{ROOT}/queries-dump/dashboard/superseded/s1-funnel_shared_m1-trimmed-base_22-30oct.sql").read()
+trim_slice = open(f"{ROOT}/queries-dump/dashboard/s1-funnel_shared_m1-trimmed-base_check-slice-23oct-10am-11am.sql").read()
 
 say("Checks: query text")
 check(md5(slice_body) == R["slice_1h_full_base"]["base_md5"], "1-hour slice ran Tejas's base query verbatim (only window dates changed)")

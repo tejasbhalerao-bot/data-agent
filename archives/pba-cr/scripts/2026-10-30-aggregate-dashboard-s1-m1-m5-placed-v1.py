@@ -1,8 +1,9 @@
 # Purpose: Section 1 metrics 1-5 on placed orders only (incomplete and scrapped carts dropped); runs every agreed check
 # Serves: Dashboard S1 M1-M5 (field mapping 2026-10-18, signed off 2026-10-30; placed-order filter added 2026-10-30)
 # Reads: archives/pba-cr/raw-data/dashboard/s1-placed-results-w2.json; the unfiltered verified runs s1-m1-results-w2.json, s1-m2-results-w2.json,
-#        s1-m5m6-results-w2.json; queries-dump base query, trimmed files and placed-filter.sql
+#        s1-m5m6-results-w2.json; queries-dump base query, trimmed files and all-sections_shared_placed-order-filter.sql
 # Writes: archives/pba-cr/outputs/dashboard-s1-m1-m5-placed-w2.txt
+# Paths updated 2026-10-30 when query files were renamed by dashboard section and metric; no logic change.
 # Run with: python3 archives/pba-cr/scripts/2026-10-30-aggregate-dashboard-s1-m1-m5-placed-v1.py
 # Note: trimming equivalence and the raw recounts were checked in the S1 M1, M2 and M5 scripts (v2); this script ties the filtered runs back to them.
 
@@ -19,14 +20,14 @@ def check(ok, label):
 D = f"{ROOT}/raw-data/dashboard"; Q = f"{ROOT}/queries-dump/dashboard"
 P = json.load(open(f"{D}/s1-placed-results-w2.json"))
 U1 = json.load(open(f"{D}/s1-m1-results-w2.json")); U2 = json.load(open(f"{D}/s1-m2-results-w2.json")); U5 = json.load(open(f"{D}/s1-m5m6-results-w2.json"))
-flt = open(f"{Q}/placed-filter.sql").read().rstrip("\n")
+flt = open(f"{Q}/all-sections_shared_placed-order-filter.sql").read().rstrip("\n")
 base = open(f"{ROOT}/queries-dump/2026-10-30-pba-cr-dashboard-base-query-v1.sql").read()
 s = base.index("WITH params AS ("); body_w2 = base[s:base.index("\n;\n", s)].replace("'2026-10-30 00:00:00 +0530'", "'2026-10-26 00:00:00 +0530'")
 INTERNAL = ("COURIER_LEGACY_TAT_ADHERENCE", "COURIER_DDB_TAT_ADHERENCE")
 
 say("Checks: query text")
 for n in ("frozen", "soft", "shipment"):
-    t = open(f"{Q}/base-trim-{n}-w2.sql").read()
+    t = open(f"{Q}/" + {"frozen": "s1-funnel_shared_m1-trimmed-base.sql", "soft": "s1-funnel_shared_m2-m4-trimmed-base.sql", "shipment": "s1-funnel_shared_m5-m6-trimmed-base.sql"}[n]).read()
     check(md5(t + "\n" + flt) == P["md5"][n], f"{n} query ran exactly as saved: trimmed base + placed-order filter")
     if n != "frozen":
         check(body_w2.startswith(t[:t.index("\n\n\nSELECT\n")]), f"{n}: trimmed part is the base query's own text (window end 26 Oct)")

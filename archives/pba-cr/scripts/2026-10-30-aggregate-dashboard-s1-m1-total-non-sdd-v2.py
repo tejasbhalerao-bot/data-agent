@@ -3,6 +3,7 @@
 # Reads: archives/pba-cr/raw-data/dashboard/s1-m1-results-w2.json (Metabase results, run 2026-10-30), the base query and trimmed-base files in queries-dump/
 # Writes: archives/pba-cr/outputs/dashboard-s1-m1-w2.txt
 # v2 (2026-10-30): window changed to orders placed 22 Oct 12:00 to 26 Oct 00:00 IST (Tejas). Slice tests and recounts sit inside it.
+# Paths updated 2026-10-30 when query files were renamed by dashboard section and metric; no logic change.
 # Run with: python3 archives/pba-cr/scripts/2026-10-30-aggregate-dashboard-s1-m1-total-non-sdd-v2.py
 
 import hashlib, json, os
@@ -22,8 +23,8 @@ s = base.index("WITH params AS ("); body = base[s:base.index("\n;\n", s)]
 body_w2 = body.replace("'2026-10-30 00:00:00 +0530'", "'2026-10-26 00:00:00 +0530'")  # the only change allowed: the window end date
 assert body_w2.count("'2026-10-26 00:00:00 +0530'") == 1
 slice_body = body.replace("'2026-10-22 12:00:00 +0530'", "'2026-10-23 10:00:00 +0530'").replace("'2026-10-30 00:00:00 +0530'", "'2026-10-23 11:00:00 +0530'")
-trim_full = open(f"{ROOT}/queries-dump/dashboard/base-trim-frozen-w2.sql").read()
-trim_slice = open(f"{ROOT}/queries-dump/dashboard/base-trim-frozen-slice.sql").read()
+trim_full = open(f"{ROOT}/queries-dump/dashboard/s1-funnel_shared_m1-trimmed-base.sql").read()
+trim_slice = open(f"{ROOT}/queries-dump/dashboard/s1-funnel_shared_m1-trimmed-base_check-slice-23oct-10am-11am.sql").read()
 
 say("Checks: query text")
 check(md5(slice_body) == R["slice_1h_full_base"]["base_md5"], "1-hour slice ran Tejas's base query verbatim (only window dates changed)")
