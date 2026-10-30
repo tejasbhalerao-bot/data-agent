@@ -1,0 +1,67 @@
+=== Section 2 soft, M1: PBA allocated orders, PBA promise (WH to Delivery, calendar days, IST) ===
+Checks: the queries and their results
+  [PASS] pba 22oct-12pm: SQL Metabase ran is the saved file
+  [PASS] pba 22oct-12pm: in-query fingerprint matches the file
+  [PASS] pba 22oct-12pm: window 2026-10-22 12:00:00 to 2026-10-23 00:00:00
+  [PASS] pba 22oct-12pm: complete, 44 rows, not truncated
+  [PASS] pba 22oct-12pm: result differs from every other chunk
+  [PASS] pba 23oct-12am: SQL Metabase ran is the saved file
+  [PASS] pba 23oct-12am: in-query fingerprint matches the file
+  [PASS] pba 23oct-12am: window 2026-10-23 00:00:00 to 2026-10-23 12:00:00
+  [PASS] pba 23oct-12am: complete, 35 rows, not truncated
+  [PASS] pba 23oct-12am: result differs from every other chunk
+  [PASS] pba 23oct-12pm: SQL Metabase ran is the saved file
+  [PASS] pba 23oct-12pm: in-query fingerprint matches the file
+  [PASS] pba 23oct-12pm: window 2026-10-23 12:00:00 to 2026-10-24 00:00:00
+  [PASS] pba 23oct-12pm: complete, 42 rows, not truncated
+  [PASS] pba 23oct-12pm: result differs from every other chunk
+  [PASS] pba 24oct-12am: SQL Metabase ran is the saved file
+  [PASS] pba 24oct-12am: in-query fingerprint matches the file
+  [PASS] pba 24oct-12am: window 2026-10-24 00:00:00 to 2026-10-24 12:00:00
+  [PASS] pba 24oct-12am: complete, 35 rows, not truncated
+  [PASS] pba 24oct-12am: result differs from every other chunk
+  [PASS] pba 24oct-12pm: SQL Metabase ran is the saved file
+  [PASS] pba 24oct-12pm: in-query fingerprint matches the file
+  [PASS] pba 24oct-12pm: window 2026-10-24 12:00:00 to 2026-10-25 00:00:00
+  [PASS] pba 24oct-12pm: complete, 39 rows, not truncated
+  [PASS] pba 24oct-12pm: result differs from every other chunk
+  [PASS] pba 25oct-12am: SQL Metabase ran is the saved file
+  [PASS] pba 25oct-12am: in-query fingerprint matches the file
+  [PASS] pba 25oct-12am: window 2026-10-25 00:00:00 to 2026-10-25 12:00:00
+  [PASS] pba 25oct-12am: complete, 33 rows, not truncated
+  [PASS] pba 25oct-12am: result differs from every other chunk
+  [PASS] pba 25oct-12pm: SQL Metabase ran is the saved file
+  [PASS] pba 25oct-12pm: in-query fingerprint matches the file
+  [PASS] pba 25oct-12pm: window 2026-10-25 12:00:00 to 2026-10-26 00:00:00
+  [PASS] pba 25oct-12pm: complete, 38 rows, not truncated
+  [PASS] pba 25oct-12pm: result differs from every other chunk
+  [PASS] 22oct-12pm: both measures cover the same PBA orders (no order lost in the unpivot)
+  [PASS] 22oct-12pm: no lane flag in this query (lane-free run)
+  [PASS] 23oct-12am: both measures cover the same PBA orders (no order lost in the unpivot)
+  [PASS] 23oct-12am: no lane flag in this query (lane-free run)
+  [PASS] 23oct-12pm: both measures cover the same PBA orders (no order lost in the unpivot)
+  [PASS] 23oct-12pm: no lane flag in this query (lane-free run)
+  [PASS] 24oct-12am: both measures cover the same PBA orders (no order lost in the unpivot)
+  [PASS] 24oct-12am: no lane flag in this query (lane-free run)
+  [PASS] 24oct-12pm: both measures cover the same PBA orders (no order lost in the unpivot)
+  [PASS] 24oct-12pm: no lane flag in this query (lane-free run)
+  [PASS] 25oct-12am: both measures cover the same PBA orders (no order lost in the unpivot)
+  [PASS] 25oct-12am: no lane flag in this query (lane-free run)
+  [PASS] 25oct-12pm: both measures cover the same PBA orders (no order lost in the unpivot)
+  [PASS] 25oct-12pm: no lane flag in this query (lane-free run)
+  [PASS] all three timestamps are offset-aware (TIMESTAMP_TZ), so the IST date is exact: ['TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]']
+  [PASS] orders counted + blank + negative = whole base
+  [PASS] cumulative % rises and stays within 100
+  [PASS] p25 = 2 agrees with the cumulative counts (nearest rank)
+  [PASS] p50 = 3 agrees with the cumulative counts (nearest rank)
+  [PASS] p75 = 4 agrees with the cumulative counts (nearest rank)
+  [PASS] p90 = 4 agrees with the cumulative counts (nearest rank)
+  [INFO] PBA base here: 3,489 orders (per 12h chunk: [673, 291, 671, 317, 655, 273, 609]); Section 1 metric 4 had 3,490; difference -1 (live data moved between runs)
+
+Result
+  Orders in the metric (both timestamps present, days >= 0): 3,489 of 3,489 in the PBA base
+  Left out, a timestamp blank: 0;  left out, negative days (data error): 0 
+  Avg 3.0 d | p25 2 | p50 3 | p75 4 | p90 4
+  Cumulative: 0 d 0.0% | <=1 7.2% | <=2 34.4% | <=3 68.8% | 4+ 100.0%
+  Distribution (days: orders): {1: 250, 2: 950, 3: 1200, 4: 778, 5: 222, 6: 59, 7: 23, 8: 6, 9: 1}
+

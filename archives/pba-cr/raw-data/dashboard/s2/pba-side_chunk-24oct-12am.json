@@ -1,0 +1,957 @@
+{
+  "data": {
+    "rows": [
+      [
+        "Internal",
+        false,
+        "DD_PBA",
+        1,
+        1164,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "DD_PBA",
+        2,
+        2386,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "DD_PBA",
+        3,
+        1598,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "DD_PBA",
+        4,
+        524,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "DD_PBA",
+        5,
+        134,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "DD_PBA",
+        6,
+        26,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "DD_PBA",
+        7,
+        9,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "DD_PBA",
+        8,
+        4,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "DD_PBA",
+        9,
+        1,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "DD_PBA",
+        13,
+        1,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "DD_PBA",
+        null,
+        18,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "WH_PBA",
+        1,
+        924,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "WH_PBA",
+        2,
+        2254,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "WH_PBA",
+        3,
+        1707,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "WH_PBA",
+        4,
+        706,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "WH_PBA",
+        5,
+        185,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "WH_PBA",
+        6,
+        55,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "WH_PBA",
+        7,
+        10,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "WH_PBA",
+        8,
+        3,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "WH_PBA",
+        9,
+        2,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "WH_PBA",
+        13,
+        1,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "Internal",
+        false,
+        "WH_PBA",
+        null,
+        18,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "DD_PBA",
+        1,
+        38,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "DD_PBA",
+        2,
+        151,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "DD_PBA",
+        3,
+        92,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "DD_PBA",
+        4,
+        27,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "DD_PBA",
+        5,
+        8,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "DD_PBA",
+        6,
+        1,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "WH_PBA",
+        1,
+        21,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "WH_PBA",
+        2,
+        131,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "WH_PBA",
+        3,
+        108,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "WH_PBA",
+        4,
+        41,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "WH_PBA",
+        5,
+        10,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "WH_PBA",
+        6,
+        5,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ],
+      [
+        "PBA",
+        false,
+        "WH_PBA",
+        7,
+        1,
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16] / TIMESTAMP_TZ(9)[SB16]",
+        "d98ac9c558a34ef4ea3d057674fcf3f1",
+        "a8ee3aeeb24b78ae74a6212fb5311270"
+      ]
+    ],
+    "results_timezone": "Asia/Kolkata",
+    "csv-include-bom?": true,
+    "download_perms": "full",
+    "results_metadata": {
+      "columns": [
+        {
+          "database_type": "VARCHAR",
+          "semantic_type": null,
+          "lib/deduplicated-name": "BASE_GROUP",
+          "lib/original-name": "BASE_GROUP",
+          "name": "BASE_GROUP",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "BASE_GROUP",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "BASE_GROUP",
+            {
+              "base-type": "type/Text"
+            }
+          ],
+          "effective_type": "type/Text",
+          "lib/desired-column-alias": "BASE_GROUP",
+          "display_name": "BASE_GROUP",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 2,
+              "nil%": 0
+            },
+            "type": {
+              "type/Text": {
+                "percent-json": 0,
+                "percent-url": 0,
+                "percent-email": 0,
+                "percent-state": 0,
+                "percent-blank": 0,
+                "average-length": 6.142857142857143,
+                "mode-fraction": 0.6285714285714286,
+                "top-3-fraction": 1
+              }
+            }
+          },
+          "base_type": "type/Text"
+        },
+        {
+          "database_type": "BOOLEAN",
+          "semantic_type": null,
+          "lib/deduplicated-name": "COMMON_LANE",
+          "lib/original-name": "COMMON_LANE",
+          "name": "COMMON_LANE",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "COMMON_LANE",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "COMMON_LANE",
+            {
+              "base-type": "type/Boolean"
+            }
+          ],
+          "effective_type": "type/Boolean",
+          "lib/desired-column-alias": "COMMON_LANE",
+          "display_name": "COMMON_LANE",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 1,
+              "nil%": 0
+            }
+          },
+          "base_type": "type/Boolean"
+        },
+        {
+          "database_type": "VARCHAR",
+          "semantic_type": null,
+          "lib/deduplicated-name": "MEASURE",
+          "lib/original-name": "MEASURE",
+          "name": "MEASURE",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "MEASURE",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "MEASURE",
+            {
+              "base-type": "type/Text"
+            }
+          ],
+          "effective_type": "type/Text",
+          "lib/desired-column-alias": "MEASURE",
+          "display_name": "MEASURE",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 2,
+              "nil%": 0
+            },
+            "type": {
+              "type/Text": {
+                "percent-json": 0,
+                "percent-url": 0,
+                "percent-email": 0,
+                "percent-state": 0,
+                "percent-blank": 0,
+                "average-length": 6,
+                "mode-fraction": 0.5142857142857142,
+                "top-3-fraction": 1
+              }
+            }
+          },
+          "base_type": "type/Text"
+        },
+        {
+          "database_type": "NUMBER",
+          "semantic_type": null,
+          "lib/deduplicated-name": "DAYS",
+          "lib/original-name": "DAYS",
+          "name": "DAYS",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "DAYS",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "DAYS",
+            {
+              "base-type": "type/BigInteger"
+            }
+          ],
+          "effective_type": "type/BigInteger",
+          "lib/desired-column-alias": "DAYS",
+          "display_name": "DAYS",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 11,
+              "nil%": 0.05714285714285714
+            },
+            "type": {
+              "type/Number": {
+                "skewness": 0.9026072420101872,
+                "min": 1,
+                "q1": 3,
+                "q3": 7,
+                "excess-kurtosis": 0.7431763900648956,
+                "zero-fraction": 0,
+                "mode-fraction": 0.12121212121212122,
+                "top-3-fraction": 0.36363636363636365,
+                "max": 13,
+                "sd": 3.1324910215354174,
+                "avg": 5.000000000000001
+              }
+            }
+          },
+          "base_type": "type/BigInteger"
+        },
+        {
+          "database_type": "NUMBER",
+          "semantic_type": null,
+          "lib/deduplicated-name": "N_ORDERS",
+          "lib/original-name": "N_ORDERS",
+          "name": "N_ORDERS",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "N_ORDERS",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "N_ORDERS",
+            {
+              "base-type": "type/BigInteger"
+            }
+          ],
+          "effective_type": "type/BigInteger",
+          "lib/desired-column-alias": "N_ORDERS",
+          "display_name": "N_ORDERS",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 29,
+              "nil%": 0
+            },
+            "type": {
+              "type/Number": {
+                "skewness": 2.0864973523675645,
+                "min": 1,
+                "q1": 5,
+                "q3": 185,
+                "excess-kurtosis": 3.3604646597682484,
+                "zero-fraction": 0,
+                "mode-fraction": 0.14285714285714285,
+                "top-3-fraction": 0.2571428571428571,
+                "max": 2386,
+                "sd": 663.6861564668305,
+                "avg": 353.2571428571429
+              }
+            }
+          },
+          "base_type": "type/BigInteger"
+        },
+        {
+          "database_type": "VARCHAR",
+          "semantic_type": null,
+          "lib/deduplicated-name": "TS_TYPES_MIN",
+          "lib/original-name": "TS_TYPES_MIN",
+          "name": "TS_TYPES_MIN",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "TS_TYPES_MIN",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "TS_TYPES_MIN",
+            {
+              "base-type": "type/Text"
+            }
+          ],
+          "effective_type": "type/Text",
+          "lib/desired-column-alias": "TS_TYPES_MIN",
+          "display_name": "TS_TYPES_MIN",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 1,
+              "nil%": 0
+            },
+            "type": {
+              "type/Text": {
+                "percent-json": 0,
+                "percent-url": 0,
+                "percent-email": 0,
+                "percent-state": 0,
+                "percent-blank": 0,
+                "average-length": 69,
+                "mode-fraction": 1,
+                "top-3-fraction": 1
+              }
+            }
+          },
+          "base_type": "type/Text"
+        },
+        {
+          "database_type": "VARCHAR",
+          "semantic_type": null,
+          "lib/deduplicated-name": "TS_TYPES_MAX",
+          "lib/original-name": "TS_TYPES_MAX",
+          "name": "TS_TYPES_MAX",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "TS_TYPES_MAX",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "TS_TYPES_MAX",
+            {
+              "base-type": "type/Text"
+            }
+          ],
+          "effective_type": "type/Text",
+          "lib/desired-column-alias": "TS_TYPES_MAX",
+          "display_name": "TS_TYPES_MAX",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 1,
+              "nil%": 0
+            },
+            "type": {
+              "type/Text": {
+                "percent-json": 0,
+                "percent-url": 0,
+                "percent-email": 0,
+                "percent-state": 0,
+                "percent-blank": 0,
+                "average-length": 69,
+                "mode-fraction": 1,
+                "top-3-fraction": 1
+              }
+            }
+          },
+          "base_type": "type/Text"
+        },
+        {
+          "database_type": "VARCHAR",
+          "semantic_type": null,
+          "lib/deduplicated-name": "BASE_MD5",
+          "lib/original-name": "BASE_MD5",
+          "name": "BASE_MD5",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "BASE_MD5",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "BASE_MD5",
+            {
+              "base-type": "type/Text"
+            }
+          ],
+          "effective_type": "type/Text",
+          "lib/desired-column-alias": "BASE_MD5",
+          "display_name": "BASE_MD5",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 1,
+              "nil%": 0
+            },
+            "type": {
+              "type/Text": {
+                "percent-json": 0,
+                "percent-url": 0,
+                "percent-email": 0,
+                "percent-state": 0,
+                "percent-blank": 0,
+                "average-length": 32,
+                "mode-fraction": 1,
+                "top-3-fraction": 1
+              }
+            }
+          },
+          "base_type": "type/Text"
+        },
+        {
+          "database_type": "VARCHAR",
+          "semantic_type": null,
+          "lib/deduplicated-name": "FULL_MD5",
+          "lib/original-name": "FULL_MD5",
+          "name": "FULL_MD5",
+          "lib/source": "source/native",
+          "lib/source-column-alias": "FULL_MD5",
+          "source": "native",
+          "field_ref": [
+            "field",
+            "FULL_MD5",
+            {
+              "base-type": "type/Text"
+            }
+          ],
+          "effective_type": "type/Text",
+          "lib/desired-column-alias": "FULL_MD5",
+          "display_name": "FULL_MD5",
+          "fingerprint": {
+            "global": {
+              "distinct-count": 1,
+              "nil%": 0
+            },
+            "type": {
+              "type/Text": {
+                "percent-json": 0,
+                "percent-url": 0,
+                "percent-email": 0,
+                "percent-state": 0,
+                "percent-blank": 0,
+                "average-length": 32,
+                "mode-fraction": 1,
+                "top-3-fraction": 1
+              }
+            }
+          },
+          "base_type": "type/Text"
+        }
+      ]
+    },
+    "requested_timezone": "Asia/Kolkata",
+    "format-rows?": true,
+    "cols": [
+      {
+        "database_type": "VARCHAR",
+        "lib/deduplicated-name": "BASE_GROUP",
+        "lib/original-name": "BASE_GROUP",
+        "name": "BASE_GROUP",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "BASE_GROUP",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "BASE_GROUP",
+          {
+            "base-type": "type/Text"
+          }
+        ],
+        "effective_type": "type/Text",
+        "lib/desired-column-alias": "BASE_GROUP",
+        "display_name": "BASE_GROUP",
+        "base_type": "type/Text"
+      },
+      {
+        "database_type": "BOOLEAN",
+        "lib/deduplicated-name": "COMMON_LANE",
+        "lib/original-name": "COMMON_LANE",
+        "name": "COMMON_LANE",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "COMMON_LANE",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "COMMON_LANE",
+          {
+            "base-type": "type/Boolean"
+          }
+        ],
+        "effective_type": "type/Boolean",
+        "lib/desired-column-alias": "COMMON_LANE",
+        "display_name": "COMMON_LANE",
+        "base_type": "type/Boolean"
+      },
+      {
+        "database_type": "VARCHAR",
+        "lib/deduplicated-name": "MEASURE",
+        "lib/original-name": "MEASURE",
+        "name": "MEASURE",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "MEASURE",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "MEASURE",
+          {
+            "base-type": "type/Text"
+          }
+        ],
+        "effective_type": "type/Text",
+        "lib/desired-column-alias": "MEASURE",
+        "display_name": "MEASURE",
+        "base_type": "type/Text"
+      },
+      {
+        "database_type": "NUMBER",
+        "lib/deduplicated-name": "DAYS",
+        "lib/original-name": "DAYS",
+        "name": "DAYS",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "DAYS",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "DAYS",
+          {
+            "base-type": "type/BigInteger"
+          }
+        ],
+        "effective_type": "type/BigInteger",
+        "lib/desired-column-alias": "DAYS",
+        "display_name": "DAYS",
+        "base_type": "type/BigInteger"
+      },
+      {
+        "database_type": "NUMBER",
+        "lib/deduplicated-name": "N_ORDERS",
+        "lib/original-name": "N_ORDERS",
+        "name": "N_ORDERS",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "N_ORDERS",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "N_ORDERS",
+          {
+            "base-type": "type/BigInteger"
+          }
+        ],
+        "effective_type": "type/BigInteger",
+        "lib/desired-column-alias": "N_ORDERS",
+        "display_name": "N_ORDERS",
+        "base_type": "type/BigInteger"
+      },
+      {
+        "database_type": "VARCHAR",
+        "lib/deduplicated-name": "TS_TYPES_MIN",
+        "lib/original-name": "TS_TYPES_MIN",
+        "name": "TS_TYPES_MIN",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "TS_TYPES_MIN",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "TS_TYPES_MIN",
+          {
+            "base-type": "type/Text"
+          }
+        ],
+        "effective_type": "type/Text",
+        "lib/desired-column-alias": "TS_TYPES_MIN",
+        "display_name": "TS_TYPES_MIN",
+        "base_type": "type/Text"
+      },
+      {
+        "database_type": "VARCHAR",
+        "lib/deduplicated-name": "TS_TYPES_MAX",
+        "lib/original-name": "TS_TYPES_MAX",
+        "name": "TS_TYPES_MAX",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "TS_TYPES_MAX",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "TS_TYPES_MAX",
+          {
+            "base-type": "type/Text"
+          }
+        ],
+        "effective_type": "type/Text",
+        "lib/desired-column-alias": "TS_TYPES_MAX",
+        "display_name": "TS_TYPES_MAX",
+        "base_type": "type/Text"
+      },
+      {
+        "database_type": "VARCHAR",
+        "lib/deduplicated-name": "BASE_MD5",
+        "lib/original-name": "BASE_MD5",
+        "name": "BASE_MD5",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "BASE_MD5",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "BASE_MD5",
+          {
+            "base-type": "type/Text"
+          }
+        ],
+        "effective_type": "type/Text",
+        "lib/desired-column-alias": "BASE_MD5",
+        "display_name": "BASE_MD5",
+        "base_type": "type/Text"
+      },
+      {
+        "database_type": "VARCHAR",
+        "lib/deduplicated-name": "FULL_MD5",
+        "lib/original-name": "FULL_MD5",
+        "name": "FULL_MD5",
+        "lib/source": "source/native",
+        "lib/source-column-alias": "FULL_MD5",
+        "source": "native",
+        "field_ref": [
+          "field",
+          "FULL_MD5",
+          {
+            "base-type": "type/Text"
+          }
+        ],
+        "effective_type": "type/Text",
+        "lib/desired-column-alias": "FULL_MD5",
+        "display_name": "FULL_MD5",
+        "base_type": "type/Text"
+      }
+    ],
+    "native_form": {
+      "lib/type": "mbql.stage/native",
+      "query": "WITH base AS (\nWITH params AS (\n    SELECT '2026-10-24 00:00:00 +0530'::TIMESTAMP_TZ AS start_ts,\n           '2026-10-24 12:00:00 +0530'::TIMESTAMP_TZ AS end_ts\n),\n\n\n-- the same window as IST wall-clock, for the NTZ instrumentation tables\nparams_ist AS (\n    SELECT CONVERT_TIMEZONE('Asia/Kolkata', start_ts)::TIMESTAMP_NTZ AS start_ist,\n           CONVERT_TIMEZONE('Asia/Kolkata', end_ts)::TIMESTAMP_NTZ   AS end_ist\n    FROM params\n),\n\n\n-- latest version of each order's promise, with its placement time taken over all versions\nfrozen AS (\n    SELECT v.*\n    FROM (\n        SELECT d.*,\n               MIN(d.created_at) OVER (PARTITION BY d.reference_id) AS order_placed_at\n        FROM prod_silver_db.logistics.serviceability_eta_details d\n        -- performance pre-filter (added 2026-10-30, not in the v2.1 base): keeps every row of any order with a promise row inside the window;\n        -- an order kept by the placed-at filter below always has one, so results are unchanged (proven on slice and on full window)\n        WHERE d.reference_id IN (SELECT w.reference_id FROM prod_silver_db.logistics.serviceability_eta_details w CROSS JOIN params p\n                                 WHERE w.created_at >= p.start_ts AND w.created_at < p.end_ts)\n        QUALIFY ROW_NUMBER() OVER (PARTITION BY d.reference_id ORDER BY TRY_TO_NUMBER(d.version) DESC) = 1\n    ) v\n    CROSS JOIN params p\n    WHERE v.order_placed_at >= p.start_ts AND v.order_placed_at < p.end_ts\n),\n\n\nshipment AS (\n    SELECT s.*\n    FROM prod_silver_db.logistics.logistics_shipment_details s\n    JOIN frozen f ON f.reference_id = s.reference_id\n    WHERE COALESCE(s.is_deleted, FALSE) = FALSE\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY TRY_TO_NUMBER(s.version) DESC) = 1\n),\n\n\n-- ETA records of the cohort's orders\neta_inst AS (\n    SELECT i.*,\n           TRY_PARSE_JSON(TO_VARCHAR(i.eval_candidates)) AS cands\n    FROM prod_silver_db.logistics.logistics_eta_instrumentation i\n    JOIN frozen f ON f.reference_id = i.reference_id\n    CROSS JOIN params_ist p\n    WHERE i.created_at >= DATEADD(day, -1, p.start_ist)      -- a promise can be computed shortly before the order is placed\n      AND i.created_at <  DATEADD(day, 10, p.end_ist)\n),\n\n\n-- hard-allocation records of the cohort's orders\nhard_inst AS (\n    SELECT i.*,\n           TRY_PARSE_JSON(TO_VARCHAR(i.eval_candidates)) AS cands\n    FROM prod_silver_db.logistics.logistics_hard_allocation_instrumentation i\n    JOIN frozen f ON f.reference_id = i.reference_id\n    CROSS JOIN params_ist p\n    WHERE i.created_at >= DATEADD(day, -1, p.start_ist)\n      AND i.created_at <  DATEADD(day, 10, p.end_ist)        -- hard allocations land after the soft window\n),\n\n\n-- ---------- SOFT: the ETA record of the promise that stands ----------\nsoft AS (\n    SELECT i.*\n    FROM eta_inst i\n    JOIN frozen f ON f.reference_id = i.reference_id AND f.request_id = i.request_id\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY i.reference_id ORDER BY i.created_at DESC) = 1\n),\n\n\nsoft_pba AS (\n    SELECT s.reference_id,\n           MAX(c.value:evaluated::BOOLEAN)                                             AS pba_evaluated,\n           MAX(c.value:decision::STRING)                                               AS pba_decision,\n           MAX(c.value:decision_detail::STRING)                                        AS pba_decision_detail,\n           MAX(c.value:pba_to_internal_tat_ratio::FLOAT)                               AS pba_to_internal_tat_ratio,\n           MAX(c.value:source::STRING)                                                 AS pba_source,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',           e.value:delivery_partner_id,\n               'tat_in_minutes',    e.value:delivery_tat_in_minutes,\n               'dispatch_time',     e.value:dispatch_time,\n               'delivery_time',     e.value:delivery_time,\n               'eligible',          e.value:eligible,\n               'is_express',        e.value:is_express,\n               'cache_lookup',      e.value:cache_row:cache_lookup,\n               'cache_age_minutes', e.value:cache_row:cache_age_minutes,\n               'cutoff_window',     e.value:cache_row:cutoff_window\n           )) WITHIN GROUP (ORDER BY e.index)                                          AS pba_soft_preference_array\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates, OUTER => TRUE) e\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n    GROUP BY s.reference_id\n),\n\n\n-- PBA's soft pick: the top-ranked PBA partner (first eligible in PBA's order), whether or not it was served\nsoft_pba_pick AS (\n    SELECT s.reference_id,\n           e.value:delivery_partner_id::NUMBER                                         AS pba_partner,\n           e.value:delivery_tat_in_minutes::NUMBER                                     AS pba_tat_in_minutes,\n           TRY_TO_TIMESTAMP_TZ(e.value:dispatch_time::STRING)                          AS pba_dispatch_time,\n           TRY_TO_TIMESTAMP_TZ(e.value:delivery_time::STRING)                          AS pba_delivery_time,\n           e.value:is_express::BOOLEAN                                                 AS pba_is_express,\n           e.value:cache_row:cache_lookup::STRING                                      AS pba_cache_lookup,\n           e.value:cache_row:cache_age_minutes::NUMBER                                 AS pba_cache_age_minutes,\n           e.value:cache_row:cutoff_window::STRING                                     AS pba_cutoff_window,\n           TRY_TO_TIMESTAMP_TZ(e.value:cache_row:last_cached_at::STRING)               AS pba_cache_last_cached_at\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates) e\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n      AND e.value:eligible::BOOLEAN\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY e.index) = 1\n),\n\n\n-- PBA buffers and buffered times on the soft side (present only when PBA was served)\nsoft_pba_buffer AS (\n    SELECT s.reference_id,\n           b.value:pickup_buffer_in_minutes::NUMBER                                    AS pba_pickup_buffer,\n           b.value:drop_buffer_in_minutes::NUMBER                                      AS pba_drop_buffer,\n           TRY_TO_TIMESTAMP_TZ(b.value:dispatch_time::STRING)                          AS pba_buffered_dispatch_time,\n           TRY_TO_TIMESTAMP_TZ(b.value:delivery_time::STRING)                          AS pba_buffered_delivery_time\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:buffer_adjusted_candidates) b\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n      AND b.value:rank::NUMBER = 1\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY b.index) = 1\n),\n\n\n-- Internal soft side: the evaluated internal store (pharmacist or DDB TAT adherence), ranked after buffers.\n-- Rank 1 is internal's pick whether or not it was served.\nsoft_internal AS (\n    SELECT s.reference_id,\n           MAX(c.value:candidate_type::STRING)                                                          AS internal_candidate_type,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:delivery_partner_id::NUMBER, NULL))                AS internal_partner,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:delivery_tat_in_minutes::NUMBER, NULL))            AS internal_tat_in_minutes,\n           MAX(IFF(b.value:rank::NUMBER = 1, TRY_TO_TIMESTAMP_TZ(b.value:dispatch_time::STRING), NULL)) AS internal_dispatch_time,\n           MAX(IFF(b.value:rank::NUMBER = 1, TRY_TO_TIMESTAMP_TZ(b.value:delivery_time::STRING), NULL)) AS internal_delivery_time,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:pickup_buffer_in_minutes::NUMBER, NULL))           AS internal_pickup_buffer,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:drop_buffer_in_minutes::NUMBER, NULL))             AS internal_drop_buffer,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:is_express::BOOLEAN, NULL))                        AS internal_is_express,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',        b.value:delivery_partner_id,\n               'rank',           b.value:rank,\n               'tat_in_minutes', b.value:delivery_tat_in_minutes,\n               'dispatch_time',  b.value:dispatch_time,\n               'delivery_time',  b.value:delivery_time,\n               'score',          b.value:score\n           )) WITHIN GROUP (ORDER BY b.value:rank::NUMBER)                                              AS internal_soft_preference_array\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:buffer_adjusted_candidates) b\n    WHERE c.value:candidate_type::STRING IN ('COURIER_LEGACY_TAT_ADHERENCE', 'COURIER_DDB_TAT_ADHERENCE')\n      AND c.value:evaluated::BOOLEAN\n    GROUP BY s.reference_id\n)\n\n\nSELECT\n    f.reference_id                                              AS order_id,\n    f.order_placed_at,\n    f.sdd_enabled,\n    f.warehouse_id                                              AS wh_id,\n    f.delivery_pincode                                          AS pincode,\n    (s.reference_id IS NOT NULL)                                AS has_soft_record,\n    s.result_selected_candidate_type                            AS soft_served_candidate_type,\n    f.promised_warehouse_processing_time,\n    COALESCE(pb.pba_buffered_dispatch_time, pp.pba_dispatch_time) AS pba_projected_dispatch_time,\n    COALESCE(pb.pba_buffered_delivery_time, pp.pba_delivery_time) AS pba_projected_delivery_time\nFROM frozen f\nLEFT JOIN soft            s   ON s.reference_id   = f.reference_id\nLEFT JOIN soft_pba_pick   pp  ON pp.reference_id  = f.reference_id\nLEFT JOIN soft_pba_buffer pb  ON pb.reference_id  = f.reference_id\n),\nod AS (\n    SELECT order_id, orderstatus\n    FROM prod_silver_db.main_db.order_details\n    WHERE order_id IN (SELECT TRY_TO_NUMBER(order_id) FROM base)\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY ingestion_ts_ist DESC) = 1\n),\nplaced AS (\n    SELECT b.*,\n           CASE WHEN od.order_id IS NULL            THEN 'no_status_row'\n                WHEN od.orderstatus IN (49, 312)    THEN 'dropped'\n                ELSE 'kept' END                     AS placed_flag\n    FROM base b\n    LEFT JOIN od ON od.order_id = TRY_TO_NUMBER(b.order_id)\n),\nkb AS (\n    SELECT p.*,\n           CASE WHEN soft_served_candidate_type = 'COURIER_PBA' THEN 'PBA'\n                WHEN soft_served_candidate_type IN ('COURIER_LEGACY_TAT_ADHERENCE', 'COURIER_DDB_TAT_ADHERENCE') THEN 'Internal' END AS base_group,\n           TO_VARCHAR(wh_id) || '|' || TO_VARCHAR(pincode) AS lane\n    FROM placed p\n    WHERE placed_flag = 'kept' AND sdd_enabled = FALSE\n),\nd AS (\n    SELECT kb.base_group,\n           FALSE AS common_lane,\n           DATEDIFF(day, TO_DATE(CONVERT_TIMEZONE('Asia/Kolkata', promised_warehouse_processing_time)), TO_DATE(CONVERT_TIMEZONE('Asia/Kolkata', pba_projected_delivery_time)))      AS wh_pba,\n           DATEDIFF(day, TO_DATE(CONVERT_TIMEZONE('Asia/Kolkata', pba_projected_dispatch_time)), TO_DATE(CONVERT_TIMEZONE('Asia/Kolkata', pba_projected_delivery_time)))                 AS dd_pba,\n           SYSTEM$TYPEOF(promised_warehouse_processing_time) || ' / ' || SYSTEM$TYPEOF(pba_projected_dispatch_time) || ' / ' || SYSTEM$TYPEOF(pba_projected_delivery_time) AS ts_types\n    FROM kb\n    WHERE kb.base_group IS NOT NULL\n),\nu AS (\n    SELECT base_group, common_lane, measure, days, ts_types\n    FROM d UNPIVOT INCLUDE NULLS (days FOR measure IN (wh_pba, dd_pba))\n)\nSELECT base_group, common_lane, measure, days, COUNT(*) AS n_orders, MIN(ts_types) AS ts_types_min, MAX(ts_types) AS ts_types_max,\n       ANY_VALUE(MD5(SUBSTR(CURRENT_STATEMENT(),\n                  CHARINDEX('WITH params AS (', CURRENT_STATEMENT()),\n                  CHARINDEX(CHR(10) || ')' || CHR(10) || 'SELECT', CURRENT_STATEMENT()) - CHARINDEX('WITH params AS (', CURRENT_STATEMENT())))) AS base_md5,\n       ANY_VALUE(MD5(CURRENT_STATEMENT())) AS full_md5\nFROM u\nGROUP BY 1, 2, 3, 4\nORDER BY 1, 2, 3, 4"
+    },
+    "is_sandboxed": false,
+    "insights": null
+  },
+  "cached": null,
+  "database_id": 1192,
+  "started_at": "2026-10-30T10:48:16.102575312Z",
+  "json_query": {
+    "lib/type": "mbql/query",
+    "stages": [
+      {
+        "lib/type": "mbql.stage/native",
+        "native": "WITH base AS (\nWITH params AS (\n    SELECT '2026-10-24 00:00:00 +0530'::TIMESTAMP_TZ AS start_ts,\n           '2026-10-24 12:00:00 +0530'::TIMESTAMP_TZ AS end_ts\n),\n\n\n-- the same window as IST wall-clock, for the NTZ instrumentation tables\nparams_ist AS (\n    SELECT CONVERT_TIMEZONE('Asia/Kolkata', start_ts)::TIMESTAMP_NTZ AS start_ist,\n           CONVERT_TIMEZONE('Asia/Kolkata', end_ts)::TIMESTAMP_NTZ   AS end_ist\n    FROM params\n),\n\n\n-- latest version of each order's promise, with its placement time taken over all versions\nfrozen AS (\n    SELECT v.*\n    FROM (\n        SELECT d.*,\n               MIN(d.created_at) OVER (PARTITION BY d.reference_id) AS order_placed_at\n        FROM prod_silver_db.logistics.serviceability_eta_details d\n        -- performance pre-filter (added 2026-10-30, not in the v2.1 base): keeps every row of any order with a promise row inside the window;\n        -- an order kept by the placed-at filter below always has one, so results are unchanged (proven on slice and on full window)\n        WHERE d.reference_id IN (SELECT w.reference_id FROM prod_silver_db.logistics.serviceability_eta_details w CROSS JOIN params p\n                                 WHERE w.created_at >= p.start_ts AND w.created_at < p.end_ts)\n        QUALIFY ROW_NUMBER() OVER (PARTITION BY d.reference_id ORDER BY TRY_TO_NUMBER(d.version) DESC) = 1\n    ) v\n    CROSS JOIN params p\n    WHERE v.order_placed_at >= p.start_ts AND v.order_placed_at < p.end_ts\n),\n\n\nshipment AS (\n    SELECT s.*\n    FROM prod_silver_db.logistics.logistics_shipment_details s\n    JOIN frozen f ON f.reference_id = s.reference_id\n    WHERE COALESCE(s.is_deleted, FALSE) = FALSE\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY TRY_TO_NUMBER(s.version) DESC) = 1\n),\n\n\n-- ETA records of the cohort's orders\neta_inst AS (\n    SELECT i.*,\n           TRY_PARSE_JSON(TO_VARCHAR(i.eval_candidates)) AS cands\n    FROM prod_silver_db.logistics.logistics_eta_instrumentation i\n    JOIN frozen f ON f.reference_id = i.reference_id\n    CROSS JOIN params_ist p\n    WHERE i.created_at >= DATEADD(day, -1, p.start_ist)      -- a promise can be computed shortly before the order is placed\n      AND i.created_at <  DATEADD(day, 10, p.end_ist)\n),\n\n\n-- hard-allocation records of the cohort's orders\nhard_inst AS (\n    SELECT i.*,\n           TRY_PARSE_JSON(TO_VARCHAR(i.eval_candidates)) AS cands\n    FROM prod_silver_db.logistics.logistics_hard_allocation_instrumentation i\n    JOIN frozen f ON f.reference_id = i.reference_id\n    CROSS JOIN params_ist p\n    WHERE i.created_at >= DATEADD(day, -1, p.start_ist)\n      AND i.created_at <  DATEADD(day, 10, p.end_ist)        -- hard allocations land after the soft window\n),\n\n\n-- ---------- SOFT: the ETA record of the promise that stands ----------\nsoft AS (\n    SELECT i.*\n    FROM eta_inst i\n    JOIN frozen f ON f.reference_id = i.reference_id AND f.request_id = i.request_id\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY i.reference_id ORDER BY i.created_at DESC) = 1\n),\n\n\nsoft_pba AS (\n    SELECT s.reference_id,\n           MAX(c.value:evaluated::BOOLEAN)                                             AS pba_evaluated,\n           MAX(c.value:decision::STRING)                                               AS pba_decision,\n           MAX(c.value:decision_detail::STRING)                                        AS pba_decision_detail,\n           MAX(c.value:pba_to_internal_tat_ratio::FLOAT)                               AS pba_to_internal_tat_ratio,\n           MAX(c.value:source::STRING)                                                 AS pba_source,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',           e.value:delivery_partner_id,\n               'tat_in_minutes',    e.value:delivery_tat_in_minutes,\n               'dispatch_time',     e.value:dispatch_time,\n               'delivery_time',     e.value:delivery_time,\n               'eligible',          e.value:eligible,\n               'is_express',        e.value:is_express,\n               'cache_lookup',      e.value:cache_row:cache_lookup,\n               'cache_age_minutes', e.value:cache_row:cache_age_minutes,\n               'cutoff_window',     e.value:cache_row:cutoff_window\n           )) WITHIN GROUP (ORDER BY e.index)                                          AS pba_soft_preference_array\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates, OUTER => TRUE) e\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n    GROUP BY s.reference_id\n),\n\n\n-- PBA's soft pick: the top-ranked PBA partner (first eligible in PBA's order), whether or not it was served\nsoft_pba_pick AS (\n    SELECT s.reference_id,\n           e.value:delivery_partner_id::NUMBER                                         AS pba_partner,\n           e.value:delivery_tat_in_minutes::NUMBER                                     AS pba_tat_in_minutes,\n           TRY_TO_TIMESTAMP_TZ(e.value:dispatch_time::STRING)                          AS pba_dispatch_time,\n           TRY_TO_TIMESTAMP_TZ(e.value:delivery_time::STRING)                          AS pba_delivery_time,\n           e.value:is_express::BOOLEAN                                                 AS pba_is_express,\n           e.value:cache_row:cache_lookup::STRING                                      AS pba_cache_lookup,\n           e.value:cache_row:cache_age_minutes::NUMBER                                 AS pba_cache_age_minutes,\n           e.value:cache_row:cutoff_window::STRING                                     AS pba_cutoff_window,\n           TRY_TO_TIMESTAMP_TZ(e.value:cache_row:last_cached_at::STRING)               AS pba_cache_last_cached_at\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:evaluated_candidates) e\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n      AND e.value:eligible::BOOLEAN\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY e.index) = 1\n),\n\n\n-- PBA buffers and buffered times on the soft side (present only when PBA was served)\nsoft_pba_buffer AS (\n    SELECT s.reference_id,\n           b.value:pickup_buffer_in_minutes::NUMBER                                    AS pba_pickup_buffer,\n           b.value:drop_buffer_in_minutes::NUMBER                                      AS pba_drop_buffer,\n           TRY_TO_TIMESTAMP_TZ(b.value:dispatch_time::STRING)                          AS pba_buffered_dispatch_time,\n           TRY_TO_TIMESTAMP_TZ(b.value:delivery_time::STRING)                          AS pba_buffered_delivery_time\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:buffer_adjusted_candidates) b\n    WHERE c.value:candidate_type::STRING = 'COURIER_PBA'\n      AND b.value:rank::NUMBER = 1\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY s.reference_id ORDER BY b.index) = 1\n),\n\n\n-- Internal soft side: the evaluated internal store (pharmacist or DDB TAT adherence), ranked after buffers.\n-- Rank 1 is internal's pick whether or not it was served.\nsoft_internal AS (\n    SELECT s.reference_id,\n           MAX(c.value:candidate_type::STRING)                                                          AS internal_candidate_type,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:delivery_partner_id::NUMBER, NULL))                AS internal_partner,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:delivery_tat_in_minutes::NUMBER, NULL))            AS internal_tat_in_minutes,\n           MAX(IFF(b.value:rank::NUMBER = 1, TRY_TO_TIMESTAMP_TZ(b.value:dispatch_time::STRING), NULL)) AS internal_dispatch_time,\n           MAX(IFF(b.value:rank::NUMBER = 1, TRY_TO_TIMESTAMP_TZ(b.value:delivery_time::STRING), NULL)) AS internal_delivery_time,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:pickup_buffer_in_minutes::NUMBER, NULL))           AS internal_pickup_buffer,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:drop_buffer_in_minutes::NUMBER, NULL))             AS internal_drop_buffer,\n           MAX(IFF(b.value:rank::NUMBER = 1, b.value:is_express::BOOLEAN, NULL))                        AS internal_is_express,\n           ARRAY_AGG(OBJECT_CONSTRUCT(\n               'partner',        b.value:delivery_partner_id,\n               'rank',           b.value:rank,\n               'tat_in_minutes', b.value:delivery_tat_in_minutes,\n               'dispatch_time',  b.value:dispatch_time,\n               'delivery_time',  b.value:delivery_time,\n               'score',          b.value:score\n           )) WITHIN GROUP (ORDER BY b.value:rank::NUMBER)                                              AS internal_soft_preference_array\n    FROM soft s,\n         LATERAL FLATTEN(input => s.cands) c,\n         LATERAL FLATTEN(input => c.value:buffer_adjusted_candidates) b\n    WHERE c.value:candidate_type::STRING IN ('COURIER_LEGACY_TAT_ADHERENCE', 'COURIER_DDB_TAT_ADHERENCE')\n      AND c.value:evaluated::BOOLEAN\n    GROUP BY s.reference_id\n)\n\n\nSELECT\n    f.reference_id                                              AS order_id,\n    f.order_placed_at,\n    f.sdd_enabled,\n    f.warehouse_id                                              AS wh_id,\n    f.delivery_pincode                                          AS pincode,\n    (s.reference_id IS NOT NULL)                                AS has_soft_record,\n    s.result_selected_candidate_type                            AS soft_served_candidate_type,\n    f.promised_warehouse_processing_time,\n    COALESCE(pb.pba_buffered_dispatch_time, pp.pba_dispatch_time) AS pba_projected_dispatch_time,\n    COALESCE(pb.pba_buffered_delivery_time, pp.pba_delivery_time) AS pba_projected_delivery_time\nFROM frozen f\nLEFT JOIN soft            s   ON s.reference_id   = f.reference_id\nLEFT JOIN soft_pba_pick   pp  ON pp.reference_id  = f.reference_id\nLEFT JOIN soft_pba_buffer pb  ON pb.reference_id  = f.reference_id\n),\nod AS (\n    SELECT order_id, orderstatus\n    FROM prod_silver_db.main_db.order_details\n    WHERE order_id IN (SELECT TRY_TO_NUMBER(order_id) FROM base)\n    QUALIFY ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY ingestion_ts_ist DESC) = 1\n),\nplaced AS (\n    SELECT b.*,\n           CASE WHEN od.order_id IS NULL            THEN 'no_status_row'\n                WHEN od.orderstatus IN (49, 312)    THEN 'dropped'\n                ELSE 'kept' END                     AS placed_flag\n    FROM base b\n    LEFT JOIN od ON od.order_id = TRY_TO_NUMBER(b.order_id)\n),\nkb AS (\n    SELECT p.*,\n           CASE WHEN soft_served_candidate_type = 'COURIER_PBA' THEN 'PBA'\n                WHEN soft_served_candidate_type IN ('COURIER_LEGACY_TAT_ADHERENCE', 'COURIER_DDB_TAT_ADHERENCE') THEN 'Internal' END AS base_group,\n           TO_VARCHAR(wh_id) || '|' || TO_VARCHAR(pincode) AS lane\n    FROM placed p\n    WHERE placed_flag = 'kept' AND sdd_enabled = FALSE\n),\nd AS (\n    SELECT kb.base_group,\n           FALSE AS common_lane,\n           DATEDIFF(day, TO_DATE(CONVERT_TIMEZONE('Asia/Kolkata', promised_warehouse_processing_time)), TO_DATE(CONVERT_TIMEZONE('Asia/Kolkata', pba_projected_delivery_time)))      AS wh_pba,\n           DATEDIFF(day, TO_DATE(CONVERT_TIMEZONE('Asia/Kolkata', pba_projected_dispatch_time)), TO_DATE(CONVERT_TIMEZONE('Asia/Kolkata', pba_projected_delivery_time)))                 AS dd_pba,\n           SYSTEM$TYPEOF(promised_warehouse_processing_time) || ' / ' || SYSTEM$TYPEOF(pba_projected_dispatch_time) || ' / ' || SYSTEM$TYPEOF(pba_projected_delivery_time) AS ts_types\n    FROM kb\n    WHERE kb.base_group IS NOT NULL\n),\nu AS (\n    SELECT base_group, common_lane, measure, days, ts_types\n    FROM d UNPIVOT INCLUDE NULLS (days FOR measure IN (wh_pba, dd_pba))\n)\nSELECT base_group, common_lane, measure, days, COUNT(*) AS n_orders, MIN(ts_types) AS ts_types_min, MAX(ts_types) AS ts_types_max,\n       ANY_VALUE(MD5(SUBSTR(CURRENT_STATEMENT(),\n                  CHARINDEX('WITH params AS (', CURRENT_STATEMENT()),\n                  CHARINDEX(CHR(10) || ')' || CHR(10) || 'SELECT', CURRENT_STATEMENT()) - CHARINDEX('WITH params AS (', CURRENT_STATEMENT())))) AS base_md5,\n       ANY_VALUE(MD5(CURRENT_STATEMENT())) AS full_md5\nFROM u\nGROUP BY 1, 2, 3, 4\nORDER BY 1, 2, 3, 4"
+      }
+    ],
+    "database": 1192,
+    "middleware": {
+      "js-int-to-string?": true,
+      "userland-query?": true,
+      "add-default-userland-constraints?": true
+    }
+  },
+  "average_execution_time": null,
+  "status": "completed",
+  "context": "ad-hoc",
+  "tenant_id": null,
+  "row_count": 35,
+  "running_time": 21052
+}
