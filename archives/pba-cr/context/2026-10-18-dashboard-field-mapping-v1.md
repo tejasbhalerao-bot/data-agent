@@ -50,6 +50,7 @@ Which raw-dump fields compute each dashboard number, and exactly how. Numbering 
 
 ### Percentages
 - % = numerator ÷ denominator × 100, shown to 1 decimal. A denominator of 0 shows "n/a".
+- **Exception: Section 1 metric 3** is shown to 2 decimals, because at 1 decimal it rounds to 0.0% (Tejas, 2026-10-30).
 
 ### Bases used across sections
 - **PBA base:** orders where `SDD_ENABLED = 'false'` and `SOFT_SERVED_CANDIDATE_TYPE = 'COURIER_PBA'`.
