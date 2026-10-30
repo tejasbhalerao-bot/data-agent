@@ -1,0 +1,19 @@
+Checks: query text
+  [PASS] 1-hour slice ran Tejas's base query verbatim (only window dates changed)
+  [PASS] trimmed queries ran exactly as saved
+  [PASS] trimmed query = the base query's own text up to the end of the soft step, unchanged
+  [PASS] every line of the trimmed final SELECT and joins is copied from the base query
+Checks: trimming changes nothing
+  [PASS] 1-hour slice: full base and trimmed base give identical groups and counts
+Checks: independent recount (Python from raw promise versions, soft records and shipment rows, 23 Oct 10:00:00-10:00:30)
+  [PASS] raw pull not truncated
+  [PASS] SQL = Python on every group
+Checks: full-window result
+  [PASS] one row per order; groups add up to all orders
+  [PASS] non-SDD total = metric 1
+  [PASS] PBA and Internal bases = metric 4 (17,804 and 338,386)
+  [PASS] a pickup or attempt time only appears on orders with a shipment record
+
+S1 M5  % picked up: PBA 30.9% (5,493 of 17,804)   Internal 30.6% (103,385 of 338,386)
+       Data note: orders with a delivery attempt but no pickup time: PBA 2, Internal 14 (counted as not picked up)
+       Run 2026-10-30T09:18:34Z
