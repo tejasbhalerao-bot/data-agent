@@ -1,0 +1,24 @@
+PBA base 8,491: picked up 2,814 (33.1%)
+   status  49 INCOMPLETE ORDER               2,858 orders   picked up       0
+   status  55 ORDER DELIVERED                2,287 orders   picked up   2,285
+   status 312 SCRAPPED                       2,143 orders   picked up       0
+   status  60 ORDER DISPATCHED                 376 orders   picked up     356
+   status 174 ORDER DISCARD                    375 orders   picked up       0
+   status  57 ORDER CANCELED                   253 orders   picked up       5
+   status  56 ORDER RETURNED                   107 orders   picked up     105
+   status 124 RTO Delivered                     43 orders   picked up      38
+   never real orders (incomplete + scrapped + discarded): 5,376 (63.3% of the base), picked up 0
+   excluding them: picked up 2,814 of 3,115 = 90.3%
+   also excluding cancelled (253, of which 5 picked up): 2,809 of 2,862 = 98.1%
+Internal base 161,680: picked up 54,367 (33.6%)
+   status  49 INCOMPLETE ORDER              52,387 orders   picked up       0
+   status  55 ORDER DELIVERED               44,232 orders   picked up  44,189
+   status 312 SCRAPPED                      42,551 orders   picked up       0
+   status  60 ORDER DISPATCHED               7,421 orders   picked up   7,094
+   status 174 ORDER DISCARD                  6,985 orders   picked up       0
+   status  57 ORDER CANCELED                 4,526 orders   picked up      42
+   status  56 ORDER RETURNED                 1,837 orders   picked up   1,804
+   status 124 RTO Delivered                    711 orders   picked up     672
+   never real orders (incomplete + scrapped + discarded): 101,923 (63.0% of the base), picked up 0
+   excluding them: picked up 54,367 of 59,757 = 91.0%
+   also excluding cancelled (4,526, of which 42 picked up): 54,325 of 55,231 = 98.4%

@@ -1,0 +1,11 @@
+{"run_at_utc":"2026-10-30T09:33:36Z","window":["2026-10-22 12:00:00 +0530","2026-10-26 00:00:00 +0530"],
+ "columns":["base_group","order_status","orders","picked_up","attempted"],
+ "status_names":{"1":"NEW ORDER","2":"PENDING VERIFICATION","39":"DIGITIZED","49":"INCOMPLETE ORDER","55":"ORDER DELIVERED","56":"ORDER RETURNED","57":"ORDER CANCELED","58":"PAYMENT PENDING","60":"ORDER DISPATCHED","66":"ORDER CONFIRMED","121":"RTO In Transit","124":"RTO Delivered","142":"PROCESSING","174":"ORDER DISCARD","191":"RETURN GENERATED","193":"ORDER DELAYED AT WAREHOUSE","199":"ORDER REFUNDED","200":"PARTIALLY RETURNED","201":"PARTIALLY REFUNDED","312":"SCRAPPED","317":"DR ORDER CONFIRMED","318":"SCHEDULER ERROR DR CONFIRM ORDER","452":"PARTIALLY DIGITIZED","596":"ORDER TRANSFER POSSIBLE","664":"PAYMENT INITIATED","665":"PAYMENT RECEIVED"},
+ "non_sdd_rows":[
+ ["Internal",49,52387,0,0],["Internal",55,44232,44189,43954],["Internal",312,42551,0,0],["Internal",60,7421,7094,2611],["Internal",174,6985,0,0],["Internal",57,4526,42,18],
+ ["Internal",56,1837,1804,1692],["Internal",124,711,672,539],["Internal",199,245,240,186],["Internal",142,179,0,0],["Internal",191,159,159,159],["Internal",201,152,151,150],
+ ["Internal",664,89,0,0],["Internal",193,47,0,0],["Internal",39,45,0,0],["Internal",58,31,1,1],["Internal",121,20,13,13],["Internal",452,16,0,0],["Internal",66,14,1,1],
+ ["Internal",318,12,0,0],["Internal",1,10,0,0],["Internal",2,8,0,0],["Internal",596,2,0,0],["Internal",200,1,1,1],
+ ["PBA",49,2858,0,0],["PBA",55,2287,2285,2269],["PBA",312,2143,0,0],["PBA",60,376,356,142],["PBA",174,375,0,0],["PBA",57,253,5,3],["PBA",56,107,105,103],
+ ["PBA",124,43,38,31],["PBA",199,15,15,15],["PBA",142,9,0,0],["PBA",201,7,7,7],["PBA",664,5,0,0],["PBA",191,4,3,3],["PBA",193,3,0,0],["PBA",39,3,0,0],
+ ["PBA",1,1,0,0],["PBA",452,1,0,0],["PBA",121,1,0,0]]}
