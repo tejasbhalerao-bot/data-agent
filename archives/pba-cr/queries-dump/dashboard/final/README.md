@@ -9,12 +9,14 @@ One Snowflake query per dashboard table, for every signed-off metric (sign-off 2
 | `s2-promise_soft-promise_m1-m4_wh-to-delivery.sql` | Section 2 Promise: Soft, WH to Delivery | 1–4 |
 | `s2-promise_soft-promise_m5-m8_dispatch-to-delivery.sql` | Section 2 Promise: Soft, Dispatch to Delivery | 5–8 |
 | `s2-promise_lane-adjusted_m9-m10.sql` | Section 2 Promise: Lane Adjusted Promise Comparison | 9–10 |
+| `s2-promise_hard-promise_m11-m12_dispatch-to-delivery.sql` | Section 2 Promise: Hard, Dispatch to Delivery | 11 Hard PBA orders, PBA hard promise; 12 Hard Internal orders, partner TAT rounded up (added 2026-11-09) |
+| `s2-promise_hard-promise_m13_lane-adjusted.sql` | Section 2 Promise: Hard, Lane Adjusted | 13 PBA vs Internal on the common lane set (added 2026-11-09) |
 | `s3-courier-mix_m1_pba-vs-internal-partner.sql` | Section 3 Courier Allocation Mix | 1 Soft and Hard partner mix, all lanes |
 | `s3-courier-mix_m2_lane-adjusted.sql` | Section 3 Courier Allocation Mix | 2 Soft and Hard partner mix, common lanes |
 | `s4-adherence_soft-promise_m1_wh-to-delivery.sql` | Section 4 Adherence: Soft | 1 WH to Delivery, all lanes and lane adjusted |
 | `s4-adherence_soft-promise_m2_dispatch-to-delivery.sql` | Section 4 Adherence: Soft | 2 Dispatch to Delivery, all lanes and lane adjusted |
 
-On hold, so no query: Section 2 hard (metrics 11–13) and Section 4 hard (metrics 3–4).
+On hold, so no query: Section 4 hard (metrics 3–4). Section 2 hard metrics 11–13 were added on 2026-11-09 at Tejas's request; their logic was checked on a 6-order test base the same way.
 
 ## How every query is built
 - **Base:** Tejas's base query v2.1 (`queries-dump/2026-10-30-pba-cr-dashboard-base-query-v1.sql`). It is used unchanged except for two things:
